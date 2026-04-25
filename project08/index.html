@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>交互式城市建筑可视化</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="container"></div>
+    
+    <!-- 控制面板 -->
+    <div id="controls">
+        <button id="toggleDayNight">🌙 切换夜晚</button>
+        <button id="toggleView">🔍 切换视图</button>
+    </div>
+    
+    <!-- 建筑信息卡片 -->
+    <div id="buildingInfo" class="hidden">
+        <h3 id="buildingName">建筑名称</h3>
+        <div class="info-item">
+            <span class="info-label">楼层数：</span>
+            <span id="buildingFloors">--</span>
+        </div>
+        <div class="info-item">
+            <span class="info-label">用途：</span>
+            <span id="buildingPurpose">--</span>
+        </div>
+        <div class="info-item">
+            <span class="info-label">高度：</span>
+            <span id="buildingHeight">--</span>
+        </div>
+        <button id="closeInfo">关闭</button>
+    </div>
+    
+    <!-- 建筑高度排行榜 -->
+    <div id="ranking">
+        <h3>🏆 建筑高度排行榜</h3>
+        <div id="rankingList"></div>
+    </div>
+    
+    <!-- 加载Three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>

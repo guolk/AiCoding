@@ -1,0 +1,208 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    overflow: hidden;
+    background-color: #1a1a2e;
+}
+
+#container {
+    width: 100vw;
+    height: 100vh;
+}
+
+/* 控制面板 */
+#controls {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1000;
+    display: flex;
+    gap: 10px;
+}
+
+#controls button {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 25px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    transition: all 0.3s ease;
+}
+
+#controls button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+}
+
+/* 建筑信息卡片 */
+#buildingInfo {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(255, 255, 255, 0.95);
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    z-index: 2000;
+    min-width: 300px;
+    backdrop-filter: blur(10px);
+}
+
+#buildingInfo.hidden {
+    display: none;
+}
+
+#buildingInfo h3 {
+    color: #667eea;
+    margin-bottom: 20px;
+    font-size: 20px;
+    border-bottom: 2px solid #f0f0f0;
+    padding-bottom: 10px;
+}
+
+.info-item {
+    margin: 15px 0;
+    font-size: 16px;
+}
+
+.info-label {
+    color: #666;
+    font-weight: 500;
+}
+
+#closeInfo {
+    margin-top: 20px;
+    width: 100%;
+    background: linear-gradient(135deg, #f5576c 0%, #f093fb 100%);
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#closeInfo:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(245, 87, 108, 0.4);
+}
+
+/* 排行榜 */
+#ranking {
+    position: fixed;
+    top: 80px;
+    right: 20px;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    max-height: 70vh;
+    overflow-y: auto;
+    min-width: 250px;
+    backdrop-filter: blur(10px);
+}
+
+#ranking h3 {
+    color: #667eea;
+    margin-bottom: 15px;
+    font-size: 18px;
+}
+
+#rankingList {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.ranking-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 12px;
+    border-radius: 8px;
+    background: #f8f9fa;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.ranking-item:hover {
+    background: #e9ecef;
+    transform: translateX(-3px);
+}
+
+.ranking-item .rank {
+    width: 25px;
+    height: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-weight: bold;
+    font-size: 12px;
+    margin-right: 10px;
+}
+
+.ranking-item .rank.gold {
+    background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+    color: #8b4513;
+}
+
+.ranking-item .rank.silver {
+    background: linear-gradient(135deg, #c0c0c0 0%, #e8e8e8 100%);
+    color: #555;
+}
+
+.ranking-item .rank.bronze {
+    background: linear-gradient(135deg, #cd7f32 0%, #daa06d 100%);
+    color: #fff;
+}
+
+.ranking-item .rank.normal {
+    background: #ddd;
+    color: #777;
+}
+
+.ranking-item .building-name {
+    flex: 1;
+    font-weight: 500;
+    font-size: 13px;
+    color: #333;
+}
+
+.ranking-item .building-height {
+    color: #667eea;
+    font-weight: bold;
+    font-size: 13px;
+}
+
+/* 滚动条样式 */
+#ranking::-webkit-scrollbar {
+    width: 6px;
+}
+
+#ranking::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+}
+
+#ranking::-webkit-scrollbar-thumb {
+    background: #667eea;
+    border-radius: 3px;
+}
+
+#ranking::-webkit-scrollbar-thumb:hover {
+    background: #764ba2;
+}
