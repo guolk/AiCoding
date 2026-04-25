@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>交互式地球仪</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            overflow: hidden;
+            font-family: 'Arial', sans-serif;
+            background: #000;
+        }
+        
+        #canvas-container {
+            width: 100vw;
+            height: 100vh;
+        }
+        
+        #info-card {
+            position: absolute;
+            background: rgba(20, 30, 50, 0.95);
+            border: 1px solid rgba(100, 150, 255, 0.5);
+            border-radius: 12px;
+            padding: 20px;
+            color: #fff;
+            min-width: 280px;
+            max-width: 350px;
+            pointer-events: none;
+            opacity: 0;
+            transform: translate(-50%, -100%);
+            transition: opacity 0.3s ease;
+            box-shadow: 0 4px 20px rgba(100, 150, 255, 0.3);
+        }
+        
+        #info-card.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        
+        #info-card h3 {
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: #7dd3fc;
+            border-bottom: 1px solid rgba(100, 150, 255, 0.3);
+            padding-bottom: 10px;
+        }
+        
+        #info-card .info-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        
+        #info-card .info-label {
+            color: #94a3b8;
+        }
+        
+        #info-card .info-value {
+            color: #e2e8f0;
+            font-weight: 500;
+        }
+        
+        #info-card .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background: none;
+            border: none;
+            color: #94a3b8;
+            font-size: 20px;
+            cursor: pointer;
+            pointer-events: auto;
+        }
+        
+        #info-card .close-btn:hover {
+            color: #fff;
+        }
+        
+        #loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #7dd3fc;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <div id="canvas-container"></div>
+    <div id="loading">加载中...</div>
+    <div id="info-card">
+        <button class="close-btn" onclick="closeInfoCard()">&times;</button>
+        <h3 id="city-name">城市名</h3>
+        <div class="info-row">
+            <span class="info-label">国家</span>
+            <span class="info-value" id="city-country">-</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">人口</span>
+            <span class="info-value" id="city-population">-</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">时区</span>
+            <span class="info-value" id="city-timezone">-</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">当地时间</span>
+            <span class="info-value" id="city-time">-</span>
+        </div>
+    </div>
+
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+            "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+        }
+    }
+    </script>
+    <script type="module" src="app.js"></script>
+    <script>
+        window.closeInfoCard = function() {
+            const card = document.getElementById('info-card');
+            card.classList.remove('visible');
+        };
+    </script>
+</body>
+</html>
