@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>物理沙盒游戏</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            color: #fff;
+        }
+        
+        h1 {
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .control-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .element-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+        
+        .element-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        
+        .element-btn.active {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(255,255,255,0.5);
+        }
+        
+        .sand { background: #e6c229; color: #333; }
+        .water { background: #3498db; color: #fff; }
+        .fire { background: #e74c3c; color: #fff; }
+        .stone { background: #7f8c8d; color: #fff; }
+        .wood { background: #8b4513; color: #fff; }
+        .tnt { background: #f39c12; color: #333; }
+        .eraser { background: #9b59b6; color: #fff; }
+        
+        .action-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            background: #34495e;
+            color: #fff;
+            transition: all 0.3s ease;
+        }
+        
+        .action-btn:hover {
+            background: #2c3e50;
+            transform: translateY(-2px);
+        }
+        
+        .action-btn.playing {
+            background: #27ae60;
+        }
+        
+        .action-btn.paused {
+            background: #e74c3c;
+        }
+        
+        .speed-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        input[type="range"] {
+            width: 150px;
+            cursor: pointer;
+        }
+        
+        canvas {
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 10px;
+            background: #000;
+            cursor: crosshair;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        
+        .info {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 14px;
+            opacity: 0.8;
+        }
+        
+        .brush-size {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>物理沙盒游戏</h1>
+    
+    <div class="controls">
+        <div class="control-group">
+            <button class="element-btn sand active" data-element="sand">沙子</button>
+            <button class="element-btn water" data-element="water">水</button>
+            <button class="element-btn fire" data-element="fire">火</button>
+            <button class="element-btn stone" data-element="stone">石头</button>
+            <button class="element-btn wood" data-element="wood">木头</button>
+            <button class="element-btn tnt" data-element="tnt">炸药</button>
+            <button class="element-btn eraser" data-element="eraser">橡皮擦</button>
+        </div>
+        
+        <div class="control-group">
+            <button class="action-btn playing" id="playPause">暂停</button>
+            <button class="action-btn" id="clear">清空</button>
+        </div>
+        
+        <div class="control-group speed-control">
+            <label>速度:</label>
+            <input type="range" id="speed" min="1" max="20" value="10">
+            <span id="speedValue">1x</span>
+        </div>
+        
+        <div class="control-group brush-size">
+            <label>画笔大小:</label>
+            <input type="range" id="brushSize" min="1" max="20" value="5">
+            <span id="brushValue">5</span>
+        </div>
+        
+        <div class="control-group">
+            <button class="action-btn" id="save">保存</button>
+            <button class="action-btn" id="load">加载</button>
+        </div>
+    </div>
+    
+    <canvas id="canvas"></canvas>
+    
+    <div class="info">
+        <p>使用鼠标左键在画布上绘制元素，右键或使用橡皮擦删除元素</p>
+        <p>沙子会自由下落堆积，水会向低处流动，火会向上蔓延并点燃木头和炸药</p>
+    </div>
+    
+    <script src="game.js"></script>
+</body>
+</html>

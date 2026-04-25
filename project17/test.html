@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript测试页面</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+        }
+        .test-btn {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 0;
+        }
+        .test-btn:hover {
+            background-color: #2980b9;
+        }
+        #output {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #e8f4f8;
+            border: 1px solid #b8d4e3;
+            border-radius: 5px;
+            min-height: 100px;
+        }
+        .status {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>JavaScript功能测试</h1>
+        
+        <div id="jsStatus" class="status">
+            正在检查JavaScript...
+        </div>
+        
+        <button class="test-btn" id="testBtn1">测试按钮1 (点击我)</button>
+        <button class="test-btn" id="testBtn2">测试按钮2 (改变背景色)</button>
+        <button class="test-btn" id="testBtn3">测试按钮3 (显示消息)</button>
+        
+        <div id="output">
+            <strong>输出区域：</strong><br>
+            点击按钮查看结果...
+        </div>
+        
+        <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #eee;">
+            <h3>Canvas测试</h3>
+            <canvas id="testCanvas" width="300" height="200" style="border: 1px solid #ccc; background: #fff;"></canvas>
+            <br>
+            <button class="test-btn" id="drawBtn">在Canvas上绘制</button>
+        </div>
+    </div>
+    
+    <script>
+        console.log('测试脚本开始加载...');
+        
+        function log(message) {
+            console.log(message);
+            var output = document.getElementById('output');
+            if (output) {
+                var timestamp = new Date().toLocaleTimeString();
+                output.innerHTML += '[' + timestamp + '] ' + message + '<br>';
+            }
+        }
+        
+        function init() {
+            log('DOM已加载，开始初始化...');
+            
+            var jsStatus = document.getElementById('jsStatus');
+            if (jsStatus) {
+                jsStatus.className = 'status success';
+                jsStatus.innerHTML = '✅ JavaScript运行正常！';
+            }
+            
+            var testBtn1 = document.getElementById('testBtn1');
+            if (testBtn1) {
+                testBtn1.addEventListener('click', function() {
+                    log('测试按钮1被点击！');
+                    alert('按钮1工作正常！');
+                });
+                log('测试按钮1事件监听器已绑定');
+            } else {
+                log('错误：找不到测试按钮1');
+            }
+            
+            var testBtn2 = document.getElementById('testBtn2');
+            if (testBtn2) {
+                testBtn2.addEventListener('click', function() {
+                    var colors = ['#ff9999', '#99ff99', '#9999ff', '#ffff99', '#ff99ff', '#99ffff'];
+                    var randomColor = colors[Math.floor(Math.random() * colors.length)];
+                    document.body.style.backgroundColor = randomColor;
+                    log('背景色已改变为: ' + randomColor);
+                });
+                log('测试按钮2事件监听器已绑定');
+            }
+            
+            var testBtn3 = document.getElementById('testBtn3');
+            if (testBtn3) {
+                testBtn3.addEventListener('click', function() {
+                    var message = '当前时间: ' + new Date().toString();
+                    log('按钮3消息: ' + message);
+                    alert(message);
+                });
+                log('测试按钮3事件监听器已绑定');
+            }
+            
+            var canvas = document.getElementById('testCanvas');
+            if (canvas) {
+                log('Canvas元素找到: ' + canvas.width + 'x' + canvas.height);
+                
+                var ctx = canvas.getContext('2d');
+                if (ctx) {
+                    log('Canvas上下文获取成功');
+                    
+                    ctx.fillStyle = '#3498db';
+                    ctx.fillRect(10, 10, 100, 50);
+                    
+                    ctx.fillStyle = '#e74c3c';
+                    ctx.beginPath();
+                    ctx.arc(200, 100, 40, 0, Math.PI * 2);
+                    ctx.fill();
+                    
+                    log('初始图形已绘制到Canvas');
+                } else {
+                    log('错误：无法获取Canvas上下文');
+                }
+            } else {
+                log('错误：找不到Canvas元素');
+            }
+            
+            var drawBtn = document.getElementById('drawBtn');
+            if (drawBtn) {
+                drawBtn.addEventListener('click', function() {
+                    var canvas = document.getElementById('testCanvas');
+                    if (canvas) {
+                        var ctx = canvas.getContext('2d');
+                        if (ctx) {
+                            var x = Math.random() * canvas.width;
+                            var y = Math.random() * canvas.height;
+                            var radius = Math.random() * 30 + 10;
+                            
+                            var colors = ['#e74c3c', '#3498db', '#2ecc71', '#f39c12', '#9b59b6', '#1abc9c'];
+                            ctx.fillStyle = colors[Math.floor(Math.random() * colors.length)];
+                            
+                            ctx.beginPath();
+                            ctx.arc(x, y, radius, 0, Math.PI * 2);
+                            ctx.fill();
+                            
+                            log('在Canvas上绘制了圆形: (' + x.toFixed(0) + ', ' + y.toFixed(0) + ') 半径: ' + radius.toFixed(0));
+                        }
+                    }
+                });
+                log('绘制按钮事件监听器已绑定');
+            }
+            
+            log('初始化完成！');
+        }
+        
+        if (document.readyState === 'complete' || document.readyState === 'interactive') {
+            log('DOM已经加载完成，立即初始化');
+            setTimeout(init, 1);
+        } else {
+            log('等待DOMContentLoaded事件...');
+            document.addEventListener('DOMContentLoaded', init);
+        }
+        
+        window.addEventListener('load', function() {
+            log('window load事件触发');
+        });
+        
+        console.log('测试脚本加载完成');
+    </script>
+</body>
+</html>
