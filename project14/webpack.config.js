@@ -14,6 +14,13 @@ module.exports = (env, argv) => {
       clean: true,
       publicPath: '/'
     },
+    cache: {
+      type: 'filesystem',
+      buildDependencies: {
+        config: [__filename]
+      },
+      compression: 'gzip'
+    },
     module: {
       rules: [
         {
@@ -22,6 +29,8 @@ module.exports = (env, argv) => {
           use: {
             loader: 'babel-loader',
             options: {
+              cacheDirectory: true,
+              cacheCompression: false,
               presets: [
                 ['@babel/preset-env', {
                   targets: {
@@ -109,24 +118,6 @@ module.exports = (env, argv) => {
           echarts: {
             test: /[\\/]node_modules[\\/]echarts[\\/]/,
             name: 'echarts',
-            priority: 10,
-            chunks: 'all'
-          },
-          lodash: {
-            test: /[\\/]node_modules[\\/]lodash-es[\\/]/,
-            name: 'lodash',
-            priority: 10,
-            chunks: 'all'
-          },
-          dayjs: {
-            test: /[\\/]node_modules[\\/]dayjs[\\/]/,
-            name: 'dayjs',
-            priority: 10,
-            chunks: 'all'
-          },
-          axios: {
-            test: /[\\/]node_modules[\\/]axios[\\/]/,
-            name: 'axios',
             priority: 10,
             chunks: 'all'
           },
