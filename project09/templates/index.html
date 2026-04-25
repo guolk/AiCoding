@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>实时手写数字识别</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .main-content {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .canvas-section, .result-section {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .canvas-section {
+            flex: 0 0 auto;
+        }
+
+        .result-section {
+            flex: 1;
+            min-width: 400px;
+        }
+
+        h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+        }
+
+        .canvas-container {
+            position: relative;
+            border: 3px solid #ddd;
+            border-radius: 10px;
+            background: white;
+            cursor: crosshair;
+        }
+
+        #drawingCanvas {
+            display: block;
+            border-radius: 8px;
+        }
+
+        .controls {
+            margin-top: 20px;
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        button {
+            padding: 12px 30px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .btn-clear {
+            background: #f44336;
+            color: white;
+        }
+
+        .btn-clear:hover {
+            background: #d32f2f;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(244, 67, 54, 0.4);
+        }
+
+        .btn-predict {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .btn-predict:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .prediction-result {
+            text-align: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 15px;
+            margin-bottom: 25px;
+        }
+
+        .prediction-label {
+            font-size: 1.1rem;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .predicted-digit {
+            font-size: 5rem;
+            font-weight: bold;
+            color: #667eea;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .confidence {
+            font-size: 1.2rem;
+            color: #4CAF50;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        .chart-container {
+            margin-top: 20px;
+        }
+
+        .chart-title {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+        }
+
+        .bar-chart {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-around;
+            height: 250px;
+            padding: 20px 10px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .bar-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            max-width: 40px;
+        }
+
+        .bar {
+            width: 100%;
+            background: linear-gradient(to top, #667eea, #764ba2);
+            border-radius: 5px 5px 0 0;
+            transition: height 0.5s ease;
+            min-height: 2px;
+            position: relative;
+        }
+
+        .bar-value {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.75rem;
+            color: #666;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .bar-label {
+            margin-top: 8px;
+            font-size: 0.9rem;
+            color: #666;
+            font-weight: 600;
+        }
+
+        .instructions {
+            margin-top: 20px;
+            padding: 15px;
+            background: #e3f2fd;
+            border-radius: 10px;
+            border-left: 4px solid #2196F3;
+        }
+
+        .instructions h3 {
+            color: #1565c0;
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+
+        .instructions ul {
+            margin-left: 20px;
+            color: #333;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .status-message {
+            text-align: center;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .status-message.error {
+            background: #ffebee;
+            color: #c62828;
+        }
+
+        .status-message.success {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>实时手写数字识别</h1>
+        
+        <div class="main-content">
+            <div class="canvas-section">
+                <h2>画板 - 用鼠标绘制数字 (0-9)</h2>
+                <div class="canvas-container">
+                    <canvas id="drawingCanvas" width="280" height="280"></canvas>
+                </div>
+                
+                <div class="controls">
+                    <button id="clearBtn" class="btn-clear">清空画板</button>
+                    <button id="predictBtn" class="btn-predict">识别数字</button>
+                </div>
+
+                <div class="loading" id="loading">
+                    <div class="spinner"></div>
+                    <p>正在识别中...</p>
+                </div>
+
+                <div class="status-message" id="statusMessage"></div>
+
+                <div class="instructions">
+                    <h3>使用说明：</h3>
+                    <ul>
+                        <li>按住鼠标左键在画板上绘制数字 (0-9)</li>
+                        <li>松开鼠标后会自动识别（也可点击"识别数字"按钮）</li>
+                        <li>点击"清空画板"可重新绘制</li>
+                        <li>建议在画板中央绘制较大的数字</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="result-section">
+                <h2>识别结果</h2>
+                
+                <div class="prediction-result" id="predictionResult">
+                    <div class="prediction-label">预测数字</div>
+                    <div class="predicted-digit" id="predictedDigit">-</div>
+                    <div class="confidence" id="confidence">置信度: -</div>
+                </div>
+
+                <div class="chart-container">
+                    <div class="chart-title">各数字置信度分布</div>
+                    <div class="bar-chart" id="barChart">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('drawingCanvas');
+        const ctx = canvas.getContext('2d');
+        const clearBtn = document.getElementById('clearBtn');
+        const predictBtn = document.getElementById('predictBtn');
+        const predictedDigit = document.getElementById('predictedDigit');
+        const confidence = document.getElementById('confidence');
+        const barChart = document.getElementById('barChart');
+        const loading = document.getElementById('loading');
+        const statusMessage = document.getElementById('statusMessage');
+
+        let isDrawing = false;
+        let lastX = 0;
+        let lastY = 0;
+
+        function initCanvas() {
+            ctx.fillStyle = 'white';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.strokeStyle = 'black';
+            ctx.lineWidth = 15;
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+        }
+
+        initCanvas();
+
+        function initBarChart() {
+            barChart.innerHTML = '';
+            for (let i = 0; i <= 9; i++) {
+                const barGroup = document.createElement('div');
+                barGroup.className = 'bar-group';
+                
+                const bar = document.createElement('div');
+                bar.className = 'bar';
+                bar.id = `bar-${i}`;
+                bar.style.height = '2px';
+                
+                const barValue = document.createElement('span');
+                barValue.className = 'bar-value';
+                barValue.id = `bar-value-${i}`;
+                barValue.textContent = '0%';
+                
+                const barLabel = document.createElement('span');
+                barLabel.className = 'bar-label';
+                barLabel.textContent = i;
+                
+                bar.appendChild(barValue);
+                barGroup.appendChild(bar);
+                barGroup.appendChild(barLabel);
+                barChart.appendChild(barGroup);
+            }
+        }
+
+        initBarChart();
+
+        function updateBarChart(probabilities) {
+            const maxHeight = 200;
+            
+            probabilities.forEach((prob, index) => {
+                const bar = document.getElementById(`bar-${index}`);
+                const barValue = document.getElementById(`bar-value-${index}`);
+                
+                const height = Math.max(prob * maxHeight, 2);
+                bar.style.height = `${height}px`;
+                
+                const percentage = (prob * 100).toFixed(1);
+                barValue.textContent = `${percentage}%`;
+                
+                if (prob === Math.max(...probabilities)) {
+                    bar.style.background = 'linear-gradient(to top, #4CAF50, #8BC34A)';
+                } else {
+                    bar.style.background = 'linear-gradient(to top, #667eea, #764ba2)';
+                }
+            });
+        }
+
+        function getPosition(e) {
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+            
+            if (e.touches) {
+                return {
+                    x: (e.touches[0].clientX - rect.left) * scaleX,
+                    y: (e.touches[0].clientY - rect.top) * scaleY
+                };
+            }
+            return {
+                x: (e.clientX - rect.left) * scaleX,
+                y: (e.clientY - rect.top) * scaleY
+            };
+        }
+
+        function startDrawing(e) {
+            isDrawing = true;
+            const pos = getPosition(e);
+            lastX = pos.x;
+            lastY = pos.y;
+            
+            ctx.beginPath();
+            ctx.arc(pos.x, pos.y, ctx.lineWidth / 2, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        function draw(e) {
+            if (!isDrawing) return;
+            e.preventDefault();
+            
+            const pos = getPosition(e);
+            
+            ctx.beginPath();
+            ctx.moveTo(lastX, lastY);
+            ctx.lineTo(pos.x, pos.y);
+            ctx.stroke();
+            
+            lastX = pos.x;
+            lastY = pos.y;
+        }
+
+        function stopDrawing() {
+            if (isDrawing) {
+                isDrawing = false;
+                predict();
+            }
+        }
+
+        canvas.addEventListener('mousedown', startDrawing);
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mouseup', stopDrawing);
+        canvas.addEventListener('mouseout', stopDrawing);
+
+        canvas.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            startDrawing(e);
+        });
+        canvas.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            draw(e);
+        });
+        canvas.addEventListener('touchend', stopDrawing);
+
+        clearBtn.addEventListener('click', () => {
+            initCanvas();
+            predictedDigit.textContent = '-';
+            confidence.textContent = '置信度: -';
+            updateBarChart([0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+            hideStatus();
+        });
+
+        predictBtn.addEventListener('click', predict);
+
+        function showLoading() {
+            loading.style.display = 'block';
+            predictBtn.disabled = true;
+        }
+
+        function hideLoading() {
+            loading.style.display = 'none';
+            predictBtn.disabled = false;
+        }
+
+        function showStatus(message, isError = false) {
+            statusMessage.textContent = message;
+            statusMessage.className = `status-message ${isError ? 'error' : 'success'}`;
+            statusMessage.style.display = 'block';
+        }
+
+        function hideStatus() {
+            statusMessage.style.display = 'none';
+        }
+
+        async function predict() {
+            const imageData = canvas.toDataURL('image/png');
+            
+            showLoading();
+            hideStatus();
+            
+            try {
+                const response = await fetch('/predict', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ image: imageData })
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    predictedDigit.textContent = result.prediction;
+                    confidence.textContent = `置信度: ${(result.confidence * 100).toFixed(2)}%`;
+                    updateBarChart(result.probabilities);
+                    showStatus('识别成功！', false);
+                } else {
+                    throw new Error(result.error || '识别失败');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showStatus(`识别出错: ${error.message}`, true);
+            } finally {
+                hideLoading();
+            }
+        }
+    </script>
+</body>
+</html>
