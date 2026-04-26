@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<head>    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    
+        <script>
+            L_NO_TOUCH = false;
+            L_DISABLE_3D = false;
+        </script>
+    
+    <style>html, body {width: 100%;height: 100%;margin: 0;padding: 0;}</style>
+    <style>#map {position:absolute;top:0;bottom:0;right:0;left:0;}</style>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.6.0/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.6.0/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_369c59a5fb641f702f96d86dde190a22 {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+            </style>
+        
+</head>
+<body>    
+    
+        <div style="position: fixed; 
+                    bottom: 50px; left: 50px; width: 220px; height: 140px; 
+                    border:2px solid grey; z-index:9999; font-size:14px;
+                    background-color:white;
+                    padding: 10px;
+                    border-radius: 5px;
+                    opacity: 0.9;">
+        <p style="margin-top: 0; margin-bottom: 10px; font-weight: bold;">天气敏感度</p>
+        <p><i class="fa fa-minus" style="color:#00FF00; font-size: 20px;"></i>&nbsp; 低敏感度</p>
+        <p><i class="fa fa-minus" style="color:#FFFF00; font-size: 20px;"></i>&nbsp; 中等敏感度</p>
+        <p><i class="fa fa-minus" style="color:#FF8800; font-size: 20px;"></i>&nbsp; 较高敏感度</p>
+        <p><i class="fa fa-minus" style="color:#FF0000; font-size: 20px;"></i>&nbsp; 高敏感度</p>
+        </div>
+        
+    
+            <div class="folium-map" id="map_369c59a5fb641f702f96d86dde190a22" ></div>
+        
+</body>
+<script>    
+    
+            var map_369c59a5fb641f702f96d86dde190a22 = L.map(
+                "map_369c59a5fb641f702f96d86dde190a22",
+                {
+                    center: [39.90047280506819, 116.40432158734154],
+                    crs: L.CRS.EPSG3857,
+                    zoom: 12,
+                    zoomControl: true,
+                    preferCanvas: false,
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_8a1a8d6b1764a7950f3e9855af4352fb = L.tileLayer(
+                "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {"attribution": "Data by \u0026copy; \u003ca href=\"http://openstreetmap.org\"\u003eOpenStreetMap\u003c/a\u003e, under \u003ca href=\"http://www.openstreetmap.org/copyright\"\u003eODbL\u003c/a\u003e.", "detectRetina": false, "maxNativeZoom": 18, "maxZoom": 18, "minZoom": 0, "noWrap": false, "opacity": 1, "subdomains": "abc", "tms": false}
+            ).addTo(map_369c59a5fb641f702f96d86dde190a22);
+        
+    
+            var poly_line_1bb0ee2d079100d2b3f4f9dd2142863e = L.polyline(
+                [[39.93068735089171, 116.38695351501767], [39.92963017520641, 116.4490058800319]],
+                {"bubblingMouseEvents": true, "color": "#FF0032", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FF0032", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 3}
+            ).addTo(map_369c59a5fb641f702f96d86dde190a22);
+        
+    
+        var popup_ae6a60bef0f87d6ddeb9d1fb43a3b1fd = L.popup({"maxWidth": "100%"});
+
+        
+            var html_1213468338eeac58b53b95530214dc53 = $(`<div id="html_1213468338eeac58b53b95530214dc53" style="width: 100.0%; height: 100.0%;"><b>天气敏感路段</b><br>道路ID: RD009<br>类型: 次干道<br>限速: 40 km/h<br>晴天速度: 26.25 km/h<br>恶劣天气速度比例: 72.2%<br>综合敏感度: 0.2677</div>`)[0];
+            popup_ae6a60bef0f87d6ddeb9d1fb43a3b1fd.setContent(html_1213468338eeac58b53b95530214dc53);
+        
+
+        poly_line_1bb0ee2d079100d2b3f4f9dd2142863e.bindPopup(popup_ae6a60bef0f87d6ddeb9d1fb43a3b1fd)
+        ;
+
+        
+    
+    
+            var poly_line_de8ae089e74a69da96a64bc7951397cd = L.polyline(
+                [[39.85684342911607, 116.38354825300674], [39.89023182244571, 116.40849082227254]],
+                {"bubblingMouseEvents": true, "color": "#F50932", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#F50932", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 3}
+            ).addTo(map_369c59a5fb641f702f96d86dde190a22);
+        
+    
+        var popup_75ff13759c681546be849b3bff5310c2 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_319ceca15a2e90278c572e6c2d888ec8 = $(`<div id="html_319ceca15a2e90278c572e6c2d888ec8" style="width: 100.0%; height: 100.0%;"><b>天气敏感路段</b><br>道路ID: RD010<br>类型: 次干道<br>限速: 40 km/h<br>晴天速度: 26.10 km/h<br>恶劣天气速度比例: 72.6%<br>综合敏感度: 0.2581</div>`)[0];
+            popup_75ff13759c681546be849b3bff5310c2.setContent(html_319ceca15a2e90278c572e6c2d888ec8);
+        
+
+        poly_line_de8ae089e74a69da96a64bc7951397cd.bindPopup(popup_75ff13759c681546be849b3bff5310c2)
+        ;
+
+        
+    
+    
+            var poly_line_e2d5e80d01429e62818affec99098b9b = L.polyline(
+                [[39.858080507085916, 116.42212134237539], [39.92963017520641, 116.4490058800319]],
+                {"bubblingMouseEvents": true, "color": "#F40A32", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#F40A32", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(map_369c59a5fb641f702f96d86dde190a22);
+        
+    
+        var popup_2c47dc5a79fa8644a0e397ec56e986d2 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_d61c2cca376bd5236443a3bf09afa5e1 = $(`<div id="html_d61c2cca376bd5236443a3bf09afa5e1" style="width: 100.0%; height: 100.0%;"><b>天气敏感路段</b><br>道路ID: RD020<br>类型: 主干道<br>限速: 60 km/h<br>晴天速度: 39.02 km/h<br>恶劣天气速度比例: 72.6%<br>综合敏感度: 0.2566</div>`)[0];
+            popup_2c47dc5a79fa8644a0e397ec56e986d2.setContent(html_d61c2cca376bd5236443a3bf09afa5e1);
+        
+
+        poly_line_e2d5e80d01429e62818affec99098b9b.bindPopup(popup_2c47dc5a79fa8644a0e397ec56e986d2)
+        ;
+
+        
+    
+    
+            var poly_line_56e8e28504693daa820562bc45a2ee42 = L.polyline(
+                [[39.88684985771145, 116.42843588337003], [39.94114467055648, 116.39570154780704]],
+                {"bubblingMouseEvents": true, "color": "#F20C32", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#F20C32", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 3}
+            ).addTo(map_369c59a5fb641f702f96d86dde190a22);
+        
+    
+        var popup_b869ce9117eacb52f8dea4e297bb503a = L.popup({"maxWidth": "100%"});
+
+        
+            var html_77f43ca93ad7a42abd8a107040901ce3 = $(`<div id="html_77f43ca93ad7a42abd8a107040901ce3" style="width: 100.0%; height: 100.0%;"><b>天气敏感路段</b><br>道路ID: RD031<br>类型: 次干道<br>限速: 40 km/h<br>晴天速度: 26.05 km/h<br>恶劣天气速度比例: 72.8%<br>综合敏感度: 0.2547</div>`)[0];
+            popup_b869ce9117eacb52f8dea4e297bb503a.setContent(html_77f43ca93ad7a42abd8a107040901ce3);
+        
+
+        poly_line_56e8e28504693daa820562bc45a2ee42.bindPopup(popup_b869ce9117eacb52f8dea4e297bb503a)
+        ;
+
+        
+    
+    
+            var poly_line_5d8d9923502c6f15f27d3171f2c36199 = L.polyline(
+                [[39.89023182244571, 116.40849082227254], [39.91003928827176, 116.3677649439456]],
+                {"bubblingMouseEvents": true, "color": "#F20C32", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#F20C32", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 3}
+            ).addTo(map_369c59a5fb641f702f96d86dde190a22);
+        
+    
+        var popup_58ee1a97d8eeee9339b89067a7d19820 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_4dedbd8693de3dd599ee6b4ad7663a05 = $(`<div id="html_4dedbd8693de3dd599ee6b4ad7663a05" style="width: 100.0%; height: 100.0%;"><b>天气敏感路段</b><br>道路ID: RD033<br>类型: 次干道<br>限速: 40 km/h<br>晴天速度: 26.10 km/h<br>恶劣天气速度比例: 72.8%<br>综合敏感度: 0.2545</div>`)[0];
+            popup_58ee1a97d8eeee9339b89067a7d19820.setContent(html_4dedbd8693de3dd599ee6b4ad7663a05);
+        
+
+        poly_line_5d8d9923502c6f15f27d3171f2c36199.bindPopup(popup_58ee1a97d8eeee9339b89067a7d19820)
+        ;
+
+        
+    
+    
+            var poly_line_a87ea7e510bfd54bf09ac213d1db5ffd = L.polyline(
+                [[39.87889113276693, 116.35798679983246], [39.93068735089171, 116.38695351501767]],
+                {"bubblingMouseEvents": true, "color": "#F20C32", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#F20C32", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(map_369c59a5fb641f702f96d86dde190a22);
+        
+    
+        var popup_b9bc2fd4afe432edf80a5e81d9afaae3 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_58d0567ee6db5acc64923fb8e94314ec = $(`<div id="html_58d0567ee6db5acc64923fb8e94314ec" style="width: 100.0%; height: 100.0%;"><b>天气敏感路段</b><br>道路ID: RD014<br>类型: 主干道<br>限速: 60 km/h<br>晴天速度: 39.08 km/h<br>恶劣天气速度比例: 72.7%<br>综合敏感度: 0.2544</div>`)[0];
+            popup_b9bc2fd4afe432edf80a5e81d9afaae3.setContent(html_58d0567ee6db5acc64923fb8e94314ec);
+        
+
+        poly_line_a87ea7e510bfd54bf09ac213d1db5ffd.bindPopup(popup_b9bc2fd4afe432edf80a5e81d9afaae3)
+        ;
+
+        
+    
+    
+            var poly_line_346c1ff83d92369bcccf4327042080d2 = L.polyline(
+                [[39.891816549822956, 116.38544753056478], [39.90415034560206, 116.4381982569162]],
+                {"bubblingMouseEvents": true, "color": "#F10D32", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#F10D32", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(map_369c59a5fb641f702f96d86dde190a22);
+        
+    
+        var popup_25d6fc305d56515978bd89e889e91f25 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_39d22bfe3f32b1b486716992e490c2d4 = $(`<div id="html_39d22bfe3f32b1b486716992e490c2d4" style="width: 100.0%; height: 100.0%;"><b>天气敏感路段</b><br>道路ID: RD024<br>类型: 主干道<br>限速: 60 km/h<br>晴天速度: 39.17 km/h<br>恶劣天气速度比例: 72.8%<br>综合敏感度: 0.2540</div>`)[0];
+            popup_25d6fc305d56515978bd89e889e91f25.setContent(html_39d22bfe3f32b1b486716992e490c2d4);
+        
+
+        poly_line_346c1ff83d92369bcccf4327042080d2.bindPopup(popup_25d6fc305d56515978bd89e889e91f25)
+        ;
+
+        
+    
+    
+            var poly_line_b9fb0e565dfc8ce047edb9a848013bea = L.polyline(
+                [[39.88684985771145, 116.42843588337003], [39.87889113276693, 116.35798679983246]],
+                {"bubblingMouseEvents": true, "color": "#F10D32", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#F10D32", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 3}
+            ).addTo(map_369c59a5fb641f702f96d86dde190a22);
+        
+    
+        var popup_f442e5e835ae1fe7bed9352bacc56936 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_6a1e91fbdf6999c794465e4fc5e00f58 = $(`<div id="html_6a1e91fbdf6999c794465e4fc5e00f58" style="width: 100.0%; height: 100.0%;"><b>天气敏感路段</b><br>道路ID: RD006<br>类型: 次干道<br>限速: 40 km/h<br>晴天速度: 26.07 km/h<br>恶劣天气速度比例: 72.8%<br>综合敏感度: 0.2539</div>`)[0];
+            popup_f442e5e835ae1fe7bed9352bacc56936.setContent(html_6a1e91fbdf6999c794465e4fc5e00f58);
+        
+
+        poly_line_b9fb0e565dfc8ce047edb9a848013bea.bindPopup(popup_f442e5e835ae1fe7bed9352bacc56936)
+        ;
+
+        
+    
+    
+            var poly_line_a5d58587a5966e4e65df3b40b2a293a3 = L.polyline(
+                [[39.87889113276693, 116.35798679983246], [39.92880763307581, 116.4306172365548]],
+                {"bubblingMouseEvents": true, "color": "#F10D32", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#F10D32", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(map_369c59a5fb641f702f96d86dde190a22);
+        
+    
+        var popup_5535ff1f0c7ab7049b43435c4e7f90cc = L.popup({"maxWidth": "100%"});
+
+        
+            var html_5f2f98707c395c14c6441bcb824ed0ce = $(`<div id="html_5f2f98707c395c14c6441bcb824ed0ce" style="width: 100.0%; height: 100.0%;"><b>天气敏感路段</b><br>道路ID: RD004<br>类型: 主干道<br>限速: 60 km/h<br>晴天速度: 39.08 km/h<br>恶劣天气速度比例: 72.8%<br>综合敏感度: 0.2534</div>`)[0];
+            popup_5535ff1f0c7ab7049b43435c4e7f90cc.setContent(html_5f2f98707c395c14c6441bcb824ed0ce);
+        
+
+        poly_line_a5d58587a5966e4e65df3b40b2a293a3.bindPopup(popup_5535ff1f0c7ab7049b43435c4e7f90cc)
+        ;
+
+        
+    
+    
+            var poly_line_d62bd414b56087584e2ba7e3747fb17f = L.polyline(
+                [[39.91530709947699, 116.35961950501265], [39.89187114562218, 116.4145305691349]],
+                {"bubblingMouseEvents": true, "color": "#F10D32", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#F10D32", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(map_369c59a5fb641f702f96d86dde190a22);
+        
+    
+        var popup_16a6f48ea1ce3a2e528ae44dbea279b6 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_7770db7ed00d6e1563941d7824b1567e = $(`<div id="html_7770db7ed00d6e1563941d7824b1567e" style="width: 100.0%; height: 100.0%;"><b>天气敏感路段</b><br>道路ID: RD030<br>类型: 主干道<br>限速: 60 km/h<br>晴天速度: 39.10 km/h<br>恶劣天气速度比例: 72.9%<br>综合敏感度: 0.2531</div>`)[0];
+            popup_16a6f48ea1ce3a2e528ae44dbea279b6.setContent(html_7770db7ed00d6e1563941d7824b1567e);
+        
+
+        poly_line_d62bd414b56087584e2ba7e3747fb17f.bindPopup(popup_16a6f48ea1ce3a2e528ae44dbea279b6)
+        ;
+
+        
+    
+    
+            var poly_line_450a6ecbef2b3001b9bcbbbcdb0f7f9c = L.polyline(
+                [[39.92880763307581, 116.4306172365548], [39.854362439985735, 116.36545618175428]],
+                {"bubblingMouseEvents": true, "color": "#F00E32", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#F00E32", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(map_369c59a5fb641f702f96d86dde190a22);
+        
+    
+        var popup_7b9c601bf81d464e7dfc4cfe58fd4e6c = L.popup({"maxWidth": "100%"});
+
+        
+            var html_8f004c67f567a96ce5fee964f6d3de7e = $(`<div id="html_8f004c67f567a96ce5fee964f6d3de7e" style="width: 100.0%; height: 100.0%;"><b>天气敏感路段</b><br>道路ID: RD034<br>类型: 主干道<br>限速: 60 km/h<br>晴天速度: 39.11 km/h<br>恶劣天气速度比例: 72.9%<br>综合敏感度: 0.2524</div>`)[0];
+            popup_7b9c601bf81d464e7dfc4cfe58fd4e6c.setContent(html_8f004c67f567a96ce5fee964f6d3de7e);
+        
+
+        poly_line_450a6ecbef2b3001b9bcbbbcdb0f7f9c.bindPopup(popup_7b9c601bf81d464e7dfc4cfe58fd4e6c)
+        ;
+
+        
+    
+    
+            var poly_line_d958644ee6756f354009cebc9cb445b9 = L.polyline(
+                [[39.89187114562218, 116.4145305691349], [39.891816549822956, 116.38544753056478]],
+                {"bubblingMouseEvents": true, "color": "#F00E32", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#F00E32", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 3}
+            ).addTo(map_369c59a5fb641f702f96d86dde190a22);
+        
+    
+        var popup_af5922a8f3bc7e07274a1a7e679be371 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_80b2f14c5598de82e99ebc1c997ef4e4 = $(`<div id="html_80b2f14c5598de82e99ebc1c997ef4e4" style="width: 100.0%; height: 100.0%;"><b>天气敏感路段</b><br>道路ID: RD011<br>类型: 次干道<br>限速: 40 km/h<br>晴天速度: 26.06 km/h<br>恶劣天气速度比例: 72.9%<br>综合敏感度: 0.2521</div>`)[0];
+            popup_af5922a8f3bc7e07274a1a7e679be371.setContent(html_80b2f14c5598de82e99ebc1c997ef4e4);
+        
+
+        poly_line_d958644ee6756f354009cebc9cb445b9.bindPopup(popup_af5922a8f3bc7e07274a1a7e679be371)
+        ;
+
+        
+    
+    
+            var poly_line_a0edd45f2978623699f6f3198352b5fe = L.polyline(
+                [[39.92880763307581, 116.4306172365548], [39.90415034560206, 116.4381982569162]],
+                {"bubblingMouseEvents": true, "color": "#EF0F32", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#EF0F32", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(map_369c59a5fb641f702f96d86dde190a22);
+        
+    
+        var popup_672ea621497e51f699c7c6529e864293 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_49333c86ce6a548e426247475aaca43d = $(`<div id="html_49333c86ce6a548e426247475aaca43d" style="width: 100.0%; height: 100.0%;"><b>天气敏感路段</b><br>道路ID: RD019<br>类型: 主干道<br>限速: 60 km/h<br>晴天速度: 39.06 km/h<br>恶劣天气速度比例: 72.9%<br>综合敏感度: 0.2519</div>`)[0];
+            popup_672ea621497e51f699c7c6529e864293.setContent(html_49333c86ce6a548e426247475aaca43d);
+        
+
+        poly_line_a0edd45f2978623699f6f3198352b5fe.bindPopup(popup_672ea621497e51f699c7c6529e864293)
+        ;
+
+        
+    
+    
+            var poly_line_f04c4f40c02770ef2838740eb5247855 = L.polyline(
+                [[39.89187114562218, 116.4145305691349], [39.878697094249624, 116.4120959277378]],
+                {"bubblingMouseEvents": true, "color": "#EF0F32", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#EF0F32", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 3}
+            ).addTo(map_369c59a5fb641f702f96d86dde190a22);
+        
+    
+        var popup_c3f4b1f23132d811218ee7970e484f62 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_0896896e0ea46a6d4d45be93cf792b98 = $(`<div id="html_0896896e0ea46a6d4d45be93cf792b98" style="width: 100.0%; height: 100.0%;"><b>天气敏感路段</b><br>道路ID: RD027<br>类型: 次干道<br>限速: 40 km/h<br>晴天速度: 26.01 km/h<br>恶劣天气速度比例: 72.8%<br>综合敏感度: 0.2519</div>`)[0];
+            popup_c3f4b1f23132d811218ee7970e484f62.setContent(html_0896896e0ea46a6d4d45be93cf792b98);
+        
+
+        poly_line_f04c4f40c02770ef2838740eb5247855.bindPopup(popup_c3f4b1f23132d811218ee7970e484f62)
+        ;
+
+        
+    
+    
+            var poly_line_833bd9a11a243b4716c978081880e34d = L.polyline(
+                [[39.88684985771145, 116.42843588337003], [39.878697094249624, 116.4120959277378]],
+                {"bubblingMouseEvents": true, "color": "#EF0F32", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#EF0F32", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(map_369c59a5fb641f702f96d86dde190a22);
+        
+    
+        var popup_84e8a4c8f41d2b17cc6f3a729ce22886 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_6e6358b87eee20fe392505f24ae43405 = $(`<div id="html_6e6358b87eee20fe392505f24ae43405" style="width: 100.0%; height: 100.0%;"><b>天气敏感路段</b><br>道路ID: RD036<br>类型: 主干道<br>限速: 60 km/h<br>晴天速度: 39.07 km/h<br>恶劣天气速度比例: 72.9%<br>综合敏感度: 0.2516</div>`)[0];
+            popup_84e8a4c8f41d2b17cc6f3a729ce22886.setContent(html_6e6358b87eee20fe392505f24ae43405);
+        
+
+        poly_line_833bd9a11a243b4716c978081880e34d.bindPopup(popup_84e8a4c8f41d2b17cc6f3a729ce22886)
+        ;
+
+        
+    
+    
+            var poly_line_5eac5d571e4de17882be2efc61cc14d9 = L.polyline(
+                [[39.85684342911607, 116.38354825300674], [39.89187114562218, 116.4145305691349]],
+                {"bubblingMouseEvents": true, "color": "#EF0F32", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#EF0F32", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(map_369c59a5fb641f702f96d86dde190a22);
+        
+    
+        var popup_ff329129d8da877999072db150c26b3a = L.popup({"maxWidth": "100%"});
+
+        
+            var html_40a429b8531d37c97bfd842011b6dfe5 = $(`<div id="html_40a429b8531d37c97bfd842011b6dfe5" style="width: 100.0%; height: 100.0%;"><b>天气敏感路段</b><br>道路ID: RD028<br>类型: 主干道<br>限速: 60 km/h<br>晴天速度: 38.96 km/h<br>恶劣天气速度比例: 72.9%<br>综合敏感度: 0.2516</div>`)[0];
+            popup_ff329129d8da877999072db150c26b3a.setContent(html_40a429b8531d37c97bfd842011b6dfe5);
+        
+
+        poly_line_5eac5d571e4de17882be2efc61cc14d9.bindPopup(popup_ff329129d8da877999072db150c26b3a)
+        ;
+
+        
+    
+    
+            var poly_line_df45baeaac9eb5ba81f678a383516659 = L.polyline(
+                [[39.89023182244571, 116.40849082227254], [39.90209104138482, 116.423297340713]],
+                {"bubblingMouseEvents": true, "color": "#EF0F32", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#EF0F32", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 3}
+            ).addTo(map_369c59a5fb641f702f96d86dde190a22);
+        
+    
+        var popup_ccc15557a2bea82d5e19e093b9f973b0 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_1aeee060813e5acee69c4e82381fc0c4 = $(`<div id="html_1aeee060813e5acee69c4e82381fc0c4" style="width: 100.0%; height: 100.0%;"><b>天气敏感路段</b><br>道路ID: RD037<br>类型: 次干道<br>限速: 40 km/h<br>晴天速度: 26.09 km/h<br>恶劣天气速度比例: 72.9%<br>综合敏感度: 0.2515</div>`)[0];
+            popup_ccc15557a2bea82d5e19e093b9f973b0.setContent(html_1aeee060813e5acee69c4e82381fc0c4);
+        
+
+        poly_line_df45baeaac9eb5ba81f678a383516659.bindPopup(popup_ccc15557a2bea82d5e19e093b9f973b0)
+        ;
+
+        
+    
+    
+            var poly_line_1c4508030aed64aa9cc87c24d57a0e0d = L.polyline(
+                [[39.92054612690199, 116.44687948039126], [39.91003928827176, 116.3677649439456]],
+                {"bubblingMouseEvents": true, "color": "#EF0F32", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#EF0F32", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(map_369c59a5fb641f702f96d86dde190a22);
+        
+    
+        var popup_e97e724e68e71c73ff0c1ba4bf4bdd43 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_6adc3b7c269389ddbfe39e64ca4f5fbb = $(`<div id="html_6adc3b7c269389ddbfe39e64ca4f5fbb" style="width: 100.0%; height: 100.0%;"><b>天气敏感路段</b><br>道路ID: RD016<br>类型: 主干道<br>限速: 60 km/h<br>晴天速度: 39.20 km/h<br>恶劣天气速度比例: 72.9%<br>综合敏感度: 0.2514</div>`)[0];
+            popup_e97e724e68e71c73ff0c1ba4bf4bdd43.setContent(html_6adc3b7c269389ddbfe39e64ca4f5fbb);
+        
+
+        poly_line_1c4508030aed64aa9cc87c24d57a0e0d.bindPopup(popup_e97e724e68e71c73ff0c1ba4bf4bdd43)
+        ;
+
+        
+    
+    
+            var poly_line_679d2b188711c9719b271c54320d0973 = L.polyline(
+                [[39.92880763307581, 116.4306172365548], [39.89187114562218, 116.4145305691349]],
+                {"bubblingMouseEvents": true, "color": "#EF0F32", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#EF0F32", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(map_369c59a5fb641f702f96d86dde190a22);
+        
+    
+        var popup_633a124dfb8f5051e586c7761bbdbeb7 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_f9fbc29b9259afcba01c7de97039ace1 = $(`<div id="html_f9fbc29b9259afcba01c7de97039ace1" style="width: 100.0%; height: 100.0%;"><b>天气敏感路段</b><br>道路ID: RD029<br>类型: 主干道<br>限速: 60 km/h<br>晴天速度: 39.10 km/h<br>恶劣天气速度比例: 73.0%<br>综合敏感度: 0.2514</div>`)[0];
+            popup_633a124dfb8f5051e586c7761bbdbeb7.setContent(html_f9fbc29b9259afcba01c7de97039ace1);
+        
+
+        poly_line_679d2b188711c9719b271c54320d0973.bindPopup(popup_633a124dfb8f5051e586c7761bbdbeb7)
+        ;
+
+        
+    
+    
+            var poly_line_9dd29b808beb75c2960cbec6d9ed048a = L.polyline(
+                [[39.91530709947699, 116.35961950501265], [39.91291444394971, 116.43139994775234]],
+                {"bubblingMouseEvents": true, "color": "#EF0F32", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#EF0F32", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(map_369c59a5fb641f702f96d86dde190a22);
+        
+    
+        var popup_7a7c54987fd700a7fb5f2500f5dca8d0 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_be588108690d1be26c3dc335374071ff = $(`<div id="html_be588108690d1be26c3dc335374071ff" style="width: 100.0%; height: 100.0%;"><b>天气敏感路段</b><br>道路ID: RD000<br>类型: 主干道<br>限速: 60 km/h<br>晴天速度: 39.03 km/h<br>恶劣天气速度比例: 72.9%<br>综合敏感度: 0.2511</div>`)[0];
+            popup_7a7c54987fd700a7fb5f2500f5dca8d0.setContent(html_be588108690d1be26c3dc335374071ff);
+        
+
+        poly_line_9dd29b808beb75c2960cbec6d9ed048a.bindPopup(popup_7a7c54987fd700a7fb5f2500f5dca8d0)
+        ;
+
+        
+    
+    
+            var poly_line_3f08f5abae649707a8dbbbcb743c35e3 = L.polyline(
+                [[39.90209104138482, 116.423297340713], [39.858080507085916, 116.42212134237539]],
+                {"bubblingMouseEvents": true, "color": "#EE1032", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#EE1032", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 2}
+            ).addTo(map_369c59a5fb641f702f96d86dde190a22);
+        
+    
+        var popup_bdfe4e8348ecf578a8d3cbc180bdf57b = L.popup({"maxWidth": "100%"});
+
+        
+            var html_166ebe0c5f049f8388e6dafa87cf1c3c = $(`<div id="html_166ebe0c5f049f8388e6dafa87cf1c3c" style="width: 100.0%; height: 100.0%;"><b>天气敏感路段</b><br>道路ID: RD025<br>类型: 支路<br>限速: 30 km/h<br>晴天速度: 19.51 km/h<br>恶劣天气速度比例: 73.0%<br>综合敏感度: 0.2505</div>`)[0];
+            popup_bdfe4e8348ecf578a8d3cbc180bdf57b.setContent(html_166ebe0c5f049f8388e6dafa87cf1c3c);
+        
+
+        poly_line_3f08f5abae649707a8dbbbcb743c35e3.bindPopup(popup_bdfe4e8348ecf578a8d3cbc180bdf57b)
+        ;
+
+        
+    
+    
+            var poly_line_05a83a3f0e52b6875a9c822c5612113e = L.polyline(
+                [[39.92054612690199, 116.44687948039126], [39.85684342911607, 116.38354825300674]],
+                {"bubblingMouseEvents": true, "color": "#EE1032", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#EE1032", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 2}
+            ).addTo(map_369c59a5fb641f702f96d86dde190a22);
+        
+    
+        var popup_71bc780a43d15ad2ac26588ce674e550 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_785d37e6749c0f545a26ac70e7f75ef2 = $(`<div id="html_785d37e6749c0f545a26ac70e7f75ef2" style="width: 100.0%; height: 100.0%;"><b>天气敏感路段</b><br>道路ID: RD013<br>类型: 支路<br>限速: 30 km/h<br>晴天速度: 19.56 km/h<br>恶劣天气速度比例: 73.0%<br>综合敏感度: 0.2504</div>`)[0];
+            popup_71bc780a43d15ad2ac26588ce674e550.setContent(html_785d37e6749c0f545a26ac70e7f75ef2);
+        
+
+        poly_line_05a83a3f0e52b6875a9c822c5612113e.bindPopup(popup_71bc780a43d15ad2ac26588ce674e550)
+        ;
+
+        
+    
+    
+            var poly_line_829d55f9ae6743ec1c95130a014e6931 = L.polyline(
+                [[39.92649394723945, 116.37888078263903], [39.90415034560206, 116.4381982569162]],
+                {"bubblingMouseEvents": true, "color": "#EE1032", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#EE1032", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 3}
+            ).addTo(map_369c59a5fb641f702f96d86dde190a22);
+        
+    
+        var popup_d15ca9785ae36735794beed179a6179e = L.popup({"maxWidth": "100%"});
+
+        
+            var html_9d8ed4e721a505e6f9f17a2766911d89 = $(`<div id="html_9d8ed4e721a505e6f9f17a2766911d89" style="width: 100.0%; height: 100.0%;"><b>天气敏感路段</b><br>道路ID: RD026<br>类型: 次干道<br>限速: 40 km/h<br>晴天速度: 26.03 km/h<br>恶劣天气速度比例: 72.9%<br>综合敏感度: 0.2501</div>`)[0];
+            popup_d15ca9785ae36735794beed179a6179e.setContent(html_9d8ed4e721a505e6f9f17a2766911d89);
+        
+
+        poly_line_829d55f9ae6743ec1c95130a014e6931.bindPopup(popup_d15ca9785ae36735794beed179a6179e)
+        ;
+
+        
+    
+    
+            var poly_line_ccc4094b176a48844fda83c66741f600 = L.polyline(
+                [[39.88684985771145, 116.42843588337003], [39.90415034560206, 116.4381982569162]],
+                {"bubblingMouseEvents": true, "color": "#EE1032", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#EE1032", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(map_369c59a5fb641f702f96d86dde190a22);
+        
+    
+        var popup_4d2ed5ab72942a4148b6ad0baf34de77 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_970938fa95a296a0b17ce129ea1eedc6 = $(`<div id="html_970938fa95a296a0b17ce129ea1eedc6" style="width: 100.0%; height: 100.0%;"><b>天气敏感路段</b><br>道路ID: RD035<br>类型: 主干道<br>限速: 60 km/h<br>晴天速度: 39.10 km/h<br>恶劣天气速度比例: 73.0%<br>综合敏感度: 0.2499</div>`)[0];
+            popup_4d2ed5ab72942a4148b6ad0baf34de77.setContent(html_970938fa95a296a0b17ce129ea1eedc6);
+        
+
+        poly_line_ccc4094b176a48844fda83c66741f600.bindPopup(popup_4d2ed5ab72942a4148b6ad0baf34de77)
+        ;
+
+        
+    
+    
+            var poly_line_b179c2195e311449c099a02cbe1d8f4d = L.polyline(
+                [[39.92880763307581, 116.4306172365548], [39.94114467055648, 116.39570154780704]],
+                {"bubblingMouseEvents": true, "color": "#ED1132", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#ED1132", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 3}
+            ).addTo(map_369c59a5fb641f702f96d86dde190a22);
+        
+    
+        var popup_f738c5c794d04ee5acca76588777ab59 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_3f66b250303f79f7ea44dd2bf15b376d = $(`<div id="html_3f66b250303f79f7ea44dd2bf15b376d" style="width: 100.0%; height: 100.0%;"><b>天气敏感路段</b><br>道路ID: RD012<br>类型: 次干道<br>限速: 40 km/h<br>晴天速度: 25.99 km/h<br>恶劣天气速度比例: 73.0%<br>综合敏感度: 0.2497</div>`)[0];
+            popup_f738c5c794d04ee5acca76588777ab59.setContent(html_3f66b250303f79f7ea44dd2bf15b376d);
+        
+
+        poly_line_b179c2195e311449c099a02cbe1d8f4d.bindPopup(popup_f738c5c794d04ee5acca76588777ab59)
+        ;
+
+        
+    
+    
+            var poly_line_b9825b671d0652549bec4505c457541b = L.polyline(
+                [[39.92963017520641, 116.4490058800319], [39.89023182244571, 116.40849082227254]],
+                {"bubblingMouseEvents": true, "color": "#ED1132", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#ED1132", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 2}
+            ).addTo(map_369c59a5fb641f702f96d86dde190a22);
+        
+    
+        var popup_5f6b1c80996a7e5bfe3e5d068a399918 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_2f4575e126b3fa5d83e9481a4793986a = $(`<div id="html_2f4575e126b3fa5d83e9481a4793986a" style="width: 100.0%; height: 100.0%;"><b>天气敏感路段</b><br>道路ID: RD039<br>类型: 支路<br>限速: 30 km/h<br>晴天速度: 19.54 km/h<br>恶劣天气速度比例: 73.1%<br>综合敏感度: 0.2491</div>`)[0];
+            popup_5f6b1c80996a7e5bfe3e5d068a399918.setContent(html_2f4575e126b3fa5d83e9481a4793986a);
+        
+
+        poly_line_b9825b671d0652549bec4505c457541b.bindPopup(popup_5f6b1c80996a7e5bfe3e5d068a399918)
+        ;
+
+        
+    
+    
+            var poly_line_3e20a9e947527b85fadd2a4162d034ea = L.polyline(
+                [[39.878697094249624, 116.4120959277378], [39.92963017520641, 116.4490058800319]],
+                {"bubblingMouseEvents": true, "color": "#ED1132", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#ED1132", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 2}
+            ).addTo(map_369c59a5fb641f702f96d86dde190a22);
+        
+    
+        var popup_0b681b132376ebb307a166cb23692b6b = L.popup({"maxWidth": "100%"});
+
+        
+            var html_61fcad3ffe14cd31e08ed259b932530d = $(`<div id="html_61fcad3ffe14cd31e08ed259b932530d" style="width: 100.0%; height: 100.0%;"><b>天气敏感路段</b><br>道路ID: RD017<br>类型: 支路<br>限速: 30 km/h<br>晴天速度: 19.53 km/h<br>恶劣天气速度比例: 73.2%<br>综合敏感度: 0.2491</div>`)[0];
+            popup_0b681b132376ebb307a166cb23692b6b.setContent(html_61fcad3ffe14cd31e08ed259b932530d);
+        
+
+        poly_line_3e20a9e947527b85fadd2a4162d034ea.bindPopup(popup_0b681b132376ebb307a166cb23692b6b)
+        ;
+
+        
+    
+    
+            var poly_line_0ef98301fa62cf4035b8f0814ae77914 = L.polyline(
+                [[39.94114467055648, 116.39570154780704], [39.92054612690199, 116.44687948039126]],
+                {"bubblingMouseEvents": true, "color": "#ED1132", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#ED1132", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 3}
+            ).addTo(map_369c59a5fb641f702f96d86dde190a22);
+        
+    
+        var popup_2c19d1b323655415042cb9a185919dc0 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_1701b38a1f38f28eaf2b953ff5fa3ff5 = $(`<div id="html_1701b38a1f38f28eaf2b953ff5fa3ff5" style="width: 100.0%; height: 100.0%;"><b>天气敏感路段</b><br>道路ID: RD005<br>类型: 次干道<br>限速: 40 km/h<br>晴天速度: 26.01 km/h<br>恶劣天气速度比例: 73.1%<br>综合敏感度: 0.2490</div>`)[0];
+            popup_2c19d1b323655415042cb9a185919dc0.setContent(html_1701b38a1f38f28eaf2b953ff5fa3ff5);
+        
+
+        poly_line_0ef98301fa62cf4035b8f0814ae77914.bindPopup(popup_2c19d1b323655415042cb9a185919dc0)
+        ;
+
+        
+    
+    
+            var poly_line_9e4284df759cdbf7839ea15437ad7295 = L.polyline(
+                [[39.858080507085916, 116.42212134237539], [39.88684985771145, 116.42843588337003]],
+                {"bubblingMouseEvents": true, "color": "#ED1132", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#ED1132", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(map_369c59a5fb641f702f96d86dde190a22);
+        
+    
+        var popup_4ea1ef80d6b1e01af91281faf07f325b = L.popup({"maxWidth": "100%"});
+
+        
+            var html_2c9361958e201a4abd7dfa024c94f718 = $(`<div id="html_2c9361958e201a4abd7dfa024c94f718" style="width: 100.0%; height: 100.0%;"><b>天气敏感路段</b><br>道路ID: RD015<br>类型: 主干道<br>限速: 60 km/h<br>晴天速度: 39.09 km/h<br>恶劣天气速度比例: 73.0%<br>综合敏感度: 0.2490</div>`)[0];
+            popup_4ea1ef80d6b1e01af91281faf07f325b.setContent(html_2c9361958e201a4abd7dfa024c94f718);
+        
+
+        poly_line_9e4284df759cdbf7839ea15437ad7295.bindPopup(popup_4ea1ef80d6b1e01af91281faf07f325b)
+        ;
+
+        
+    
+    
+            var poly_line_5d742f498eb981eb7fd30e7ec6383cc3 = L.polyline(
+                [[39.92880763307581, 116.4306172365548], [39.878697094249624, 116.4120959277378]],
+                {"bubblingMouseEvents": true, "color": "#ED1132", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#ED1132", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(map_369c59a5fb641f702f96d86dde190a22);
+        
+    
+        var popup_f3416f7203dfc5281b2d1ffe837d4a54 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_7c56240d55e3d0def7d31a3c6a77d792 = $(`<div id="html_7c56240d55e3d0def7d31a3c6a77d792" style="width: 100.0%; height: 100.0%;"><b>天气敏感路段</b><br>道路ID: RD001<br>类型: 主干道<br>限速: 60 km/h<br>晴天速度: 39.00 km/h<br>恶劣天气速度比例: 73.0%<br>综合敏感度: 0.2490</div>`)[0];
+            popup_f3416f7203dfc5281b2d1ffe837d4a54.setContent(html_7c56240d55e3d0def7d31a3c6a77d792);
+        
+
+        poly_line_5d742f498eb981eb7fd30e7ec6383cc3.bindPopup(popup_f3416f7203dfc5281b2d1ffe837d4a54)
+        ;
+
+        
+    
+    
+            var poly_line_d3b3d59f487c960fc7b9d1f7f2dc1407 = L.polyline(
+                [[39.858080507085916, 116.42212134237539], [39.94114467055648, 116.39570154780704]],
+                {"bubblingMouseEvents": true, "color": "#EC1232", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#EC1232", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 2}
+            ).addTo(map_369c59a5fb641f702f96d86dde190a22);
+        
+    
+        var popup_2463f1e9dfc8c45749acfa8d30e9d08b = L.popup({"maxWidth": "100%"});
+
+        
+            var html_bfbb1ab7636d45f77cef961725def3f7 = $(`<div id="html_bfbb1ab7636d45f77cef961725def3f7" style="width: 100.0%; height: 100.0%;"><b>天气敏感路段</b><br>道路ID: RD023<br>类型: 支路<br>限速: 30 km/h<br>晴天速度: 19.50 km/h<br>恶劣天气速度比例: 73.1%<br>综合敏感度: 0.2488</div>`)[0];
+            popup_2463f1e9dfc8c45749acfa8d30e9d08b.setContent(html_bfbb1ab7636d45f77cef961725def3f7);
+        
+
+        poly_line_d3b3d59f487c960fc7b9d1f7f2dc1407.bindPopup(popup_2463f1e9dfc8c45749acfa8d30e9d08b)
+        ;
+
+        
+    
+    
+            var poly_line_621f294e13439333ab652809ca48e54a = L.polyline(
+                [[39.89187114562218, 116.4145305691349], [39.91003928827176, 116.3677649439456]],
+                {"bubblingMouseEvents": true, "color": "#EC1232", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#EC1232", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 2}
+            ).addTo(map_369c59a5fb641f702f96d86dde190a22);
+        
+    
+        var popup_1a4e3f18a6182d794027c5661505d135 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_edadcdc78b18be508e1a4a903dcf9c83 = $(`<div id="html_edadcdc78b18be508e1a4a903dcf9c83" style="width: 100.0%; height: 100.0%;"><b>天气敏感路段</b><br>道路ID: RD032<br>类型: 支路<br>限速: 30 km/h<br>晴天速度: 19.56 km/h<br>恶劣天气速度比例: 73.1%<br>综合敏感度: 0.2481</div>`)[0];
+            popup_1a4e3f18a6182d794027c5661505d135.setContent(html_edadcdc78b18be508e1a4a903dcf9c83);
+        
+
+        poly_line_621f294e13439333ab652809ca48e54a.bindPopup(popup_1a4e3f18a6182d794027c5661505d135)
+        ;
+
+        
+    
+    
+            var poly_line_c20693074579ac671bb38833578dafb8 = L.polyline(
+                [[39.92880763307581, 116.4306172365548], [39.91291444394971, 116.43139994775234]],
+                {"bubblingMouseEvents": true, "color": "#EC1232", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#EC1232", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 3}
+            ).addTo(map_369c59a5fb641f702f96d86dde190a22);
+        
+    
+        var popup_1f6e142eedfd0f215e6dbf8a89e6f643 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_7e69ae4daacccc8b09c4eb51239a5c03 = $(`<div id="html_7e69ae4daacccc8b09c4eb51239a5c03" style="width: 100.0%; height: 100.0%;"><b>天气敏感路段</b><br>道路ID: RD003<br>类型: 次干道<br>限速: 40 km/h<br>晴天速度: 26.02 km/h<br>恶劣天气速度比例: 73.1%<br>综合敏感度: 0.2479</div>`)[0];
+            popup_1f6e142eedfd0f215e6dbf8a89e6f643.setContent(html_7e69ae4daacccc8b09c4eb51239a5c03);
+        
+
+        poly_line_c20693074579ac671bb38833578dafb8.bindPopup(popup_1f6e142eedfd0f215e6dbf8a89e6f643)
+        ;
+
+        
+    
+    
+            var poly_line_2610df9da73e26d5da0fc383d1401e5e = L.polyline(
+                [[39.91530709947699, 116.35961950501265], [39.878697094249624, 116.4120959277378]],
+                {"bubblingMouseEvents": true, "color": "#EB1332", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#EB1332", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 2}
+            ).addTo(map_369c59a5fb641f702f96d86dde190a22);
+        
+    
+        var popup_0dd03d28d39edecec919fb504f6beb6f = L.popup({"maxWidth": "100%"});
+
+        
+            var html_9e31619c4b98daaf50358d9bf1882d7a = $(`<div id="html_9e31619c4b98daaf50358d9bf1882d7a" style="width: 100.0%; height: 100.0%;"><b>天气敏感路段</b><br>道路ID: RD022<br>类型: 支路<br>限速: 30 km/h<br>晴天速度: 19.46 km/h<br>恶劣天气速度比例: 73.1%<br>综合敏感度: 0.2468</div>`)[0];
+            popup_0dd03d28d39edecec919fb504f6beb6f.setContent(html_9e31619c4b98daaf50358d9bf1882d7a);
+        
+
+        poly_line_2610df9da73e26d5da0fc383d1401e5e.bindPopup(popup_0dd03d28d39edecec919fb504f6beb6f)
+        ;
+
+        
+    
+    
+            var poly_line_a4a9cb7b827ad5d6cb1b6a7b00945976 = L.polyline(
+                [[39.91003928827176, 116.3677649439456], [39.92880763307581, 116.4306172365548]],
+                {"bubblingMouseEvents": true, "color": "#EA1432", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#EA1432", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(map_369c59a5fb641f702f96d86dde190a22);
+        
+    
+        var popup_392b2dba423af8516ab95a606d84f563 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_22d6d140a49e34e094b225bed6d57a9c = $(`<div id="html_22d6d140a49e34e094b225bed6d57a9c" style="width: 100.0%; height: 100.0%;"><b>天气敏感路段</b><br>道路ID: RD038<br>类型: 主干道<br>限速: 60 km/h<br>晴天速度: 39.01 km/h<br>恶劣天气速度比例: 73.1%<br>综合敏感度: 0.2465</div>`)[0];
+            popup_392b2dba423af8516ab95a606d84f563.setContent(html_22d6d140a49e34e094b225bed6d57a9c);
+        
+
+        poly_line_a4a9cb7b827ad5d6cb1b6a7b00945976.bindPopup(popup_392b2dba423af8516ab95a606d84f563)
+        ;
+
+        
+    
+    
+            var poly_line_7bd0e5f83d4a37743a1be217d015f94b = L.polyline(
+                [[39.91291444394971, 116.43139994775234], [39.92963017520641, 116.4490058800319]],
+                {"bubblingMouseEvents": true, "color": "#E91532", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#E91532", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(map_369c59a5fb641f702f96d86dde190a22);
+        
+    
+        var popup_b52d9285ecae1304b241bfa26f003753 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_14d8e856cd705853c3e2fe3ec58c6507 = $(`<div id="html_14d8e856cd705853c3e2fe3ec58c6507" style="width: 100.0%; height: 100.0%;"><b>天气敏感路段</b><br>道路ID: RD021<br>类型: 主干道<br>限速: 60 km/h<br>晴天速度: 38.90 km/h<br>恶劣天气速度比例: 73.2%<br>综合敏感度: 0.2453</div>`)[0];
+            popup_b52d9285ecae1304b241bfa26f003753.setContent(html_14d8e856cd705853c3e2fe3ec58c6507);
+        
+
+        poly_line_7bd0e5f83d4a37743a1be217d015f94b.bindPopup(popup_b52d9285ecae1304b241bfa26f003753)
+        ;
+
+        
+    
+    
+            var poly_line_bcf1435121e3f67f98bffbffb6959a07 = L.polyline(
+                [[39.87889113276693, 116.35798679983246], [39.858080507085916, 116.42212134237539]],
+                {"bubblingMouseEvents": true, "color": "#E81632", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#E81632", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(map_369c59a5fb641f702f96d86dde190a22);
+        
+    
+        var popup_e00feffd94013724924b9fc1b41b62f7 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_9abaed51aee400196451c13560ec3b61 = $(`<div id="html_9abaed51aee400196451c13560ec3b61" style="width: 100.0%; height: 100.0%;"><b>天气敏感路段</b><br>道路ID: RD007<br>类型: 主干道<br>限速: 60 km/h<br>晴天速度: 38.98 km/h<br>恶劣天气速度比例: 73.3%<br>综合敏感度: 0.2444</div>`)[0];
+            popup_e00feffd94013724924b9fc1b41b62f7.setContent(html_9abaed51aee400196451c13560ec3b61);
+        
+
+        poly_line_bcf1435121e3f67f98bffbffb6959a07.bindPopup(popup_e00feffd94013724924b9fc1b41b62f7)
+        ;
+
+        
+    
+    
+            var poly_line_048200e70d6dd307e357e87c4867d688 = L.polyline(
+                [[39.89023182244571, 116.40849082227254], [39.878697094249624, 116.4120959277378]],
+                {"bubblingMouseEvents": true, "color": "#E71732", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#E71732", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 2}
+            ).addTo(map_369c59a5fb641f702f96d86dde190a22);
+        
+    
+        var popup_64109dc93eb18fbf24850fd84293941a = L.popup({"maxWidth": "100%"});
+
+        
+            var html_03868a497a208b86c40fc80524619a0d = $(`<div id="html_03868a497a208b86c40fc80524619a0d" style="width: 100.0%; height: 100.0%;"><b>天气敏感路段</b><br>道路ID: RD002<br>类型: 支路<br>限速: 30 km/h<br>晴天速度: 19.48 km/h<br>恶劣天气速度比例: 73.2%<br>综合敏感度: 0.2431</div>`)[0];
+            popup_64109dc93eb18fbf24850fd84293941a.setContent(html_03868a497a208b86c40fc80524619a0d);
+        
+
+        poly_line_048200e70d6dd307e357e87c4867d688.bindPopup(popup_64109dc93eb18fbf24850fd84293941a)
+        ;
+
+        
+    
+    
+            var poly_line_1de903e18b4424a1759951238ed1032c = L.polyline(
+                [[39.87889113276693, 116.35798679983246], [39.91530709947699, 116.35961950501265]],
+                {"bubblingMouseEvents": true, "color": "#E71732", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#E71732", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 2}
+            ).addTo(map_369c59a5fb641f702f96d86dde190a22);
+        
+    
+        var popup_f69a310075f8d0b75f76607d091f5e82 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_b2b62b17216557dcd0593fc2aa2203dc = $(`<div id="html_b2b62b17216557dcd0593fc2aa2203dc" style="width: 100.0%; height: 100.0%;"><b>天气敏感路段</b><br>道路ID: RD008<br>类型: 支路<br>限速: 30 km/h<br>晴天速度: 19.44 km/h<br>恶劣天气速度比例: 73.4%<br>综合敏感度: 0.2425</div>`)[0];
+            popup_f69a310075f8d0b75f76607d091f5e82.setContent(html_b2b62b17216557dcd0593fc2aa2203dc);
+        
+
+        poly_line_1de903e18b4424a1759951238ed1032c.bindPopup(popup_f69a310075f8d0b75f76607d091f5e82)
+        ;
+
+        
+    
+    
+            var poly_line_a86b6f703c5e7090ce8dde4efcd4f6d8 = L.polyline(
+                [[39.90415034560206, 116.4381982569162], [39.93068735089171, 116.38695351501767]],
+                {"bubblingMouseEvents": true, "color": "#E11D32", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#E11D32", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 3}
+            ).addTo(map_369c59a5fb641f702f96d86dde190a22);
+        
+    
+        var popup_a3003a9b0b2c2b22a77a014a9f7680c6 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_3f8eb62d66d7bf4724ce3a1b21c9be57 = $(`<div id="html_3f8eb62d66d7bf4724ce3a1b21c9be57" style="width: 100.0%; height: 100.0%;"><b>天气敏感路段</b><br>道路ID: RD018<br>类型: 次干道<br>限速: 40 km/h<br>晴天速度: 25.90 km/h<br>恶劣天气速度比例: 73.6%<br>综合敏感度: 0.2364</div>`)[0];
+            popup_a3003a9b0b2c2b22a77a014a9f7680c6.setContent(html_3f8eb62d66d7bf4724ce3a1b21c9be57);
+        
+
+        poly_line_a86b6f703c5e7090ce8dde4efcd4f6d8.bindPopup(popup_a3003a9b0b2c2b22a77a014a9f7680c6)
+        ;
+
+        
+    
+</script>

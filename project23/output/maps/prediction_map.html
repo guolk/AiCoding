@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<head>    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    
+        <script>
+            L_NO_TOUCH = false;
+            L_DISABLE_3D = false;
+        </script>
+    
+    <style>html, body {width: 100%;height: 100%;margin: 0;padding: 0;}</style>
+    <style>#map {position:absolute;top:0;bottom:0;right:0;left:0;}</style>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.6.0/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.6.0/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_b1c551ccdf1c295c8f2237ebed6aa077 {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+            </style>
+        
+</head>
+<body>    
+    
+        <div style="position: fixed; 
+                    bottom: 50px; left: 50px; width: 220px; height: 160px; 
+                    border:2px solid grey; z-index:9999; font-size:14px;
+                    background-color:white;
+                    padding: 10px;
+                    border-radius: 5px;
+                    opacity: 0.9;">
+        <p style="margin-top: 0; margin-bottom: 10px; font-weight: bold;">明日高峰期预测</p>
+        <p><i class="fa fa-minus" style="color:#00FF00; font-size: 20px;"></i>&nbsp; 畅通 (0-3)</p>
+        <p><i class="fa fa-minus" style="color:#90EE90; font-size: 20px;"></i>&nbsp; 基本畅通 (3-5)</p>
+        <p><i class="fa fa-minus" style="color:#FFFF00; font-size: 20px;"></i>&nbsp; 轻度拥堵 (5-7)</p>
+        <p><i class="fa fa-minus" style="color:#FFA500; font-size: 20px;"></i>&nbsp; 中度拥堵 (7-9)</p>
+        <p><i class="fa fa-minus" style="color:#FF0000; font-size: 20px;"></i>&nbsp; 严重拥堵 (9-10)</p>
+        </div>
+        
+    
+            <div class="folium-map" id="map_b1c551ccdf1c295c8f2237ebed6aa077" ></div>
+        
+</body>
+<script>    
+    
+            var map_b1c551ccdf1c295c8f2237ebed6aa077 = L.map(
+                "map_b1c551ccdf1c295c8f2237ebed6aa077",
+                {
+                    center: [39.90047280506819, 116.40432158734154],
+                    crs: L.CRS.EPSG3857,
+                    zoom: 12,
+                    zoomControl: true,
+                    preferCanvas: false,
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_12f9b5ba8cce0f0c32c8116cf3fa9a0d = L.tileLayer(
+                "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {"attribution": "Data by \u0026copy; \u003ca href=\"http://openstreetmap.org\"\u003eOpenStreetMap\u003c/a\u003e, under \u003ca href=\"http://www.openstreetmap.org/copyright\"\u003eODbL\u003c/a\u003e.", "detectRetina": false, "maxNativeZoom": 18, "maxZoom": 18, "minZoom": 0, "noWrap": false, "opacity": 1, "subdomains": "abc", "tms": false}
+            ).addTo(map_b1c551ccdf1c295c8f2237ebed6aa077);
+        
+    
+            var poly_line_2d5e9253faa016b84903de7334eff936 = L.polyline(
+                [[39.91530709947699, 116.35961950501265], [39.91291444394971, 116.43139994775234]],
+                {"bubblingMouseEvents": true, "color": "#FFA500", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FFA500", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(map_b1c551ccdf1c295c8f2237ebed6aa077);
+        
+    
+        var popup_7bebc1dc220baeb209bb9985b2e0e994 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_7f3355bfd0fe9c1367f80c5e27b9163d = $(`<div id="html_7f3355bfd0fe9c1367f80c5e27b9163d" style="width: 100.0%; height: 100.0%;"><b>明日高峰期预测</b><br>道路ID: RD000<br>类型: 主干道<br>预测平均拥堵指数: 7.69<br>预测最大拥堵指数: 8.80<br>预测拥堵等级: 中度拥堵</div>`)[0];
+            popup_7bebc1dc220baeb209bb9985b2e0e994.setContent(html_7f3355bfd0fe9c1367f80c5e27b9163d);
+        
+
+        poly_line_2d5e9253faa016b84903de7334eff936.bindPopup(popup_7bebc1dc220baeb209bb9985b2e0e994)
+        ;
+
+        
+    
+    
+            var poly_line_fc7de5920cc9e2b5ac073862233f058d = L.polyline(
+                [[39.89023182244571, 116.40849082227254], [39.91003928827176, 116.3677649439456]],
+                {"bubblingMouseEvents": true, "color": "#FFA500", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FFA500", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 3}
+            ).addTo(map_b1c551ccdf1c295c8f2237ebed6aa077);
+        
+    
+        var popup_cf1017047ba7f9c2768099a34d4884a6 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_f56ea6e34ee9333808e131bd6a03e8b4 = $(`<div id="html_f56ea6e34ee9333808e131bd6a03e8b4" style="width: 100.0%; height: 100.0%;"><b>明日高峰期预测</b><br>道路ID: RD033<br>类型: 次干道<br>预测平均拥堵指数: 7.67<br>预测最大拥堵指数: 8.72<br>预测拥堵等级: 中度拥堵</div>`)[0];
+            popup_cf1017047ba7f9c2768099a34d4884a6.setContent(html_f56ea6e34ee9333808e131bd6a03e8b4);
+        
+
+        poly_line_fc7de5920cc9e2b5ac073862233f058d.bindPopup(popup_cf1017047ba7f9c2768099a34d4884a6)
+        ;
+
+        
+    
+    
+            var poly_line_043c22c9b147f3f8b56f75b00049e1fd = L.polyline(
+                [[39.92880763307581, 116.4306172365548], [39.90415034560206, 116.4381982569162]],
+                {"bubblingMouseEvents": true, "color": "#FFA500", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FFA500", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(map_b1c551ccdf1c295c8f2237ebed6aa077);
+        
+    
+        var popup_6c61cf1c77be15b8fc96033e4b3a6183 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_ab110abdea840ed9f7364228946eb38d = $(`<div id="html_ab110abdea840ed9f7364228946eb38d" style="width: 100.0%; height: 100.0%;"><b>明日高峰期预测</b><br>道路ID: RD019<br>类型: 主干道<br>预测平均拥堵指数: 7.75<br>预测最大拥堵指数: 8.98<br>预测拥堵等级: 中度拥堵</div>`)[0];
+            popup_6c61cf1c77be15b8fc96033e4b3a6183.setContent(html_ab110abdea840ed9f7364228946eb38d);
+        
+
+        poly_line_043c22c9b147f3f8b56f75b00049e1fd.bindPopup(popup_6c61cf1c77be15b8fc96033e4b3a6183)
+        ;
+
+        
+    
+    
+            var poly_line_9164641d29558714a21cf4ac8d92773e = L.polyline(
+                [[39.90209104138482, 116.423297340713], [39.858080507085916, 116.42212134237539]],
+                {"bubblingMouseEvents": true, "color": "#FFA500", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FFA500", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 2}
+            ).addTo(map_b1c551ccdf1c295c8f2237ebed6aa077);
+        
+    
+        var popup_619fe3a9ee8d07570f970d83d396a599 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_24d48cd5917a71d71bec2a36787cf311 = $(`<div id="html_24d48cd5917a71d71bec2a36787cf311" style="width: 100.0%; height: 100.0%;"><b>明日高峰期预测</b><br>道路ID: RD025<br>类型: 支路<br>预测平均拥堵指数: 7.54<br>预测最大拥堵指数: 8.59<br>预测拥堵等级: 中度拥堵</div>`)[0];
+            popup_619fe3a9ee8d07570f970d83d396a599.setContent(html_24d48cd5917a71d71bec2a36787cf311);
+        
+
+        poly_line_9164641d29558714a21cf4ac8d92773e.bindPopup(popup_619fe3a9ee8d07570f970d83d396a599)
+        ;
+
+        
+    
+    
+            var poly_line_a9bc85ea335f2b71f9ff11357097d8eb = L.polyline(
+                [[39.87889113276693, 116.35798679983246], [39.91530709947699, 116.35961950501265]],
+                {"bubblingMouseEvents": true, "color": "#FFA500", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FFA500", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 2}
+            ).addTo(map_b1c551ccdf1c295c8f2237ebed6aa077);
+        
+    
+        var popup_8192cf9d99df057c15682ebbd8ee68e9 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_8ef6a946ceeaec3793ff0766d863ec01 = $(`<div id="html_8ef6a946ceeaec3793ff0766d863ec01" style="width: 100.0%; height: 100.0%;"><b>明日高峰期预测</b><br>道路ID: RD008<br>类型: 支路<br>预测平均拥堵指数: 7.69<br>预测最大拥堵指数: 8.94<br>预测拥堵等级: 中度拥堵</div>`)[0];
+            popup_8192cf9d99df057c15682ebbd8ee68e9.setContent(html_8ef6a946ceeaec3793ff0766d863ec01);
+        
+
+        poly_line_a9bc85ea335f2b71f9ff11357097d8eb.bindPopup(popup_8192cf9d99df057c15682ebbd8ee68e9)
+        ;
+
+        
+    
+    
+            var poly_line_a7b5f5b3db8b5f6fc406f72c8a3deda8 = L.polyline(
+                [[39.94114467055648, 116.39570154780704], [39.92054612690199, 116.44687948039126]],
+                {"bubblingMouseEvents": true, "color": "#FFA500", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FFA500", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 3}
+            ).addTo(map_b1c551ccdf1c295c8f2237ebed6aa077);
+        
+    
+        var popup_0ffa6a3f179228fe40d3b471519c7a4e = L.popup({"maxWidth": "100%"});
+
+        
+            var html_bfc6e0c354f408fd4ee368afc7103d31 = $(`<div id="html_bfc6e0c354f408fd4ee368afc7103d31" style="width: 100.0%; height: 100.0%;"><b>明日高峰期预测</b><br>道路ID: RD005<br>类型: 次干道<br>预测平均拥堵指数: 7.60<br>预测最大拥堵指数: 8.88<br>预测拥堵等级: 中度拥堵</div>`)[0];
+            popup_0ffa6a3f179228fe40d3b471519c7a4e.setContent(html_bfc6e0c354f408fd4ee368afc7103d31);
+        
+
+        poly_line_a7b5f5b3db8b5f6fc406f72c8a3deda8.bindPopup(popup_0ffa6a3f179228fe40d3b471519c7a4e)
+        ;
+
+        
+    
+    
+            var poly_line_0e52912a0070442386ddf0ac1c0d148c = L.polyline(
+                [[39.92880763307581, 116.4306172365548], [39.89187114562218, 116.4145305691349]],
+                {"bubblingMouseEvents": true, "color": "#FFA500", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FFA500", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(map_b1c551ccdf1c295c8f2237ebed6aa077);
+        
+    
+        var popup_e8d8b94dae9a76320e0c91726b28fb25 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_262c1ed12c75e8c846a1a683f8fba973 = $(`<div id="html_262c1ed12c75e8c846a1a683f8fba973" style="width: 100.0%; height: 100.0%;"><b>明日高峰期预测</b><br>道路ID: RD029<br>类型: 主干道<br>预测平均拥堵指数: 7.68<br>预测最大拥堵指数: 9.12<br>预测拥堵等级: 中度拥堵</div>`)[0];
+            popup_e8d8b94dae9a76320e0c91726b28fb25.setContent(html_262c1ed12c75e8c846a1a683f8fba973);
+        
+
+        poly_line_0e52912a0070442386ddf0ac1c0d148c.bindPopup(popup_e8d8b94dae9a76320e0c91726b28fb25)
+        ;
+
+        
+    
+    
+            var poly_line_65a3c626011008112da3700afdb09387 = L.polyline(
+                [[39.92054612690199, 116.44687948039126], [39.91003928827176, 116.3677649439456]],
+                {"bubblingMouseEvents": true, "color": "#FFA500", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FFA500", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(map_b1c551ccdf1c295c8f2237ebed6aa077);
+        
+    
+        var popup_ef057ff6fb0b81e84162e21e5e58f6fd = L.popup({"maxWidth": "100%"});
+
+        
+            var html_2f7c1b36007c2da1b33bf5c701183ee8 = $(`<div id="html_2f7c1b36007c2da1b33bf5c701183ee8" style="width: 100.0%; height: 100.0%;"><b>明日高峰期预测</b><br>道路ID: RD016<br>类型: 主干道<br>预测平均拥堵指数: 7.85<br>预测最大拥堵指数: 9.35<br>预测拥堵等级: 中度拥堵</div>`)[0];
+            popup_ef057ff6fb0b81e84162e21e5e58f6fd.setContent(html_2f7c1b36007c2da1b33bf5c701183ee8);
+        
+
+        poly_line_65a3c626011008112da3700afdb09387.bindPopup(popup_ef057ff6fb0b81e84162e21e5e58f6fd)
+        ;
+
+        
+    
+    
+            var poly_line_b5e3d1dd5d8e732a405912bd5751d934 = L.polyline(
+                [[39.92963017520641, 116.4490058800319], [39.89023182244571, 116.40849082227254]],
+                {"bubblingMouseEvents": true, "color": "#FFA500", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FFA500", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 2}
+            ).addTo(map_b1c551ccdf1c295c8f2237ebed6aa077);
+        
+    
+        var popup_087e85ca8caba68e9993d97bcf225a92 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_d440a7168d94172482ac0c1077bdcdfa = $(`<div id="html_d440a7168d94172482ac0c1077bdcdfa" style="width: 100.0%; height: 100.0%;"><b>明日高峰期预测</b><br>道路ID: RD039<br>类型: 支路<br>预测平均拥堵指数: 7.84<br>预测最大拥堵指数: 8.98<br>预测拥堵等级: 中度拥堵</div>`)[0];
+            popup_087e85ca8caba68e9993d97bcf225a92.setContent(html_d440a7168d94172482ac0c1077bdcdfa);
+        
+
+        poly_line_b5e3d1dd5d8e732a405912bd5751d934.bindPopup(popup_087e85ca8caba68e9993d97bcf225a92)
+        ;
+
+        
+    
+    
+            var poly_line_af810e8da09ab84d17afc34753dc987d = L.polyline(
+                [[39.88684985771145, 116.42843588337003], [39.878697094249624, 116.4120959277378]],
+                {"bubblingMouseEvents": true, "color": "#FFA500", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FFA500", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(map_b1c551ccdf1c295c8f2237ebed6aa077);
+        
+    
+        var popup_7cc2eb5e3c8276e5f26d161fe770e2ad = L.popup({"maxWidth": "100%"});
+
+        
+            var html_ae0b5f914634a5b8ee34e67f76722f3f = $(`<div id="html_ae0b5f914634a5b8ee34e67f76722f3f" style="width: 100.0%; height: 100.0%;"><b>明日高峰期预测</b><br>道路ID: RD036<br>类型: 主干道<br>预测平均拥堵指数: 7.71<br>预测最大拥堵指数: 8.64<br>预测拥堵等级: 中度拥堵</div>`)[0];
+            popup_7cc2eb5e3c8276e5f26d161fe770e2ad.setContent(html_ae0b5f914634a5b8ee34e67f76722f3f);
+        
+
+        poly_line_af810e8da09ab84d17afc34753dc987d.bindPopup(popup_7cc2eb5e3c8276e5f26d161fe770e2ad)
+        ;
+
+        
+    
+    
+            var poly_line_32f95b608d0a3dd004ffe3c12a8e9fae = L.polyline(
+                [[39.89187114562218, 116.4145305691349], [39.91003928827176, 116.3677649439456]],
+                {"bubblingMouseEvents": true, "color": "#FFA500", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FFA500", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 2}
+            ).addTo(map_b1c551ccdf1c295c8f2237ebed6aa077);
+        
+    
+        var popup_bd805fa2c98395bc7dc8dc0ad04af9a6 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_c867273e9e1d3853fa76b227c1e51072 = $(`<div id="html_c867273e9e1d3853fa76b227c1e51072" style="width: 100.0%; height: 100.0%;"><b>明日高峰期预测</b><br>道路ID: RD032<br>类型: 支路<br>预测平均拥堵指数: 7.99<br>预测最大拥堵指数: 9.45<br>预测拥堵等级: 中度拥堵</div>`)[0];
+            popup_bd805fa2c98395bc7dc8dc0ad04af9a6.setContent(html_c867273e9e1d3853fa76b227c1e51072);
+        
+
+        poly_line_32f95b608d0a3dd004ffe3c12a8e9fae.bindPopup(popup_bd805fa2c98395bc7dc8dc0ad04af9a6)
+        ;
+
+        
+    
+    
+            var poly_line_b7830076774c71ffc8b2a9e3dcb948c7 = L.polyline(
+                [[39.88684985771145, 116.42843588337003], [39.87889113276693, 116.35798679983246]],
+                {"bubblingMouseEvents": true, "color": "#FFA500", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FFA500", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 3}
+            ).addTo(map_b1c551ccdf1c295c8f2237ebed6aa077);
+        
+    
+        var popup_ba94d465a76bd669eebddb3b7745acc3 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_816b19b2c7b033a64558c6ce3af6f7aa = $(`<div id="html_816b19b2c7b033a64558c6ce3af6f7aa" style="width: 100.0%; height: 100.0%;"><b>明日高峰期预测</b><br>道路ID: RD006<br>类型: 次干道<br>预测平均拥堵指数: 7.78<br>预测最大拥堵指数: 8.98<br>预测拥堵等级: 中度拥堵</div>`)[0];
+            popup_ba94d465a76bd669eebddb3b7745acc3.setContent(html_816b19b2c7b033a64558c6ce3af6f7aa);
+        
+
+        poly_line_b7830076774c71ffc8b2a9e3dcb948c7.bindPopup(popup_ba94d465a76bd669eebddb3b7745acc3)
+        ;
+
+        
+    
+    
+            var poly_line_97d1b93977704ca245338c6b6e074caa = L.polyline(
+                [[39.92880763307581, 116.4306172365548], [39.91291444394971, 116.43139994775234]],
+                {"bubblingMouseEvents": true, "color": "#FFA500", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FFA500", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 3}
+            ).addTo(map_b1c551ccdf1c295c8f2237ebed6aa077);
+        
+    
+        var popup_46ac2e2ebcc840d4c46524360825c44c = L.popup({"maxWidth": "100%"});
+
+        
+            var html_aec937ee8c7535d8821932ba9fbf3236 = $(`<div id="html_aec937ee8c7535d8821932ba9fbf3236" style="width: 100.0%; height: 100.0%;"><b>明日高峰期预测</b><br>道路ID: RD003<br>类型: 次干道<br>预测平均拥堵指数: 7.85<br>预测最大拥堵指数: 8.95<br>预测拥堵等级: 中度拥堵</div>`)[0];
+            popup_46ac2e2ebcc840d4c46524360825c44c.setContent(html_aec937ee8c7535d8821932ba9fbf3236);
+        
+
+        poly_line_97d1b93977704ca245338c6b6e074caa.bindPopup(popup_46ac2e2ebcc840d4c46524360825c44c)
+        ;
+
+        
+    
+    
+            var poly_line_4aa258a48bef84667f105deddee3a7a9 = L.polyline(
+                [[39.89187114562218, 116.4145305691349], [39.878697094249624, 116.4120959277378]],
+                {"bubblingMouseEvents": true, "color": "#FF0000", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FF0000", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 3}
+            ).addTo(map_b1c551ccdf1c295c8f2237ebed6aa077);
+        
+    
+        var popup_d466d652b74a388ec817c5cac0734967 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_b099d04c723a8d8fe1ba51596835c3dd = $(`<div id="html_b099d04c723a8d8fe1ba51596835c3dd" style="width: 100.0%; height: 100.0%;"><b>明日高峰期预测</b><br>道路ID: RD027<br>类型: 次干道<br>预测平均拥堵指数: 8.15<br>预测最大拥堵指数: 8.79<br>预测拥堵等级: 中度拥堵</div>`)[0];
+            popup_d466d652b74a388ec817c5cac0734967.setContent(html_b099d04c723a8d8fe1ba51596835c3dd);
+        
+
+        poly_line_4aa258a48bef84667f105deddee3a7a9.bindPopup(popup_d466d652b74a388ec817c5cac0734967)
+        ;
+
+        
+    
+    
+            var poly_line_7986b804289c96885d5bd0d3f7b02689 = L.polyline(
+                [[39.90415034560206, 116.4381982569162], [39.93068735089171, 116.38695351501767]],
+                {"bubblingMouseEvents": true, "color": "#FFA500", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FFA500", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 3}
+            ).addTo(map_b1c551ccdf1c295c8f2237ebed6aa077);
+        
+    
+        var popup_994d52be67399cde7cbedb939baf0217 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_57ddc4cfc5864ac0bd37bad34c6354ce = $(`<div id="html_57ddc4cfc5864ac0bd37bad34c6354ce" style="width: 100.0%; height: 100.0%;"><b>明日高峰期预测</b><br>道路ID: RD018<br>类型: 次干道<br>预测平均拥堵指数: 7.97<br>预测最大拥堵指数: 8.91<br>预测拥堵等级: 中度拥堵</div>`)[0];
+            popup_994d52be67399cde7cbedb939baf0217.setContent(html_57ddc4cfc5864ac0bd37bad34c6354ce);
+        
+
+        poly_line_7986b804289c96885d5bd0d3f7b02689.bindPopup(popup_994d52be67399cde7cbedb939baf0217)
+        ;
+
+        
+    
+    
+            var poly_line_083ac10b7cd52ece609b1ffa8fed6a5e = L.polyline(
+                [[39.92649394723945, 116.37888078263903], [39.90415034560206, 116.4381982569162]],
+                {"bubblingMouseEvents": true, "color": "#FFA500", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FFA500", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 3}
+            ).addTo(map_b1c551ccdf1c295c8f2237ebed6aa077);
+        
+    
+        var popup_f774bc6b68cd65eaa5ad97ff066291b8 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_1f8e0e6bcb6c2c29ad642f9dbf942f16 = $(`<div id="html_1f8e0e6bcb6c2c29ad642f9dbf942f16" style="width: 100.0%; height: 100.0%;"><b>明日高峰期预测</b><br>道路ID: RD026<br>类型: 次干道<br>预测平均拥堵指数: 7.82<br>预测最大拥堵指数: 9.34<br>预测拥堵等级: 中度拥堵</div>`)[0];
+            popup_f774bc6b68cd65eaa5ad97ff066291b8.setContent(html_1f8e0e6bcb6c2c29ad642f9dbf942f16);
+        
+
+        poly_line_083ac10b7cd52ece609b1ffa8fed6a5e.bindPopup(popup_f774bc6b68cd65eaa5ad97ff066291b8)
+        ;
+
+        
+    
+    
+            var poly_line_5f6b5b498acaa432248af24f5400e800 = L.polyline(
+                [[39.91003928827176, 116.3677649439456], [39.92880763307581, 116.4306172365548]],
+                {"bubblingMouseEvents": true, "color": "#FFA500", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FFA500", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(map_b1c551ccdf1c295c8f2237ebed6aa077);
+        
+    
+        var popup_4d92ce88818e5233cfb968586a6c1538 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_0dbaa2f202105daa7e77f17a9fc2eb2c = $(`<div id="html_0dbaa2f202105daa7e77f17a9fc2eb2c" style="width: 100.0%; height: 100.0%;"><b>明日高峰期预测</b><br>道路ID: RD038<br>类型: 主干道<br>预测平均拥堵指数: 7.56<br>预测最大拥堵指数: 8.77<br>预测拥堵等级: 中度拥堵</div>`)[0];
+            popup_4d92ce88818e5233cfb968586a6c1538.setContent(html_0dbaa2f202105daa7e77f17a9fc2eb2c);
+        
+
+        poly_line_5f6b5b498acaa432248af24f5400e800.bindPopup(popup_4d92ce88818e5233cfb968586a6c1538)
+        ;
+
+        
+    
+    
+            var poly_line_ae1b7e13ff5fa2ee03f1ab6e16029592 = L.polyline(
+                [[39.87889113276693, 116.35798679983246], [39.858080507085916, 116.42212134237539]],
+                {"bubblingMouseEvents": true, "color": "#FFA500", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FFA500", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(map_b1c551ccdf1c295c8f2237ebed6aa077);
+        
+    
+        var popup_c1ca874f1147cf43718897377ad99062 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_ff852b398d695bb79620314e87f2c48c = $(`<div id="html_ff852b398d695bb79620314e87f2c48c" style="width: 100.0%; height: 100.0%;"><b>明日高峰期预测</b><br>道路ID: RD007<br>类型: 主干道<br>预测平均拥堵指数: 7.57<br>预测最大拥堵指数: 8.81<br>预测拥堵等级: 中度拥堵</div>`)[0];
+            popup_c1ca874f1147cf43718897377ad99062.setContent(html_ff852b398d695bb79620314e87f2c48c);
+        
+
+        poly_line_ae1b7e13ff5fa2ee03f1ab6e16029592.bindPopup(popup_c1ca874f1147cf43718897377ad99062)
+        ;
+
+        
+    
+    
+            var poly_line_7bf803f7eff2637a35a2c073219bc67a = L.polyline(
+                [[39.89023182244571, 116.40849082227254], [39.878697094249624, 116.4120959277378]],
+                {"bubblingMouseEvents": true, "color": "#FFA500", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FFA500", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 2}
+            ).addTo(map_b1c551ccdf1c295c8f2237ebed6aa077);
+        
+    
+        var popup_44b9bbf6dd28bc5a59e6983a7ad0758e = L.popup({"maxWidth": "100%"});
+
+        
+            var html_ac1697cb39837f2c243cb9a48dce2021 = $(`<div id="html_ac1697cb39837f2c243cb9a48dce2021" style="width: 100.0%; height: 100.0%;"><b>明日高峰期预测</b><br>道路ID: RD002<br>类型: 支路<br>预测平均拥堵指数: 7.75<br>预测最大拥堵指数: 8.95<br>预测拥堵等级: 中度拥堵</div>`)[0];
+            popup_44b9bbf6dd28bc5a59e6983a7ad0758e.setContent(html_ac1697cb39837f2c243cb9a48dce2021);
+        
+
+        poly_line_7bf803f7eff2637a35a2c073219bc67a.bindPopup(popup_44b9bbf6dd28bc5a59e6983a7ad0758e)
+        ;
+
+        
+    
+    
+            var poly_line_df517f1097cd617a8f4d36a5a164bf7f = L.polyline(
+                [[39.858080507085916, 116.42212134237539], [39.94114467055648, 116.39570154780704]],
+                {"bubblingMouseEvents": true, "color": "#FFA500", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FFA500", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 2}
+            ).addTo(map_b1c551ccdf1c295c8f2237ebed6aa077);
+        
+    
+        var popup_961ddb4ea5a37195bad9a5be8dfee77a = L.popup({"maxWidth": "100%"});
+
+        
+            var html_624996c00ac80971928483b594f5ea40 = $(`<div id="html_624996c00ac80971928483b594f5ea40" style="width: 100.0%; height: 100.0%;"><b>明日高峰期预测</b><br>道路ID: RD023<br>类型: 支路<br>预测平均拥堵指数: 7.67<br>预测最大拥堵指数: 8.95<br>预测拥堵等级: 中度拥堵</div>`)[0];
+            popup_961ddb4ea5a37195bad9a5be8dfee77a.setContent(html_624996c00ac80971928483b594f5ea40);
+        
+
+        poly_line_df517f1097cd617a8f4d36a5a164bf7f.bindPopup(popup_961ddb4ea5a37195bad9a5be8dfee77a)
+        ;
+
+        
+    
+    
+            var poly_line_b56df5bcb8f51feaf44dd41706c72e77 = L.polyline(
+                [[39.85684342911607, 116.38354825300674], [39.89023182244571, 116.40849082227254]],
+                {"bubblingMouseEvents": true, "color": "#FFA500", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FFA500", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 3}
+            ).addTo(map_b1c551ccdf1c295c8f2237ebed6aa077);
+        
+    
+        var popup_eaa46b9b7595597c82b4e93669614fbc = L.popup({"maxWidth": "100%"});
+
+        
+            var html_836b66000589e0895441ba0c63b119e7 = $(`<div id="html_836b66000589e0895441ba0c63b119e7" style="width: 100.0%; height: 100.0%;"><b>明日高峰期预测</b><br>道路ID: RD010<br>类型: 次干道<br>预测平均拥堵指数: 7.59<br>预测最大拥堵指数: 8.68<br>预测拥堵等级: 中度拥堵</div>`)[0];
+            popup_eaa46b9b7595597c82b4e93669614fbc.setContent(html_836b66000589e0895441ba0c63b119e7);
+        
+
+        poly_line_b56df5bcb8f51feaf44dd41706c72e77.bindPopup(popup_eaa46b9b7595597c82b4e93669614fbc)
+        ;
+
+        
+    
+    
+            var poly_line_6696e623c261eca4a1b215636a5afebf = L.polyline(
+                [[39.92880763307581, 116.4306172365548], [39.878697094249624, 116.4120959277378]],
+                {"bubblingMouseEvents": true, "color": "#FFA500", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FFA500", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(map_b1c551ccdf1c295c8f2237ebed6aa077);
+        
+    
+        var popup_311b8c467860c1bee3f9226724d8975a = L.popup({"maxWidth": "100%"});
+
+        
+            var html_bb43b25f1a875a8f6eb12176c9128975 = $(`<div id="html_bb43b25f1a875a8f6eb12176c9128975" style="width: 100.0%; height: 100.0%;"><b>明日高峰期预测</b><br>道路ID: RD001<br>类型: 主干道<br>预测平均拥堵指数: 7.62<br>预测最大拥堵指数: 8.88<br>预测拥堵等级: 中度拥堵</div>`)[0];
+            popup_311b8c467860c1bee3f9226724d8975a.setContent(html_bb43b25f1a875a8f6eb12176c9128975);
+        
+
+        poly_line_6696e623c261eca4a1b215636a5afebf.bindPopup(popup_311b8c467860c1bee3f9226724d8975a)
+        ;
+
+        
+    
+    
+            var poly_line_9690c5eaf1ab290ef4c06bd78099c21d = L.polyline(
+                [[39.92054612690199, 116.44687948039126], [39.85684342911607, 116.38354825300674]],
+                {"bubblingMouseEvents": true, "color": "#FFA500", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FFA500", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 2}
+            ).addTo(map_b1c551ccdf1c295c8f2237ebed6aa077);
+        
+    
+        var popup_067f1eba5e9f78698e608576616b0667 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_cb2f451e9bf37201d56e304931e369cc = $(`<div id="html_cb2f451e9bf37201d56e304931e369cc" style="width: 100.0%; height: 100.0%;"><b>明日高峰期预测</b><br>道路ID: RD013<br>类型: 支路<br>预测平均拥堵指数: 7.78<br>预测最大拥堵指数: 8.85<br>预测拥堵等级: 中度拥堵</div>`)[0];
+            popup_067f1eba5e9f78698e608576616b0667.setContent(html_cb2f451e9bf37201d56e304931e369cc);
+        
+
+        poly_line_9690c5eaf1ab290ef4c06bd78099c21d.bindPopup(popup_067f1eba5e9f78698e608576616b0667)
+        ;
+
+        
+    
+    
+            var poly_line_9a53c9c478584e1f85cd39363f6cb5f6 = L.polyline(
+                [[39.92880763307581, 116.4306172365548], [39.854362439985735, 116.36545618175428]],
+                {"bubblingMouseEvents": true, "color": "#FFA500", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FFA500", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(map_b1c551ccdf1c295c8f2237ebed6aa077);
+        
+    
+        var popup_4530e2d204285916ca8ca14952ba7f0c = L.popup({"maxWidth": "100%"});
+
+        
+            var html_bf78943f2bd72edca697cbcf1b2b4fc6 = $(`<div id="html_bf78943f2bd72edca697cbcf1b2b4fc6" style="width: 100.0%; height: 100.0%;"><b>明日高峰期预测</b><br>道路ID: RD034<br>类型: 主干道<br>预测平均拥堵指数: 7.80<br>预测最大拥堵指数: 8.84<br>预测拥堵等级: 中度拥堵</div>`)[0];
+            popup_4530e2d204285916ca8ca14952ba7f0c.setContent(html_bf78943f2bd72edca697cbcf1b2b4fc6);
+        
+
+        poly_line_9a53c9c478584e1f85cd39363f6cb5f6.bindPopup(popup_4530e2d204285916ca8ca14952ba7f0c)
+        ;
+
+        
+    
+    
+            var poly_line_fcb7c61d0bf398182e30e5cc0f594b6e = L.polyline(
+                [[39.91291444394971, 116.43139994775234], [39.92963017520641, 116.4490058800319]],
+                {"bubblingMouseEvents": true, "color": "#FFA500", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FFA500", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(map_b1c551ccdf1c295c8f2237ebed6aa077);
+        
+    
+        var popup_6700bc1cd874c24dde26ee4aa0806b8a = L.popup({"maxWidth": "100%"});
+
+        
+            var html_8e705918f12755890f56e97b239cf091 = $(`<div id="html_8e705918f12755890f56e97b239cf091" style="width: 100.0%; height: 100.0%;"><b>明日高峰期预测</b><br>道路ID: RD021<br>类型: 主干道<br>预测平均拥堵指数: 7.87<br>预测最大拥堵指数: 8.87<br>预测拥堵等级: 中度拥堵</div>`)[0];
+            popup_6700bc1cd874c24dde26ee4aa0806b8a.setContent(html_8e705918f12755890f56e97b239cf091);
+        
+
+        poly_line_fcb7c61d0bf398182e30e5cc0f594b6e.bindPopup(popup_6700bc1cd874c24dde26ee4aa0806b8a)
+        ;
+
+        
+    
+    
+            var poly_line_9bc10d6acddaf8c8327fae6ccbc639ce = L.polyline(
+                [[39.891816549822956, 116.38544753056478], [39.90415034560206, 116.4381982569162]],
+                {"bubblingMouseEvents": true, "color": "#FFA500", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FFA500", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(map_b1c551ccdf1c295c8f2237ebed6aa077);
+        
+    
+        var popup_af24bf70a417e636ce6f5f1b48e8d4a8 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_dbe1a2ff117222d86865ab75122cf851 = $(`<div id="html_dbe1a2ff117222d86865ab75122cf851" style="width: 100.0%; height: 100.0%;"><b>明日高峰期预测</b><br>道路ID: RD024<br>类型: 主干道<br>预测平均拥堵指数: 7.85<br>预测最大拥堵指数: 9.29<br>预测拥堵等级: 中度拥堵</div>`)[0];
+            popup_af24bf70a417e636ce6f5f1b48e8d4a8.setContent(html_dbe1a2ff117222d86865ab75122cf851);
+        
+
+        poly_line_9bc10d6acddaf8c8327fae6ccbc639ce.bindPopup(popup_af24bf70a417e636ce6f5f1b48e8d4a8)
+        ;
+
+        
+    
+    
+            var poly_line_7b11c34010b0c5dd6967a3650962cc26 = L.polyline(
+                [[39.93068735089171, 116.38695351501767], [39.92963017520641, 116.4490058800319]],
+                {"bubblingMouseEvents": true, "color": "#FFA500", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FFA500", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 3}
+            ).addTo(map_b1c551ccdf1c295c8f2237ebed6aa077);
+        
+    
+        var popup_5366e12338058a35206f6e3f908a2e50 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_7f64e7d7f7f2698ff64c68c995db056d = $(`<div id="html_7f64e7d7f7f2698ff64c68c995db056d" style="width: 100.0%; height: 100.0%;"><b>明日高峰期预测</b><br>道路ID: RD009<br>类型: 次干道<br>预测平均拥堵指数: 7.46<br>预测最大拥堵指数: 8.95<br>预测拥堵等级: 中度拥堵</div>`)[0];
+            popup_5366e12338058a35206f6e3f908a2e50.setContent(html_7f64e7d7f7f2698ff64c68c995db056d);
+        
+
+        poly_line_7b11c34010b0c5dd6967a3650962cc26.bindPopup(popup_5366e12338058a35206f6e3f908a2e50)
+        ;
+
+        
+    
+    
+            var poly_line_1f34f7ac5ebfe6eba1a1417024f718fe = L.polyline(
+                [[39.87889113276693, 116.35798679983246], [39.93068735089171, 116.38695351501767]],
+                {"bubblingMouseEvents": true, "color": "#FFA500", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FFA500", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(map_b1c551ccdf1c295c8f2237ebed6aa077);
+        
+    
+        var popup_dd6715a152b407685304caa7f9b2e41f = L.popup({"maxWidth": "100%"});
+
+        
+            var html_10ff4a913a406a165770041fe93852d9 = $(`<div id="html_10ff4a913a406a165770041fe93852d9" style="width: 100.0%; height: 100.0%;"><b>明日高峰期预测</b><br>道路ID: RD014<br>类型: 主干道<br>预测平均拥堵指数: 7.80<br>预测最大拥堵指数: 8.84<br>预测拥堵等级: 中度拥堵</div>`)[0];
+            popup_dd6715a152b407685304caa7f9b2e41f.setContent(html_10ff4a913a406a165770041fe93852d9);
+        
+
+        poly_line_1f34f7ac5ebfe6eba1a1417024f718fe.bindPopup(popup_dd6715a152b407685304caa7f9b2e41f)
+        ;
+
+        
+    
+    
+            var poly_line_a26d5a0774a9c800a8f0a7d59e20dd27 = L.polyline(
+                [[39.87889113276693, 116.35798679983246], [39.92880763307581, 116.4306172365548]],
+                {"bubblingMouseEvents": true, "color": "#FFA500", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FFA500", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(map_b1c551ccdf1c295c8f2237ebed6aa077);
+        
+    
+        var popup_535eaf311e8fbbd138a912e60aaa777e = L.popup({"maxWidth": "100%"});
+
+        
+            var html_3174aa9edaf7c324322f8b71b756f44e = $(`<div id="html_3174aa9edaf7c324322f8b71b756f44e" style="width: 100.0%; height: 100.0%;"><b>明日高峰期预测</b><br>道路ID: RD004<br>类型: 主干道<br>预测平均拥堵指数: 7.87<br>预测最大拥堵指数: 9.36<br>预测拥堵等级: 中度拥堵</div>`)[0];
+            popup_535eaf311e8fbbd138a912e60aaa777e.setContent(html_3174aa9edaf7c324322f8b71b756f44e);
+        
+
+        poly_line_a26d5a0774a9c800a8f0a7d59e20dd27.bindPopup(popup_535eaf311e8fbbd138a912e60aaa777e)
+        ;
+
+        
+    
+    
+            var poly_line_b1d9ece6b1ca7d476e1ac2bcdc6f7b89 = L.polyline(
+                [[39.85684342911607, 116.38354825300674], [39.89187114562218, 116.4145305691349]],
+                {"bubblingMouseEvents": true, "color": "#FFA500", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FFA500", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(map_b1c551ccdf1c295c8f2237ebed6aa077);
+        
+    
+        var popup_3cd1389e954f0b7ca5e29686494f12e2 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_e5611eb478436aed9fdf2f1d0bc32a7f = $(`<div id="html_e5611eb478436aed9fdf2f1d0bc32a7f" style="width: 100.0%; height: 100.0%;"><b>明日高峰期预测</b><br>道路ID: RD028<br>类型: 主干道<br>预测平均拥堵指数: 7.79<br>预测最大拥堵指数: 9.07<br>预测拥堵等级: 中度拥堵</div>`)[0];
+            popup_3cd1389e954f0b7ca5e29686494f12e2.setContent(html_e5611eb478436aed9fdf2f1d0bc32a7f);
+        
+
+        poly_line_b1d9ece6b1ca7d476e1ac2bcdc6f7b89.bindPopup(popup_3cd1389e954f0b7ca5e29686494f12e2)
+        ;
+
+        
+    
+    
+            var poly_line_88c6c7d3c64326f6ff51883e2f16dacc = L.polyline(
+                [[39.89023182244571, 116.40849082227254], [39.90209104138482, 116.423297340713]],
+                {"bubblingMouseEvents": true, "color": "#FFA500", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FFA500", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 3}
+            ).addTo(map_b1c551ccdf1c295c8f2237ebed6aa077);
+        
+    
+        var popup_34c204578751f508322e0dbfd8a272cb = L.popup({"maxWidth": "100%"});
+
+        
+            var html_822ee047eb8fc8b0ea6847054d0dbd89 = $(`<div id="html_822ee047eb8fc8b0ea6847054d0dbd89" style="width: 100.0%; height: 100.0%;"><b>明日高峰期预测</b><br>道路ID: RD037<br>类型: 次干道<br>预测平均拥堵指数: 7.63<br>预测最大拥堵指数: 8.70<br>预测拥堵等级: 中度拥堵</div>`)[0];
+            popup_34c204578751f508322e0dbfd8a272cb.setContent(html_822ee047eb8fc8b0ea6847054d0dbd89);
+        
+
+        poly_line_88c6c7d3c64326f6ff51883e2f16dacc.bindPopup(popup_34c204578751f508322e0dbfd8a272cb)
+        ;
+
+        
+    
+    
+            var poly_line_48f1efda6062a75d2294a2aeb1c3d651 = L.polyline(
+                [[39.858080507085916, 116.42212134237539], [39.92963017520641, 116.4490058800319]],
+                {"bubblingMouseEvents": true, "color": "#FFA500", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FFA500", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(map_b1c551ccdf1c295c8f2237ebed6aa077);
+        
+    
+        var popup_b6e7be6b2ce28a783ad3425ce8f81ec9 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_5060da5f8bcc18fd9356c48f8ffdfcd3 = $(`<div id="html_5060da5f8bcc18fd9356c48f8ffdfcd3" style="width: 100.0%; height: 100.0%;"><b>明日高峰期预测</b><br>道路ID: RD020<br>类型: 主干道<br>预测平均拥堵指数: 7.70<br>预测最大拥堵指数: 8.83<br>预测拥堵等级: 中度拥堵</div>`)[0];
+            popup_b6e7be6b2ce28a783ad3425ce8f81ec9.setContent(html_5060da5f8bcc18fd9356c48f8ffdfcd3);
+        
+
+        poly_line_48f1efda6062a75d2294a2aeb1c3d651.bindPopup(popup_b6e7be6b2ce28a783ad3425ce8f81ec9)
+        ;
+
+        
+    
+    
+            var poly_line_438abf89ccd82abdb1f4866b15822060 = L.polyline(
+                [[39.88684985771145, 116.42843588337003], [39.90415034560206, 116.4381982569162]],
+                {"bubblingMouseEvents": true, "color": "#FFA500", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FFA500", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(map_b1c551ccdf1c295c8f2237ebed6aa077);
+        
+    
+        var popup_d5f12b0cc35d1a88983f4fbc473f4b02 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_070e269404aeb5c2e8110ba83728f0ac = $(`<div id="html_070e269404aeb5c2e8110ba83728f0ac" style="width: 100.0%; height: 100.0%;"><b>明日高峰期预测</b><br>道路ID: RD035<br>类型: 主干道<br>预测平均拥堵指数: 7.90<br>预测最大拥堵指数: 8.94<br>预测拥堵等级: 中度拥堵</div>`)[0];
+            popup_d5f12b0cc35d1a88983f4fbc473f4b02.setContent(html_070e269404aeb5c2e8110ba83728f0ac);
+        
+
+        poly_line_438abf89ccd82abdb1f4866b15822060.bindPopup(popup_d5f12b0cc35d1a88983f4fbc473f4b02)
+        ;
+
+        
+    
+    
+            var poly_line_31cae22116425d096cc5224eff4a2e36 = L.polyline(
+                [[39.89187114562218, 116.4145305691349], [39.891816549822956, 116.38544753056478]],
+                {"bubblingMouseEvents": true, "color": "#FFA500", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FFA500", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 3}
+            ).addTo(map_b1c551ccdf1c295c8f2237ebed6aa077);
+        
+    
+        var popup_a5f698338cf79649f0552ca816d0968e = L.popup({"maxWidth": "100%"});
+
+        
+            var html_15da1c7a0309d2fe55773bf2e7764c89 = $(`<div id="html_15da1c7a0309d2fe55773bf2e7764c89" style="width: 100.0%; height: 100.0%;"><b>明日高峰期预测</b><br>道路ID: RD011<br>类型: 次干道<br>预测平均拥堵指数: 7.44<br>预测最大拥堵指数: 9.07<br>预测拥堵等级: 中度拥堵</div>`)[0];
+            popup_a5f698338cf79649f0552ca816d0968e.setContent(html_15da1c7a0309d2fe55773bf2e7764c89);
+        
+
+        poly_line_31cae22116425d096cc5224eff4a2e36.bindPopup(popup_a5f698338cf79649f0552ca816d0968e)
+        ;
+
+        
+    
+    
+            var poly_line_59ff3a4638e5977f90f58029eb782c0a = L.polyline(
+                [[39.858080507085916, 116.42212134237539], [39.88684985771145, 116.42843588337003]],
+                {"bubblingMouseEvents": true, "color": "#FFA500", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FFA500", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(map_b1c551ccdf1c295c8f2237ebed6aa077);
+        
+    
+        var popup_e96989ac8855422f0a838df917b345e1 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_56926d0a0ba255684c2b13c614da1a0b = $(`<div id="html_56926d0a0ba255684c2b13c614da1a0b" style="width: 100.0%; height: 100.0%;"><b>明日高峰期预测</b><br>道路ID: RD015<br>类型: 主干道<br>预测平均拥堵指数: 7.74<br>预测最大拥堵指数: 8.62<br>预测拥堵等级: 中度拥堵</div>`)[0];
+            popup_e96989ac8855422f0a838df917b345e1.setContent(html_56926d0a0ba255684c2b13c614da1a0b);
+        
+
+        poly_line_59ff3a4638e5977f90f58029eb782c0a.bindPopup(popup_e96989ac8855422f0a838df917b345e1)
+        ;
+
+        
+    
+    
+            var poly_line_ea5a6086ef7e62e2132722e1df3936c3 = L.polyline(
+                [[39.91530709947699, 116.35961950501265], [39.878697094249624, 116.4120959277378]],
+                {"bubblingMouseEvents": true, "color": "#FFA500", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FFA500", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 2}
+            ).addTo(map_b1c551ccdf1c295c8f2237ebed6aa077);
+        
+    
+        var popup_bfa8b43a8ea48a8901356b6dd12aa00d = L.popup({"maxWidth": "100%"});
+
+        
+            var html_28b01c663a4d74ac1b1874415c79b8b9 = $(`<div id="html_28b01c663a4d74ac1b1874415c79b8b9" style="width: 100.0%; height: 100.0%;"><b>明日高峰期预测</b><br>道路ID: RD022<br>类型: 支路<br>预测平均拥堵指数: 7.74<br>预测最大拥堵指数: 9.07<br>预测拥堵等级: 中度拥堵</div>`)[0];
+            popup_bfa8b43a8ea48a8901356b6dd12aa00d.setContent(html_28b01c663a4d74ac1b1874415c79b8b9);
+        
+
+        poly_line_ea5a6086ef7e62e2132722e1df3936c3.bindPopup(popup_bfa8b43a8ea48a8901356b6dd12aa00d)
+        ;
+
+        
+    
+    
+            var poly_line_dd339bfecf81f6ee2941815105aa26ae = L.polyline(
+                [[39.91530709947699, 116.35961950501265], [39.89187114562218, 116.4145305691349]],
+                {"bubblingMouseEvents": true, "color": "#FFA500", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FFA500", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(map_b1c551ccdf1c295c8f2237ebed6aa077);
+        
+    
+        var popup_75fbc6a0cffd011ba6770efe4aff508b = L.popup({"maxWidth": "100%"});
+
+        
+            var html_06850870234cb6cb41467eb378c2b795 = $(`<div id="html_06850870234cb6cb41467eb378c2b795" style="width: 100.0%; height: 100.0%;"><b>明日高峰期预测</b><br>道路ID: RD030<br>类型: 主干道<br>预测平均拥堵指数: 7.54<br>预测最大拥堵指数: 9.02<br>预测拥堵等级: 中度拥堵</div>`)[0];
+            popup_75fbc6a0cffd011ba6770efe4aff508b.setContent(html_06850870234cb6cb41467eb378c2b795);
+        
+
+        poly_line_dd339bfecf81f6ee2941815105aa26ae.bindPopup(popup_75fbc6a0cffd011ba6770efe4aff508b)
+        ;
+
+        
+    
+    
+            var poly_line_25343bde95358cc13a7f64eee39ec9dc = L.polyline(
+                [[39.88684985771145, 116.42843588337003], [39.94114467055648, 116.39570154780704]],
+                {"bubblingMouseEvents": true, "color": "#FFA500", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FFA500", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 3}
+            ).addTo(map_b1c551ccdf1c295c8f2237ebed6aa077);
+        
+    
+        var popup_c62e1bace8039ef64105450de20392d6 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_fb73e28b548ac3a908fe4f3dd621250f = $(`<div id="html_fb73e28b548ac3a908fe4f3dd621250f" style="width: 100.0%; height: 100.0%;"><b>明日高峰期预测</b><br>道路ID: RD031<br>类型: 次干道<br>预测平均拥堵指数: 7.71<br>预测最大拥堵指数: 8.71<br>预测拥堵等级: 中度拥堵</div>`)[0];
+            popup_c62e1bace8039ef64105450de20392d6.setContent(html_fb73e28b548ac3a908fe4f3dd621250f);
+        
+
+        poly_line_25343bde95358cc13a7f64eee39ec9dc.bindPopup(popup_c62e1bace8039ef64105450de20392d6)
+        ;
+
+        
+    
+    
+            var poly_line_48e91fe2ec98730f6a9bb92d44a4e172 = L.polyline(
+                [[39.878697094249624, 116.4120959277378], [39.92963017520641, 116.4490058800319]],
+                {"bubblingMouseEvents": true, "color": "#FFA500", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FFA500", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 2}
+            ).addTo(map_b1c551ccdf1c295c8f2237ebed6aa077);
+        
+    
+        var popup_de1c37ebffab3f3d080f18db61fccfe0 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_c2bbe9a4613d0cbeeb84e4c0b02e95db = $(`<div id="html_c2bbe9a4613d0cbeeb84e4c0b02e95db" style="width: 100.0%; height: 100.0%;"><b>明日高峰期预测</b><br>道路ID: RD017<br>类型: 支路<br>预测平均拥堵指数: 7.93<br>预测最大拥堵指数: 8.74<br>预测拥堵等级: 中度拥堵</div>`)[0];
+            popup_de1c37ebffab3f3d080f18db61fccfe0.setContent(html_c2bbe9a4613d0cbeeb84e4c0b02e95db);
+        
+
+        poly_line_48e91fe2ec98730f6a9bb92d44a4e172.bindPopup(popup_de1c37ebffab3f3d080f18db61fccfe0)
+        ;
+
+        
+    
+    
+            var poly_line_dd2ec20f602c6cc953ab9368eab5f662 = L.polyline(
+                [[39.92880763307581, 116.4306172365548], [39.94114467055648, 116.39570154780704]],
+                {"bubblingMouseEvents": true, "color": "#FFA500", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FFA500", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 3}
+            ).addTo(map_b1c551ccdf1c295c8f2237ebed6aa077);
+        
+    
+        var popup_e8efd97f1c6f214d4b45b2afc66ad2e2 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_a5b48671fb1974e64adafc98da3ca75c = $(`<div id="html_a5b48671fb1974e64adafc98da3ca75c" style="width: 100.0%; height: 100.0%;"><b>明日高峰期预测</b><br>道路ID: RD012<br>类型: 次干道<br>预测平均拥堵指数: 7.68<br>预测最大拥堵指数: 8.68<br>预测拥堵等级: 中度拥堵</div>`)[0];
+            popup_e8efd97f1c6f214d4b45b2afc66ad2e2.setContent(html_a5b48671fb1974e64adafc98da3ca75c);
+        
+
+        poly_line_dd2ec20f602c6cc953ab9368eab5f662.bindPopup(popup_e8efd97f1c6f214d4b45b2afc66ad2e2)
+        ;
+
+        
+    
+</script>

@@ -1,0 +1,1599 @@
+<!DOCTYPE html>
+<head>    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    
+        <script>
+            L_NO_TOUCH = false;
+            L_DISABLE_3D = false;
+        </script>
+    
+    <style>html, body {width: 100%;height: 100%;margin: 0;padding: 0;}</style>
+    <style>#map {position:absolute;top:0;bottom:0;right:0;left:0;}</style>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.6.0/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.6.0/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_1f81be14d907713d4d6f42c39d4a2f6a {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+            </style>
+        
+</head>
+<body>    
+    
+        <div style="position: fixed; 
+                    bottom: 50px; left: 50px; width: 180px; height: 180px; 
+                    border:2px solid grey; z-index:9999; font-size:14px;
+                    background-color:white;
+                    padding: 10px;
+                    border-radius: 5px;
+                    opacity: 0.9;">
+        <p style="margin-top: 0; margin-bottom: 10px; font-weight: bold;">早高峰拥堵热力图</p>
+        <p><i class="fa fa-circle" style="color:#00FF00"></i>&nbsp; 畅通 (0-2)</p>
+        <p><i class="fa fa-circle" style="color:#90EE90"></i>&nbsp; 基本畅通 (2-4)</p>
+        <p><i class="fa fa-circle" style="color:#FFFF00"></i>&nbsp; 轻度拥堵 (4-6)</p>
+        <p><i class="fa fa-circle" style="color:#FFA500"></i>&nbsp; 中度拥堵 (6-8)</p>
+        <p><i class="fa fa-circle" style="color:#FF0000"></i>&nbsp; 严重拥堵 (8-10)</p>
+        </div>
+        
+    
+            <div class="folium-map" id="map_1f81be14d907713d4d6f42c39d4a2f6a" ></div>
+        
+</body>
+<script>    
+    
+            var map_1f81be14d907713d4d6f42c39d4a2f6a = L.map(
+                "map_1f81be14d907713d4d6f42c39d4a2f6a",
+                {
+                    center: [39.90047280506819, 116.40432158734154],
+                    crs: L.CRS.EPSG3857,
+                    zoom: 12,
+                    zoomControl: true,
+                    preferCanvas: false,
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_4326ed6293ef0770c568adb3fdf061e0 = L.tileLayer(
+                "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {"attribution": "Data by \u0026copy; \u003ca href=\"http://openstreetmap.org\"\u003eOpenStreetMap\u003c/a\u003e, under \u003ca href=\"http://www.openstreetmap.org/copyright\"\u003eODbL\u003c/a\u003e.", "detectRetina": false, "maxNativeZoom": 18, "maxZoom": 18, "minZoom": 0, "noWrap": false, "opacity": 1, "subdomains": "abc", "tms": false}
+            ).addTo(map_1f81be14d907713d4d6f42c39d4a2f6a);
+        
+    
+            var poly_line_f9c8ce701001ba4bb573084f7bd70302 = L.polyline(
+                [[39.91530709947699, 116.35961950501265], [39.91291444394971, 116.43139994775234]],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FFFF00", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(map_1f81be14d907713d4d6f42c39d4a2f6a);
+        
+    
+        var popup_a761409eecd3bcfbda224cf17a2e123e = L.popup({"maxWidth": "100%"});
+
+        
+            var html_ded1ad5b6b6be0372151e488c23d2ca7 = $(`<div id="html_ded1ad5b6b6be0372151e488c23d2ca7" style="width: 100.0%; height: 100.0%;">道路ID: RD000<br>类型: 主干道<br>平均拥堵指数: 4.48<br>平均速度: 34.24 km/h<br>限速: 60 km/h</div>`)[0];
+            popup_a761409eecd3bcfbda224cf17a2e123e.setContent(html_ded1ad5b6b6be0372151e488c23d2ca7);
+        
+
+        poly_line_f9c8ce701001ba4bb573084f7bd70302.bindPopup(popup_a761409eecd3bcfbda224cf17a2e123e)
+        ;
+
+        
+    
+    
+            var poly_line_12e7c44bf34cac03f4eb52083d94dbba = L.polyline(
+                [[39.92880763307581, 116.4306172365548], [39.878697094249624, 116.4120959277378]],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FFFF00", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(map_1f81be14d907713d4d6f42c39d4a2f6a);
+        
+    
+        var popup_5c79e9f996b553cd4f603a6a8c198343 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_62057982c8f56aa20d1f5601e882c611 = $(`<div id="html_62057982c8f56aa20d1f5601e882c611" style="width: 100.0%; height: 100.0%;">道路ID: RD001<br>类型: 主干道<br>平均拥堵指数: 4.49<br>平均速度: 34.21 km/h<br>限速: 60 km/h</div>`)[0];
+            popup_5c79e9f996b553cd4f603a6a8c198343.setContent(html_62057982c8f56aa20d1f5601e882c611);
+        
+
+        poly_line_12e7c44bf34cac03f4eb52083d94dbba.bindPopup(popup_5c79e9f996b553cd4f603a6a8c198343)
+        ;
+
+        
+    
+    
+            var poly_line_c361fc26c27b678bce1fb74a0fb31436 = L.polyline(
+                [[39.89023182244571, 116.40849082227254], [39.878697094249624, 116.4120959277378]],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FFFF00", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 2}
+            ).addTo(map_1f81be14d907713d4d6f42c39d4a2f6a);
+        
+    
+        var popup_7de2259a5dd161fe1ee7e692b51ae5c1 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_eb2878041aee1dcc8d59278ef3efc4ed = $(`<div id="html_eb2878041aee1dcc8d59278ef3efc4ed" style="width: 100.0%; height: 100.0%;">道路ID: RD002<br>类型: 支路<br>平均拥堵指数: 4.49<br>平均速度: 17.11 km/h<br>限速: 30 km/h</div>`)[0];
+            popup_7de2259a5dd161fe1ee7e692b51ae5c1.setContent(html_eb2878041aee1dcc8d59278ef3efc4ed);
+        
+
+        poly_line_c361fc26c27b678bce1fb74a0fb31436.bindPopup(popup_7de2259a5dd161fe1ee7e692b51ae5c1)
+        ;
+
+        
+    
+    
+            var poly_line_601d97fa96d42ef7c6a3e8b89823c834 = L.polyline(
+                [[39.92880763307581, 116.4306172365548], [39.91291444394971, 116.43139994775234]],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FFFF00", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 3}
+            ).addTo(map_1f81be14d907713d4d6f42c39d4a2f6a);
+        
+    
+        var popup_b1277a8f7cc469e442d7bca27f81d3db = L.popup({"maxWidth": "100%"});
+
+        
+            var html_08b3fa2f60f747fd3ecdfa9c5ee71cd5 = $(`<div id="html_08b3fa2f60f747fd3ecdfa9c5ee71cd5" style="width: 100.0%; height: 100.0%;">道路ID: RD003<br>类型: 次干道<br>平均拥堵指数: 4.48<br>平均速度: 22.86 km/h<br>限速: 40 km/h</div>`)[0];
+            popup_b1277a8f7cc469e442d7bca27f81d3db.setContent(html_08b3fa2f60f747fd3ecdfa9c5ee71cd5);
+        
+
+        poly_line_601d97fa96d42ef7c6a3e8b89823c834.bindPopup(popup_b1277a8f7cc469e442d7bca27f81d3db)
+        ;
+
+        
+    
+    
+            var poly_line_ba1d5fad02bccc1b0570756acd82b20a = L.polyline(
+                [[39.87889113276693, 116.35798679983246], [39.92880763307581, 116.4306172365548]],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FFFF00", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(map_1f81be14d907713d4d6f42c39d4a2f6a);
+        
+    
+        var popup_df25805d3b5408accedb0785840d56cb = L.popup({"maxWidth": "100%"});
+
+        
+            var html_803f191d5335112e776b73942f1c666f = $(`<div id="html_803f191d5335112e776b73942f1c666f" style="width: 100.0%; height: 100.0%;">道路ID: RD004<br>类型: 主干道<br>平均拥堵指数: 4.49<br>平均速度: 34.25 km/h<br>限速: 60 km/h</div>`)[0];
+            popup_df25805d3b5408accedb0785840d56cb.setContent(html_803f191d5335112e776b73942f1c666f);
+        
+
+        poly_line_ba1d5fad02bccc1b0570756acd82b20a.bindPopup(popup_df25805d3b5408accedb0785840d56cb)
+        ;
+
+        
+    
+    
+            var poly_line_ebe70a1feff8b519cf4e92873d536687 = L.polyline(
+                [[39.94114467055648, 116.39570154780704], [39.92054612690199, 116.44687948039126]],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FFFF00", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 3}
+            ).addTo(map_1f81be14d907713d4d6f42c39d4a2f6a);
+        
+    
+        var popup_8f212f57e5d75359bab2276b9622a5c5 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_58e8d83ff61a5e8e6d22701208b55c51 = $(`<div id="html_58e8d83ff61a5e8e6d22701208b55c51" style="width: 100.0%; height: 100.0%;">道路ID: RD005<br>类型: 次干道<br>平均拥堵指数: 4.48<br>平均速度: 22.83 km/h<br>限速: 40 km/h</div>`)[0];
+            popup_8f212f57e5d75359bab2276b9622a5c5.setContent(html_58e8d83ff61a5e8e6d22701208b55c51);
+        
+
+        poly_line_ebe70a1feff8b519cf4e92873d536687.bindPopup(popup_8f212f57e5d75359bab2276b9622a5c5)
+        ;
+
+        
+    
+    
+            var poly_line_bd0a312a6274b99f7600b08431be0409 = L.polyline(
+                [[39.88684985771145, 116.42843588337003], [39.87889113276693, 116.35798679983246]],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FFFF00", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 3}
+            ).addTo(map_1f81be14d907713d4d6f42c39d4a2f6a);
+        
+    
+        var popup_42d08160dc221b6fca4aa457d032a530 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_f11a7d352aa7812bf0a1c10e59ac260a = $(`<div id="html_f11a7d352aa7812bf0a1c10e59ac260a" style="width: 100.0%; height: 100.0%;">道路ID: RD006<br>类型: 次干道<br>平均拥堵指数: 4.48<br>平均速度: 22.85 km/h<br>限速: 40 km/h</div>`)[0];
+            popup_42d08160dc221b6fca4aa457d032a530.setContent(html_f11a7d352aa7812bf0a1c10e59ac260a);
+        
+
+        poly_line_bd0a312a6274b99f7600b08431be0409.bindPopup(popup_42d08160dc221b6fca4aa457d032a530)
+        ;
+
+        
+    
+    
+            var poly_line_5b17b8a19b6548726828d71742c2cccd = L.polyline(
+                [[39.87889113276693, 116.35798679983246], [39.858080507085916, 116.42212134237539]],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FFFF00", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(map_1f81be14d907713d4d6f42c39d4a2f6a);
+        
+    
+        var popup_309fe1e051ff765f3b57d8cade2de7c7 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_eb1eecef1e64f803110c677eee3070b5 = $(`<div id="html_eb1eecef1e64f803110c677eee3070b5" style="width: 100.0%; height: 100.0%;">道路ID: RD007<br>类型: 主干道<br>平均拥堵指数: 4.47<br>平均速度: 34.25 km/h<br>限速: 60 km/h</div>`)[0];
+            popup_309fe1e051ff765f3b57d8cade2de7c7.setContent(html_eb1eecef1e64f803110c677eee3070b5);
+        
+
+        poly_line_5b17b8a19b6548726828d71742c2cccd.bindPopup(popup_309fe1e051ff765f3b57d8cade2de7c7)
+        ;
+
+        
+    
+    
+            var poly_line_5bc6ba23453f3f2e67bffd058c1ab9a8 = L.polyline(
+                [[39.87889113276693, 116.35798679983246], [39.91530709947699, 116.35961950501265]],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FFFF00", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 2}
+            ).addTo(map_1f81be14d907713d4d6f42c39d4a2f6a);
+        
+    
+        var popup_40e75a1ba62f1349af68d9841e16ef66 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_4b4baa5802c07c9c4dc5c6db181a4391 = $(`<div id="html_4b4baa5802c07c9c4dc5c6db181a4391" style="width: 100.0%; height: 100.0%;">道路ID: RD008<br>类型: 支路<br>平均拥堵指数: 4.50<br>平均速度: 17.09 km/h<br>限速: 30 km/h</div>`)[0];
+            popup_40e75a1ba62f1349af68d9841e16ef66.setContent(html_4b4baa5802c07c9c4dc5c6db181a4391);
+        
+
+        poly_line_5bc6ba23453f3f2e67bffd058c1ab9a8.bindPopup(popup_40e75a1ba62f1349af68d9841e16ef66)
+        ;
+
+        
+    
+    
+            var poly_line_c1c33d5b055e6e209f8c251fdfc44e10 = L.polyline(
+                [[39.93068735089171, 116.38695351501767], [39.92963017520641, 116.4490058800319]],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FFFF00", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 3}
+            ).addTo(map_1f81be14d907713d4d6f42c39d4a2f6a);
+        
+    
+        var popup_a5c28ed588fa936055ecc79e4f54542d = L.popup({"maxWidth": "100%"});
+
+        
+            var html_7c7da34066aeeda47347e8296b686229 = $(`<div id="html_7c7da34066aeeda47347e8296b686229" style="width: 100.0%; height: 100.0%;">道路ID: RD009<br>类型: 次干道<br>平均拥堵指数: 4.47<br>平均速度: 22.88 km/h<br>限速: 40 km/h</div>`)[0];
+            popup_a5c28ed588fa936055ecc79e4f54542d.setContent(html_7c7da34066aeeda47347e8296b686229);
+        
+
+        poly_line_c1c33d5b055e6e209f8c251fdfc44e10.bindPopup(popup_a5c28ed588fa936055ecc79e4f54542d)
+        ;
+
+        
+    
+    
+            var poly_line_f79ccf98a8425aee9d2a94820f85bb86 = L.polyline(
+                [[39.85684342911607, 116.38354825300674], [39.89023182244571, 116.40849082227254]],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FFFF00", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 3}
+            ).addTo(map_1f81be14d907713d4d6f42c39d4a2f6a);
+        
+    
+        var popup_7179c6bfc5c56d53e5cf0cea41dffc5f = L.popup({"maxWidth": "100%"});
+
+        
+            var html_34bdf39eb095038c69a56ade8de8c19a = $(`<div id="html_34bdf39eb095038c69a56ade8de8c19a" style="width: 100.0%; height: 100.0%;">道路ID: RD010<br>类型: 次干道<br>平均拥堵指数: 4.48<br>平均速度: 22.82 km/h<br>限速: 40 km/h</div>`)[0];
+            popup_7179c6bfc5c56d53e5cf0cea41dffc5f.setContent(html_34bdf39eb095038c69a56ade8de8c19a);
+        
+
+        poly_line_f79ccf98a8425aee9d2a94820f85bb86.bindPopup(popup_7179c6bfc5c56d53e5cf0cea41dffc5f)
+        ;
+
+        
+    
+    
+            var poly_line_d9741a18f0fc4512d613020078dbbf7c = L.polyline(
+                [[39.89187114562218, 116.4145305691349], [39.891816549822956, 116.38544753056478]],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FFFF00", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 3}
+            ).addTo(map_1f81be14d907713d4d6f42c39d4a2f6a);
+        
+    
+        var popup_61784cf52b96d3ef8f214a55532213a9 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_44025e8176670f25ae0a5065f8296b12 = $(`<div id="html_44025e8176670f25ae0a5065f8296b12" style="width: 100.0%; height: 100.0%;">道路ID: RD011<br>类型: 次干道<br>平均拥堵指数: 4.48<br>平均速度: 22.85 km/h<br>限速: 40 km/h</div>`)[0];
+            popup_61784cf52b96d3ef8f214a55532213a9.setContent(html_44025e8176670f25ae0a5065f8296b12);
+        
+
+        poly_line_d9741a18f0fc4512d613020078dbbf7c.bindPopup(popup_61784cf52b96d3ef8f214a55532213a9)
+        ;
+
+        
+    
+    
+            var poly_line_22ec6afa3aab4c63c243598b3ee797f0 = L.polyline(
+                [[39.92880763307581, 116.4306172365548], [39.94114467055648, 116.39570154780704]],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FFFF00", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 3}
+            ).addTo(map_1f81be14d907713d4d6f42c39d4a2f6a);
+        
+    
+        var popup_0f17feef41078fe47a6fbf6a6b9f879f = L.popup({"maxWidth": "100%"});
+
+        
+            var html_b1a191c3861b38a17a5b30fe03bdcf21 = $(`<div id="html_b1a191c3861b38a17a5b30fe03bdcf21" style="width: 100.0%; height: 100.0%;">道路ID: RD012<br>类型: 次干道<br>平均拥堵指数: 4.49<br>平均速度: 22.81 km/h<br>限速: 40 km/h</div>`)[0];
+            popup_0f17feef41078fe47a6fbf6a6b9f879f.setContent(html_b1a191c3861b38a17a5b30fe03bdcf21);
+        
+
+        poly_line_22ec6afa3aab4c63c243598b3ee797f0.bindPopup(popup_0f17feef41078fe47a6fbf6a6b9f879f)
+        ;
+
+        
+    
+    
+            var poly_line_5850ba5f67261f17eac925d71070accb = L.polyline(
+                [[39.92054612690199, 116.44687948039126], [39.85684342911607, 116.38354825300674]],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FFFF00", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 2}
+            ).addTo(map_1f81be14d907713d4d6f42c39d4a2f6a);
+        
+    
+        var popup_682fbf4fc40dc0877a423e9b4d7940a1 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_95e48e6b85982a0c6d2f3049c505bbae = $(`<div id="html_95e48e6b85982a0c6d2f3049c505bbae" style="width: 100.0%; height: 100.0%;">道路ID: RD013<br>类型: 支路<br>平均拥堵指数: 4.47<br>平均速度: 17.16 km/h<br>限速: 30 km/h</div>`)[0];
+            popup_682fbf4fc40dc0877a423e9b4d7940a1.setContent(html_95e48e6b85982a0c6d2f3049c505bbae);
+        
+
+        poly_line_5850ba5f67261f17eac925d71070accb.bindPopup(popup_682fbf4fc40dc0877a423e9b4d7940a1)
+        ;
+
+        
+    
+    
+            var poly_line_7b939d8103996bc3672f50a41c65a505 = L.polyline(
+                [[39.87889113276693, 116.35798679983246], [39.93068735089171, 116.38695351501767]],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FFFF00", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(map_1f81be14d907713d4d6f42c39d4a2f6a);
+        
+    
+        var popup_2ff6494a88c711db936758c6488134a1 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_f5bddc6175f5d7131e3725f3eb651c66 = $(`<div id="html_f5bddc6175f5d7131e3725f3eb651c66" style="width: 100.0%; height: 100.0%;">道路ID: RD014<br>类型: 主干道<br>平均拥堵指数: 4.50<br>平均速度: 34.21 km/h<br>限速: 60 km/h</div>`)[0];
+            popup_2ff6494a88c711db936758c6488134a1.setContent(html_f5bddc6175f5d7131e3725f3eb651c66);
+        
+
+        poly_line_7b939d8103996bc3672f50a41c65a505.bindPopup(popup_2ff6494a88c711db936758c6488134a1)
+        ;
+
+        
+    
+    
+            var poly_line_90a7a93b92158962367365b51b5f0a15 = L.polyline(
+                [[39.858080507085916, 116.42212134237539], [39.88684985771145, 116.42843588337003]],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FFFF00", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(map_1f81be14d907713d4d6f42c39d4a2f6a);
+        
+    
+        var popup_66563ab59333ab569548d9e80787cd41 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_5a280224cc1f6a10ad8503ac245645d0 = $(`<div id="html_5a280224cc1f6a10ad8503ac245645d0" style="width: 100.0%; height: 100.0%;">道路ID: RD015<br>类型: 主干道<br>平均拥堵指数: 4.47<br>平均速度: 34.28 km/h<br>限速: 60 km/h</div>`)[0];
+            popup_66563ab59333ab569548d9e80787cd41.setContent(html_5a280224cc1f6a10ad8503ac245645d0);
+        
+
+        poly_line_90a7a93b92158962367365b51b5f0a15.bindPopup(popup_66563ab59333ab569548d9e80787cd41)
+        ;
+
+        
+    
+    
+            var poly_line_44c738e34909b2d6d878fa1793b3f6d0 = L.polyline(
+                [[39.92054612690199, 116.44687948039126], [39.91003928827176, 116.3677649439456]],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FFFF00", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(map_1f81be14d907713d4d6f42c39d4a2f6a);
+        
+    
+        var popup_5871bcf351c278c13980ab1e3d11a4fe = L.popup({"maxWidth": "100%"});
+
+        
+            var html_5c44aad4cd4f842245aee2cc0a0cddae = $(`<div id="html_5c44aad4cd4f842245aee2cc0a0cddae" style="width: 100.0%; height: 100.0%;">道路ID: RD016<br>类型: 主干道<br>平均拥堵指数: 4.45<br>平均速度: 34.37 km/h<br>限速: 60 km/h</div>`)[0];
+            popup_5871bcf351c278c13980ab1e3d11a4fe.setContent(html_5c44aad4cd4f842245aee2cc0a0cddae);
+        
+
+        poly_line_44c738e34909b2d6d878fa1793b3f6d0.bindPopup(popup_5871bcf351c278c13980ab1e3d11a4fe)
+        ;
+
+        
+    
+    
+            var poly_line_ed7ac175a8ec29ab2442083138a363ae = L.polyline(
+                [[39.878697094249624, 116.4120959277378], [39.92963017520641, 116.4490058800319]],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FFFF00", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 2}
+            ).addTo(map_1f81be14d907713d4d6f42c39d4a2f6a);
+        
+    
+        var popup_ae3b96383d14dc5efb78504fe445f68b = L.popup({"maxWidth": "100%"});
+
+        
+            var html_c5b21abe86a2246cac96ef5b34dbe486 = $(`<div id="html_c5b21abe86a2246cac96ef5b34dbe486" style="width: 100.0%; height: 100.0%;">道路ID: RD017<br>类型: 支路<br>平均拥堵指数: 4.46<br>平均速度: 17.15 km/h<br>限速: 30 km/h</div>`)[0];
+            popup_ae3b96383d14dc5efb78504fe445f68b.setContent(html_c5b21abe86a2246cac96ef5b34dbe486);
+        
+
+        poly_line_ed7ac175a8ec29ab2442083138a363ae.bindPopup(popup_ae3b96383d14dc5efb78504fe445f68b)
+        ;
+
+        
+    
+    
+            var poly_line_5e023c1d82e5bbf0ea5155df6b70adea = L.polyline(
+                [[39.90415034560206, 116.4381982569162], [39.93068735089171, 116.38695351501767]],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FFFF00", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 3}
+            ).addTo(map_1f81be14d907713d4d6f42c39d4a2f6a);
+        
+    
+        var popup_41484a676ff81a4d09d0b28e32cb406a = L.popup({"maxWidth": "100%"});
+
+        
+            var html_dbac2d1286266d4808a4b06914bef6a5 = $(`<div id="html_dbac2d1286266d4808a4b06914bef6a5" style="width: 100.0%; height: 100.0%;">道路ID: RD018<br>类型: 次干道<br>平均拥堵指数: 4.50<br>平均速度: 22.80 km/h<br>限速: 40 km/h</div>`)[0];
+            popup_41484a676ff81a4d09d0b28e32cb406a.setContent(html_dbac2d1286266d4808a4b06914bef6a5);
+        
+
+        poly_line_5e023c1d82e5bbf0ea5155df6b70adea.bindPopup(popup_41484a676ff81a4d09d0b28e32cb406a)
+        ;
+
+        
+    
+    
+            var poly_line_943e2ea174cfe9976e41239ab94df4fc = L.polyline(
+                [[39.92880763307581, 116.4306172365548], [39.90415034560206, 116.4381982569162]],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FFFF00", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(map_1f81be14d907713d4d6f42c39d4a2f6a);
+        
+    
+        var popup_b740861f0bced0f6282fd3ad9eaba62c = L.popup({"maxWidth": "100%"});
+
+        
+            var html_c10c63c852b0a78c1205ae2574e9a845 = $(`<div id="html_c10c63c852b0a78c1205ae2574e9a845" style="width: 100.0%; height: 100.0%;">道路ID: RD019<br>类型: 主干道<br>平均拥堵指数: 4.48<br>平均速度: 34.25 km/h<br>限速: 60 km/h</div>`)[0];
+            popup_b740861f0bced0f6282fd3ad9eaba62c.setContent(html_c10c63c852b0a78c1205ae2574e9a845);
+        
+
+        poly_line_943e2ea174cfe9976e41239ab94df4fc.bindPopup(popup_b740861f0bced0f6282fd3ad9eaba62c)
+        ;
+
+        
+    
+    
+            var poly_line_18fc1abb7d95b59945c836e0147e3339 = L.polyline(
+                [[39.858080507085916, 116.42212134237539], [39.92963017520641, 116.4490058800319]],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FFFF00", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(map_1f81be14d907713d4d6f42c39d4a2f6a);
+        
+    
+        var popup_4b2ff4499f4da720847a0cadd6f78bf9 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_938599fe707d114ddfc3993689cb8882 = $(`<div id="html_938599fe707d114ddfc3993689cb8882" style="width: 100.0%; height: 100.0%;">道路ID: RD020<br>类型: 主干道<br>平均拥堵指数: 4.52<br>平均速度: 34.15 km/h<br>限速: 60 km/h</div>`)[0];
+            popup_4b2ff4499f4da720847a0cadd6f78bf9.setContent(html_938599fe707d114ddfc3993689cb8882);
+        
+
+        poly_line_18fc1abb7d95b59945c836e0147e3339.bindPopup(popup_4b2ff4499f4da720847a0cadd6f78bf9)
+        ;
+
+        
+    
+    
+            var poly_line_c2651f7b291643c2ee23aa51f27f200d = L.polyline(
+                [[39.91291444394971, 116.43139994775234], [39.92963017520641, 116.4490058800319]],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FFFF00", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(map_1f81be14d907713d4d6f42c39d4a2f6a);
+        
+    
+        var popup_f5ee843c1c7fe767803ccaf4474d6068 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_0427ab89d2d352598103799ec63e564e = $(`<div id="html_0427ab89d2d352598103799ec63e564e" style="width: 100.0%; height: 100.0%;">道路ID: RD021<br>类型: 主干道<br>平均拥堵指数: 4.50<br>平均速度: 34.18 km/h<br>限速: 60 km/h</div>`)[0];
+            popup_f5ee843c1c7fe767803ccaf4474d6068.setContent(html_0427ab89d2d352598103799ec63e564e);
+        
+
+        poly_line_c2651f7b291643c2ee23aa51f27f200d.bindPopup(popup_f5ee843c1c7fe767803ccaf4474d6068)
+        ;
+
+        
+    
+    
+            var poly_line_404424dfe4ca5ed9d18f0ed895383651 = L.polyline(
+                [[39.91530709947699, 116.35961950501265], [39.878697094249624, 116.4120959277378]],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FFFF00", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 2}
+            ).addTo(map_1f81be14d907713d4d6f42c39d4a2f6a);
+        
+    
+        var popup_2a7f6ef3280fd1fb0e3ba67ed427e708 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_4e446084bc8392503a4bca9baec80ec6 = $(`<div id="html_4e446084bc8392503a4bca9baec80ec6" style="width: 100.0%; height: 100.0%;">道路ID: RD022<br>类型: 支路<br>平均拥堵指数: 4.50<br>平均速度: 17.09 km/h<br>限速: 30 km/h</div>`)[0];
+            popup_2a7f6ef3280fd1fb0e3ba67ed427e708.setContent(html_4e446084bc8392503a4bca9baec80ec6);
+        
+
+        poly_line_404424dfe4ca5ed9d18f0ed895383651.bindPopup(popup_2a7f6ef3280fd1fb0e3ba67ed427e708)
+        ;
+
+        
+    
+    
+            var poly_line_ae4f8972bfce6f367a20a6a0ef479d91 = L.polyline(
+                [[39.858080507085916, 116.42212134237539], [39.94114467055648, 116.39570154780704]],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FFFF00", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 2}
+            ).addTo(map_1f81be14d907713d4d6f42c39d4a2f6a);
+        
+    
+        var popup_aceb1f2d389f4f029b28def30c2540ab = L.popup({"maxWidth": "100%"});
+
+        
+            var html_509c81de4c4b6ce3ca44fb0a18d72d07 = $(`<div id="html_509c81de4c4b6ce3ca44fb0a18d72d07" style="width: 100.0%; height: 100.0%;">道路ID: RD023<br>类型: 支路<br>平均拥堵指数: 4.48<br>平均速度: 17.11 km/h<br>限速: 30 km/h</div>`)[0];
+            popup_aceb1f2d389f4f029b28def30c2540ab.setContent(html_509c81de4c4b6ce3ca44fb0a18d72d07);
+        
+
+        poly_line_ae4f8972bfce6f367a20a6a0ef479d91.bindPopup(popup_aceb1f2d389f4f029b28def30c2540ab)
+        ;
+
+        
+    
+    
+            var poly_line_3930e3a305296b165fb7abc65bfe0af4 = L.polyline(
+                [[39.891816549822956, 116.38544753056478], [39.90415034560206, 116.4381982569162]],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FFFF00", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(map_1f81be14d907713d4d6f42c39d4a2f6a);
+        
+    
+        var popup_1f8c140795e4a690134c426418c69857 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_93095a59ebef2047d4653194301c2b7b = $(`<div id="html_93095a59ebef2047d4653194301c2b7b" style="width: 100.0%; height: 100.0%;">道路ID: RD024<br>类型: 主干道<br>平均拥堵指数: 4.46<br>平均速度: 34.32 km/h<br>限速: 60 km/h</div>`)[0];
+            popup_1f8c140795e4a690134c426418c69857.setContent(html_93095a59ebef2047d4653194301c2b7b);
+        
+
+        poly_line_3930e3a305296b165fb7abc65bfe0af4.bindPopup(popup_1f8c140795e4a690134c426418c69857)
+        ;
+
+        
+    
+    
+            var poly_line_ed48e1d556d53d37400882a04b1caa97 = L.polyline(
+                [[39.90209104138482, 116.423297340713], [39.858080507085916, 116.42212134237539]],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FFFF00", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 2}
+            ).addTo(map_1f81be14d907713d4d6f42c39d4a2f6a);
+        
+    
+        var popup_479a7fb860be86e5e800fc9f221ff9bf = L.popup({"maxWidth": "100%"});
+
+        
+            var html_6d1f7f25d927dda4c3766a20f4fde093 = $(`<div id="html_6d1f7f25d927dda4c3766a20f4fde093" style="width: 100.0%; height: 100.0%;">道路ID: RD025<br>类型: 支路<br>平均拥堵指数: 4.49<br>平均速度: 17.12 km/h<br>限速: 30 km/h</div>`)[0];
+            popup_479a7fb860be86e5e800fc9f221ff9bf.setContent(html_6d1f7f25d927dda4c3766a20f4fde093);
+        
+
+        poly_line_ed48e1d556d53d37400882a04b1caa97.bindPopup(popup_479a7fb860be86e5e800fc9f221ff9bf)
+        ;
+
+        
+    
+    
+            var poly_line_92a10fe7aec3412e4b1e9b928bbbb1da = L.polyline(
+                [[39.92649394723945, 116.37888078263903], [39.90415034560206, 116.4381982569162]],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FFFF00", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 3}
+            ).addTo(map_1f81be14d907713d4d6f42c39d4a2f6a);
+        
+    
+        var popup_634ff061cf51a0cbb7a23156e258f5b7 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_d0905817177ed99baab7757804389033 = $(`<div id="html_d0905817177ed99baab7757804389033" style="width: 100.0%; height: 100.0%;">道路ID: RD026<br>类型: 次干道<br>平均拥堵指数: 4.49<br>平均速度: 22.83 km/h<br>限速: 40 km/h</div>`)[0];
+            popup_634ff061cf51a0cbb7a23156e258f5b7.setContent(html_d0905817177ed99baab7757804389033);
+        
+
+        poly_line_92a10fe7aec3412e4b1e9b928bbbb1da.bindPopup(popup_634ff061cf51a0cbb7a23156e258f5b7)
+        ;
+
+        
+    
+    
+            var poly_line_8913d8aefa54bb59d8e3e0ccad72e707 = L.polyline(
+                [[39.89187114562218, 116.4145305691349], [39.878697094249624, 116.4120959277378]],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FFFF00", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 3}
+            ).addTo(map_1f81be14d907713d4d6f42c39d4a2f6a);
+        
+    
+        var popup_9836c21b2aa22d4153177e30f8b2cbf4 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_3b372d20c62e9f67168dfb389672e0c5 = $(`<div id="html_3b372d20c62e9f67168dfb389672e0c5" style="width: 100.0%; height: 100.0%;">道路ID: RD027<br>类型: 次干道<br>平均拥堵指数: 4.51<br>平均速度: 22.78 km/h<br>限速: 40 km/h</div>`)[0];
+            popup_9836c21b2aa22d4153177e30f8b2cbf4.setContent(html_3b372d20c62e9f67168dfb389672e0c5);
+        
+
+        poly_line_8913d8aefa54bb59d8e3e0ccad72e707.bindPopup(popup_9836c21b2aa22d4153177e30f8b2cbf4)
+        ;
+
+        
+    
+    
+            var poly_line_a0ee2ef7c475ef0955acca9b906c76d3 = L.polyline(
+                [[39.85684342911607, 116.38354825300674], [39.89187114562218, 116.4145305691349]],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FFFF00", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(map_1f81be14d907713d4d6f42c39d4a2f6a);
+        
+    
+        var popup_83f9ebdf961339321db677b18e2f8a5b = L.popup({"maxWidth": "100%"});
+
+        
+            var html_f495459bac94036ad6b712e3e451eceb = $(`<div id="html_f495459bac94036ad6b712e3e451eceb" style="width: 100.0%; height: 100.0%;">道路ID: RD028<br>类型: 主干道<br>平均拥堵指数: 4.51<br>平均速度: 34.16 km/h<br>限速: 60 km/h</div>`)[0];
+            popup_83f9ebdf961339321db677b18e2f8a5b.setContent(html_f495459bac94036ad6b712e3e451eceb);
+        
+
+        poly_line_a0ee2ef7c475ef0955acca9b906c76d3.bindPopup(popup_83f9ebdf961339321db677b18e2f8a5b)
+        ;
+
+        
+    
+    
+            var poly_line_d1fe4a798daa1e8ac51d5448edfd405f = L.polyline(
+                [[39.92880763307581, 116.4306172365548], [39.89187114562218, 116.4145305691349]],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FFFF00", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(map_1f81be14d907713d4d6f42c39d4a2f6a);
+        
+    
+        var popup_4e9834ba8acf2fe0ae84adc7cbbf4c54 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_3976c93ce42594374a56b54705031dd9 = $(`<div id="html_3976c93ce42594374a56b54705031dd9" style="width: 100.0%; height: 100.0%;">道路ID: RD029<br>类型: 主干道<br>平均拥堵指数: 4.47<br>平均速度: 34.31 km/h<br>限速: 60 km/h</div>`)[0];
+            popup_4e9834ba8acf2fe0ae84adc7cbbf4c54.setContent(html_3976c93ce42594374a56b54705031dd9);
+        
+
+        poly_line_d1fe4a798daa1e8ac51d5448edfd405f.bindPopup(popup_4e9834ba8acf2fe0ae84adc7cbbf4c54)
+        ;
+
+        
+    
+    
+            var poly_line_9ebbb42a77a4ef4d0608d2e979854147 = L.polyline(
+                [[39.91530709947699, 116.35961950501265], [39.89187114562218, 116.4145305691349]],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FFFF00", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(map_1f81be14d907713d4d6f42c39d4a2f6a);
+        
+    
+        var popup_2c476a12d2ec949a1f52674101e55d6c = L.popup({"maxWidth": "100%"});
+
+        
+            var html_40c1794564cb147e315b43ee81df7b38 = $(`<div id="html_40c1794564cb147e315b43ee81df7b38" style="width: 100.0%; height: 100.0%;">道路ID: RD030<br>类型: 主干道<br>平均拥堵指数: 4.47<br>平均速度: 34.27 km/h<br>限速: 60 km/h</div>`)[0];
+            popup_2c476a12d2ec949a1f52674101e55d6c.setContent(html_40c1794564cb147e315b43ee81df7b38);
+        
+
+        poly_line_9ebbb42a77a4ef4d0608d2e979854147.bindPopup(popup_2c476a12d2ec949a1f52674101e55d6c)
+        ;
+
+        
+    
+    
+            var poly_line_b355da31196fa3826abb6394446cd2de = L.polyline(
+                [[39.88684985771145, 116.42843588337003], [39.94114467055648, 116.39570154780704]],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FFFF00", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 3}
+            ).addTo(map_1f81be14d907713d4d6f42c39d4a2f6a);
+        
+    
+        var popup_aab42d25494d41e94c1723fa82a8b775 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_eb6084569da167369105981265b25d1a = $(`<div id="html_eb6084569da167369105981265b25d1a" style="width: 100.0%; height: 100.0%;">道路ID: RD031<br>类型: 次干道<br>平均拥堵指数: 4.48<br>平均速度: 22.83 km/h<br>限速: 40 km/h</div>`)[0];
+            popup_aab42d25494d41e94c1723fa82a8b775.setContent(html_eb6084569da167369105981265b25d1a);
+        
+
+        poly_line_b355da31196fa3826abb6394446cd2de.bindPopup(popup_aab42d25494d41e94c1723fa82a8b775)
+        ;
+
+        
+    
+    
+            var poly_line_292e5ab710eea298ed80aa0215ee62dd = L.polyline(
+                [[39.89187114562218, 116.4145305691349], [39.91003928827176, 116.3677649439456]],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FFFF00", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 2}
+            ).addTo(map_1f81be14d907713d4d6f42c39d4a2f6a);
+        
+    
+        var popup_3d5d8ee2f9834c6cb918f0ac7c92d660 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_792bd4e81d8e7ad9fe42b6883bdb13e6 = $(`<div id="html_792bd4e81d8e7ad9fe42b6883bdb13e6" style="width: 100.0%; height: 100.0%;">道路ID: RD032<br>类型: 支路<br>平均拥堵指数: 4.46<br>平均速度: 17.17 km/h<br>限速: 30 km/h</div>`)[0];
+            popup_3d5d8ee2f9834c6cb918f0ac7c92d660.setContent(html_792bd4e81d8e7ad9fe42b6883bdb13e6);
+        
+
+        poly_line_292e5ab710eea298ed80aa0215ee62dd.bindPopup(popup_3d5d8ee2f9834c6cb918f0ac7c92d660)
+        ;
+
+        
+    
+    
+            var poly_line_43450ba8380bf985e7d9a1d8299e9fd1 = L.polyline(
+                [[39.89023182244571, 116.40849082227254], [39.91003928827176, 116.3677649439456]],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FFFF00", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 3}
+            ).addTo(map_1f81be14d907713d4d6f42c39d4a2f6a);
+        
+    
+        var popup_0e7f438c42cd146962f825e3a34624be = L.popup({"maxWidth": "100%"});
+
+        
+            var html_ab6244964af19c469df53a4d9c73ca0b = $(`<div id="html_ab6244964af19c469df53a4d9c73ca0b" style="width: 100.0%; height: 100.0%;">道路ID: RD033<br>类型: 次干道<br>平均拥堵指数: 4.48<br>平均速度: 22.84 km/h<br>限速: 40 km/h</div>`)[0];
+            popup_0e7f438c42cd146962f825e3a34624be.setContent(html_ab6244964af19c469df53a4d9c73ca0b);
+        
+
+        poly_line_43450ba8380bf985e7d9a1d8299e9fd1.bindPopup(popup_0e7f438c42cd146962f825e3a34624be)
+        ;
+
+        
+    
+    
+            var poly_line_10ae427c676e5bd70692421d981d20bf = L.polyline(
+                [[39.92880763307581, 116.4306172365548], [39.854362439985735, 116.36545618175428]],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FFFF00", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(map_1f81be14d907713d4d6f42c39d4a2f6a);
+        
+    
+        var popup_86ef9fe2e337262a592aa590ec0c34cd = L.popup({"maxWidth": "100%"});
+
+        
+            var html_7e0e13ff89d033ce6138c794349940e9 = $(`<div id="html_7e0e13ff89d033ce6138c794349940e9" style="width: 100.0%; height: 100.0%;">道路ID: RD034<br>类型: 主干道<br>平均拥堵指数: 4.47<br>平均速度: 34.29 km/h<br>限速: 60 km/h</div>`)[0];
+            popup_86ef9fe2e337262a592aa590ec0c34cd.setContent(html_7e0e13ff89d033ce6138c794349940e9);
+        
+
+        poly_line_10ae427c676e5bd70692421d981d20bf.bindPopup(popup_86ef9fe2e337262a592aa590ec0c34cd)
+        ;
+
+        
+    
+    
+            var poly_line_b494834eb7b2f7b3fdba5b90efea500a = L.polyline(
+                [[39.88684985771145, 116.42843588337003], [39.90415034560206, 116.4381982569162]],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FFFF00", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(map_1f81be14d907713d4d6f42c39d4a2f6a);
+        
+    
+        var popup_d194bd0842ed62bca868dc6639790fb4 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_6543b132fc3209054f60f6b7360afc93 = $(`<div id="html_6543b132fc3209054f60f6b7360afc93" style="width: 100.0%; height: 100.0%;">道路ID: RD035<br>类型: 主干道<br>平均拥堵指数: 4.46<br>平均速度: 34.31 km/h<br>限速: 60 km/h</div>`)[0];
+            popup_d194bd0842ed62bca868dc6639790fb4.setContent(html_6543b132fc3209054f60f6b7360afc93);
+        
+
+        poly_line_b494834eb7b2f7b3fdba5b90efea500a.bindPopup(popup_d194bd0842ed62bca868dc6639790fb4)
+        ;
+
+        
+    
+    
+            var poly_line_2f30da536df3ee1f9e036c418b411c1d = L.polyline(
+                [[39.88684985771145, 116.42843588337003], [39.878697094249624, 116.4120959277378]],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FFFF00", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(map_1f81be14d907713d4d6f42c39d4a2f6a);
+        
+    
+        var popup_a2fdf61565b9ff515fc25e10836ec3f4 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_e58ba53f3b4270a8088d1d356d133362 = $(`<div id="html_e58ba53f3b4270a8088d1d356d133362" style="width: 100.0%; height: 100.0%;">道路ID: RD036<br>类型: 主干道<br>平均拥堵指数: 4.48<br>平均速度: 34.25 km/h<br>限速: 60 km/h</div>`)[0];
+            popup_a2fdf61565b9ff515fc25e10836ec3f4.setContent(html_e58ba53f3b4270a8088d1d356d133362);
+        
+
+        poly_line_2f30da536df3ee1f9e036c418b411c1d.bindPopup(popup_a2fdf61565b9ff515fc25e10836ec3f4)
+        ;
+
+        
+    
+    
+            var poly_line_3c5b20356fe2d01ee1556824d797f098 = L.polyline(
+                [[39.89023182244571, 116.40849082227254], [39.90209104138482, 116.423297340713]],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FFFF00", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 3}
+            ).addTo(map_1f81be14d907713d4d6f42c39d4a2f6a);
+        
+    
+        var popup_d9121456a3f0323a0cf32ba4c56994c2 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_ec2bf54ae8bfa80d795f48dd6ead0b08 = $(`<div id="html_ec2bf54ae8bfa80d795f48dd6ead0b08" style="width: 100.0%; height: 100.0%;">道路ID: RD037<br>类型: 次干道<br>平均拥堵指数: 4.47<br>平均速度: 22.88 km/h<br>限速: 40 km/h</div>`)[0];
+            popup_d9121456a3f0323a0cf32ba4c56994c2.setContent(html_ec2bf54ae8bfa80d795f48dd6ead0b08);
+        
+
+        poly_line_3c5b20356fe2d01ee1556824d797f098.bindPopup(popup_d9121456a3f0323a0cf32ba4c56994c2)
+        ;
+
+        
+    
+    
+            var poly_line_d5ad268a693312f311d7c97ebccb5405 = L.polyline(
+                [[39.91003928827176, 116.3677649439456], [39.92880763307581, 116.4306172365548]],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FFFF00", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(map_1f81be14d907713d4d6f42c39d4a2f6a);
+        
+    
+        var popup_be341b2444047408153f47fc1957fb61 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_b679ee539027989bfdf1e0067654fd30 = $(`<div id="html_b679ee539027989bfdf1e0067654fd30" style="width: 100.0%; height: 100.0%;">道路ID: RD038<br>类型: 主干道<br>平均拥堵指数: 4.48<br>平均速度: 34.26 km/h<br>限速: 60 km/h</div>`)[0];
+            popup_be341b2444047408153f47fc1957fb61.setContent(html_b679ee539027989bfdf1e0067654fd30);
+        
+
+        poly_line_d5ad268a693312f311d7c97ebccb5405.bindPopup(popup_be341b2444047408153f47fc1957fb61)
+        ;
+
+        
+    
+    
+            var poly_line_46a701399da3fe7e9af0bb5e1a7c848f = L.polyline(
+                [[39.92963017520641, 116.4490058800319], [39.89023182244571, 116.40849082227254]],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FFFF00", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 2}
+            ).addTo(map_1f81be14d907713d4d6f42c39d4a2f6a);
+        
+    
+        var popup_af724db68f4f9597d15df970c7be483c = L.popup({"maxWidth": "100%"});
+
+        
+            var html_781613c4c461da1f003d9d5598a3acae = $(`<div id="html_781613c4c461da1f003d9d5598a3acae" style="width: 100.0%; height: 100.0%;">道路ID: RD039<br>类型: 支路<br>平均拥堵指数: 4.47<br>平均速度: 17.15 km/h<br>限速: 30 km/h</div>`)[0];
+            popup_af724db68f4f9597d15df970c7be483c.setContent(html_781613c4c461da1f003d9d5598a3acae);
+        
+
+        poly_line_46a701399da3fe7e9af0bb5e1a7c848f.bindPopup(popup_af724db68f4f9597d15df970c7be483c)
+        ;
+
+        
+    
+    
+            var poly_line_0276b37f8bd2c36d4d6bb7da8947188c = L.polyline(
+                [[39.91530709947699, 116.35961950501265], [39.91291444394971, 116.43139994775234]],
+                {"bubblingMouseEvents": true, "color": "#FF0000", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FF0000", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(map_1f81be14d907713d4d6f42c39d4a2f6a);
+        
+    
+        var popup_d6aa46a4140f954d777d1320ea499eb2 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_2c872ddc7e73b6f4cc0dca6a86f6f5dc = $(`<div id="html_2c872ddc7e73b6f4cc0dca6a86f6f5dc" style="width: 100.0%; height: 100.0%;">道路ID: RD000<br>类型: 主干道<br>早高峰平均拥堵指数: 8.03<br>早高峰平均速度: 22.64 km/h</div>`)[0];
+            popup_d6aa46a4140f954d777d1320ea499eb2.setContent(html_2c872ddc7e73b6f4cc0dca6a86f6f5dc);
+        
+
+        poly_line_0276b37f8bd2c36d4d6bb7da8947188c.bindPopup(popup_d6aa46a4140f954d777d1320ea499eb2)
+        ;
+
+        
+    
+    
+            var poly_line_3f45cde846e7732f839e8e7d33b8d571 = L.polyline(
+                [[39.92880763307581, 116.4306172365548], [39.878697094249624, 116.4120959277378]],
+                {"bubblingMouseEvents": true, "color": "#FF0000", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FF0000", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(map_1f81be14d907713d4d6f42c39d4a2f6a);
+        
+    
+        var popup_97992c34571feed8f480986a1fdeea98 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_881c80904078693049dd9694ca3eeb2e = $(`<div id="html_881c80904078693049dd9694ca3eeb2e" style="width: 100.0%; height: 100.0%;">道路ID: RD001<br>类型: 主干道<br>早高峰平均拥堵指数: 8.12<br>早高峰平均速度: 22.44 km/h</div>`)[0];
+            popup_97992c34571feed8f480986a1fdeea98.setContent(html_881c80904078693049dd9694ca3eeb2e);
+        
+
+        poly_line_3f45cde846e7732f839e8e7d33b8d571.bindPopup(popup_97992c34571feed8f480986a1fdeea98)
+        ;
+
+        
+    
+    
+            var poly_line_2c6af7e5d890fab234de2676bae2b3c6 = L.polyline(
+                [[39.89023182244571, 116.40849082227254], [39.878697094249624, 116.4120959277378]],
+                {"bubblingMouseEvents": true, "color": "#FF0000", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FF0000", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 2}
+            ).addTo(map_1f81be14d907713d4d6f42c39d4a2f6a);
+        
+    
+        var popup_20d3a1b7ea5ff73bbc44b5d117206d24 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_c3f5de6a320e7803564503935885c695 = $(`<div id="html_c3f5de6a320e7803564503935885c695" style="width: 100.0%; height: 100.0%;">道路ID: RD002<br>类型: 支路<br>早高峰平均拥堵指数: 8.26<br>早高峰平均速度: 11.06 km/h</div>`)[0];
+            popup_20d3a1b7ea5ff73bbc44b5d117206d24.setContent(html_c3f5de6a320e7803564503935885c695);
+        
+
+        poly_line_2c6af7e5d890fab234de2676bae2b3c6.bindPopup(popup_20d3a1b7ea5ff73bbc44b5d117206d24)
+        ;
+
+        
+    
+    
+            var poly_line_7c018fcd173e3da22aeda9e982efb8fa = L.polyline(
+                [[39.92880763307581, 116.4306172365548], [39.91291444394971, 116.43139994775234]],
+                {"bubblingMouseEvents": true, "color": "#FF0000", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FF0000", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 3}
+            ).addTo(map_1f81be14d907713d4d6f42c39d4a2f6a);
+        
+    
+        var popup_2127c3891129fcdb9ddfc2f6004f20e7 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_6e04b2921b3b9da3bcf995319214a66b = $(`<div id="html_6e04b2921b3b9da3bcf995319214a66b" style="width: 100.0%; height: 100.0%;">道路ID: RD003<br>类型: 次干道<br>早高峰平均拥堵指数: 8.24<br>早高峰平均速度: 14.82 km/h</div>`)[0];
+            popup_2127c3891129fcdb9ddfc2f6004f20e7.setContent(html_6e04b2921b3b9da3bcf995319214a66b);
+        
+
+        poly_line_7c018fcd173e3da22aeda9e982efb8fa.bindPopup(popup_2127c3891129fcdb9ddfc2f6004f20e7)
+        ;
+
+        
+    
+    
+            var poly_line_b8c668f52e17ff94834d47d7d3a5ea1b = L.polyline(
+                [[39.87889113276693, 116.35798679983246], [39.92880763307581, 116.4306172365548]],
+                {"bubblingMouseEvents": true, "color": "#FF0000", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FF0000", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(map_1f81be14d907713d4d6f42c39d4a2f6a);
+        
+    
+        var popup_70381949617e47a7c267825f94ffdb76 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_a57b47a45362756f9f915b9165f672f5 = $(`<div id="html_a57b47a45362756f9f915b9165f672f5" style="width: 100.0%; height: 100.0%;">道路ID: RD004<br>类型: 主干道<br>早高峰平均拥堵指数: 8.10<br>早高峰平均速度: 22.59 km/h</div>`)[0];
+            popup_70381949617e47a7c267825f94ffdb76.setContent(html_a57b47a45362756f9f915b9165f672f5);
+        
+
+        poly_line_b8c668f52e17ff94834d47d7d3a5ea1b.bindPopup(popup_70381949617e47a7c267825f94ffdb76)
+        ;
+
+        
+    
+    
+            var poly_line_4abfa414aea9b2e78e0fcd942c279761 = L.polyline(
+                [[39.94114467055648, 116.39570154780704], [39.92054612690199, 116.44687948039126]],
+                {"bubblingMouseEvents": true, "color": "#FF0000", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FF0000", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 3}
+            ).addTo(map_1f81be14d907713d4d6f42c39d4a2f6a);
+        
+    
+        var popup_b65cde6241de35c10ca3926eabc92178 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_faa4865e31336a6edc116981a5b73e06 = $(`<div id="html_faa4865e31336a6edc116981a5b73e06" style="width: 100.0%; height: 100.0%;">道路ID: RD005<br>类型: 次干道<br>早高峰平均拥堵指数: 8.09<br>早高峰平均速度: 14.91 km/h</div>`)[0];
+            popup_b65cde6241de35c10ca3926eabc92178.setContent(html_faa4865e31336a6edc116981a5b73e06);
+        
+
+        poly_line_4abfa414aea9b2e78e0fcd942c279761.bindPopup(popup_b65cde6241de35c10ca3926eabc92178)
+        ;
+
+        
+    
+    
+            var poly_line_4f8127b9658c2b0bc2177853ee519727 = L.polyline(
+                [[39.88684985771145, 116.42843588337003], [39.87889113276693, 116.35798679983246]],
+                {"bubblingMouseEvents": true, "color": "#FF0000", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FF0000", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 3}
+            ).addTo(map_1f81be14d907713d4d6f42c39d4a2f6a);
+        
+    
+        var popup_b21fd2924118f58e9104f5b9385b23cd = L.popup({"maxWidth": "100%"});
+
+        
+            var html_b1648adeccd5fd8bc4673f617f7ccacc = $(`<div id="html_b1648adeccd5fd8bc4673f617f7ccacc" style="width: 100.0%; height: 100.0%;">道路ID: RD006<br>类型: 次干道<br>早高峰平均拥堵指数: 8.14<br>早高峰平均速度: 14.99 km/h</div>`)[0];
+            popup_b21fd2924118f58e9104f5b9385b23cd.setContent(html_b1648adeccd5fd8bc4673f617f7ccacc);
+        
+
+        poly_line_4f8127b9658c2b0bc2177853ee519727.bindPopup(popup_b21fd2924118f58e9104f5b9385b23cd)
+        ;
+
+        
+    
+    
+            var poly_line_3a3c13eb527737a558c32740d705d364 = L.polyline(
+                [[39.87889113276693, 116.35798679983246], [39.858080507085916, 116.42212134237539]],
+                {"bubblingMouseEvents": true, "color": "#FF0000", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FF0000", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(map_1f81be14d907713d4d6f42c39d4a2f6a);
+        
+    
+        var popup_11db23e06decf2805c8ae09f4d0376ab = L.popup({"maxWidth": "100%"});
+
+        
+            var html_7bb8eb91fb5bce79179c1230fe83fae7 = $(`<div id="html_7bb8eb91fb5bce79179c1230fe83fae7" style="width: 100.0%; height: 100.0%;">道路ID: RD007<br>类型: 主干道<br>早高峰平均拥堵指数: 8.08<br>早高峰平均速度: 22.38 km/h</div>`)[0];
+            popup_11db23e06decf2805c8ae09f4d0376ab.setContent(html_7bb8eb91fb5bce79179c1230fe83fae7);
+        
+
+        poly_line_3a3c13eb527737a558c32740d705d364.bindPopup(popup_11db23e06decf2805c8ae09f4d0376ab)
+        ;
+
+        
+    
+    
+            var poly_line_ccb988b65e09b060b35a56d4e935d3c1 = L.polyline(
+                [[39.87889113276693, 116.35798679983246], [39.91530709947699, 116.35961950501265]],
+                {"bubblingMouseEvents": true, "color": "#FF0000", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FF0000", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 2}
+            ).addTo(map_1f81be14d907713d4d6f42c39d4a2f6a);
+        
+    
+        var popup_3a859190846c3fb28e648e1a4c1ad77c = L.popup({"maxWidth": "100%"});
+
+        
+            var html_49d05f06e3f3f56767dba82f7f752939 = $(`<div id="html_49d05f06e3f3f56767dba82f7f752939" style="width: 100.0%; height: 100.0%;">道路ID: RD008<br>类型: 支路<br>早高峰平均拥堵指数: 8.21<br>早高峰平均速度: 11.09 km/h</div>`)[0];
+            popup_3a859190846c3fb28e648e1a4c1ad77c.setContent(html_49d05f06e3f3f56767dba82f7f752939);
+        
+
+        poly_line_ccb988b65e09b060b35a56d4e935d3c1.bindPopup(popup_3a859190846c3fb28e648e1a4c1ad77c)
+        ;
+
+        
+    
+    
+            var poly_line_0d6f7da4aeca96be8f63be36a24921d8 = L.polyline(
+                [[39.93068735089171, 116.38695351501767], [39.92963017520641, 116.4490058800319]],
+                {"bubblingMouseEvents": true, "color": "#FF0000", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FF0000", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 3}
+            ).addTo(map_1f81be14d907713d4d6f42c39d4a2f6a);
+        
+    
+        var popup_74785a5606d783a7a54245c400d93ca1 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_0383a257eb7c32435d5dd857d78c5d9e = $(`<div id="html_0383a257eb7c32435d5dd857d78c5d9e" style="width: 100.0%; height: 100.0%;">道路ID: RD009<br>类型: 次干道<br>早高峰平均拥堵指数: 8.10<br>早高峰平均速度: 15.09 km/h</div>`)[0];
+            popup_74785a5606d783a7a54245c400d93ca1.setContent(html_0383a257eb7c32435d5dd857d78c5d9e);
+        
+
+        poly_line_0d6f7da4aeca96be8f63be36a24921d8.bindPopup(popup_74785a5606d783a7a54245c400d93ca1)
+        ;
+
+        
+    
+    
+            var poly_line_c41d2edcbbfd2b39fd5dd2ed277291ea = L.polyline(
+                [[39.85684342911607, 116.38354825300674], [39.89023182244571, 116.40849082227254]],
+                {"bubblingMouseEvents": true, "color": "#FFA500", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FFA500", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 3}
+            ).addTo(map_1f81be14d907713d4d6f42c39d4a2f6a);
+        
+    
+        var popup_65c8c467507bce4b5eb5377608dd6517 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_b1dfba3282ab40c449729bc8bf877be3 = $(`<div id="html_b1dfba3282ab40c449729bc8bf877be3" style="width: 100.0%; height: 100.0%;">道路ID: RD010<br>类型: 次干道<br>早高峰平均拥堵指数: 7.95<br>早高峰平均速度: 15.31 km/h</div>`)[0];
+            popup_65c8c467507bce4b5eb5377608dd6517.setContent(html_b1dfba3282ab40c449729bc8bf877be3);
+        
+
+        poly_line_c41d2edcbbfd2b39fd5dd2ed277291ea.bindPopup(popup_65c8c467507bce4b5eb5377608dd6517)
+        ;
+
+        
+    
+    
+            var poly_line_e6742498d25c6a0b86a84fdc12bd9b68 = L.polyline(
+                [[39.89187114562218, 116.4145305691349], [39.891816549822956, 116.38544753056478]],
+                {"bubblingMouseEvents": true, "color": "#FF0000", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FF0000", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 3}
+            ).addTo(map_1f81be14d907713d4d6f42c39d4a2f6a);
+        
+    
+        var popup_03ddf7616e0bcaa15fdfc5e8bfa26e74 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_65fd141a7aa0907c176cede0ea9a138f = $(`<div id="html_65fd141a7aa0907c176cede0ea9a138f" style="width: 100.0%; height: 100.0%;">道路ID: RD011<br>类型: 次干道<br>早高峰平均拥堵指数: 8.03<br>早高峰平均速度: 15.26 km/h</div>`)[0];
+            popup_03ddf7616e0bcaa15fdfc5e8bfa26e74.setContent(html_65fd141a7aa0907c176cede0ea9a138f);
+        
+
+        poly_line_e6742498d25c6a0b86a84fdc12bd9b68.bindPopup(popup_03ddf7616e0bcaa15fdfc5e8bfa26e74)
+        ;
+
+        
+    
+    
+            var poly_line_dd4210fe82f0cf4b8ceddebb144a8cd7 = L.polyline(
+                [[39.92880763307581, 116.4306172365548], [39.94114467055648, 116.39570154780704]],
+                {"bubblingMouseEvents": true, "color": "#FF0000", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FF0000", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 3}
+            ).addTo(map_1f81be14d907713d4d6f42c39d4a2f6a);
+        
+    
+        var popup_5b7c76627515ca46bf6e60adb33d0a36 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_6eefb58fdf70303107bb4582559619e1 = $(`<div id="html_6eefb58fdf70303107bb4582559619e1" style="width: 100.0%; height: 100.0%;">道路ID: RD012<br>类型: 次干道<br>早高峰平均拥堵指数: 8.11<br>早高峰平均速度: 14.88 km/h</div>`)[0];
+            popup_5b7c76627515ca46bf6e60adb33d0a36.setContent(html_6eefb58fdf70303107bb4582559619e1);
+        
+
+        poly_line_dd4210fe82f0cf4b8ceddebb144a8cd7.bindPopup(popup_5b7c76627515ca46bf6e60adb33d0a36)
+        ;
+
+        
+    
+    
+            var poly_line_19bd7f2d1246b87cc3acbb1a07f85e21 = L.polyline(
+                [[39.92054612690199, 116.44687948039126], [39.85684342911607, 116.38354825300674]],
+                {"bubblingMouseEvents": true, "color": "#FF0000", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FF0000", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 2}
+            ).addTo(map_1f81be14d907713d4d6f42c39d4a2f6a);
+        
+    
+        var popup_13df4e249f66f9eabe8edac00dc7d5aa = L.popup({"maxWidth": "100%"});
+
+        
+            var html_f444ddb6bcbbd8c08bf4e1e869703150 = $(`<div id="html_f444ddb6bcbbd8c08bf4e1e869703150" style="width: 100.0%; height: 100.0%;">道路ID: RD013<br>类型: 支路<br>早高峰平均拥堵指数: 8.17<br>早高峰平均速度: 11.16 km/h</div>`)[0];
+            popup_13df4e249f66f9eabe8edac00dc7d5aa.setContent(html_f444ddb6bcbbd8c08bf4e1e869703150);
+        
+
+        poly_line_19bd7f2d1246b87cc3acbb1a07f85e21.bindPopup(popup_13df4e249f66f9eabe8edac00dc7d5aa)
+        ;
+
+        
+    
+    
+            var poly_line_6dce9141f8add6d7481ab8487d2f5c7e = L.polyline(
+                [[39.87889113276693, 116.35798679983246], [39.93068735089171, 116.38695351501767]],
+                {"bubblingMouseEvents": true, "color": "#FF0000", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FF0000", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(map_1f81be14d907713d4d6f42c39d4a2f6a);
+        
+    
+        var popup_270179740130d01d140e98323797dd9a = L.popup({"maxWidth": "100%"});
+
+        
+            var html_8f1fec6727cb1278ed8ca39eb466e02b = $(`<div id="html_8f1fec6727cb1278ed8ca39eb466e02b" style="width: 100.0%; height: 100.0%;">道路ID: RD014<br>类型: 主干道<br>早高峰平均拥堵指数: 8.26<br>早高峰平均速度: 22.29 km/h</div>`)[0];
+            popup_270179740130d01d140e98323797dd9a.setContent(html_8f1fec6727cb1278ed8ca39eb466e02b);
+        
+
+        poly_line_6dce9141f8add6d7481ab8487d2f5c7e.bindPopup(popup_270179740130d01d140e98323797dd9a)
+        ;
+
+        
+    
+    
+            var poly_line_8c3201b513578f9089a3b294a6d66cf2 = L.polyline(
+                [[39.858080507085916, 116.42212134237539], [39.88684985771145, 116.42843588337003]],
+                {"bubblingMouseEvents": true, "color": "#FF0000", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FF0000", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(map_1f81be14d907713d4d6f42c39d4a2f6a);
+        
+    
+        var popup_0f277aa8cdf5c316921a102c3391e03f = L.popup({"maxWidth": "100%"});
+
+        
+            var html_bd2cab69a632a366285a791d4f83aa2d = $(`<div id="html_bd2cab69a632a366285a791d4f83aa2d" style="width: 100.0%; height: 100.0%;">道路ID: RD015<br>类型: 主干道<br>早高峰平均拥堵指数: 8.07<br>早高峰平均速度: 22.81 km/h</div>`)[0];
+            popup_0f277aa8cdf5c316921a102c3391e03f.setContent(html_bd2cab69a632a366285a791d4f83aa2d);
+        
+
+        poly_line_8c3201b513578f9089a3b294a6d66cf2.bindPopup(popup_0f277aa8cdf5c316921a102c3391e03f)
+        ;
+
+        
+    
+    
+            var poly_line_953e3cf62d38036ba79b4384f49f256d = L.polyline(
+                [[39.92054612690199, 116.44687948039126], [39.91003928827176, 116.3677649439456]],
+                {"bubblingMouseEvents": true, "color": "#FF0000", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FF0000", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(map_1f81be14d907713d4d6f42c39d4a2f6a);
+        
+    
+        var popup_5d4efc54ab34f78050d3187b216e2f77 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_2d88dba104bb28fbfef6dc9099fe9f3b = $(`<div id="html_2d88dba104bb28fbfef6dc9099fe9f3b" style="width: 100.0%; height: 100.0%;">道路ID: RD016<br>类型: 主干道<br>早高峰平均拥堵指数: 8.20<br>早高峰平均速度: 22.25 km/h</div>`)[0];
+            popup_5d4efc54ab34f78050d3187b216e2f77.setContent(html_2d88dba104bb28fbfef6dc9099fe9f3b);
+        
+
+        poly_line_953e3cf62d38036ba79b4384f49f256d.bindPopup(popup_5d4efc54ab34f78050d3187b216e2f77)
+        ;
+
+        
+    
+    
+            var poly_line_18cb32dfb1f26c7a0f6fddd2b92bb093 = L.polyline(
+                [[39.878697094249624, 116.4120959277378], [39.92963017520641, 116.4490058800319]],
+                {"bubblingMouseEvents": true, "color": "#FF0000", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FF0000", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 2}
+            ).addTo(map_1f81be14d907713d4d6f42c39d4a2f6a);
+        
+    
+        var popup_4ad32c7f962bdf3663f9d093ba6272af = L.popup({"maxWidth": "100%"});
+
+        
+            var html_4dad99bbe8918ec38028914371912691 = $(`<div id="html_4dad99bbe8918ec38028914371912691" style="width: 100.0%; height: 100.0%;">道路ID: RD017<br>类型: 支路<br>早高峰平均拥堵指数: 8.05<br>早高峰平均速度: 11.22 km/h</div>`)[0];
+            popup_4ad32c7f962bdf3663f9d093ba6272af.setContent(html_4dad99bbe8918ec38028914371912691);
+        
+
+        poly_line_18cb32dfb1f26c7a0f6fddd2b92bb093.bindPopup(popup_4ad32c7f962bdf3663f9d093ba6272af)
+        ;
+
+        
+    
+    
+            var poly_line_2afdf2f0079147d8fae9aa0595b5a017 = L.polyline(
+                [[39.90415034560206, 116.4381982569162], [39.93068735089171, 116.38695351501767]],
+                {"bubblingMouseEvents": true, "color": "#FF0000", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FF0000", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 3}
+            ).addTo(map_1f81be14d907713d4d6f42c39d4a2f6a);
+        
+    
+        var popup_6a8071f4e845448c9bd0a55c3c1dbef5 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_abe5ab74626d8f80129059b73d7b3584 = $(`<div id="html_abe5ab74626d8f80129059b73d7b3584" style="width: 100.0%; height: 100.0%;">道路ID: RD018<br>类型: 次干道<br>早高峰平均拥堵指数: 8.25<br>早高峰平均速度: 14.71 km/h</div>`)[0];
+            popup_6a8071f4e845448c9bd0a55c3c1dbef5.setContent(html_abe5ab74626d8f80129059b73d7b3584);
+        
+
+        poly_line_2afdf2f0079147d8fae9aa0595b5a017.bindPopup(popup_6a8071f4e845448c9bd0a55c3c1dbef5)
+        ;
+
+        
+    
+    
+            var poly_line_0113b69ef5a2151f417cf83ebcc30c33 = L.polyline(
+                [[39.92880763307581, 116.4306172365548], [39.90415034560206, 116.4381982569162]],
+                {"bubblingMouseEvents": true, "color": "#FF0000", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FF0000", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(map_1f81be14d907713d4d6f42c39d4a2f6a);
+        
+    
+        var popup_38de02c286fd4f551ae5fcfb36ec1bc4 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_1de002894bd12a9c5c4cbf244cafbc3a = $(`<div id="html_1de002894bd12a9c5c4cbf244cafbc3a" style="width: 100.0%; height: 100.0%;">道路ID: RD019<br>类型: 主干道<br>早高峰平均拥堵指数: 8.03<br>早高峰平均速度: 22.56 km/h</div>`)[0];
+            popup_38de02c286fd4f551ae5fcfb36ec1bc4.setContent(html_1de002894bd12a9c5c4cbf244cafbc3a);
+        
+
+        poly_line_0113b69ef5a2151f417cf83ebcc30c33.bindPopup(popup_38de02c286fd4f551ae5fcfb36ec1bc4)
+        ;
+
+        
+    
+    
+            var poly_line_afc4787ffe6c4bb38aa3e4129b848d75 = L.polyline(
+                [[39.858080507085916, 116.42212134237539], [39.92963017520641, 116.4490058800319]],
+                {"bubblingMouseEvents": true, "color": "#FF0000", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FF0000", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(map_1f81be14d907713d4d6f42c39d4a2f6a);
+        
+    
+        var popup_8c1324f50b586f765571beb3ed9624d9 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_910ff475816613db0b1e117d9e55071a = $(`<div id="html_910ff475816613db0b1e117d9e55071a" style="width: 100.0%; height: 100.0%;">道路ID: RD020<br>类型: 主干道<br>早高峰平均拥堵指数: 8.30<br>早高峰平均速度: 22.04 km/h</div>`)[0];
+            popup_8c1324f50b586f765571beb3ed9624d9.setContent(html_910ff475816613db0b1e117d9e55071a);
+        
+
+        poly_line_afc4787ffe6c4bb38aa3e4129b848d75.bindPopup(popup_8c1324f50b586f765571beb3ed9624d9)
+        ;
+
+        
+    
+    
+            var poly_line_1e04b8abea87ad0230ec01ee8fe3b4e4 = L.polyline(
+                [[39.91291444394971, 116.43139994775234], [39.92963017520641, 116.4490058800319]],
+                {"bubblingMouseEvents": true, "color": "#FF0000", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FF0000", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(map_1f81be14d907713d4d6f42c39d4a2f6a);
+        
+    
+        var popup_7648c9dfd174c2a727765cb1a08a2245 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_fc07f6a943a099dc17363a8e099b6524 = $(`<div id="html_fc07f6a943a099dc17363a8e099b6524" style="width: 100.0%; height: 100.0%;">道路ID: RD021<br>类型: 主干道<br>早高峰平均拥堵指数: 8.24<br>早高峰平均速度: 22.12 km/h</div>`)[0];
+            popup_7648c9dfd174c2a727765cb1a08a2245.setContent(html_fc07f6a943a099dc17363a8e099b6524);
+        
+
+        poly_line_1e04b8abea87ad0230ec01ee8fe3b4e4.bindPopup(popup_7648c9dfd174c2a727765cb1a08a2245)
+        ;
+
+        
+    
+    
+            var poly_line_51d16581806728a5074ee2f412fefffb = L.polyline(
+                [[39.91530709947699, 116.35961950501265], [39.878697094249624, 116.4120959277378]],
+                {"bubblingMouseEvents": true, "color": "#FF0000", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FF0000", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 2}
+            ).addTo(map_1f81be14d907713d4d6f42c39d4a2f6a);
+        
+    
+        var popup_973a9aa36dc6daa7c0e44931ecbe17f7 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_03852df84333f0baa5aefd12453771f6 = $(`<div id="html_03852df84333f0baa5aefd12453771f6" style="width: 100.0%; height: 100.0%;">道路ID: RD022<br>类型: 支路<br>早高峰平均拥堵指数: 8.17<br>早高峰平均速度: 11.16 km/h</div>`)[0];
+            popup_973a9aa36dc6daa7c0e44931ecbe17f7.setContent(html_03852df84333f0baa5aefd12453771f6);
+        
+
+        poly_line_51d16581806728a5074ee2f412fefffb.bindPopup(popup_973a9aa36dc6daa7c0e44931ecbe17f7)
+        ;
+
+        
+    
+    
+            var poly_line_4cef7c61528fa5f221ece9f4960cf1be = L.polyline(
+                [[39.858080507085916, 116.42212134237539], [39.94114467055648, 116.39570154780704]],
+                {"bubblingMouseEvents": true, "color": "#FFA500", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FFA500", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 2}
+            ).addTo(map_1f81be14d907713d4d6f42c39d4a2f6a);
+        
+    
+        var popup_5b4c8dad5093e2ec60648cc7bd662843 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_1bf72e076375e5db90f3a8b793172772 = $(`<div id="html_1bf72e076375e5db90f3a8b793172772" style="width: 100.0%; height: 100.0%;">道路ID: RD023<br>类型: 支路<br>早高峰平均拥堵指数: 7.97<br>早高峰平均速度: 11.39 km/h</div>`)[0];
+            popup_5b4c8dad5093e2ec60648cc7bd662843.setContent(html_1bf72e076375e5db90f3a8b793172772);
+        
+
+        poly_line_4cef7c61528fa5f221ece9f4960cf1be.bindPopup(popup_5b4c8dad5093e2ec60648cc7bd662843)
+        ;
+
+        
+    
+    
+            var poly_line_7220b9599e3a819ea115ff5d0c9e3f51 = L.polyline(
+                [[39.891816549822956, 116.38544753056478], [39.90415034560206, 116.4381982569162]],
+                {"bubblingMouseEvents": true, "color": "#FF0000", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FF0000", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(map_1f81be14d907713d4d6f42c39d4a2f6a);
+        
+    
+        var popup_bd60169653ed5386c340e4ff00a390a6 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_dee9ee6709e3ac79a5c51a71c93c05ea = $(`<div id="html_dee9ee6709e3ac79a5c51a71c93c05ea" style="width: 100.0%; height: 100.0%;">道路ID: RD024<br>类型: 主干道<br>早高峰平均拥堵指数: 8.10<br>早高峰平均速度: 22.50 km/h</div>`)[0];
+            popup_bd60169653ed5386c340e4ff00a390a6.setContent(html_dee9ee6709e3ac79a5c51a71c93c05ea);
+        
+
+        poly_line_7220b9599e3a819ea115ff5d0c9e3f51.bindPopup(popup_bd60169653ed5386c340e4ff00a390a6)
+        ;
+
+        
+    
+    
+            var poly_line_abb3b6c92d216d4e3ad6011d758fc7c7 = L.polyline(
+                [[39.90209104138482, 116.423297340713], [39.858080507085916, 116.42212134237539]],
+                {"bubblingMouseEvents": true, "color": "#FF0000", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FF0000", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 2}
+            ).addTo(map_1f81be14d907713d4d6f42c39d4a2f6a);
+        
+    
+        var popup_45bdd35cb08f01e0bbb7a951fc70d56a = L.popup({"maxWidth": "100%"});
+
+        
+            var html_131ad8c2687c232b6389604020901298 = $(`<div id="html_131ad8c2687c232b6389604020901298" style="width: 100.0%; height: 100.0%;">道路ID: RD025<br>类型: 支路<br>早高峰平均拥堵指数: 8.12<br>早高峰平均速度: 11.23 km/h</div>`)[0];
+            popup_45bdd35cb08f01e0bbb7a951fc70d56a.setContent(html_131ad8c2687c232b6389604020901298);
+        
+
+        poly_line_abb3b6c92d216d4e3ad6011d758fc7c7.bindPopup(popup_45bdd35cb08f01e0bbb7a951fc70d56a)
+        ;
+
+        
+    
+    
+            var poly_line_592f66d13d7bc62eb7c6b2ffad17e5bf = L.polyline(
+                [[39.92649394723945, 116.37888078263903], [39.90415034560206, 116.4381982569162]],
+                {"bubblingMouseEvents": true, "color": "#FF0000", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FF0000", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 3}
+            ).addTo(map_1f81be14d907713d4d6f42c39d4a2f6a);
+        
+    
+        var popup_11d9ba173c29659a024c85d5e812287d = L.popup({"maxWidth": "100%"});
+
+        
+            var html_524602728104c5d1a89d5153c6db3f23 = $(`<div id="html_524602728104c5d1a89d5153c6db3f23" style="width: 100.0%; height: 100.0%;">道路ID: RD026<br>类型: 次干道<br>早高峰平均拥堵指数: 8.23<br>早高峰平均速度: 14.80 km/h</div>`)[0];
+            popup_11d9ba173c29659a024c85d5e812287d.setContent(html_524602728104c5d1a89d5153c6db3f23);
+        
+
+        poly_line_592f66d13d7bc62eb7c6b2ffad17e5bf.bindPopup(popup_11d9ba173c29659a024c85d5e812287d)
+        ;
+
+        
+    
+    
+            var poly_line_478430229564443280856a7c5f8eba18 = L.polyline(
+                [[39.89187114562218, 116.4145305691349], [39.878697094249624, 116.4120959277378]],
+                {"bubblingMouseEvents": true, "color": "#FF0000", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FF0000", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 3}
+            ).addTo(map_1f81be14d907713d4d6f42c39d4a2f6a);
+        
+    
+        var popup_82098b4c767bf5d6b2ab2b5565f2d2f9 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_e289df1f29fcfcd27fde93db002df78b = $(`<div id="html_e289df1f29fcfcd27fde93db002df78b" style="width: 100.0%; height: 100.0%;">道路ID: RD027<br>类型: 次干道<br>早高峰平均拥堵指数: 8.26<br>早高峰平均速度: 14.76 km/h</div>`)[0];
+            popup_82098b4c767bf5d6b2ab2b5565f2d2f9.setContent(html_e289df1f29fcfcd27fde93db002df78b);
+        
+
+        poly_line_478430229564443280856a7c5f8eba18.bindPopup(popup_82098b4c767bf5d6b2ab2b5565f2d2f9)
+        ;
+
+        
+    
+    
+            var poly_line_6488978d5b63c842fde21177fab059cb = L.polyline(
+                [[39.85684342911607, 116.38354825300674], [39.89187114562218, 116.4145305691349]],
+                {"bubblingMouseEvents": true, "color": "#FF0000", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FF0000", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(map_1f81be14d907713d4d6f42c39d4a2f6a);
+        
+    
+        var popup_519d29c83208a7621f83d0184865b25f = L.popup({"maxWidth": "100%"});
+
+        
+            var html_f69dddeb70209434702e05db4c38d778 = $(`<div id="html_f69dddeb70209434702e05db4c38d778" style="width: 100.0%; height: 100.0%;">道路ID: RD028<br>类型: 主干道<br>早高峰平均拥堵指数: 8.12<br>早高峰平均速度: 22.38 km/h</div>`)[0];
+            popup_519d29c83208a7621f83d0184865b25f.setContent(html_f69dddeb70209434702e05db4c38d778);
+        
+
+        poly_line_6488978d5b63c842fde21177fab059cb.bindPopup(popup_519d29c83208a7621f83d0184865b25f)
+        ;
+
+        
+    
+    
+            var poly_line_3ba65e07af5d1419b825e72c3be6d776 = L.polyline(
+                [[39.92880763307581, 116.4306172365548], [39.89187114562218, 116.4145305691349]],
+                {"bubblingMouseEvents": true, "color": "#FF0000", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FF0000", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(map_1f81be14d907713d4d6f42c39d4a2f6a);
+        
+    
+        var popup_8bf6ccff07b763bc5a5ec94171e7cdd3 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_77a5d13ad338fc099c45e2f55e594521 = $(`<div id="html_77a5d13ad338fc099c45e2f55e594521" style="width: 100.0%; height: 100.0%;">道路ID: RD029<br>类型: 主干道<br>早高峰平均拥堵指数: 8.01<br>早高峰平均速度: 22.75 km/h</div>`)[0];
+            popup_8bf6ccff07b763bc5a5ec94171e7cdd3.setContent(html_77a5d13ad338fc099c45e2f55e594521);
+        
+
+        poly_line_3ba65e07af5d1419b825e72c3be6d776.bindPopup(popup_8bf6ccff07b763bc5a5ec94171e7cdd3)
+        ;
+
+        
+    
+    
+            var poly_line_28c90e52b63966a73e15ae53fbd78ad9 = L.polyline(
+                [[39.91530709947699, 116.35961950501265], [39.89187114562218, 116.4145305691349]],
+                {"bubblingMouseEvents": true, "color": "#FF0000", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FF0000", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(map_1f81be14d907713d4d6f42c39d4a2f6a);
+        
+    
+        var popup_e2ace6116baa1ba60d496dc414734a12 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_7e8a24309fc0bf229964e238904f334d = $(`<div id="html_7e8a24309fc0bf229964e238904f334d" style="width: 100.0%; height: 100.0%;">道路ID: RD030<br>类型: 主干道<br>早高峰平均拥堵指数: 8.12<br>早高峰平均速度: 22.28 km/h</div>`)[0];
+            popup_e2ace6116baa1ba60d496dc414734a12.setContent(html_7e8a24309fc0bf229964e238904f334d);
+        
+
+        poly_line_28c90e52b63966a73e15ae53fbd78ad9.bindPopup(popup_e2ace6116baa1ba60d496dc414734a12)
+        ;
+
+        
+    
+    
+            var poly_line_b102115088106da7e95fdb1eec163fd1 = L.polyline(
+                [[39.88684985771145, 116.42843588337003], [39.94114467055648, 116.39570154780704]],
+                {"bubblingMouseEvents": true, "color": "#FFA500", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FFA500", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 3}
+            ).addTo(map_1f81be14d907713d4d6f42c39d4a2f6a);
+        
+    
+        var popup_f7fdb4cd9755b616f634c6c9f2aaa19d = L.popup({"maxWidth": "100%"});
+
+        
+            var html_8aeb194ed6138b062f9287cde21e0e91 = $(`<div id="html_8aeb194ed6138b062f9287cde21e0e91" style="width: 100.0%; height: 100.0%;">道路ID: RD031<br>类型: 次干道<br>早高峰平均拥堵指数: 7.82<br>早高峰平均速度: 15.51 km/h</div>`)[0];
+            popup_f7fdb4cd9755b616f634c6c9f2aaa19d.setContent(html_8aeb194ed6138b062f9287cde21e0e91);
+        
+
+        poly_line_b102115088106da7e95fdb1eec163fd1.bindPopup(popup_f7fdb4cd9755b616f634c6c9f2aaa19d)
+        ;
+
+        
+    
+    
+            var poly_line_07e4032faf474b47591f01b31316e41a = L.polyline(
+                [[39.89187114562218, 116.4145305691349], [39.91003928827176, 116.3677649439456]],
+                {"bubblingMouseEvents": true, "color": "#FF0000", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FF0000", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 2}
+            ).addTo(map_1f81be14d907713d4d6f42c39d4a2f6a);
+        
+    
+        var popup_2493624782cb67293321244c033c9c4f = L.popup({"maxWidth": "100%"});
+
+        
+            var html_0c64613aee8964553773d60b443092ec = $(`<div id="html_0c64613aee8964553773d60b443092ec" style="width: 100.0%; height: 100.0%;">道路ID: RD032<br>类型: 支路<br>早高峰平均拥堵指数: 8.03<br>早高峰平均速度: 11.41 km/h</div>`)[0];
+            popup_2493624782cb67293321244c033c9c4f.setContent(html_0c64613aee8964553773d60b443092ec);
+        
+
+        poly_line_07e4032faf474b47591f01b31316e41a.bindPopup(popup_2493624782cb67293321244c033c9c4f)
+        ;
+
+        
+    
+    
+            var poly_line_1634421784289b39b115d773bcb645ba = L.polyline(
+                [[39.89023182244571, 116.40849082227254], [39.91003928827176, 116.3677649439456]],
+                {"bubblingMouseEvents": true, "color": "#FF0000", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FF0000", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 3}
+            ).addTo(map_1f81be14d907713d4d6f42c39d4a2f6a);
+        
+    
+        var popup_e4416c79980919fdeca7423910c25688 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_2edded70986c1bc4a23a423ca9e08728 = $(`<div id="html_2edded70986c1bc4a23a423ca9e08728" style="width: 100.0%; height: 100.0%;">道路ID: RD033<br>类型: 次干道<br>早高峰平均拥堵指数: 8.25<br>早高峰平均速度: 14.72 km/h</div>`)[0];
+            popup_e4416c79980919fdeca7423910c25688.setContent(html_2edded70986c1bc4a23a423ca9e08728);
+        
+
+        poly_line_1634421784289b39b115d773bcb645ba.bindPopup(popup_e4416c79980919fdeca7423910c25688)
+        ;
+
+        
+    
+    
+            var poly_line_b71a995d139c97619aafae68f2fe1752 = L.polyline(
+                [[39.92880763307581, 116.4306172365548], [39.854362439985735, 116.36545618175428]],
+                {"bubblingMouseEvents": true, "color": "#FF0000", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FF0000", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(map_1f81be14d907713d4d6f42c39d4a2f6a);
+        
+    
+        var popup_ac503053b10ac1432e17478ed9aa5f43 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_d4ca94a1cce97f72573ddaec6212b43b = $(`<div id="html_d4ca94a1cce97f72573ddaec6212b43b" style="width: 100.0%; height: 100.0%;">道路ID: RD034<br>类型: 主干道<br>早高峰平均拥堵指数: 8.11<br>早高峰平均速度: 22.41 km/h</div>`)[0];
+            popup_ac503053b10ac1432e17478ed9aa5f43.setContent(html_d4ca94a1cce97f72573ddaec6212b43b);
+        
+
+        poly_line_b71a995d139c97619aafae68f2fe1752.bindPopup(popup_ac503053b10ac1432e17478ed9aa5f43)
+        ;
+
+        
+    
+    
+            var poly_line_6a17711931a1c8446e30a766897e4002 = L.polyline(
+                [[39.88684985771145, 116.42843588337003], [39.90415034560206, 116.4381982569162]],
+                {"bubblingMouseEvents": true, "color": "#FF0000", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FF0000", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(map_1f81be14d907713d4d6f42c39d4a2f6a);
+        
+    
+        var popup_95d1eb0fae8a81692431c341da15a601 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_b10f6f4fa03f769ff446f5f1bc319595 = $(`<div id="html_b10f6f4fa03f769ff446f5f1bc319595" style="width: 100.0%; height: 100.0%;">道路ID: RD035<br>类型: 主干道<br>早高峰平均拥堵指数: 8.07<br>早高峰平均速度: 22.69 km/h</div>`)[0];
+            popup_95d1eb0fae8a81692431c341da15a601.setContent(html_b10f6f4fa03f769ff446f5f1bc319595);
+        
+
+        poly_line_6a17711931a1c8446e30a766897e4002.bindPopup(popup_95d1eb0fae8a81692431c341da15a601)
+        ;
+
+        
+    
+    
+            var poly_line_fc8792a966ce7a70e2d7acdd3c6ba8dc = L.polyline(
+                [[39.88684985771145, 116.42843588337003], [39.878697094249624, 116.4120959277378]],
+                {"bubblingMouseEvents": true, "color": "#FF0000", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FF0000", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(map_1f81be14d907713d4d6f42c39d4a2f6a);
+        
+    
+        var popup_f9c869e38ec5b720ce0e601718f84196 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_46bca6db2538c2838916780bac5c4c30 = $(`<div id="html_46bca6db2538c2838916780bac5c4c30" style="width: 100.0%; height: 100.0%;">道路ID: RD036<br>类型: 主干道<br>早高峰平均拥堵指数: 8.03<br>早高峰平均速度: 22.69 km/h</div>`)[0];
+            popup_f9c869e38ec5b720ce0e601718f84196.setContent(html_46bca6db2538c2838916780bac5c4c30);
+        
+
+        poly_line_fc8792a966ce7a70e2d7acdd3c6ba8dc.bindPopup(popup_f9c869e38ec5b720ce0e601718f84196)
+        ;
+
+        
+    
+    
+            var poly_line_5468da8b25bbfda27dcd2a8423468a80 = L.polyline(
+                [[39.89023182244571, 116.40849082227254], [39.90209104138482, 116.423297340713]],
+                {"bubblingMouseEvents": true, "color": "#FF0000", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FF0000", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 3}
+            ).addTo(map_1f81be14d907713d4d6f42c39d4a2f6a);
+        
+    
+        var popup_274e65519c3d0f5d038d9eb0fc9299f4 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_56c78dc44ab519a9138973ef70dcbef3 = $(`<div id="html_56c78dc44ab519a9138973ef70dcbef3" style="width: 100.0%; height: 100.0%;">道路ID: RD037<br>类型: 次干道<br>早高峰平均拥堵指数: 8.13<br>早高峰平均速度: 14.96 km/h</div>`)[0];
+            popup_274e65519c3d0f5d038d9eb0fc9299f4.setContent(html_56c78dc44ab519a9138973ef70dcbef3);
+        
+
+        poly_line_5468da8b25bbfda27dcd2a8423468a80.bindPopup(popup_274e65519c3d0f5d038d9eb0fc9299f4)
+        ;
+
+        
+    
+    
+            var poly_line_55c5492c735700cd5da8b5c658cefa9c = L.polyline(
+                [[39.91003928827176, 116.3677649439456], [39.92880763307581, 116.4306172365548]],
+                {"bubblingMouseEvents": true, "color": "#FF0000", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FF0000", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(map_1f81be14d907713d4d6f42c39d4a2f6a);
+        
+    
+        var popup_ac1b144c2a25dcfe7a7add96505477f9 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_50877008d99d41b7a0a70c1ccd58afaf = $(`<div id="html_50877008d99d41b7a0a70c1ccd58afaf" style="width: 100.0%; height: 100.0%;">道路ID: RD038<br>类型: 主干道<br>早高峰平均拥堵指数: 8.12<br>早高峰平均速度: 22.53 km/h</div>`)[0];
+            popup_ac1b144c2a25dcfe7a7add96505477f9.setContent(html_50877008d99d41b7a0a70c1ccd58afaf);
+        
+
+        poly_line_55c5492c735700cd5da8b5c658cefa9c.bindPopup(popup_ac1b144c2a25dcfe7a7add96505477f9)
+        ;
+
+        
+    
+    
+            var poly_line_915ad99d50e36766ce3242a0d15b284c = L.polyline(
+                [[39.92963017520641, 116.4490058800319], [39.89023182244571, 116.40849082227254]],
+                {"bubblingMouseEvents": true, "color": "#FF0000", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#FF0000", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 2}
+            ).addTo(map_1f81be14d907713d4d6f42c39d4a2f6a);
+        
+    
+        var popup_b8904c354dbe02fe43bb5658d86e1cad = L.popup({"maxWidth": "100%"});
+
+        
+            var html_0b4212bfcf7d485174b69fd8c93880b8 = $(`<div id="html_0b4212bfcf7d485174b69fd8c93880b8" style="width: 100.0%; height: 100.0%;">道路ID: RD039<br>类型: 支路<br>早高峰平均拥堵指数: 8.13<br>早高峰平均速度: 11.20 km/h</div>`)[0];
+            popup_b8904c354dbe02fe43bb5658d86e1cad.setContent(html_0b4212bfcf7d485174b69fd8c93880b8);
+        
+
+        poly_line_915ad99d50e36766ce3242a0d15b284c.bindPopup(popup_b8904c354dbe02fe43bb5658d86e1cad)
+        ;
+
+        
+    
+</script>

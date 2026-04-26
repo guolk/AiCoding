@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<head>    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    
+        <script>
+            L_NO_TOUCH = false;
+            L_DISABLE_3D = false;
+        </script>
+    
+    <style>html, body {width: 100%;height: 100%;margin: 0;padding: 0;}</style>
+    <style>#map {position:absolute;top:0;bottom:0;right:0;left:0;}</style>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.6.0/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.6.0/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_fd364bacc2d2dabdca409da25d87f6f5 {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+            </style>
+        
+    <script src="https://cdn.jsdelivr.net/gh/python-visualization/folium@master/folium/templates/leaflet_heat.min.js"></script>
+</head>
+<body>    
+    
+        <div style="position: fixed; 
+                    bottom: 50px; left: 50px; width: 180px; height: 180px; 
+                    border:2px solid grey; z-index:9999; font-size:14px;
+                    background-color:white;
+                    padding: 10px;
+                    border-radius: 5px;
+                    opacity: 0.9;">
+        <p style="margin-top: 0; margin-bottom: 10px; font-weight: bold;">路口拥堵热力图</p>
+        <p><i class="fa fa-circle" style="color:#00FF00"></i>&nbsp; 畅通 (0-2)</p>
+        <p><i class="fa fa-circle" style="color:#90EE90"></i>&nbsp; 基本畅通 (2-4)</p>
+        <p><i class="fa fa-circle" style="color:#FFFF00"></i>&nbsp; 轻度拥堵 (4-6)</p>
+        <p><i class="fa fa-circle" style="color:#FFA500"></i>&nbsp; 中度拥堵 (6-8)</p>
+        <p><i class="fa fa-circle" style="color:#FF0000"></i>&nbsp; 严重拥堵 (8-10)</p>
+        </div>
+        
+    
+            <div class="folium-map" id="map_fd364bacc2d2dabdca409da25d87f6f5" ></div>
+        
+</body>
+<script>    
+    
+            var map_fd364bacc2d2dabdca409da25d87f6f5 = L.map(
+                "map_fd364bacc2d2dabdca409da25d87f6f5",
+                {
+                    center: [39.90047280506819, 116.40432158734154],
+                    crs: L.CRS.EPSG3857,
+                    zoom: 12,
+                    zoomControl: true,
+                    preferCanvas: false,
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_57800dec94839089e35bac1f4286c8b2 = L.tileLayer(
+                "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {"attribution": "Data by \u0026copy; \u003ca href=\"http://openstreetmap.org\"\u003eOpenStreetMap\u003c/a\u003e, under \u003ca href=\"http://www.openstreetmap.org/copyright\"\u003eODbL\u003c/a\u003e.", "detectRetina": false, "maxNativeZoom": 18, "maxZoom": 18, "minZoom": 0, "noWrap": false, "opacity": 1, "subdomains": "abc", "tms": false}
+            ).addTo(map_fd364bacc2d2dabdca409da25d87f6f5);
+        
+    
+            var heat_map_dfe156a4bcf6e6e69ec56713917356d2 = L.heatLayer(
+                [[39.91003928827176, 116.3677649439456, 4.467823660714286], [39.92054612690199, 116.44687948039126, 4.467767857142857], [39.89023182244571, 116.40849082227254, 4.477261904761904], [39.854362439985735, 116.36545618175428, 4.4723065476190484], [39.92649394723945, 116.37888078263903, 4.4890625], [39.85684342911607, 116.38354825300674, 4.485550595238094], [39.94114467055648, 116.39570154780704, 4.486149553571429], [39.90415034560206, 116.4381982569162, 4.479125], [39.90209104138482, 116.423297340713, 4.475528273809524], [39.878697094249624, 116.4120959277378, 4.489784226190476], [39.92880763307581, 116.4306172365548, 4.4810658482142856], [39.891816549822956, 116.38544753056478, 4.4704613095238095], [39.91530709947699, 116.35961950501265, 4.489081101190476], [39.93068735089171, 116.38695351501767, 4.486418650793651], [39.858080507085916, 116.42212134237539, 4.486907738095238], [39.89187114562218, 116.4145305691349, 4.482118055555555], [39.91291444394971, 116.43139994775234, 4.488244047619047], [39.87889113276693, 116.35798679983246, 4.4871517857142855], [39.92963017520641, 116.4490058800319, 4.48335119047619], [39.88684985771145, 116.42843588337003, 4.4763898809523806]],
+                {"blur": 15, "gradient": {"0.2": "green", "0.4": "lime", "0.6": "yellow", "0.8": "orange", "1": "red"}, "maxZoom": 18, "minOpacity": 0.3, "radius": 20}
+            ).addTo(map_fd364bacc2d2dabdca409da25d87f6f5);
+        
+    
+            var circle_marker_62766448357d8e487bc0e6d9f7ff725e = L.circleMarker(
+                [39.91003928827176, 116.3677649439456],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#FFFF00", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8, "stroke": true, "weight": 3}
+            ).addTo(map_fd364bacc2d2dabdca409da25d87f6f5);
+        
+    
+        var popup_bea276dbed3f5ecffdc61052353e00d2 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_059f0f3a2676444f0355a314567aa9ef = $(`<div id="html_059f0f3a2676444f0355a314567aa9ef" style="width: 100.0%; height: 100.0%;">路口ID: INT000<br>名称: 路口1<br>平均拥堵指数: 4.47</div>`)[0];
+            popup_bea276dbed3f5ecffdc61052353e00d2.setContent(html_059f0f3a2676444f0355a314567aa9ef);
+        
+
+        circle_marker_62766448357d8e487bc0e6d9f7ff725e.bindPopup(popup_bea276dbed3f5ecffdc61052353e00d2)
+        ;
+
+        
+    
+    
+            var circle_marker_e60c6815227ef0794fe419d9af92eed8 = L.circleMarker(
+                [39.92054612690199, 116.44687948039126],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#FFFF00", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8, "stroke": true, "weight": 3}
+            ).addTo(map_fd364bacc2d2dabdca409da25d87f6f5);
+        
+    
+        var popup_f74691925d9060bc5fbd375df6b9326b = L.popup({"maxWidth": "100%"});
+
+        
+            var html_1b2eb433c86005e394bdaab4cf63ab8d = $(`<div id="html_1b2eb433c86005e394bdaab4cf63ab8d" style="width: 100.0%; height: 100.0%;">路口ID: INT001<br>名称: 路口2<br>平均拥堵指数: 4.47</div>`)[0];
+            popup_f74691925d9060bc5fbd375df6b9326b.setContent(html_1b2eb433c86005e394bdaab4cf63ab8d);
+        
+
+        circle_marker_e60c6815227ef0794fe419d9af92eed8.bindPopup(popup_f74691925d9060bc5fbd375df6b9326b)
+        ;
+
+        
+    
+    
+            var circle_marker_35d7cd852c34f8627bee7795edeb1ef0 = L.circleMarker(
+                [39.89023182244571, 116.40849082227254],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#FFFF00", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8, "stroke": true, "weight": 3}
+            ).addTo(map_fd364bacc2d2dabdca409da25d87f6f5);
+        
+    
+        var popup_55c12d5fbf7dbca79e6cebba58db22af = L.popup({"maxWidth": "100%"});
+
+        
+            var html_9f866acc11b4e90f824fb21bc88adebc = $(`<div id="html_9f866acc11b4e90f824fb21bc88adebc" style="width: 100.0%; height: 100.0%;">路口ID: INT002<br>名称: 路口3<br>平均拥堵指数: 4.48</div>`)[0];
+            popup_55c12d5fbf7dbca79e6cebba58db22af.setContent(html_9f866acc11b4e90f824fb21bc88adebc);
+        
+
+        circle_marker_35d7cd852c34f8627bee7795edeb1ef0.bindPopup(popup_55c12d5fbf7dbca79e6cebba58db22af)
+        ;
+
+        
+    
+    
+            var circle_marker_bc2c2ca9230b14ed914e8100a22beeec = L.circleMarker(
+                [39.854362439985735, 116.36545618175428],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#FFFF00", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8, "stroke": true, "weight": 3}
+            ).addTo(map_fd364bacc2d2dabdca409da25d87f6f5);
+        
+    
+        var popup_2e8f506b6f9d9198e29e34820b07f79e = L.popup({"maxWidth": "100%"});
+
+        
+            var html_7279a9d5e99fdf55b7301d5c43e94e53 = $(`<div id="html_7279a9d5e99fdf55b7301d5c43e94e53" style="width: 100.0%; height: 100.0%;">路口ID: INT003<br>名称: 路口4<br>平均拥堵指数: 4.47</div>`)[0];
+            popup_2e8f506b6f9d9198e29e34820b07f79e.setContent(html_7279a9d5e99fdf55b7301d5c43e94e53);
+        
+
+        circle_marker_bc2c2ca9230b14ed914e8100a22beeec.bindPopup(popup_2e8f506b6f9d9198e29e34820b07f79e)
+        ;
+
+        
+    
+    
+            var circle_marker_54da1b6f547209033fe1d5d94ef8465e = L.circleMarker(
+                [39.92649394723945, 116.37888078263903],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#FFFF00", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8, "stroke": true, "weight": 3}
+            ).addTo(map_fd364bacc2d2dabdca409da25d87f6f5);
+        
+    
+        var popup_7fcf98ebf31b328ba047250989611b3d = L.popup({"maxWidth": "100%"});
+
+        
+            var html_c04b8d271b60853eefd72b6e1c5dbb6a = $(`<div id="html_c04b8d271b60853eefd72b6e1c5dbb6a" style="width: 100.0%; height: 100.0%;">路口ID: INT004<br>名称: 路口5<br>平均拥堵指数: 4.49</div>`)[0];
+            popup_7fcf98ebf31b328ba047250989611b3d.setContent(html_c04b8d271b60853eefd72b6e1c5dbb6a);
+        
+
+        circle_marker_54da1b6f547209033fe1d5d94ef8465e.bindPopup(popup_7fcf98ebf31b328ba047250989611b3d)
+        ;
+
+        
+    
+    
+            var circle_marker_78e85dab12122b9cdb07b0330a337963 = L.circleMarker(
+                [39.85684342911607, 116.38354825300674],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#FFFF00", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8, "stroke": true, "weight": 3}
+            ).addTo(map_fd364bacc2d2dabdca409da25d87f6f5);
+        
+    
+        var popup_08f40c3ce0b6c834f884a406252bc117 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_c198974a0fccc0e7e3d30bbb827abaab = $(`<div id="html_c198974a0fccc0e7e3d30bbb827abaab" style="width: 100.0%; height: 100.0%;">路口ID: INT005<br>名称: 路口6<br>平均拥堵指数: 4.49</div>`)[0];
+            popup_08f40c3ce0b6c834f884a406252bc117.setContent(html_c198974a0fccc0e7e3d30bbb827abaab);
+        
+
+        circle_marker_78e85dab12122b9cdb07b0330a337963.bindPopup(popup_08f40c3ce0b6c834f884a406252bc117)
+        ;
+
+        
+    
+    
+            var circle_marker_76da2652fc2c9b67aca7c4bc7c74daff = L.circleMarker(
+                [39.94114467055648, 116.39570154780704],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#FFFF00", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8, "stroke": true, "weight": 3}
+            ).addTo(map_fd364bacc2d2dabdca409da25d87f6f5);
+        
+    
+        var popup_24bd555cf8a8059990c65f305b1e89fc = L.popup({"maxWidth": "100%"});
+
+        
+            var html_6a6d1b95b45e031fc91f1f2ec5a5d7e8 = $(`<div id="html_6a6d1b95b45e031fc91f1f2ec5a5d7e8" style="width: 100.0%; height: 100.0%;">路口ID: INT006<br>名称: 路口7<br>平均拥堵指数: 4.49</div>`)[0];
+            popup_24bd555cf8a8059990c65f305b1e89fc.setContent(html_6a6d1b95b45e031fc91f1f2ec5a5d7e8);
+        
+
+        circle_marker_76da2652fc2c9b67aca7c4bc7c74daff.bindPopup(popup_24bd555cf8a8059990c65f305b1e89fc)
+        ;
+
+        
+    
+    
+            var circle_marker_86787e3e807b07345d7155a849a201fa = L.circleMarker(
+                [39.90415034560206, 116.4381982569162],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#FFFF00", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8, "stroke": true, "weight": 3}
+            ).addTo(map_fd364bacc2d2dabdca409da25d87f6f5);
+        
+    
+        var popup_8e7eb836c7afa64d9afdf376592c36a8 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_4f06d7bc50439c10657ab2d278921806 = $(`<div id="html_4f06d7bc50439c10657ab2d278921806" style="width: 100.0%; height: 100.0%;">路口ID: INT007<br>名称: 路口8<br>平均拥堵指数: 4.48</div>`)[0];
+            popup_8e7eb836c7afa64d9afdf376592c36a8.setContent(html_4f06d7bc50439c10657ab2d278921806);
+        
+
+        circle_marker_86787e3e807b07345d7155a849a201fa.bindPopup(popup_8e7eb836c7afa64d9afdf376592c36a8)
+        ;
+
+        
+    
+    
+            var circle_marker_dc8d21736a95b69bc16271adf2787b8d = L.circleMarker(
+                [39.90209104138482, 116.423297340713],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#FFFF00", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8, "stroke": true, "weight": 3}
+            ).addTo(map_fd364bacc2d2dabdca409da25d87f6f5);
+        
+    
+        var popup_68208f520b599a75793928c716dddb71 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_a5611f765afb12e91ac89c5f1c798317 = $(`<div id="html_a5611f765afb12e91ac89c5f1c798317" style="width: 100.0%; height: 100.0%;">路口ID: INT008<br>名称: 路口9<br>平均拥堵指数: 4.48</div>`)[0];
+            popup_68208f520b599a75793928c716dddb71.setContent(html_a5611f765afb12e91ac89c5f1c798317);
+        
+
+        circle_marker_dc8d21736a95b69bc16271adf2787b8d.bindPopup(popup_68208f520b599a75793928c716dddb71)
+        ;
+
+        
+    
+    
+            var circle_marker_13d144274c189f4879e4877fb0da51c9 = L.circleMarker(
+                [39.878697094249624, 116.4120959277378],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#FFFF00", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8, "stroke": true, "weight": 3}
+            ).addTo(map_fd364bacc2d2dabdca409da25d87f6f5);
+        
+    
+        var popup_067350345ac502d33b6db126741076a0 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_cfd881ec2e5a82aaeac438046f67ce87 = $(`<div id="html_cfd881ec2e5a82aaeac438046f67ce87" style="width: 100.0%; height: 100.0%;">路口ID: INT009<br>名称: 路口10<br>平均拥堵指数: 4.49</div>`)[0];
+            popup_067350345ac502d33b6db126741076a0.setContent(html_cfd881ec2e5a82aaeac438046f67ce87);
+        
+
+        circle_marker_13d144274c189f4879e4877fb0da51c9.bindPopup(popup_067350345ac502d33b6db126741076a0)
+        ;
+
+        
+    
+    
+            var circle_marker_e93f4d3b0717f30aa2af14e3365c25ce = L.circleMarker(
+                [39.92880763307581, 116.4306172365548],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#FFFF00", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8, "stroke": true, "weight": 3}
+            ).addTo(map_fd364bacc2d2dabdca409da25d87f6f5);
+        
+    
+        var popup_824f54b98c9aa85610cd0b869d7e5108 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_064dd251914f0c055b81e8225b945a90 = $(`<div id="html_064dd251914f0c055b81e8225b945a90" style="width: 100.0%; height: 100.0%;">路口ID: INT010<br>名称: 路口11<br>平均拥堵指数: 4.48</div>`)[0];
+            popup_824f54b98c9aa85610cd0b869d7e5108.setContent(html_064dd251914f0c055b81e8225b945a90);
+        
+
+        circle_marker_e93f4d3b0717f30aa2af14e3365c25ce.bindPopup(popup_824f54b98c9aa85610cd0b869d7e5108)
+        ;
+
+        
+    
+    
+            var circle_marker_465fdf76ca1dba3cc4451ce3b47b4316 = L.circleMarker(
+                [39.891816549822956, 116.38544753056478],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#FFFF00", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8, "stroke": true, "weight": 3}
+            ).addTo(map_fd364bacc2d2dabdca409da25d87f6f5);
+        
+    
+        var popup_79daffa2c78f5a76064a288964d292ea = L.popup({"maxWidth": "100%"});
+
+        
+            var html_c6c00e69025ddec6970db6ded7d8fcbb = $(`<div id="html_c6c00e69025ddec6970db6ded7d8fcbb" style="width: 100.0%; height: 100.0%;">路口ID: INT011<br>名称: 路口12<br>平均拥堵指数: 4.47</div>`)[0];
+            popup_79daffa2c78f5a76064a288964d292ea.setContent(html_c6c00e69025ddec6970db6ded7d8fcbb);
+        
+
+        circle_marker_465fdf76ca1dba3cc4451ce3b47b4316.bindPopup(popup_79daffa2c78f5a76064a288964d292ea)
+        ;
+
+        
+    
+    
+            var circle_marker_0125283d1b98ae9867a1deec4cf3c477 = L.circleMarker(
+                [39.91530709947699, 116.35961950501265],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#FFFF00", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8, "stroke": true, "weight": 3}
+            ).addTo(map_fd364bacc2d2dabdca409da25d87f6f5);
+        
+    
+        var popup_df93d491455bd24891e821e7c30b5527 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_81e4a8e7b445526e8bdc162edcdbe127 = $(`<div id="html_81e4a8e7b445526e8bdc162edcdbe127" style="width: 100.0%; height: 100.0%;">路口ID: INT012<br>名称: 路口13<br>平均拥堵指数: 4.49</div>`)[0];
+            popup_df93d491455bd24891e821e7c30b5527.setContent(html_81e4a8e7b445526e8bdc162edcdbe127);
+        
+
+        circle_marker_0125283d1b98ae9867a1deec4cf3c477.bindPopup(popup_df93d491455bd24891e821e7c30b5527)
+        ;
+
+        
+    
+    
+            var circle_marker_4d6486362cb3d31420e789ca8ab9f27d = L.circleMarker(
+                [39.93068735089171, 116.38695351501767],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#FFFF00", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8, "stroke": true, "weight": 3}
+            ).addTo(map_fd364bacc2d2dabdca409da25d87f6f5);
+        
+    
+        var popup_f3bf438ad07cbb08ddd6802b8f96efbb = L.popup({"maxWidth": "100%"});
+
+        
+            var html_f00b95340677e8f80ead7a5bd3269e6f = $(`<div id="html_f00b95340677e8f80ead7a5bd3269e6f" style="width: 100.0%; height: 100.0%;">路口ID: INT013<br>名称: 路口14<br>平均拥堵指数: 4.49</div>`)[0];
+            popup_f3bf438ad07cbb08ddd6802b8f96efbb.setContent(html_f00b95340677e8f80ead7a5bd3269e6f);
+        
+
+        circle_marker_4d6486362cb3d31420e789ca8ab9f27d.bindPopup(popup_f3bf438ad07cbb08ddd6802b8f96efbb)
+        ;
+
+        
+    
+    
+            var circle_marker_aae0f7a213ff0f17c50b22ca06674993 = L.circleMarker(
+                [39.858080507085916, 116.42212134237539],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#FFFF00", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8, "stroke": true, "weight": 3}
+            ).addTo(map_fd364bacc2d2dabdca409da25d87f6f5);
+        
+    
+        var popup_539c1957e393e1d4bd9bae0606ded907 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_c58d732bc9134799529ff65c7b0abec2 = $(`<div id="html_c58d732bc9134799529ff65c7b0abec2" style="width: 100.0%; height: 100.0%;">路口ID: INT014<br>名称: 路口15<br>平均拥堵指数: 4.49</div>`)[0];
+            popup_539c1957e393e1d4bd9bae0606ded907.setContent(html_c58d732bc9134799529ff65c7b0abec2);
+        
+
+        circle_marker_aae0f7a213ff0f17c50b22ca06674993.bindPopup(popup_539c1957e393e1d4bd9bae0606ded907)
+        ;
+
+        
+    
+    
+            var circle_marker_0707681e728f3f8671d1f5d15b6e6881 = L.circleMarker(
+                [39.89187114562218, 116.4145305691349],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#FFFF00", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8, "stroke": true, "weight": 3}
+            ).addTo(map_fd364bacc2d2dabdca409da25d87f6f5);
+        
+    
+        var popup_2cf348692f595be70699e74d48a6cc4f = L.popup({"maxWidth": "100%"});
+
+        
+            var html_6f3556e6e938ebee98369ba2a3e2a997 = $(`<div id="html_6f3556e6e938ebee98369ba2a3e2a997" style="width: 100.0%; height: 100.0%;">路口ID: INT015<br>名称: 路口16<br>平均拥堵指数: 4.48</div>`)[0];
+            popup_2cf348692f595be70699e74d48a6cc4f.setContent(html_6f3556e6e938ebee98369ba2a3e2a997);
+        
+
+        circle_marker_0707681e728f3f8671d1f5d15b6e6881.bindPopup(popup_2cf348692f595be70699e74d48a6cc4f)
+        ;
+
+        
+    
+    
+            var circle_marker_0969874313ffe8409dc27ee4e521a3f2 = L.circleMarker(
+                [39.91291444394971, 116.43139994775234],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#FFFF00", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8, "stroke": true, "weight": 3}
+            ).addTo(map_fd364bacc2d2dabdca409da25d87f6f5);
+        
+    
+        var popup_dbf76b5aec93cd72f5dcf186601c2856 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_a74014e5e050737763baba3d5094ca5a = $(`<div id="html_a74014e5e050737763baba3d5094ca5a" style="width: 100.0%; height: 100.0%;">路口ID: INT016<br>名称: 路口17<br>平均拥堵指数: 4.49</div>`)[0];
+            popup_dbf76b5aec93cd72f5dcf186601c2856.setContent(html_a74014e5e050737763baba3d5094ca5a);
+        
+
+        circle_marker_0969874313ffe8409dc27ee4e521a3f2.bindPopup(popup_dbf76b5aec93cd72f5dcf186601c2856)
+        ;
+
+        
+    
+    
+            var circle_marker_803ac0a06a1e929a633977da5a5eb418 = L.circleMarker(
+                [39.87889113276693, 116.35798679983246],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#FFFF00", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8, "stroke": true, "weight": 3}
+            ).addTo(map_fd364bacc2d2dabdca409da25d87f6f5);
+        
+    
+        var popup_70e28bb2d585190e112e313c310222d5 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_fdd20a7d6b9da28a0bd754f82bba43a4 = $(`<div id="html_fdd20a7d6b9da28a0bd754f82bba43a4" style="width: 100.0%; height: 100.0%;">路口ID: INT017<br>名称: 路口18<br>平均拥堵指数: 4.49</div>`)[0];
+            popup_70e28bb2d585190e112e313c310222d5.setContent(html_fdd20a7d6b9da28a0bd754f82bba43a4);
+        
+
+        circle_marker_803ac0a06a1e929a633977da5a5eb418.bindPopup(popup_70e28bb2d585190e112e313c310222d5)
+        ;
+
+        
+    
+    
+            var circle_marker_1e70cbaa35149c09c67bb6ebbd789922 = L.circleMarker(
+                [39.92963017520641, 116.4490058800319],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#FFFF00", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8, "stroke": true, "weight": 3}
+            ).addTo(map_fd364bacc2d2dabdca409da25d87f6f5);
+        
+    
+        var popup_46ab6ae4d6b4aba86a310b1c65688794 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_ebae0cf37d7a588e210e6e05cc740fd9 = $(`<div id="html_ebae0cf37d7a588e210e6e05cc740fd9" style="width: 100.0%; height: 100.0%;">路口ID: INT018<br>名称: 路口19<br>平均拥堵指数: 4.48</div>`)[0];
+            popup_46ab6ae4d6b4aba86a310b1c65688794.setContent(html_ebae0cf37d7a588e210e6e05cc740fd9);
+        
+
+        circle_marker_1e70cbaa35149c09c67bb6ebbd789922.bindPopup(popup_46ab6ae4d6b4aba86a310b1c65688794)
+        ;
+
+        
+    
+    
+            var circle_marker_61256ec5a8ba6b5cbc2011ca8ff4b54a = L.circleMarker(
+                [39.88684985771145, 116.42843588337003],
+                {"bubblingMouseEvents": true, "color": "#FFFF00", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#FFFF00", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8, "stroke": true, "weight": 3}
+            ).addTo(map_fd364bacc2d2dabdca409da25d87f6f5);
+        
+    
+        var popup_5915678687d6344444f4628e1a6446c3 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_6a9100050f56aee0148d2813af007d93 = $(`<div id="html_6a9100050f56aee0148d2813af007d93" style="width: 100.0%; height: 100.0%;">路口ID: INT019<br>名称: 路口20<br>平均拥堵指数: 4.48</div>`)[0];
+            popup_5915678687d6344444f4628e1a6446c3.setContent(html_6a9100050f56aee0148d2813af007d93);
+        
+
+        circle_marker_61256ec5a8ba6b5cbc2011ca8ff4b54a.bindPopup(popup_5915678687d6344444f4628e1a6446c3)
+        ;
+
+        
+    
+</script>
