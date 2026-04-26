@@ -1,0 +1,243 @@
+.app {
+  min-height: 100vh;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.header {
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.header h1 {
+  font-size: 1.8rem;
+  margin: 0;
+}
+
+.theme-selector {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.theme-selector select {
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  border: 1px solid;
+  transition: all 0.3s;
+}
+
+.main {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.upload-section {
+  margin-bottom: 30px;
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px dashed;
+  text-align: center;
+}
+
+.upload-label {
+  display: inline-block;
+  padding: 12px 24px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: all 0.3s;
+  margin-bottom: 15px;
+}
+
+.file-info {
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px solid;
+}
+
+.file-info p {
+  margin: 5px 0;
+  font-size: 0.95rem;
+}
+
+.waveform-section {
+  margin-bottom: 30px;
+}
+
+.waveform-section h2 {
+  margin-bottom: 15px;
+  font-size: 1.5rem;
+}
+
+.waveform-container {
+  width: 100%;
+  height: 200px;
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+  border: 1px solid;
+}
+
+.waveform-canvas {
+  width: 100%;
+  height: 100%;
+}
+
+.time-display {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.9rem;
+}
+
+.controls {
+  display: flex;
+  gap: 15px;
+  margin-top: 20px;
+  justify-content: center;
+}
+
+.control-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.control-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.speed-control {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+}
+
+.speed-control label {
+  font-weight: 500;
+  font-size: 1rem;
+}
+
+.speed-control input[type="range"] {
+  width: 200px;
+  cursor: pointer;
+}
+
+.pitch-preserve-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  margin-top: 8px;
+}
+
+.pitch-preserve-label input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+.pitch-preserve-label input[type="checkbox"]:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.selection-control {
+  margin-top: 20px;
+  padding: 15px;
+  border-radius: 8px;
+  border: 1px solid;
+}
+
+.selection-control p {
+  margin-bottom: 10px;
+  font-weight: 500;
+}
+
+.selection-buttons {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.spectrum-section {
+  margin-bottom: 30px;
+}
+
+.spectrum-section h2 {
+  margin-bottom: 15px;
+  font-size: 1.5rem;
+}
+
+.spectrum-container {
+  width: 100%;
+  height: 150px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid;
+}
+
+.spectrum-canvas {
+  width: 100%;
+  height: 100%;
+}
+
+.instructions {
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid;
+}
+
+.instructions h3 {
+  margin-bottom: 15px;
+  font-size: 1.3rem;
+}
+
+.instructions ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.instructions li {
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .header h1 {
+    font-size: 1.5rem;
+  }
+  
+  .controls {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .selection-buttons {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
