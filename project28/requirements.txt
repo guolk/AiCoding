@@ -1,0 +1,6 @@
+bokeh==2.3.3
+tornado==6.1
+websockets==9.1
+numpy==1.19.5
+pandas==1.1.5
+psutil==5.8.0
