@@ -1,0 +1,40 @@
+{
+  "name": "account-service-event-sourcing",
+  "version": "1.0.0",
+  "description": "Account service with Event Sourcing architecture",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "test:unit": "jest tests/unit/",
+    "test:integration": "jest tests/integration/",
+    "test:concurrency": "jest tests/concurrency/",
+    "test:projection": "jest tests/projection/",
+    "test:consistency": "jest tests/consistency/",
+    "lint": "eslint src/**/*.ts"
+  },
+  "keywords": [
+    "event-sourcing",
+    "cqrs",
+    "ddd",
+    "domain-driven-design",
+    "account-service"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/jest": "^29.5.0",
+    "@types/node": "^20.0.0",
+    "jest": "^29.5.0",
+    "ts-jest": "^29.1.0",
+    "typescript": "^5.0.0",
+    "@typescript-eslint/eslint-plugin": "^5.0.0",
+    "@typescript-eslint/parser": "^5.0.0",
+    "eslint": "^8.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
