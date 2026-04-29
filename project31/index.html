@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图片拼图游戏</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>图片拼图游戏</h1>
+        
+        <div class="controls">
+            <div class="control-group">
+                <label for="imageInput">上传图片</label>
+                <input type="file" id="imageInput" accept="image/*">
+            </div>
+            
+            <div class="control-group">
+                <label for="gridSize">拼图大小: <span id="gridSizeValue">4×4</span></label>
+                <input type="range" id="gridSize" min="3" max="8" value="4">
+            </div>
+            
+            <div class="control-group">
+                <label for="shapeType">切割形状</label>
+                <select id="shapeType">
+                    <option value="rectangle">矩形</option>
+                    <option value="hexagon">六边形</option>
+                </select>
+            </div>
+            
+            <button class="btn btn-primary" id="startBtn" disabled>开始游戏</button>
+            <button class="btn btn-secondary" id="viewOriginalBtn">按住查看原图</button>
+            <button class="btn btn-success" id="autoSolveBtn" disabled>自动求解</button>
+        </div>
+        
+        <div class="error-message" id="errorMessage"></div>
+        
+        <div class="stats">
+            <div class="stat-item">
+                <div class="stat-label">用时</div>
+                <div class="stat-value" id="timeDisplay">00:00</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">移动步数</div>
+                <div class="stat-value" id="movesDisplay">0</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">已完成</div>
+                <div class="stat-value" id="completedDisplay">0%</div>
+            </div>
+        </div>
+        
+        <div class="game-area">
+            <div class="puzzle-container">
+                <div class="puzzle-grid" id="puzzleGrid"></div>
+                <div class="original-overlay" id="originalOverlay"></div>
+            </div>
+            
+            <div class="original-image-container" id="originalImageContainer" style="display: none;">
+                <h3 style="margin-bottom: 15px; text-align: center; color: #555;">原图</h3>
+                <img class="original-image" id="originalImage" alt="原图">
+                <div class="view-original-hint">按住"查看原图"按钮查看</div>
+            </div>
+        </div>
+        
+        <div class="loading" id="loadingIndicator">
+            <div class="loading-spinner"></div>
+            <p>正在求解中，请稍候...</p>
+        </div>
+        
+        <div class="solution-steps" id="solutionSteps">
+            <h3 style="margin-bottom: 10px; color: #555;">求解步骤:</h3>
+            <div id="stepsList"></div>
+        </div>
+    </div>
+    
+    <div class="celebration-modal" id="celebrationModal">
+        <div class="celebration-content">
+            <h2>🎉 恭喜完成！</h2>
+            <p style="color: #666; margin-bottom: 20px;">你成功完成了拼图游戏！</p>
+            
+            <div class="celebration-stats">
+                <div class="celebration-stat">
+                    <div class="celebration-stat-label">用时</div>
+                    <div class="celebration-stat-value" id="finalTime">00:00</div>
+                </div>
+                <div class="celebration-stat">
+                    <div class="celebration-stat-label">移动步数</div>
+                    <div class="celebration-stat-value" id="finalMoves">0</div>
+                </div>
+                <div class="celebration-stat">
+                    <div class="celebration-stat-label">拼图大小</div>
+                    <div class="celebration-stat-value" id="finalGridSize">4×4</div>
+                </div>
+            </div>
+            
+            <button class="btn btn-primary" id="playAgainBtn">再玩一次</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
