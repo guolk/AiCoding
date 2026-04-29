@@ -1,0 +1,119 @@
+{
+  "summary": {
+    "total_source": 4,
+    "total_target": 4,
+    "matched": 4,
+    "amount_mismatches": 0,
+    "date_mismatches": 0,
+    "duplicates": 0,
+    "missing_in_source": 0,
+    "missing_in_target": 0
+  },
+  "results": [
+    {
+      "status": "matched",
+      "transaction_id": "EXP-2024-03-001",
+      "source": {
+        "transaction_id": "EXP-2024-03-001",
+        "date": "2024-03-01",
+        "amount": "-15000.00",
+        "description": "设备采购支出",
+        "currency": "CNY",
+        "original_amount": null,
+        "original_currency": null,
+        "exchange_rate": null
+      },
+      "target": {
+        "transaction_id": "EXP-2024-03-001",
+        "date": "2024-03-01",
+        "amount": "-15000.00",
+        "description": "设备供应商扣款",
+        "currency": "CNY",
+        "original_amount": null,
+        "original_currency": null,
+        "exchange_rate": null
+      },
+      "difference": null,
+      "notes": "交易记录完全匹配"
+    },
+    {
+      "status": "matched",
+      "transaction_id": "EXP-2024-03-002",
+      "source": {
+        "transaction_id": "EXP-2024-03-002",
+        "date": "2024-03-05",
+        "amount": "-3500.50",
+        "description": "员工差旅费",
+        "currency": "CNY",
+        "original_amount": null,
+        "original_currency": null,
+        "exchange_rate": null
+      },
+      "target": {
+        "transaction_id": "EXP-2024-03-002",
+        "date": "2024-03-05",
+        "amount": "-3500.50",
+        "description": "差旅费报销支付",
+        "currency": "CNY",
+        "original_amount": null,
+        "original_currency": null,
+        "exchange_rate": null
+      },
+      "difference": null,
+      "notes": "交易记录完全匹配"
+    },
+    {
+      "status": "matched",
+      "transaction_id": "REV-2024-03-001",
+      "source": {
+        "transaction_id": "REV-2024-03-001",
+        "date": "2024-03-10",
+        "amount": "50000.00",
+        "description": "销售收入",
+        "currency": "CNY",
+        "original_amount": null,
+        "original_currency": null,
+        "exchange_rate": null
+      },
+      "target": {
+        "transaction_id": "REV-2024-03-001",
+        "date": "2024-03-10",
+        "amount": "50000.00",
+        "description": "客户汇款到账",
+        "currency": "CNY",
+        "original_amount": null,
+        "original_currency": null,
+        "exchange_rate": null
+      },
+      "difference": null,
+      "notes": "交易记录完全匹配"
+    },
+    {
+      "status": "matched",
+      "transaction_id": "EXP-2024-03-003",
+      "source": {
+        "transaction_id": "EXP-2024-03-003",
+        "date": "2024-03-15",
+        "amount": "-2500.00",
+        "description": "办公费用",
+        "currency": "CNY",
+        "original_amount": null,
+        "original_currency": null,
+        "exchange_rate": null
+      },
+      "target": {
+        "transaction_id": "EXP-2024-03-003",
+        "date": "2024-03-15",
+        "amount": "-2500.00",
+        "description": "办公用品采购",
+        "currency": "CNY",
+        "original_amount": null,
+        "original_currency": null,
+        "exchange_rate": null
+      },
+      "difference": null,
+      "notes": "交易记录完全匹配"
+    }
+  ],
+  "errors": []
+}

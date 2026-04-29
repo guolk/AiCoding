@@ -1,0 +1,41 @@
+{
+  "summary": {
+    "total_source": 1,
+    "total_target": 1,
+    "matched": 1,
+    "amount_mismatches": 0,
+    "date_mismatches": 0,
+    "duplicates": 0,
+    "missing_in_source": 0,
+    "missing_in_target": 0
+  },
+  "results": [
+    {
+      "status": "matched",
+      "transaction_id": "INV-SINGLE-2024-001",
+      "source": {
+        "transaction_id": "INV-SINGLE-2024-001",
+        "date": "2024-06-15",
+        "amount": "50000.00",
+        "description": "单笔大额交易 - 年度服务费",
+        "currency": "CNY",
+        "original_amount": null,
+        "original_currency": null,
+        "exchange_rate": null
+      },
+      "target": {
+        "transaction_id": "INV-SINGLE-2024-001",
+        "date": "2024-06-15",
+        "amount": "50000.00",
+        "description": "年度服务费到账",
+        "currency": "CNY",
+        "original_amount": null,
+        "original_currency": null,
+        "exchange_rate": null
+      },
+      "difference": null,
+      "notes": "交易记录完全匹配"
+    }
+  ],
+  "errors": []
+}

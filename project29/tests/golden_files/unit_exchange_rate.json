@@ -1,0 +1,38 @@
+{
+  "test_name": "exchange_rate_conversion",
+  "results": [
+    {
+      "from": "USD",
+      "to": "CNY",
+      "date": "2024-01-15",
+      "amount": "100.00",
+      "error": "type object 'datetime.date' has no attribute 'fromisoformat'",
+      "match": false
+    },
+    {
+      "from": "EUR",
+      "to": "CNY",
+      "date": "2024-01-15",
+      "amount": "50.00",
+      "error": "type object 'datetime.date' has no attribute 'fromisoformat'",
+      "match": false
+    },
+    {
+      "from": "CNY",
+      "to": "USD",
+      "date": "2024-01-15",
+      "amount": "725.00",
+      "error": "type object 'datetime.date' has no attribute 'fromisoformat'",
+      "match": false
+    },
+    {
+      "from": "CNY",
+      "to": "CNY",
+      "date": "2024-01-15",
+      "amount": "1000.00",
+      "error": "type object 'datetime.date' has no attribute 'fromisoformat'",
+      "match": false
+    }
+  ],
+  "all_passed": false
+}

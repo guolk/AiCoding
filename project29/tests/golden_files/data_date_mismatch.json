@@ -1,0 +1,93 @@
+{
+  "summary": {
+    "total_source": 3,
+    "total_target": 3,
+    "matched": 1,
+    "amount_mismatches": 0,
+    "date_mismatches": 2,
+    "duplicates": 0,
+    "missing_in_source": 0,
+    "missing_in_target": 0
+  },
+  "results": [
+    {
+      "status": "date_mismatch",
+      "transaction_id": "PAY001",
+      "source": {
+        "transaction_id": "PAY001",
+        "date": "2024-03-01",
+        "amount": "15000.00",
+        "description": "供应商付款 - 原材料A",
+        "currency": "CNY",
+        "original_amount": null,
+        "original_currency": null,
+        "exchange_rate": null
+      },
+      "target": {
+        "transaction_id": "PAY001",
+        "date": "2024-03-03",
+        "amount": "15000.00",
+        "description": "银行扣款 - 供应商A",
+        "currency": "CNY",
+        "original_amount": null,
+        "original_currency": null,
+        "exchange_rate": null
+      },
+      "difference": null,
+      "notes": "日期差异: 源文件日期 2024-03-01, 目标文件日期 2024-03-03, 相差 2 天"
+    },
+    {
+      "status": "date_mismatch",
+      "transaction_id": "PAY002",
+      "source": {
+        "transaction_id": "PAY002",
+        "date": "2024-03-05",
+        "amount": "8500.25",
+        "description": "供应商付款 - 原材料B",
+        "currency": "CNY",
+        "original_amount": null,
+        "original_currency": null,
+        "exchange_rate": null
+      },
+      "target": {
+        "transaction_id": "PAY002",
+        "date": "2024-03-08",
+        "amount": "8500.25",
+        "description": "银行扣款 - 供应商B",
+        "currency": "CNY",
+        "original_amount": null,
+        "original_currency": null,
+        "exchange_rate": null
+      },
+      "difference": null,
+      "notes": "日期差异: 源文件日期 2024-03-05, 目标文件日期 2024-03-08, 相差 3 天"
+    },
+    {
+      "status": "matched",
+      "transaction_id": "REC001",
+      "source": {
+        "transaction_id": "REC001",
+        "date": "2024-03-10",
+        "amount": "25000.00",
+        "description": "客户回款",
+        "currency": "CNY",
+        "original_amount": null,
+        "original_currency": null,
+        "exchange_rate": null
+      },
+      "target": {
+        "transaction_id": "REC001",
+        "date": "2024-03-10",
+        "amount": "25000.00",
+        "description": "银行到账",
+        "currency": "CNY",
+        "original_amount": null,
+        "original_currency": null,
+        "exchange_rate": null
+      },
+      "difference": null,
+      "notes": "交易记录完全匹配"
+    }
+  ],
+  "errors": []
+}

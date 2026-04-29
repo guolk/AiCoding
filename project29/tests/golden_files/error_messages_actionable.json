@@ -1,0 +1,30 @@
+{
+  "test_name": "error_messages_actionable",
+  "results": [
+    {
+      "test_name": "missing_columns",
+      "description": "缺少description列",
+      "has_errors": true,
+      "errors": [
+        "源文件解析错误: CSV文件缺少必需的列: transaction_id, description. 可用列: id, date, amount"
+      ]
+    },
+    {
+      "test_name": "invalid_date",
+      "description": "日期格式错误",
+      "has_errors": true,
+      "errors": [
+        "源文件解析错误: 第 2 行解析错误: 无效的日期格式: 01/01/2024，预期格式: YYYY-MM-DD"
+      ]
+    },
+    {
+      "test_name": "invalid_amount",
+      "description": "金额格式错误",
+      "has_errors": true,
+      "errors": [
+        "源文件解析错误: 第 2 行解析错误: 无效的金额: abc"
+      ]
+    }
+  ],
+  "all_tested": true
+}

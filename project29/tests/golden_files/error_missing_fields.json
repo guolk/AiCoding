@@ -1,0 +1,16 @@
+{
+  "summary": {
+    "total_source": 0,
+    "total_target": 0,
+    "matched": 0,
+    "amount_mismatches": 0,
+    "date_mismatches": 0,
+    "duplicates": 0,
+    "missing_in_source": 0,
+    "missing_in_target": 0
+  },
+  "results": [],
+  "errors": [
+    "源文件解析错误: CSV文件缺少必需的列: date, amount. 可用列: transaction_id, description"
+  ]
+}

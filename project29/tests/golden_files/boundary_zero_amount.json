@@ -1,0 +1,67 @@
+{
+  "summary": {
+    "total_source": 2,
+    "total_target": 2,
+    "matched": 2,
+    "amount_mismatches": 0,
+    "date_mismatches": 0,
+    "duplicates": 0,
+    "missing_in_source": 0,
+    "missing_in_target": 0
+  },
+  "results": [
+    {
+      "status": "matched",
+      "transaction_id": "OFFSET-2024-001",
+      "source": {
+        "transaction_id": "OFFSET-2024-001",
+        "date": "2024-03-01",
+        "amount": "0.00",
+        "description": "冲销交易 - 抵消错误记账",
+        "currency": "CNY",
+        "original_amount": null,
+        "original_currency": null,
+        "exchange_rate": null
+      },
+      "target": {
+        "transaction_id": "OFFSET-2024-001",
+        "date": "2024-03-01",
+        "amount": "0.00",
+        "description": "银行冲销记录",
+        "currency": "CNY",
+        "original_amount": null,
+        "original_currency": null,
+        "exchange_rate": null
+      },
+      "difference": null,
+      "notes": "交易记录完全匹配"
+    },
+    {
+      "status": "matched",
+      "transaction_id": "NORMAL-2024-001",
+      "source": {
+        "transaction_id": "NORMAL-2024-001",
+        "date": "2024-03-02",
+        "amount": "1000.00",
+        "description": "正常交易",
+        "currency": "CNY",
+        "original_amount": null,
+        "original_currency": null,
+        "exchange_rate": null
+      },
+      "target": {
+        "transaction_id": "NORMAL-2024-001",
+        "date": "2024-03-02",
+        "amount": "1000.00",
+        "description": "正常到账",
+        "currency": "CNY",
+        "original_amount": null,
+        "original_currency": null,
+        "exchange_rate": null
+      },
+      "difference": null,
+      "notes": "交易记录完全匹配"
+    }
+  ],
+  "errors": []
+}

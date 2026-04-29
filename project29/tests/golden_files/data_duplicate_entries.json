@@ -1,0 +1,93 @@
+{
+  "summary": {
+    "total_source": 5,
+    "total_target": 3,
+    "matched": 1,
+    "amount_mismatches": 0,
+    "date_mismatches": 0,
+    "duplicates": 2,
+    "missing_in_source": 0,
+    "missing_in_target": 0
+  },
+  "results": [
+    {
+      "status": "duplicate",
+      "transaction_id": "INV20240301",
+      "source": {
+        "transaction_id": "INV20240301",
+        "date": "2024-03-01",
+        "amount": "20000.00",
+        "description": "销售发票 - 杭州科技（第一次录入）",
+        "currency": "CNY",
+        "original_amount": null,
+        "original_currency": null,
+        "exchange_rate": null
+      },
+      "target": {
+        "transaction_id": "INV20240301",
+        "date": "2024-03-01",
+        "amount": "20000.00",
+        "description": "杭州科技转账",
+        "currency": "CNY",
+        "original_amount": null,
+        "original_currency": null,
+        "exchange_rate": null
+      },
+      "difference": null,
+      "notes": "交易ID INV20240301 在源文件中有 2 条记录，在目标文件中有 1 条记录"
+    },
+    {
+      "status": "matched",
+      "transaction_id": "INV20240305",
+      "source": {
+        "transaction_id": "INV20240305",
+        "date": "2024-03-05",
+        "amount": "15000.00",
+        "description": "销售发票 - 南京贸易",
+        "currency": "CNY",
+        "original_amount": null,
+        "original_currency": null,
+        "exchange_rate": null
+      },
+      "target": {
+        "transaction_id": "INV20240305",
+        "date": "2024-03-05",
+        "amount": "15000.00",
+        "description": "南京贸易付款",
+        "currency": "CNY",
+        "original_amount": null,
+        "original_currency": null,
+        "exchange_rate": null
+      },
+      "difference": null,
+      "notes": "交易记录完全匹配"
+    },
+    {
+      "status": "duplicate",
+      "transaction_id": "EXP20240310",
+      "source": {
+        "transaction_id": "EXP20240310",
+        "date": "2024-03-10",
+        "amount": "-5000.00",
+        "description": "办公费用",
+        "currency": "CNY",
+        "original_amount": null,
+        "original_currency": null,
+        "exchange_rate": null
+      },
+      "target": {
+        "transaction_id": "EXP20240310",
+        "date": "2024-03-10",
+        "amount": "-5000.00",
+        "description": "办公用品采购扣款",
+        "currency": "CNY",
+        "original_amount": null,
+        "original_currency": null,
+        "exchange_rate": null
+      },
+      "difference": null,
+      "notes": "交易ID EXP20240310 在源文件中有 2 条记录，在目标文件中有 1 条记录"
+    }
+  ],
+  "errors": []
+}

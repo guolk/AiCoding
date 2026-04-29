@@ -1,0 +1,119 @@
+{
+  "summary": {
+    "total_source": 4,
+    "total_target": 4,
+    "matched": 4,
+    "amount_mismatches": 0,
+    "date_mismatches": 0,
+    "duplicates": 0,
+    "missing_in_source": 0,
+    "missing_in_target": 0
+  },
+  "results": [
+    {
+      "status": "matched",
+      "transaction_id": "DEC-2024-001",
+      "source": {
+        "transaction_id": "DEC-2024-001",
+        "date": "2024-12-28",
+        "amount": "25000.00",
+        "description": "年终结算收入",
+        "currency": "CNY",
+        "original_amount": null,
+        "original_currency": null,
+        "exchange_rate": null
+      },
+      "target": {
+        "transaction_id": "DEC-2024-001",
+        "date": "2024-12-28",
+        "amount": "25000.00",
+        "description": "客户年终付款",
+        "currency": "CNY",
+        "original_amount": null,
+        "original_currency": null,
+        "exchange_rate": null
+      },
+      "difference": null,
+      "notes": "交易记录完全匹配"
+    },
+    {
+      "status": "matched",
+      "transaction_id": "DEC-2024-002",
+      "source": {
+        "transaction_id": "DEC-2024-002",
+        "date": "2024-12-30",
+        "amount": "-10000.00",
+        "description": "年终奖金发放",
+        "currency": "CNY",
+        "original_amount": null,
+        "original_currency": null,
+        "exchange_rate": null
+      },
+      "target": {
+        "transaction_id": "DEC-2024-002",
+        "date": "2024-12-30",
+        "amount": "-10000.00",
+        "description": "员工奖金支付",
+        "currency": "CNY",
+        "original_amount": null,
+        "original_currency": null,
+        "exchange_rate": null
+      },
+      "difference": null,
+      "notes": "交易记录完全匹配"
+    },
+    {
+      "status": "matched",
+      "transaction_id": "JAN-2025-001",
+      "source": {
+        "transaction_id": "JAN-2025-001",
+        "date": "2025-01-02",
+        "amount": "15000.00",
+        "description": "新年第一笔收入",
+        "currency": "CNY",
+        "original_amount": null,
+        "original_currency": null,
+        "exchange_rate": null
+      },
+      "target": {
+        "transaction_id": "JAN-2025-001",
+        "date": "2025-01-02",
+        "amount": "15000.00",
+        "description": "新年回款",
+        "currency": "CNY",
+        "original_amount": null,
+        "original_currency": null,
+        "exchange_rate": null
+      },
+      "difference": null,
+      "notes": "交易记录完全匹配"
+    },
+    {
+      "status": "matched",
+      "transaction_id": "JAN-2025-002",
+      "source": {
+        "transaction_id": "JAN-2025-002",
+        "date": "2025-01-05",
+        "amount": "-5000.00",
+        "description": "办公设备采购",
+        "currency": "CNY",
+        "original_amount": null,
+        "original_currency": null,
+        "exchange_rate": null
+      },
+      "target": {
+        "transaction_id": "JAN-2025-002",
+        "date": "2025-01-05",
+        "amount": "-5000.00",
+        "description": "设备采购扣款",
+        "currency": "CNY",
+        "original_amount": null,
+        "original_currency": null,
+        "exchange_rate": null
+      },
+      "difference": null,
+      "notes": "交易记录完全匹配"
+    }
+  ],
+  "errors": []
+}

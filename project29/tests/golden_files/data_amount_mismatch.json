@@ -1,0 +1,93 @@
+{
+  "summary": {
+    "total_source": 3,
+    "total_target": 3,
+    "matched": 1,
+    "amount_mismatches": 2,
+    "date_mismatches": 0,
+    "duplicates": 0,
+    "missing_in_source": 0,
+    "missing_in_target": 0
+  },
+  "results": [
+    {
+      "status": "matched",
+      "transaction_id": "INV2024001",
+      "source": {
+        "transaction_id": "INV2024001",
+        "date": "2024-02-01",
+        "amount": "10000.00",
+        "description": "销售发票 - 广州电子科技",
+        "currency": "CNY",
+        "original_amount": null,
+        "original_currency": null,
+        "exchange_rate": null
+      },
+      "target": {
+        "transaction_id": "INV2024001",
+        "date": "2024-02-01",
+        "amount": "10000.00",
+        "description": "广州电子科技付款",
+        "currency": "CNY",
+        "original_amount": null,
+        "original_currency": null,
+        "exchange_rate": null
+      },
+      "difference": null,
+      "notes": "交易记录完全匹配"
+    },
+    {
+      "status": "amount_mismatch",
+      "transaction_id": "INV2024002",
+      "source": {
+        "transaction_id": "INV2024002",
+        "date": "2024-02-05",
+        "amount": "7500.50",
+        "description": "销售发票 - 深圳软件公司",
+        "currency": "CNY",
+        "original_amount": null,
+        "original_currency": null,
+        "exchange_rate": null
+      },
+      "target": {
+        "transaction_id": "INV2024002",
+        "date": "2024-02-05",
+        "amount": "7550.50",
+        "description": "深圳软件公司付款（含手续费）",
+        "currency": "CNY",
+        "original_amount": null,
+        "original_currency": null,
+        "exchange_rate": null
+      },
+      "difference": "-50.00",
+      "notes": "金额差异: 源文件金额 7500.50 CNY, 目标文件金额 7550.50 CNY, 差异 -50.00 CNY"
+    },
+    {
+      "status": "amount_mismatch",
+      "transaction_id": "EXP2024001",
+      "source": {
+        "transaction_id": "EXP2024001",
+        "date": "2024-02-10",
+        "amount": "-3000.00",
+        "description": "服务器租金",
+        "currency": "CNY",
+        "original_amount": null,
+        "original_currency": null,
+        "exchange_rate": null
+      },
+      "target": {
+        "transaction_id": "EXP2024001",
+        "date": "2024-02-10",
+        "amount": "-2900.00",
+        "description": "服务器服务商扣款",
+        "currency": "CNY",
+        "original_amount": null,
+        "original_currency": null,
+        "exchange_rate": null
+      },
+      "difference": "-100.00",
+      "notes": "金额差异: 源文件金额 -3000.00 CNY, 目标文件金额 -2900.00 CNY, 差异 -100.00 CNY"
+    }
+  ],
+  "errors": []
+}
