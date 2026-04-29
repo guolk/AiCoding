@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数据中心机房可视化</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="container">
+        <div id="stats-panel">
+            <h2>机房统计</h2>
+            <div class="stat-item">
+                <span>总能耗:</span>
+                <span id="total-power">0 kW</span>
+            </div>
+            <div class="stat-item">
+                <span>平均温度:</span>
+                <span id="avg-temperature">0 °C</span>
+            </div>
+            <div class="stat-item">
+                <span>正常服务器:</span>
+                <span id="normal-servers">0</span>
+            </div>
+            <div class="stat-item">
+                <span>告警服务器:</span>
+                <span id="warning-servers">0</span>
+            </div>
+            <div class="stat-item">
+                <span>故障服务器:</span>
+                <span id="error-servers">0</span>
+            </div>
+            <div class="stat-item">
+                <span>下线服务器:</span>
+                <span id="offline-servers">0</span>
+            </div>
+            <button id="optimization-btn">机位优化推荐</button>
+        </div>
+        
+        <div id="scene-container">
+            <div id="view-switch">
+                <button id="top-view-btn">俯视图</button>
+                <button id="perspective-view-btn">透视图</button>
+            </div>
+            <canvas id="main-canvas"></canvas>
+        </div>
+        
+        <div id="info-panel">
+            <div id="rack-info" style="display: none;">
+                <h3 id="rack-title">机柜信息</h3>
+                <div id="rack-stats">
+                    <div class="rack-stat">
+                        <span>温度:</span>
+                        <span id="rack-temperature">-</span>
+                    </div>
+                    <div class="rack-stat">
+                        <span>功率:</span>
+                        <span id="rack-power">-</span>
+                    </div>
+                </div>
+                <div id="servers-list">
+                    <h4>服务器列表</h4>
+                    <div id="servers-container"></div>
+                </div>
+            </div>
+            
+            <div id="server-detail" style="display: none;">
+                <h3 id="server-title">服务器详情</h3>
+                <div id="server-stats">
+                    <div class="server-stat">
+                        <span>状态:</span>
+                        <span id="server-status">-</span>
+                    </div>
+                    <div class="server-stat">
+                        <span>位置:</span>
+                        <span id="server-position">-</span>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <h4>CPU使用率</h4>
+                    <canvas id="cpu-chart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <h4>内存使用率</h4>
+                    <canvas id="memory-chart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <h4>磁盘使用率</h4>
+                    <canvas id="disk-chart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <h4>网络流量</h4>
+                    <canvas id="network-chart"></canvas>
+                </div>
+                <button id="close-server-detail">关闭</button>
+            </div>
+            
+            <div id="optimization-panel" style="display: none;">
+                <h3>机位分配优化推荐</h3>
+                <div id="optimization-results"></div>
+                <button id="close-optimization">关闭</button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
