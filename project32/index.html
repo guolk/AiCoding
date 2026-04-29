@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CPU架构可视化教学工具</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="container">
+        <div id="canvas-container"></div>
+        
+        <!-- 控制面板 -->
+        <div id="control-panel">
+            <h2>CPU架构可视化</h2>
+            
+            <!-- 指令选择 -->
+            <div class="control-section">
+                <h3>指令选择</h3>
+                <select id="instruction-select">
+                    <option value="MOV R1, #10">MOV R1, #10</option>
+                    <option value="MOV R2, #20">MOV R2, #20</option>
+                    <option value="ADD R3, R1, R2">ADD R3, R1, R2</option>
+                    <option value="SUB R4, R3, R1">SUB R4, R3, R1</option>
+                    <option value="JMP 0x100">JMP 0x100</option>
+                    <option value="BEQ R1, R2, 0x200">BEQ R1, R2, 0x200</option>
+                    <option value="LDR R5, [R1]">LDR R5, [R1]</option>
+                    <option value="STR R5, [R2]">STR R5, [R2]</option>
+                </select>
+                <button id="add-instruction">添加到指令序列</button>
+                <div id="instruction-sequence" class="sequence-container">
+                    <h4>指令序列:</h4>
+                    <div id="instruction-list"></div>
+                </div>
+            </div>
+            
+            <!-- 执行控制 -->
+            <div class="control-section">
+                <h3>执行控制</h3>
+                <div class="execution-mode">
+                    <label>
+                        <input type="radio" name="mode" value="single" checked> 单步执行
+                    </label>
+                    <label>
+                        <input type="radio" name="mode" value="continuous"> 连续执行
+                    </label>
+                </div>
+                <div class="speed-control">
+                    <label>执行速度:</label>
+                    <input type="range" id="speed-slider" min="0.5" max="3" step="0.1" value="1">
+                    <span id="speed-value">1x</span>
+                </div>
+                <div class="execution-buttons">
+                    <button id="start-btn" class="primary-btn">开始执行</button>
+                    <button id="pause-btn" class="secondary-btn" disabled>暂停</button>
+                    <button id="step-btn" class="secondary-btn">单步</button>
+                    <button id="reset-btn" class="danger-btn">重置</button>
+                </div>
+            </div>
+            
+            <!-- 流水线状态 -->
+            <div class="control-section">
+                <h3>流水线状态</h3>
+                <div id="pipeline-stages">
+                    <div class="stage" id="stage-IF">
+                        <span class="stage-name">取指 (IF)</span>
+                        <span class="stage-status">空闲</span>
+                    </div>
+                    <div class="stage" id="stage-ID">
+                        <span class="stage-name">译码 (ID)</span>
+                        <span class="stage-status">空闲</span>
+                    </div>
+                    <div class="stage" id="stage-EX">
+                        <span class="stage-name">执行 (EX)</span>
+                        <span class="stage-status">空闲</span>
+                    </div>
+                    <div class="stage" id="stage-MEM">
+                        <span class="stage-name">访存 (MEM)</span>
+                        <span class="stage-status">空闲</span>
+                    </div>
+                    <div class="stage" id="stage-WB">
+                        <span class="stage-name">写回 (WB)</span>
+                        <span class="stage-status">空闲</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 执行状态 -->
+            <div class="control-section" id="execution-status">
+                <h3>执行状态</h3>
+                <div id="status-message">
+                    <p style="color: #2ecc71;">等待开始执行...</p>
+                </div>
+            </div>
+            
+            <!-- 冒险检测 -->
+            <div class="control-section" id="hazard-section" style="display: none;">
+                <h3 style="color: #ff4444;">⚠ 冒险检测</h3>
+                <div id="hazard-info"></div>
+            </div>
+            
+            <!-- 组件信息面板 -->
+            <div class="control-section" id="component-info">
+                <h3>组件信息</h3>
+                <div id="component-details">
+                    <p>点击CPU组件查看详细信息</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 提示面板 -->
+        <div id="tooltip"></div>
+    </div>
+    
+    <!-- Three.js库 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    
+    <!-- 主应用脚本 -->
+    <script src="app.js"></script>
+</body>
+</html>
