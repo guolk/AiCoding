@@ -1,0 +1,15 @@
+import { Point, Rect, Size, IEngineConfig } from '../types/index.js';
+export declare function generateId(): string;
+export declare function distance(p1: Point, p2: Point): number;
+export declare function pointInRect(point: Point, rect: Rect): boolean;
+export declare function rectIntersect(r1: Rect, r2: Rect): boolean;
+export declare function lineIntersectsRect(p1: Point, p2: Point, rect: Rect): boolean;
+export declare function lineIntersectsLine(p1: Point, p2: Point, p3: Point, p4: Point): boolean;
+export declare function snapToGrid(point: Point, gridSize: number): Point;
+export declare function clamp(value: number, min: number, max: number): number;
+export declare function lerp(a: number, b: number, t: number): number;
+export declare function lerpPoint(p1: Point, p2: Point, t: number): Point;
+export declare function expandRect(rect: Rect, padding: number): Rect;
+export declare function getNodeBounds(position: Point, size: Size): Rect;
+export declare function deepClone<T>(obj: T): T;
+export declare function getDefaultConfig(): IEngineConfig;

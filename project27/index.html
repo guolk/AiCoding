@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>流程图绘制引擎</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f0f2f5;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .toolbar {
+      background-color: #ffffff;
+      border-bottom: 1px solid #e0e0e0;
+      padding: 10px 20px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .toolbar-group {
+      display: flex;
+      gap: 4px;
+      border-right: 1px solid #e0e0e0;
+      padding-right: 12px;
+      margin-right: 8px;
+    }
+
+    .toolbar-group:last-child {
+      border-right: none;
+      padding-right: 0;
+      margin-right: 0;
+    }
+
+    .toolbar-btn {
+      padding: 8px 12px;
+      border: 1px solid #d0d0d0;
+      background-color: #ffffff;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 13px;
+      transition: all 0.2s ease;
+    }
+
+    .toolbar-btn:hover:not(:disabled) {
+      background-color: #f5f5f5;
+      border-color: #b0b0b0;
+    }
+
+    .toolbar-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .toolbar-btn.primary {
+      background-color: #2196F3;
+      color: white;
+      border-color: #1976D2;
+    }
+
+    .toolbar-btn.primary:hover:not(:disabled) {
+      background-color: #1976D2;
+    }
+
+    .toolbar-label {
+      font-size: 13px;
+      color: #666;
+      margin-right: 4px;
+    }
+
+    .canvas-container {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #flowchart-canvas {
+      display: block;
+      cursor: default;
+    }
+
+    .status-bar {
+      background-color: #ffffff;
+      border-top: 1px solid #e0e0e0;
+      padding: 6px 20px;
+      font-size: 12px;
+      color: #666;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.5);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background-color: #ffffff;
+      border-radius: 8px;
+      padding: 24px;
+      max-width: 600px;
+      width: 90%;
+      max-height: 80vh;
+      overflow: auto;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    }
+
+    .modal-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      color: #333;
+    }
+
+    .modal-textarea {
+      width: 100%;
+      height: 300px;
+      border: 1px solid #d0d0d0;
+      border-radius: 4px;
+      padding: 12px;
+      font-family: 'Consolas', 'Monaco', monospace;
+      font-size: 12px;
+      resize: vertical;
+    }
+
+    .modal-buttons {
+      display: flex;
+      gap: 8px;
+      margin-top: 16px;
+      justify-content: flex-end;
+    }
+
+    .help-section {
+      margin-bottom: 16px;
+    }
+
+    .help-section h4 {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #333;
+    }
+
+    .help-section ul {
+      list-style: none;
+      padding-left: 16px;
+    }
+
+    .help-section li {
+      font-size: 13px;
+      color: #666;
+      margin-bottom: 4px;
+    }
+
+    .help-section kbd {
+      background-color: #f0f0f0;
+      border: 1px solid #d0d0d0;
+      border-radius: 3px;
+      padding: 1px 4px;
+      font-family: 'Consolas', monospace;
+      font-size: 11px;
+    }
+
+    .node-button {
+      padding: 8px 12px;
+      border: 1px solid #d0d0d0;
+      background-color: #ffffff;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 13px;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .node-button:hover {
+      background-color: #f5f5f5;
+      border-color: #b0b0b0;
+    }
+
+    .node-icon {
+      width: 16px;
+      height: 16px;
+      display: inline-block;
+    }
+
+    .icon-rectangle {
+      background-color: #2196F3;
+      border-radius: 2px;
+    }
+
+    .icon-diamond {
+      background-color: #FFC107;
+      transform: rotate(45deg);
+    }
+
+    .icon-circle {
+      background-color: #9C27B0;
+      border-radius: 50%;
+    }
+
+    .icon-parallelogram {
+      background-color: #4CAF50;
+      clip-path: polygon(20% 0%, 100% 0%, 80% 100%, 0% 100%);
+    }
+
+    .icon-swimlane {
+      background-color: #F5F5F5;
+      border: 1px solid #E0E0E0;
+    }
+  </style>
+</head>
+<body>
+  <div class="toolbar">
+    <div class="toolbar-group">
+      <span class="toolbar-label">添加节点:</span>
+      <button class="node-button" id="add-rectangle">
+        <span class="node-icon icon-rectangle"></span>
+        矩形
+      </button>
+      <button class="node-button" id="add-diamond">
+        <span class="node-icon icon-diamond"></span>
+        菱形
+      </button>
+      <button class="node-button" id="add-circle">
+        <span class="node-icon icon-circle"></span>
+        圆形
+      </button>
+      <button class="node-button" id="add-parallelogram">
+        <span class="node-icon icon-parallelogram"></span>
+        平行四边形
+      </button>
+      <button class="node-button" id="add-swimlane">
+        <span class="node-icon icon-swimlane"></span>
+        泳道
+      </button>
+    </div>
+
+    <div class="toolbar-group">
+      <button class="toolbar-btn" id="undo-btn" title="撤销 (Ctrl+Z)">
+        ↶ 撤销
+      </button>
+      <button class="toolbar-btn" id="redo-btn" title="重做 (Ctrl+Y)">
+        ↷ 重做
+      </button>
+    </div>
+
+    <div class="toolbar-group">
+      <span class="toolbar-label">对齐:</span>
+      <button class="toolbar-btn" id="align-left" title="左对齐">
+        ◀ 左对齐
+      </button>
+      <button class="toolbar-btn" id="align-center-h" title="水平居中对齐">
+        ◀▶ 水平居中
+      </button>
+      <button class="toolbar-btn" id="align-right" title="右对齐">
+        ▶ 右对齐
+      </button>
+      <button class="toolbar-btn" id="align-top" title="顶部对齐">
+        ▲ 顶部对齐
+      </button>
+      <button class="toolbar-btn" id="align-center-v" title="垂直居中对齐">
+        ▼▲ 垂直居中
+      </button>
+      <button class="toolbar-btn" id="align-bottom" title="底部对齐">
+        ▼ 底部对齐
+      </button>
+    </div>
+
+    <div class="toolbar-group">
+      <span class="toolbar-label">分布:</span>
+      <button class="toolbar-btn" id="distribute-h" title="水平等间距分布">
+        ⇄ 水平分布
+      </button>
+      <button class="toolbar-btn" id="distribute-v" title="垂直等间距分布">
+        ⇅ 垂直分布
+      </button>
+    </div>
+
+    <div class="toolbar-group">
+      <button class="toolbar-btn primary" id="export-json">
+        📄 导出JSON
+      </button>
+      <button class="toolbar-btn primary" id="export-svg">
+        🖼️ 导出SVG
+      </button>
+      <button class="toolbar-btn" id="import-json">
+        📂 导入JSON
+      </button>
+    </div>
+
+    <div class="toolbar-group">
+      <button class="toolbar-btn" id="delete-selected">
+        🗑️ 删除选中
+      </button>
+      <button class="toolbar-btn" id="select-all">
+        📋 全选
+      </button>
+      <button class="toolbar-btn" id="clear-selection">
+        ✕ 取消选择
+      </button>
+      <button class="toolbar-btn" id="help-btn">
+        ❓ 帮助
+      </button>
+    </div>
+  </div>
+
+  <div class="canvas-container">
+    <canvas id="flowchart-canvas"></canvas>
+  </div>
+
+  <div class="status-bar">
+    <span id="status-info">准备就绪</span>
+    <span id="zoom-info">缩放: 100%</span>
+  </div>
+
+  <div class="modal" id="json-export-modal">
+    <div class="modal-content">
+      <div class="modal-title">JSON 数据</div>
+      <textarea class="modal-textarea" id="json-export-content" readonly></textarea>
+      <div class="modal-buttons">
+        <button class="toolbar-btn" id="copy-json">复制到剪贴板</button>
+        <button class="toolbar-btn" id="close-export-modal">关闭</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="json-import-modal">
+    <div class="modal-content">
+      <div class="modal-title">导入 JSON 数据</div>
+      <textarea class="modal-textarea" id="json-import-content" placeholder="在此粘贴JSON数据..."></textarea>
+      <div class="modal-buttons">
+        <button class="toolbar-btn primary" id="do-import">导入</button>
+        <button class="toolbar-btn" id="close-import-modal">取消</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="help-modal">
+    <div class="modal-content">
+      <div class="modal-title">使用帮助</div>
+      
+      <div class="help-section">
+        <h4>基本操作</h4>
+        <ul>
+          <li>• <strong>创建节点</strong>: 点击工具栏中的节点类型按钮</li>
+          <li>• <strong>创建连接</strong>: 从输出端口(绿色)拖拽到输入端口(红色)</li>
+          <li>• <strong>移动节点</strong>: 点击并拖拽节点</li>
+          <li>• <strong>平移画布</strong>: 按住 <kbd>Alt</kbd> + 鼠标拖拽，或鼠标中键拖拽</li>
+          <li>• <strong>缩放画布</strong>: 鼠标滚轮</li>
+        </ul>
+      </div>
+
+      <div class="help-section">
+        <h4>选择操作</h4>
+        <ul>
+          <li>• <strong>选择单个</strong>: 点击节点或连接线</li>
+          <li>• <strong>多选</strong>: 按住 <kbd>Shift</kbd> 点击添加到选择</li>
+          <li>• <strong>全选</strong>: <kbd>Ctrl</kbd> + <kbd>A</kbd></li>
+          <li>• <strong>取消选择</strong>: <kbd>Esc</kbd> 或点击空白处</li>
+        </ul>
+      </div>
+
+      <div class="help-section">
+        <h4>编辑操作</h4>
+        <ul>
+          <li>• <strong>删除</strong>: 选中后按 <kbd>Delete</kbd> 或 <kbd>Backspace</kbd></li>
+          <li>• <strong>撤销</strong>: <kbd>Ctrl</kbd> + <kbd>Z</kbd></li>
+          <li>• <strong>重做</strong>: <kbd>Ctrl</kbd> + <kbd>Y</kbd> 或 <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Z</kbd></li>
+        </ul>
+      </div>
+
+      <div class="help-section">
+        <h4>小地图导航</h4>
+        <ul>
+          <li>• 点击右下角小地图可快速跳转到指定位置</li>
+          <li>• 橙色虚线框表示当前视口范围</li>
+        </ul>
+      </div>
+
+      <div class="help-section">
+        <h4>节点类型</h4>
+        <ul>
+          <li>• <strong>矩形</strong>: 通用节点，用于表示流程步骤</li>
+          <li>• <strong>菱形</strong>: 用于表示判断/决策</li>
+          <li>• <strong>圆形</strong>: 用于表示开始/结束</li>
+          <li>• <strong>平行四边形</strong>: 用于表示输入/输出</li>
+          <li>• <strong>泳道</strong>: 用于分组和组织其他节点</li>
+        </ul>
+      </div>
+
+      <div class="modal-buttons">
+        <button class="toolbar-btn" id="close-help-modal">关闭</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import('./dist/app.js?' + Date.now());
+  </script>
+</body>
+</html>
