@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASCII艺术生成与编辑平台</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎨 ASCII艺术平台</h1>
+            <nav>
+                <button class="nav-btn active" data-tab="converter">图片转换</button>
+                <button class="nav-btn" data-tab="editor">艺术编辑器</button>
+                <button class="nav-btn" data-tab="font">字体生成</button>
+            </nav>
+        </header>
+
+        <main>
+            <!-- 图片转换模块 -->
+            <section id="converter" class="tab-content active">
+                <div class="converter-container">
+                    <div class="converter-controls">
+                        <h2>图片转ASCII艺术</h2>
+                        
+                        <div class="control-group">
+                            <label>上传图片:</label>
+                            <input type="file" id="imageUpload" accept="image/*">
+                        </div>
+
+                        <div class="control-group">
+                            <label>字符集:</label>
+                            <select id="charsetSelect">
+                                <option value="standard">标准ASCII</option>
+                                <option value="block">块字符</option>
+                                <option value="braille">Braille盲文点阵</option>
+                            </select>
+                        </div>
+
+                        <div class="control-group">
+                            <label>字符密度: <span id="densityValue">80</span></label>
+                            <input type="range" id="densitySlider" min="20" max="200" value="80">
+                        </div>
+
+                        <div class="control-group">
+                            <label>对比度: <span id="contrastValue">1.0</span></label>
+                            <input type="range" id="contrastSlider" min="0.5" max="2.0" step="0.1" value="1.0">
+                        </div>
+
+                        <div class="control-group">
+                            <label>
+                                <input type="checkbox" id="colorCheckbox">
+                                彩色模式
+                            </label>
+                        </div>
+
+                        <button id="convertBtn" class="primary-btn">转换为ASCII</button>
+                        <button id="sendToEditorBtn" class="secondary-btn" style="display: none;">发送到编辑器</button>
+                    </div>
+
+                    <div class="preview-section">
+                        <h3>原始图片</h3>
+                        <canvas id="originalCanvas" class="preview-canvas"></canvas>
+                        
+                        <h3>ASCII预览</h3>
+                        <div id="asciiPreview" class="ascii-preview">
+                            <pre id="asciiOutput"></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 艺术编辑器模块 -->
+            <section id="editor" class="tab-content">
+                <div class="editor-container">
+                    <div class="editor-toolbar">
+                        <h2>ASCII艺术编辑器</h2>
+                        
+                        <div class="tool-group">
+                            <button class="tool-btn active" data-tool="select">选择</button>
+                            <button class="tool-btn" data-tool="draw">画笔</button>
+                            <button class="tool-btn" data-tool="line">直线</button>
+                            <button class="tool-btn" data-tool="rect">矩形</button>
+                            <button class="tool-btn" data-tool="fill">填充</button>
+                        </div>
+
+                        <div class="tool-group">
+                            <label>字符:</label>
+                            <input type="text" id="drawChar" maxlength="1" value="#" style="width: 40px;">
+                            <button id="clearEditorBtn">清空</button>
+                            <button id="undoBtn">撤销</button>
+                            <button id="redoBtn">重做</button>
+                        </div>
+
+                        <div class="tool-group">
+                            <label>颜色:</label>
+                            <input type="color" id="textColor" value="#ff0000">
+                            <label>
+                                <input type="checkbox" id="useColor" checked> 使用颜色
+                            </label>
+                        </div>
+
+                        <div class="tool-group">
+                            <button id="copySelectionBtn">复制选区</button>
+                            <button id="pasteBtn">粘贴</button>
+                            <button id="cutSelectionBtn">剪切选区</button>
+                        </div>
+                    </div>
+
+                    <div class="editor-main">
+                        <div class="editor-info">
+                            <span>大小: <span id="editorSize">0 x 0</span></span>
+                            <span>光标: <span id="cursorPos">0, 0</span></span>
+                        </div>
+                        <div class="editor-wrapper">
+                            <textarea id="editorArea" class="editor-area" spellcheck="false" style="display: none;"></textarea>
+                            <div id="editorDisplay" class="editor-display" contenteditable="true" spellcheck="false"></div>
+                            <canvas id="editorCanvas" class="editor-canvas" style="display: none;"></canvas>
+                        </div>
+                        <div id="selectionOverlay" class="selection-overlay" style="display: none;"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 字体生成模块 -->
+            <section id="font" class="tab-content">
+                <div class="font-container">
+                    <div class="font-controls">
+                        <h2>ASCII艺术字体生成</h2>
+                        
+                        <div class="control-group">
+                            <label>输入文字:</label>
+                            <input type="text" id="fontInput" placeholder="输入要转换的文字" maxlength="50">
+                        </div>
+
+                        <div class="control-group">
+                            <label>字体风格:</label>
+                            <select id="fontStyleSelect">
+                                <option value="standard">标准</option>
+                                <option value="slant">斜体</option>
+                                <option value="shadow">阴影</option>
+                                <option value="block">方块</option>
+                                <option value="bubble">气泡</option>
+                            </select>
+                        </div>
+
+                        <button id="generateFontBtn" class="primary-btn">生成字体</button>
+                        <button id="fontToEditorBtn" class="secondary-btn">发送到编辑器</button>
+                    </div>
+
+                    <div class="font-preview">
+                        <h3>预览</h3>
+                        <pre id="fontOutput" class="font-output"></pre>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <div class="export-section">
+                <h3>导出作品</h3>
+                <button id="exportTxtBtn">导出 TXT</button>
+                <button id="exportSvgBtn">导出 SVG</button>
+                <button id="exportPngBtn">导出 PNG</button>
+            </div>
+
+            <div class="share-section">
+                <h3>分享作品</h3>
+                <button id="generateShareLinkBtn">生成分享链接</button>
+                <div id="shareLinkDisplay" style="display: none;">
+                    <input type="text" id="shareLink" readonly>
+                    <button id="copyShareLinkBtn">复制</button>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="asciiConverter.js"></script>
+    <script src="editor.js"></script>
+    <script src="fontRenderer.js"></script>
+    <script src="exporter.js"></script>
+    <script src="share.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
