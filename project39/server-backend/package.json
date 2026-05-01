@@ -1,0 +1,49 @@
+{
+  "name": "content-subscription-backend",
+  "version": "1.0.0",
+  "description": "内容订阅平台后端 - 包含安全漏洞用于演示修复",
+  "type": "module",
+  "scripts": {
+    "dev": "nuxt dev",
+    "build": "nuxt build",
+    "start": "nuxt start",
+    "generate": "nuxt generate",
+    "db:push": "prisma db push",
+    "db:migrate": "prisma migrate dev",
+    "db:studio": "prisma studio",
+    "test": "vitest",
+    "test:coverage": "vitest --coverage",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "@nuxtjs/device": "^3.1.1",
+    "@prisma/client": "^5.10.0",
+    "bcryptjs": "^2.4.3",
+    "bull": "^4.12.2",
+    "date-fns": "^3.3.1",
+    "date-fns-tz": "^2.0.0",
+    "formidable": "^3.5.1",
+    "ioredis": "^5.3.2",
+    "jsonwebtoken": "^9.0.2",
+    "nodemailer": "^6.9.9",
+    "nuxt": "^3.10.0",
+    "uuid": "^9.0.1",
+    "vue": "^3.4.15",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@nuxt/eslint-config": "^0.2.0",
+    "@nuxt/test-utils": "^3.11.0",
+    "@types/bcryptjs": "^2.4.6",
+    "@types/formidable": "^3.4.5",
+    "@types/jsonwebtoken": "^9.0.5",
+    "@types/node": "^20.11.16",
+    "@types/nodemailer": "^6.4.14",
+    "@types/uuid": "^9.0.8",
+    "eslint": "^8.56.0",
+    "prisma": "^5.10.0",
+    "typescript": "^5.3.3",
+    "vitest": "^1.2.2",
+    "@vitest/coverage-v8": "^1.2.2"
+  }
+}
