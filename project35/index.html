@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>原生JavaScript电子表格协作工具</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="spreadsheet-container">
+        <!-- 顶部菜单栏 -->
+        <div class="menu-bar">
+            <div class="menu-item">
+                <div class="menu-title" id="menu-file-title">文件</div>
+                <div class="menu-dropdown" id="menu-file-dropdown" style="display:none;">
+                    <div class="menu-option" id="menu-file-new">新建</div>
+                    <div class="menu-option" id="menu-file-open">打开...</div>
+                    <div class="menu-separator"></div>
+                    <div class="menu-option" id="menu-file-save">保存为 JSON</div>
+                    <div class="menu-option" id="menu-file-save-xlsx">导出为 Excel (.xlsx)</div>
+                    <div class="menu-option" id="menu-file-save-csv">导出为 CSV</div>
+                </div>
+            </div>
+            <div class="menu-item">
+                <div class="menu-title" id="menu-edit-title">编辑</div>
+                <div class="menu-dropdown" id="menu-edit-dropdown" style="display:none;">
+                    <div class="menu-option" id="menu-edit-undo">撤销 (Ctrl+Z)</div>
+                    <div class="menu-option" id="menu-edit-redo">重做 (Ctrl+Y)</div>
+                    <div class="menu-separator"></div>
+                    <div class="menu-option" id="menu-edit-cut">剪切 (Ctrl+X)</div>
+                    <div class="menu-option" id="menu-edit-copy">复制 (Ctrl+C)</div>
+                    <div class="menu-option" id="menu-edit-paste">粘贴 (Ctrl+V)</div>
+                    <div class="menu-option" id="menu-edit-clear">清除内容</div>
+                    <div class="menu-separator"></div>
+                    <div class="menu-option" id="menu-edit-find">查找...</div>
+                    <div class="menu-option" id="menu-edit-replace">替换...</div>
+                </div>
+            </div>
+            <div class="menu-item">
+                <div class="menu-title" id="menu-view-title">视图</div>
+                <div class="menu-dropdown" id="menu-view-dropdown" style="display:none;">
+                    <div class="menu-option" id="menu-view-freeze-top">冻结首行</div>
+                    <div class="menu-option" id="menu-view-freeze-left">冻结首列</div>
+                    <div class="menu-option" id="menu-view-unfreeze">取消冻结</div>
+                    <div class="menu-separator"></div>
+                    <div class="menu-option" id="menu-view-formula-bar">显示/隐藏编辑栏</div>
+                    <div class="menu-option" id="menu-view-status-bar">显示/隐藏状态栏</div>
+                </div>
+            </div>
+            <div class="menu-item">
+                <div class="menu-title" id="menu-insert-title">插入</div>
+                <div class="menu-dropdown" id="menu-insert-dropdown" style="display:none;">
+                    <div class="menu-option" id="menu-insert-chart-line">折线图</div>
+                    <div class="menu-option" id="menu-insert-chart-bar">柱状图</div>
+                    <div class="menu-option" id="menu-insert-chart-pie">饼图</div>
+                    <div class="menu-separator"></div>
+                    <div class="menu-option" id="menu-insert-function">函数...</div>
+                </div>
+            </div>
+            <div class="menu-item">
+                <div class="menu-title" id="menu-format-title">格式</div>
+                <div class="menu-dropdown" id="menu-format-dropdown" style="display:none;">
+                    <div class="menu-option" id="menu-format-bold">加粗 (Ctrl+B)</div>
+                    <div class="menu-option" id="menu-format-italic">斜体 (Ctrl+I)</div>
+                    <div class="menu-option" id="menu-format-underline">下划线 (Ctrl+U)</div>
+                    <div class="menu-separator"></div>
+                    <div class="menu-option" id="menu-format-align-left">左对齐</div>
+                    <div class="menu-option" id="menu-format-align-center">居中对齐</div>
+                    <div class="menu-option" id="menu-format-align-right">右对齐</div>
+                    <div class="menu-option" id="menu-format-wrap-text">自动换行</div>
+                    <div class="menu-separator"></div>
+                    <div class="menu-option" id="menu-format-number">数字格式</div>
+                    <div class="menu-option" id="menu-format-currency">货币格式</div>
+                    <div class="menu-option" id="menu-format-percent">百分比格式</div>
+                    <div class="menu-option" id="menu-format-date">日期格式</div>
+                    <div class="menu-option" id="menu-format-time">时间格式</div>
+                    <div class="menu-separator"></div>
+                    <div class="menu-option" id="menu-format-row-height">行高...</div>
+                    <div class="menu-option" id="menu-format-col-width">列宽...</div>
+                    <div class="menu-separator"></div>
+                    <div class="menu-option" id="menu-format-hide-row">隐藏行</div>
+                    <div class="menu-option" id="menu-format-hide-col">隐藏列</div>
+                    <div class="menu-option" id="menu-format-unhide-rows">取消隐藏行</div>
+                    <div class="menu-option" id="menu-format-unhide-cols">取消隐藏列</div>
+                </div>
+            </div>
+            <div class="menu-item">
+                <div class="menu-title" id="menu-data-title">数据</div>
+                <div class="menu-dropdown" id="menu-data-dropdown" style="display:none;">
+                    <div class="menu-option" id="menu-data-sort-asc">升序排序</div>
+                    <div class="menu-option" id="menu-data-sort-desc">降序排序</div>
+                    <div class="menu-separator"></div>
+                    <div class="menu-option" id="menu-data-filter">筛选</div>
+                    <div class="menu-option" id="menu-data-validation">数据验证...</div>
+                    <div class="menu-separator"></div>
+                    <div class="menu-option" id="menu-data-text-columns">分列...</div>
+                    <div class="menu-option" id="menu-data-remove-duplicates">删除重复值</div>
+                </div>
+            </div>
+            <div class="menu-item">
+                <div class="menu-title" id="menu-tools-title">工具</div>
+                <div class="menu-dropdown" id="menu-tools-dropdown" style="display:none;">
+                    <div class="menu-option" id="menu-tools-conditional">条件格式...</div>
+                    <div class="menu-separator"></div>
+                    <div class="menu-option" id="menu-tools-merge">合并单元格</div>
+                    <div class="menu-option" id="menu-tools-unmerge">拆分单元格</div>
+                </div>
+            </div>
+            <div class="menu-item">
+                <div class="menu-title" id="menu-help-title">帮助</div>
+                <div class="menu-dropdown" id="menu-help-dropdown" style="display:none;">
+                    <div class="menu-option" id="menu-help-about">关于</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 工具栏 -->
+        <div class="toolbar">
+            <div class="toolbar-group">
+                <button class="toolbar-btn" id="btn-bold" title="加粗 (Ctrl+B)">B</button>
+                <button class="toolbar-btn" id="btn-italic" title="斜体 (Ctrl+I)">I</button>
+                <button class="toolbar-btn" id="btn-underline" title="下划线 (Ctrl+U)">U</button>
+            </div>
+            <div class="toolbar-group">
+                <select id="font-family" class="toolbar-select">
+                    <option value="Arial">Arial</option>
+                    <option value="Times New Roman">Times New Roman</option>
+                    <option value="Courier New">Courier New</option>
+                    <option value="微软雅黑">微软雅黑</option>
+                    <option value="宋体">宋体</option>
+                </select>
+                <select id="font-size" class="toolbar-select">
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12" selected>12</option>
+                    <option value="14">14</option>
+                    <option value="16">16</option>
+                    <option value="18">18</option>
+                    <option value="20">20</option>
+                    <option value="24">24</option>
+                </select>
+            </div>
+            <div class="toolbar-group">
+                <button class="toolbar-btn" id="btn-align-left" title="左对齐">
+                    <svg viewBox="0 0 24 24" width="16" height="16"><path d="M3 3h18v2H3V3zm0 4h12v2H3V7zm0 4h18v2H3v-2zm0 4h12v2H3v-2zm0 4h18v2H3v-2z"/></svg>
+                </button>
+                <button class="toolbar-btn" id="btn-align-center" title="居中对齐">
+                    <svg viewBox="0 0 24 24" width="16" height="16"><path d="M3 3h18v2H3V3zm3 4h12v2H6V7zm-3 4h18v2H3v-2zm3 4h12v2H6v-2zm-3 4h18v2H3v-2z"/></svg>
+                </button>
+                <button class="toolbar-btn" id="btn-align-right" title="右对齐">
+                    <svg viewBox="0 0 24 24" width="16" height="16"><path d="M3 3h18v2H3V3zm6 4h12v2H9V7zm-6 4h18v2H3v-2zm6 4h12v2H9v-2zm-6 4h18v2H3v-2z"/></svg>
+                </button>
+            </div>
+            <div class="toolbar-group">
+                <button class="toolbar-btn" id="btn-merge" title="合并单元格">合并</button>
+                <button class="toolbar-btn" id="btn-unmerge" title="拆分单元格">拆分</button>
+            </div>
+            <div class="toolbar-group">
+                <input type="color" id="bg-color" value="#ffffff" title="背景颜色">
+                <input type="color" id="text-color" value="#000000" title="文字颜色">
+            </div>
+            <div class="toolbar-group">
+                <button class="toolbar-btn" id="btn-freeze" title="冻结窗格">冻结</button>
+                <button class="toolbar-btn" id="btn-conditional" title="条件格式">条件格式</button>
+                <button class="toolbar-btn" id="btn-validation" title="数据验证">数据验证</button>
+            </div>
+            <div class="toolbar-group">
+                <button class="toolbar-btn" id="btn-chart-line" title="插入折线图">折线图</button>
+                <button class="toolbar-btn" id="btn-chart-bar" title="插入柱状图">柱状图</button>
+                <button class="toolbar-btn" id="btn-chart-pie" title="插入饼图">饼图</button>
+            </div>
+            <div class="toolbar-group">
+                <button class="toolbar-btn" id="btn-import" title="导入文件">导入</button>
+                <button class="toolbar-btn" id="btn-export" title="导出文件">导出</button>
+            </div>
+        </div>
+        
+        <!-- 公式栏 -->
+        <div class="formula-bar">
+            <div class="name-box" id="name-box">A1</div>
+            <div class="formula-label">fx</div>
+            <input type="text" class="formula-input" id="formula-input" placeholder="输入值或公式">
+        </div>
+        
+        <!-- 电子表格主体 -->
+        <div class="spreadsheet-body">
+            <!-- 左上角交叉按钮 -->
+            <div class="corner-button" id="corner-button"></div>
+            
+            <!-- 列标题 -->
+            <div class="column-header" id="column-header">
+                <div class="column-header-scroll">
+                    <div class="column-header-container" id="column-header-container"></div>
+                </div>
+            </div>
+            
+            <!-- 行标题 -->
+            <div class="row-header" id="row-header">
+                <div class="row-header-scroll">
+                    <div class="row-header-container" id="row-header-container"></div>
+                </div>
+            </div>
+            
+            <!-- 主网格 -->
+            <div class="grid-container" id="grid-container">
+                <canvas class="grid-canvas" id="grid-canvas"></canvas>
+                <input type="text" class="cell-editor" id="cell-editor" style="display:none;">
+                
+                <!-- 冻结层（左上角） -->
+                <div class="frozen-top-left" id="frozen-top-left">
+                    <canvas class="frozen-canvas" id="frozen-canvas-tl"></canvas>
+                </div>
+                
+                <!-- 冻结层（顶部） -->
+                <div class="frozen-top" id="frozen-top">
+                    <canvas class="frozen-canvas" id="frozen-canvas-t"></canvas>
+                </div>
+                
+                <!-- 冻结层（左侧） -->
+                <div class="frozen-left" id="frozen-left">
+                    <canvas class="frozen-canvas" id="frozen-canvas-l"></canvas>
+                </div>
+            </div>
+            
+            <!-- 滚动条 -->
+            <div class="scrollbar-horizontal" id="scrollbar-h">
+                <div class="scrollbar-thumb" id="scrollbar-thumb-h"></div>
+            </div>
+            <div class="scrollbar-vertical" id="scrollbar-v">
+                <div class="scrollbar-thumb" id="scrollbar-thumb-v"></div>
+            </div>
+        </div>
+        
+        <!-- 图表容器 -->
+        <div class="chart-container" id="chart-container" style="display:none;">
+            <div class="chart-title-bar">
+                <span class="chart-title" id="chart-title">图表</span>
+                <button class="chart-close" id="chart-close">×</button>
+            </div>
+            <canvas class="chart-canvas" id="chart-canvas"></canvas>
+        </div>
+        
+        <!-- 协作状态栏 -->
+        <div class="collaboration-status" id="collaboration-status">
+            <span class="connection-status" id="connection-status">● 未连接</span>
+            <div class="user-cursors" id="user-cursors"></div>
+        </div>
+        
+        <!-- 底部状态栏 -->
+        <div class="status-bar">
+            <div class="status-left" id="status-left">就绪</div>
+            <div class="status-right">
+                <span id="selection-info">选择: 1×1</span>
+                <span id="sum-display">求和: 0</span>
+                <span id="avg-display">平均值: 0</span>
+                <span id="count-display">计数: 0</span>
+            </div>
+        </div>
+        
+        <!-- 上下文菜单 -->
+        <div class="context-menu" id="context-menu" style="display:none;">
+            <div class="context-menu-item" data-action="cut">剪切 (Ctrl+X)</div>
+            <div class="context-menu-item" data-action="copy">复制 (Ctrl+C)</div>
+            <div class="context-menu-item" data-action="paste">粘贴 (Ctrl+V)</div>
+            <div class="context-menu-divider"></div>
+            <div class="context-menu-item" data-action="insert-row">插入行</div>
+            <div class="context-menu-item" data-action="insert-column">插入列</div>
+            <div class="context-menu-item" data-action="delete-row">删除行</div>
+            <div class="context-menu-item" data-action="delete-column">删除列</div>
+            <div class="context-menu-item" data-action="hide-row">隐藏行</div>
+            <div class="context-menu-item" data-action="hide-column">隐藏列</div>
+            <div class="context-menu-divider"></div>
+            <div class="context-menu-item" data-action="merge">合并单元格</div>
+            <div class="context-menu-item" data-action="unmerge">拆分单元格</div>
+            <div class="context-menu-divider"></div>
+            <div class="context-menu-item" data-action="format">设置单元格格式</div>
+        </div>
+        
+        <!-- 条件格式对话框 -->
+        <div class="modal" id="conditional-modal" style="display:none;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>条件格式</h3>
+                    <button class="modal-close" id="conditional-close">×</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>条件类型:</label>
+                        <select id="conditional-type">
+                            <option value="cell-value">单元格值</option>
+                            <option value="formula">公式</option>
+                            <option value="data-bar">数据条</option>
+                            <option value="color-scale">色阶</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="conditional-cell-value">
+                        <label>运算符:</label>
+                        <select id="conditional-operator">
+                            <option value="between">介于</option>
+                            <option value="not-between">不介于</option>
+                            <option value="equal">等于</option>
+                            <option value="not-equal">不等于</option>
+                            <option value="greater">大于</option>
+                            <option value="less">小于</option>
+                            <option value="greater-equal">大于等于</option>
+                            <option value="less-equal">小于等于</option>
+                        </select>
+                        <input type="text" id="conditional-value1" placeholder="值1">
+                        <input type="text" id="conditional-value2" placeholder="值2" style="display:none;">
+                    </div>
+                    <div class="form-group" id="conditional-formula" style="display:none;">
+                        <label>公式:</label>
+                        <input type="text" id="conditional-formula-input" placeholder="=公式">
+                    </div>
+                    <div class="form-group">
+                        <label>设置格式:</label>
+                        <div class="format-preview" id="conditional-preview">预览</div>
+                        <input type="color" id="conditional-bg" value="#ffffff" title="背景颜色">
+                        <input type="color" id="conditional-fg" value="#000000" title="文字颜色">
+                        <label><input type="checkbox" id="conditional-bold"> 加粗</label>
+                        <label><input type="checkbox" id="conditional-italic"> 斜体</label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn-primary" id="conditional-add">添加规则</button>
+                    <button class="btn-secondary" id="conditional-cancel">取消</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 数据验证对话框 -->
+        <div class="modal" id="validation-modal" style="display:none;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>数据验证</h3>
+                    <button class="modal-close" id="validation-close">×</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>允许类型:</label>
+                        <select id="validation-type">
+                            <option value="any">任何值</option>
+                            <option value="integer">整数</option>
+                            <option value="decimal">小数</option>
+                            <option value="list">序列</option>
+                            <option value="date">日期</option>
+                            <option value="time">时间</option>
+                            <option value="text-length">文本长度</option>
+                            <option value="custom">自定义</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="validation-conditions">
+                        <label>数据:</label>
+                        <select id="validation-operator">
+                            <option value="between">介于</option>
+                            <option value="not-between">不介于</option>
+                            <option value="equal">等于</option>
+                            <option value="not-equal">不等于</option>
+                            <option value="greater">大于</option>
+                            <option value="less">小于</option>
+                            <option value="greater-equal">大于等于</option>
+                            <option value="less-equal">小于等于</option>
+                        </select>
+                        <input type="text" id="validation-value1" placeholder="最小值">
+                        <input type="text" id="validation-value2" placeholder="最大值" style="display:none;">
+                    </div>
+                    <div class="form-group" id="validation-list" style="display:none;">
+                        <label>来源 (用逗号分隔):</label>
+                        <input type="text" id="validation-source" placeholder="选项1,选项2,选项3">
+                        <label><input type="checkbox" id="validation-dropdown" checked> 提供下拉箭头</label>
+                    </div>
+                    <div class="form-group">
+                        <label><input type="checkbox" id="validation-blank" checked> 忽略空值</label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn-primary" id="validation-save">确定</button>
+                    <button class="btn-secondary" id="validation-cancel">取消</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 导入导出对话框 -->
+        <div class="modal" id="import-modal" style="display:none;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>导入文件</h3>
+                    <button class="modal-close" id="import-close">×</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>选择文件:</label>
+                        <input type="file" id="import-file" accept=".xlsx,.xls,.csv,.json">
+                    </div>
+                    <div class="form-group">
+                        <label>支持格式:</label>
+                        <div class="format-info">
+                            <span>Excel (.xlsx, .xls)</span>
+                            <span>CSV (.csv)</span>
+                            <span>JSON (.json)</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn-primary" id="import-confirm">导入</button>
+                    <button class="btn-secondary" id="import-cancel">取消</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="modal" id="export-modal" style="display:none;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>导出文件</h3>
+                    <button class="modal-close" id="export-close">×</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>导出格式:</label>
+                        <select id="export-format">
+                            <option value="xlsx">Excel (.xlsx)</option>
+                            <option value="csv">CSV (.csv)</option>
+                            <option value="json">JSON (.json)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>文件名:</label>
+                        <input type="text" id="export-filename" value="spreadsheet">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn-primary" id="export-confirm">导出</button>
+                    <button class="btn-secondary" id="export-cancel">取消</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 图表配置对话框 -->
+        <div class="modal" id="chart-modal" style="display:none;">
+            <div class="modal-content" style="width: 500px;">
+                <div class="modal-header">
+                    <h3>创建图表</h3>
+                    <button class="modal-close" id="chart-modal-close">×</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>图表类型:</label>
+                        <select id="chart-modal-type">
+                            <option value="line">折线图</option>
+                            <option value="bar">柱状图</option>
+                            <option value="pie">饼图</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>数据区域:</label>
+                        <input type="text" id="chart-modal-range" placeholder="例如: A1:E5" style="width: 100%;">
+                        <small style="color: #666;">选择数据区域，第一行为标题，第一列为标签</small>
+                    </div>
+                    <div class="form-group">
+                        <label><input type="checkbox" id="chart-modal-has-header" checked> 首行为标题</label>
+                        <label><input type="checkbox" id="chart-modal-has-labels" checked> 首列为标签</label>
+                    </div>
+                    <div class="form-group">
+                        <label>预览:</label>
+                        <div class="chart-preview" style="border: 1px solid #ccc; height: 200px; background: #f9f9f9; display: flex; align-items: center; justify-content: center;">
+                            <span style="color: #999;">选择数据后预览图表</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn-primary" id="chart-modal-create">创建图表</button>
+                    <button class="btn-secondary" id="chart-modal-cancel">取消</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 筛选对话框 -->
+        <div class="modal" id="filter-modal" style="display:none;">
+            <div class="modal-content" style="width: 450px;">
+                <div class="modal-header">
+                    <h3>数据筛选</h3>
+                    <button class="modal-close" id="filter-modal-close">×</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>筛选列:</label>
+                        <select id="filter-column">
+                            <option value="">选择列</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>筛选条件:</label>
+                        <select id="filter-operator">
+                            <option value="equal">等于</option>
+                            <option value="not-equal">不等于</option>
+                            <option value="greater">大于</option>
+                            <option value="less">小于</option>
+                            <option value="greater-equal">大于等于</option>
+                            <option value="less-equal">小于等于</option>
+                            <option value="between">介于</option>
+                            <option value="not-between">不介于</option>
+                            <option value="contains">包含</option>
+                            <option value="starts-with">开头是</option>
+                            <option value="ends-with">结尾是</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>条件值1:</label>
+                        <input type="text" id="filter-value1" placeholder="输入值">
+                    </div>
+                    <div class="form-group" id="filter-value2-group" style="display:none;">
+                        <label>条件值2:</label>
+                        <input type="text" id="filter-value2" placeholder="输入值">
+                    </div>
+                    <div class="form-group">
+                        <label><input type="checkbox" id="filter-apply-selection" checked> 仅应用于当前选中区域</label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn-primary" id="filter-apply">应用筛选</button>
+                    <button class="btn-secondary" id="filter-clear">清除筛选</button>
+                    <button class="btn-secondary" id="filter-cancel">取消</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 循环引用警告 -->
+        <div class="notification" id="circular-warning" style="display:none;">
+            <span class="notification-icon">⚠</span>
+            <span class="notification-message">检测到循环引用，公式可能无法正确计算</span>
+            <button class="notification-close" id="circular-close">×</button>
+        </div>
+    </div>
+    
+    <!-- 引入SheetJS用于Excel导入导出 -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    
+    <!-- 引入应用脚本 -->
+    <script src="app.js"></script>
+</body>
+</html>
