@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>用户管理系统 - 传统jQuery版本</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+</head>
+<body>
+    <div id="app">
+        <!-- Header -->
+        <header id="header">
+            <div class="container">
+                <h1>用户管理系统</h1>
+                <nav id="nav">
+                    <ul>
+                        <li><a href="#" data-page="dashboard">首页</a></li>
+                        <li><a href="#" data-page="users">用户管理</a></li>
+                        <li><a href="#" data-page="roles">角色管理</a></li>
+                        <li><a href="#" data-page="permissions">权限管理</a></li>
+                        <li><a href="#" data-page="settings">系统设置</a></li>
+                    </ul>
+                </nav>
+                <div id="user-info">
+                    <span id="current-user"></span>
+                    <button id="logout-btn">退出登录</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main id="main">
+            <div class="container">
+                <!-- Login Page -->
+                <div id="login-page" class="page">
+                    <div class="login-box">
+                        <h2>系统登录</h2>
+                        <form id="login-form">
+                            <div class="form-group">
+                                <label for="login-username">用户名</label>
+                                <input type="text" id="login-username" name="username" placeholder="请输入用户名">
+                                <span class="error-message" data-field="username"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="login-password">密码</label>
+                                <input type="password" id="login-password" name="password" placeholder="请输入密码">
+                                <span class="error-message" data-field="password"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="login-remember">
+                                    <input type="checkbox" id="login-remember" name="remember">
+                                    记住我
+                                </label>
+                            </div>
+                            <button type="submit" class="btn btn-primary">登录</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Dashboard Page -->
+                <div id="dashboard-page" class="page hidden">
+                    <h2>仪表盘</h2>
+                    <div class="dashboard-stats">
+                        <div class="stat-card">
+                            <div class="stat-value" id="stat-total-users">0</div>
+                            <div class="stat-label">总用户数</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="stat-active-users">0</div>
+                            <div class="stat-label">活跃用户</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="stat-total-roles">0</div>
+                            <div class="stat-label">角色数量</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="stat-pending-requests">0</div>
+                            <div class="stat-label">待处理请求</div>
+                        </div>
+                    </div>
+                    <div class="recent-activity">
+                        <h3>最近活动</h3>
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>操作</th>
+                                    <th>用户</th>
+                                    <th>时间</th>
+                                    <th>状态</th>
+                                </tr>
+                            </thead>
+                            <tbody id="activity-list">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Users Page -->
+                <div id="users-page" class="page hidden">
+                    <div class="page-header">
+                        <h2>用户管理</h2>
+                        <button id="add-user-btn" class="btn btn-primary">添加用户</button>
+                    </div>
+                    
+                    <!-- Search and Filter -->
+                    <div class="filter-section">
+                        <input type="text" id="user-search" placeholder="搜索用户名、邮箱...">
+                        <select id="user-status-filter">
+                            <option value="">全部状态</option>
+                            <option value="active">激活</option>
+                            <option value="inactive">禁用</option>
+                            <option value="pending">待审核</option>
+                        </select>
+                        <select id="user-role-filter">
+                            <option value="">全部角色</option>
+                        </select>
+                    </div>
+
+                    <!-- Users Table -->
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th><input type="checkbox" id="select-all-users"></th>
+                                    <th>ID</th>
+                                    <th>用户名</th>
+                                    <th>邮箱</th>
+                                    <th>角色</th>
+                                    <th>状态</th>
+                                    <th>创建时间</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="users-list">
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Pagination -->
+                    <div class="pagination" id="users-pagination">
+                    </div>
+
+                    <!-- User Form Modal -->
+                    <div id="user-modal" class="modal">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h3 id="user-modal-title">添加用户</h3>
+                                <span class="modal-close">&times;</span>
+                            </div>
+                            <form id="user-form">
+                                <input type="hidden" id="user-id">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="user-username">用户名 <span class="required">*</span></label>
+                                        <input type="text" id="user-username" name="username" placeholder="请输入用户名">
+                                        <span class="error-message" data-field="username"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="user-email">邮箱 <span class="required">*</span></label>
+                                        <input type="email" id="user-email" name="email" placeholder="请输入邮箱">
+                                        <span class="error-message" data-field="email"></span>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="user-password">密码 <span class="required">*</span></label>
+                                        <input type="password" id="user-password" name="password" placeholder="请输入密码">
+                                        <span class="error-message" data-field="password"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="user-confirm-password">确认密码 <span class="required">*</span></label>
+                                        <input type="password" id="user-confirm-password" name="confirmPassword" placeholder="请再次输入密码">
+                                        <span class="error-message" data-field="confirmPassword"></span>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="user-role">角色 <span class="required">*</span></label>
+                                        <select id="user-role" name="roleId">
+                                            <option value="">请选择角色</option>
+                                        </select>
+                                        <span class="error-message" data-field="roleId"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="user-status">状态</label>
+                                        <select id="user-status" name="status">
+                                            <option value="active">激活</option>
+                                            <option value="inactive">禁用</option>
+                                            <option value="pending">待审核</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="user-phone">手机号</label>
+                                    <input type="tel" id="user-phone" name="phone" placeholder="请输入手机号">
+                                    <span class="error-message" data-field="phone"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="user-address">地址</label>
+                                    <textarea id="user-address" name="address" rows="3" placeholder="请输入地址"></textarea>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default modal-cancel">取消</button>
+                                    <button type="submit" class="btn btn-primary">保存</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Delete Confirmation Modal -->
+                    <div id="delete-modal" class="modal">
+                        <div class="modal-content modal-small">
+                            <div class="modal-header">
+                                <h3>确认删除</h3>
+                                <span class="modal-close">&times;</span>
+                            </div>
+                            <div class="modal-body">
+                                <p id="delete-message">确定要删除该用户吗？此操作无法撤销。</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default modal-cancel">取消</button>
+                                <button type="button" class="btn btn-danger" id="confirm-delete-btn">删除</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Roles Page -->
+                <div id="roles-page" class="page hidden">
+                    <div class="page-header">
+                        <h2>角色管理</h2>
+                        <button id="add-role-btn" class="btn btn-primary">添加角色</button>
+                    </div>
+                    
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>角色名称</th>
+                                    <th>角色代码</th>
+                                    <th>描述</th>
+                                    <th>用户数量</th>
+                                    <th>状态</th>
+                                    <th>创建时间</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="roles-list">
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Role Form Modal -->
+                    <div id="role-modal" class="modal">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h3 id="role-modal-title">添加角色</h3>
+                                <span class="modal-close">&times;</span>
+                            </div>
+                            <form id="role-form">
+                                <input type="hidden" id="role-id">
+                                <div class="form-group">
+                                    <label for="role-name">角色名称 <span class="required">*</span></label>
+                                    <input type="text" id="role-name" name="name" placeholder="请输入角色名称">
+                                    <span class="error-message" data-field="name"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="role-code">角色代码 <span class="required">*</span></label>
+                                    <input type="text" id="role-code" name="code" placeholder="请输入角色代码（如：admin, editor）">
+                                    <span class="error-message" data-field="code"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="role-description">描述</label>
+                                    <textarea id="role-description" name="description" rows="3" placeholder="请输入角色描述"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label>权限配置</label>
+                                    <div id="permissions-tree" class="permissions-tree">
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default modal-cancel">取消</button>
+                                    <button type="submit" class="btn btn-primary">保存</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Permissions Page -->
+                <div id="permissions-page" class="page hidden">
+                    <div class="page-header">
+                        <h2>权限管理</h2>
+                        <button id="add-permission-btn" class="btn btn-primary">添加权限</button>
+                    </div>
+                    
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>权限名称</th>
+                                    <th>权限代码</th>
+                                    <th>资源类型</th>
+                                    <th>父级权限</th>
+                                    <th>状态</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="permissions-list">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Settings Page -->
+                <div id="settings-page" class="page hidden">
+                    <h2>系统设置</h2>
+                    <div class="settings-tabs">
+                        <button class="tab-btn active" data-tab="general">通用设置</button>
+                        <button class="tab-btn" data-tab="security">安全设置</button>
+                        <button class="tab-btn" data-tab="email">邮件设置</button>
+                        <button class="tab-btn" data-tab="notification">通知设置</button>
+                    </div>
+
+                    <!-- General Settings -->
+                    <div id="general-settings" class="settings-content">
+                        <form id="general-settings-form">
+                            <div class="form-group">
+                                <label for="site-name">网站名称</label>
+                                <input type="text" id="site-name" name="siteName" value="用户管理系统">
+                            </div>
+                            <div class="form-group">
+                                <label for="site-description">网站描述</label>
+                                <textarea id="site-description" name="siteDescription" rows="3">这是一个功能强大的用户管理系统</textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="default-language">默认语言</label>
+                                <select id="default-language" name="defaultLanguage">
+                                    <option value="zh-CN">简体中文</option>
+                                    <option value="en-US">English</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="default-theme">默认主题</label>
+                                <select id="default-theme" name="defaultTheme">
+                                    <option value="light">浅色</option>
+                                    <option value="dark">深色</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary">保存设置</button>
+                        </form>
+                    </div>
+
+                    <!-- Security Settings -->
+                    <div id="security-settings" class="settings-content hidden">
+                        <form id="security-settings-form">
+                            <div class="form-group">
+                                <label for="session-timeout">会话超时（分钟）</label>
+                                <input type="number" id="session-timeout" name="sessionTimeout" value="30" min="5" max="120">
+                            </div>
+                            <div class="form-group">
+                                <label for="max-login-attempts">最大登录尝试次数</label>
+                                <input type="number" id="max-login-attempts" name="maxLoginAttempts" value="5" min="1" max="10">
+                            </div>
+                            <div class="form-group">
+                                <label for="password-min-length">密码最小长度</label>
+                                <input type="number" id="password-min-length" name="passwordMinLength" value="8" min="6" max="20">
+                            </div>
+                            <div class="form-group">
+                                <label>
+                                    <input type="checkbox" id="require-mfa" name="requireMFA">
+                                    要求双因素认证
+                                </label>
+                            </div>
+                            <button type="submit" class="btn btn-primary">保存设置</button>
+                        </form>
+                    </div>
+
+                    <!-- Email Settings -->
+                    <div id="email-settings" class="settings-content hidden">
+                        <form id="email-settings-form">
+                            <div class="form-group">
+                                <label for="smtp-host">SMTP服务器</label>
+                                <input type="text" id="smtp-host" name="smtpHost" value="smtp.example.com">
+                            </div>
+                            <div class="form-group">
+                                <label for="smtp-port">SMTP端口</label>
+                                <input type="number" id="smtp-port" name="smtpPort" value="587">
+                            </div>
+                            <div class="form-group">
+                                <label for="smtp-username">SMTP用户名</label>
+                                <input type="email" id="smtp-username" name="smtpUsername" value="admin@example.com">
+                            </div>
+                            <div class="form-group">
+                                <label for="smtp-password">SMTP密码</label>
+                                <input type="password" id="smtp-password" name="smtpPassword">
+                            </div>
+                            <button type="submit" class="btn btn-primary">保存设置</button>
+                            <button type="button" class="btn btn-default" id="test-email-btn">测试邮件</button>
+                        </form>
+                    </div>
+
+                    <!-- Notification Settings -->
+                    <div id="notification-settings" class="settings-content hidden">
+                        <form id="notification-settings-form">
+                            <div class="form-group">
+                                <label>
+                                    <input type="checkbox" id="notify-user-created" name="notifyUserCreated" checked>
+                                    新用户创建时发送通知
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label>
+                                    <input type="checkbox" id="notify-user-updated" name="notifyUserUpdated">
+                                    用户信息更新时发送通知
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label>
+                                    <input type="checkbox" id="notify-user-deleted" name="notifyUserDeleted" checked>
+                                    用户删除时发送通知
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label>
+                                    <input type="checkbox" id="notify-system-error" name="notifySystemError" checked>
+                                    系统错误时发送通知
+                                </label>
+                            </div>
+                            <button type="submit" class="btn btn-primary">保存设置</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer id="footer">
+            <div class="container">
+                <p>&copy; 2026 用户管理系统 - 传统jQuery版本</p>
+            </div>
+        </footer>
+
+        <!-- Toast Notification -->
+        <div id="toast-container">
+            <div id="toast" class="toast hidden">
+                <span id="toast-message"></span>
+            </div>
+        </div>
+
+        <!-- Loading Overlay -->
+        <div id="loading-overlay" class="hidden">
+            <div class="loading-spinner"></div>
+        </div>
+    </div>
+
+    <script src="js/utils.js"></script>
+    <script src="js/validation.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/dashboard.js"></script>
+    <script src="js/users.js"></script>
+    <script src="js/roles.js"></script>
+    <script src="js/permissions.js"></script>
+    <script src="js/settings.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
