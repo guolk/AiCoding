@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>正则表达式调试工具</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>正则表达式调试工具</h1>
+            <div class="language-selector">
+                <label for="language">正则语言：</label>
+                <select id="language">
+                    <option value="javascript">JavaScript</option>
+                    <option value="python">Python</option>
+                    <option value="go">Go</option>
+                </select>
+            </div>
+        </header>
+        
+        <main>
+            <div class="main-content">
+                <div class="left-panel">
+                    <div class="panel-header">
+                        <h2>正则表达式</h2>
+                        <div class="flags">
+                            <label class="flag-item">
+                                <input type="checkbox" id="flag-global" checked>
+                                <span>g</span>
+                            </label>
+                            <label class="flag-item">
+                                <input type="checkbox" id="flag-caseinsensitive">
+                                <span>i</span>
+                            </label>
+                            <label class="flag-item">
+                                <input type="checkbox" id="flag-multiline">
+                                <span>m</span>
+                            </label>
+                            <label class="flag-item">
+                                <input type="checkbox" id="flag-dotall">
+                                <span>s</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="regex-input-container">
+                        <input type="text" id="regex-input" placeholder="输入正则表达式，例如：(\w+)\s+(\d+)" autocomplete="off">
+                        <div id="regex-highlight"></div>
+                    </div>
+                    <div id="regex-error" class="error-message hidden"></div>
+                    
+                    <div class="templates">
+                        <h3>常用模板</h3>
+                        <div class="template-grid" id="template-grid">
+                            <!-- 模板将通过JS填充 -->
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="right-panel">
+                    <h2>测试文本</h2>
+                    <div class="test-text-container">
+                        <textarea id="test-input" placeholder="输入要测试的文本"></textarea>
+                        <div id="test-highlight"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="results-section">
+                <div class="tabs">
+                    <button class="tab-button active" data-tab="matches">匹配结果</button>
+                    <button class="tab-button" data-tab="replace">替换预览</button>
+                    <button class="tab-button" data-tab="visualization">可视化解析</button>
+                    <button class="tab-button" data-tab="syntax">语法提示</button>
+                </div>
+                
+                <div class="tab-content">
+                    <div id="tab-matches" class="tab-panel active">
+                        <div class="matches-summary" id="matches-summary"></div>
+                        <div class="matches-list" id="matches-list"></div>
+                    </div>
+                    
+                    <div id="tab-replace" class="tab-panel hidden">
+                        <div class="replace-section">
+                            <label for="replace-input">替换模板：</label>
+                            <input type="text" id="replace-input" placeholder="例如：$1_$2">
+                        </div>
+                        <div class="replace-preview">
+                            <h3>替换结果预览</h3>
+                            <div id="replace-output"></div>
+                        </div>
+                    </div>
+                    
+                    <div id="tab-visualization" class="tab-panel hidden">
+                        <div class="visualization-container">
+                            <svg id="visualization-svg" width="100%" height="400"></svg>
+                        </div>
+                    </div>
+                    
+                    <div id="tab-syntax" class="tab-panel hidden">
+                        <div id="syntax-info" class="syntax-info"></div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <script src="app.js"></script>
+</body>
+</html>
