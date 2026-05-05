@@ -1,0 +1,496 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f5f5;
+    color: #333;
+}
+
+.app-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 12px 24px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.toolbar-left h1 {
+    color: white;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.toolbar-right {
+    display: flex;
+    gap: 10px;
+}
+
+.btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.btn-primary {
+    background-color: #4a90e2;
+    color: white;
+}
+
+.btn-success {
+    background-color: #5cb85c;
+    color: white;
+}
+
+.btn-info {
+    background-color: #5bc0de;
+    color: white;
+}
+
+.btn-warning {
+    background-color: #f0ad4e;
+    color: white;
+}
+
+.btn-danger {
+    background-color: #d9534f;
+    color: white;
+}
+
+.btn-small {
+    padding: 4px 8px;
+    font-size: 12px;
+}
+
+.main-content {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+
+.control-panel {
+    width: 280px;
+    background-color: white;
+    border-right: 1px solid #e0e0e0;
+    overflow-y: auto;
+    padding: 16px;
+}
+
+.panel-section {
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #eee;
+}
+
+.panel-section:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.panel-section h3 {
+    font-size: 14px;
+    font-weight: 600;
+    color: #666;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.duration-controls,
+.type-controls,
+.accidental-controls,
+.tie-controls,
+.edit-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.duration-btn,
+.type-btn,
+.accidental-btn,
+.tie-btn {
+    flex: 1;
+    min-width: 80px;
+    padding: 8px 12px;
+    border: 2px solid #ddd;
+    background-color: white;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: all 0.2s ease;
+}
+
+.duration-btn:hover,
+.type-btn:hover,
+.accidental-btn:hover,
+.tie-btn:hover {
+    border-color: #667eea;
+}
+
+.duration-btn.active,
+.type-btn.active,
+.accidental-btn.active,
+.tie-btn.active {
+    background-color: #667eea;
+    color: white;
+    border-color: #667eea;
+}
+
+.playback-controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+.play-btn,
+.stop-btn {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.play-btn {
+    background-color: #5cb85c;
+    color: white;
+}
+
+.play-btn:hover {
+    background-color: #4cae4c;
+}
+
+.stop-btn {
+    background-color: #d9534f;
+    color: white;
+}
+
+.stop-btn:hover {
+    background-color: #c9302c;
+}
+
+.tempo-control,
+.instrument-control {
+    margin-bottom: 12px;
+}
+
+.tempo-control label,
+.instrument-control label {
+    display: block;
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 6px;
+}
+
+#tempoSlider {
+    width: 100%;
+}
+
+#instrumentSelect {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 13px;
+}
+
+.track-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.track-header {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 8px;
+    font-size: 12px;
+    color: #666;
+    font-weight: 600;
+}
+
+.track-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.track-item {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 8px;
+    align-items: center;
+    padding: 8px;
+    background-color: #f9f9f9;
+    border-radius: 4px;
+    border: 2px solid transparent;
+}
+
+.track-item.active {
+    border-color: #667eea;
+    background-color: #f0f4ff;
+}
+
+.track-name {
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.track-volume {
+    width: 100%;
+}
+
+.track-mute {
+    width: 100%;
+    padding: 4px;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.editor-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: #fafafa;
+    overflow: hidden;
+}
+
+.score-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 16px 24px;
+    background-color: white;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+#scoreTitle {
+    font-size: 1.5rem;
+    font-weight: 600;
+    border: none;
+    border-bottom: 2px solid transparent;
+    padding: 4px 8px;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+#scoreTitle:focus {
+    border-bottom-color: #667eea;
+}
+
+.key-signature,
+.time-signature {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.key-signature label,
+.time-signature label {
+    font-size: 13px;
+    color: #666;
+}
+
+.key-signature select,
+.time-signature select {
+    padding: 6px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 13px;
+    outline: none;
+}
+
+.key-signature select:focus,
+.time-signature select:focus {
+    border-color: #667eea;
+}
+
+.score-container {
+    flex: 1;
+    overflow: auto;
+    padding: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.score-canvas-wrapper {
+    position: relative;
+    background-color: white;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    border-radius: 4px;
+}
+
+#scoreCanvas {
+    display: block;
+    cursor: crosshair;
+}
+
+.click-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    cursor: crosshair;
+    pointer-events: none;
+}
+
+.score-footer {
+    background-color: white;
+    border-top: 1px solid #e0e0e0;
+    padding: 8px 24px;
+}
+
+.status-bar {
+    display: flex;
+    gap: 30px;
+    font-size: 13px;
+    color: #666;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.modal.show {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: white;
+    padding: 24px;
+    border-radius: 8px;
+    width: 500px;
+    max-height: 80vh;
+    overflow-y: auto;
+    position: relative;
+}
+
+.close {
+    position: absolute;
+    right: 16px;
+    top: 12px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #666;
+    cursor: pointer;
+}
+
+.close:hover {
+    color: #333;
+}
+
+.modal-content h2 {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.score-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.score-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    background-color: #f9f9f9;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.score-item:hover {
+    background-color: #f0f4ff;
+}
+
+.score-item-info h4 {
+    margin-bottom: 4px;
+    color: #333;
+}
+
+.score-item-info p {
+    font-size: 12px;
+    color: #666;
+}
+
+.score-item-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #a1a1a1;
+}
