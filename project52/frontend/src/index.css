@@ -1,0 +1,111 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background-color: #f0f2f5;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+.ant-layout {
+  min-height: 100vh;
+}
+
+.logo {
+  height: 32px;
+  margin: 16px;
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.page-header {
+  margin-bottom: 24px;
+}
+
+.card-shadow {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03), 0 2px 4px rgba(0, 0, 0, 0.03);
+}
+
+.stat-card {
+  text-align: center;
+  padding: 16px;
+}
+
+.stat-value {
+  font-size: 28px;
+  font-weight: bold;
+  color: #1890ff;
+}
+
+.stat-label {
+  color: #666;
+  margin-top: 4px;
+}
+
+.matrix-cell {
+  padding: 16px;
+  text-align: center;
+  border: 1px solid #e8e8e8;
+  min-height: 100px;
+}
+
+.matrix-cell-high {
+  background-color: #f6ffed;
+  border-color: #b7eb8f;
+}
+
+.matrix-cell-medium {
+  background-color: #fffbe6;
+  border-color: #ffe58f;
+}
+
+.matrix-cell-low {
+  background-color: #fff2f0;
+  border-color: #ffccc7;
+}
+
+.platform-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  color: white;
+}
+
+.platform-bilibili { background-color: #00a1d6; }
+.platform-douyin { background-color: #000; }
+.platform-xiaohongshu { background-color: #ff2442; }
+.platform-wechat { background-color: #07c160; }
+.platform-youtube { background-color: #ff0000; }
+
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.login-card {
+  width: 400px;
+  padding: 32px;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+.login-title {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.menu-item-icon {
+  margin-right: 8px;
+}
