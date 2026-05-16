@@ -1,0 +1,213 @@
+@import 'react-quill/dist/quill.snow.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  user-select: auto;
+  -webkit-user-select: auto;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: linear-gradient(135deg, #fdf4ff 0%, #fae8ff 50%, #f5d0fe 100%);
+  min-height: 100vh;
+}
+
+.ql-container {
+  min-height: 300px;
+  background: white;
+  border-bottom-left-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+.ql-editor {
+  min-height: 300px;
+  font-size: 16px;
+  line-height: 1.6;
+  position: relative;
+  z-index: 2;
+  cursor: text;
+}
+
+.ql-editor:focus {
+  outline: none;
+}
+
+.ql-toolbar {
+  border-top-left-radius: 0.5rem;
+  border-top-right-radius: 0.5rem;
+  background: #fafafa;
+  position: relative;
+  z-index: 2;
+}
+
+.ql-toolbar button {
+  cursor: pointer;
+}
+
+.ql-toolbar button:hover {
+  color: #d946ef;
+  fill: #d946ef;
+}
+
+.diary-editor {
+  position: relative;
+  z-index: 100;
+}
+
+.diary-editor .ql-container {
+  pointer-events: auto;
+}
+
+.diary-editor .ql-editor {
+  pointer-events: auto;
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+.diary-editor .ql-editor p {
+  margin: 0.5em 0;
+}
+
+.diary-editor .ql-editor.ql-blank::before {
+  color: #9ca3af;
+  font-style: normal;
+}
+
+.ql-editor {
+  pointer-events: auto !important;
+  user-select: text !important;
+  -webkit-user-select: text !important;
+  cursor: text !important;
+}
+
+.ql-editor[contenteditable="false"] {
+  contenteditable: true !important;
+}
+
+.ql-container {
+  pointer-events: auto !important;
+}
+
+.ql-container .ql-editor {
+  min-height: 300px !important;
+  padding: 12px 15px !important;
+}
+
+.paper-grid {
+  background-image: 
+    linear-gradient(#e5e7eb 1px, transparent 1px),
+    linear-gradient(90deg, #e5e7eb 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+.paper-lines {
+  background-image: linear-gradient(#e5e7eb 1px, transparent 1px);
+  background-size: 100% 24px;
+}
+
+.paper-dots {
+  background-image: radial-gradient(#d1d5db 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+.paper-blank {
+  background: white;
+}
+
+.sticker {
+  cursor: grab;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.sticker:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.sticker:active {
+  cursor: grabbing;
+}
+
+.calendar-cell {
+  aspect-ratio: 1;
+  transition: all 0.2s;
+}
+
+.calendar-cell:hover {
+  transform: scale(1.05);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.mood-heatmap {
+  transition: all 0.3s ease;
+}
+
+.card-shadow {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.glass-effect {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+}
+
+.timeline-line {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2px;
+  height: 100%;
+  background: linear-gradient(to bottom, #d946ef, #a21caf);
+}
+
+.wordcloud-container {
+  width: 100%;
+  height: 400px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.diary-content img {
+  max-width: 100%;
+  border-radius: 0.5rem;
+  margin: 0.5rem 0;
+}
+
+.diary-content blockquote {
+  border-left: 4px solid #d946ef;
+  padding-left: 1rem;
+  margin: 1rem 0;
+  color: #6b7280;
+  font-style: italic;
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: #c026d3;
+  border-radius: 3px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: #a21caf;
+}
