@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>家庭账本 - 智能财务规划工具</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <header class="app-header">
+            <div class="logo">
+                <span class="logo-icon">💰</span>
+                <h1>家庭账本</h1>
+            </div>
+            <div class="header-actions">
+                <button class="btn btn-primary" onclick="app.openAddTransactionModal()">
+                    <span>+</span> 记一笔
+                </button>
+                <div class="user-menu">
+                    <span class="user-avatar">👤</span>
+                </div>
+            </div>
+        </header>
+
+        <nav class="sidebar">
+            <ul class="nav-menu">
+                <li class="nav-item active" data-module="dashboard" onclick="switchModule('dashboard')">
+                    <span class="nav-icon">📊</span>
+                    <span class="nav-text">概览</span>
+                </li>
+                <li class="nav-item" data-module="transactions" onclick="switchModule('transactions')">
+                    <span class="nav-icon">📝</span>
+                    <span class="nav-text">收支记录</span>
+                </li>
+                <li class="nav-item" data-module="budget" onclick="switchModule('budget')">
+                    <span class="nav-icon">🎯</span>
+                    <span class="nav-text">预算管理</span>
+                </li>
+                <li class="nav-item" data-module="planning" onclick="switchModule('planning')">
+                    <span class="nav-icon">📈</span>
+                    <span class="nav-text">财务规划</span>
+                </li>
+                <li class="nav-item" data-module="insights" onclick="switchModule('insights')">
+                    <span class="nav-icon">🔍</span>
+                    <span class="nav-text">数据洞察</span>
+                </li>
+                <li class="nav-item" data-module="settings" onclick="switchModule('settings')">
+                    <span class="nav-icon">⚙️</span>
+                    <span class="nav-text">数据管理</span>
+                </li>
+            </ul>
+        </nav>
+
+        <main class="main-content">
+            <div id="module-dashboard" class="module-content active">
+                <div class="dashboard-header">
+                    <h2>财务概览</h2>
+                    <div class="date-filter">
+                        <select id="dashboard-month" onchange="app.updateDashboard()">
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="stats-cards">
+                    <div class="stat-card income">
+                        <div class="stat-icon">💵</div>
+                        <div class="stat-info">
+                            <p class="stat-label">本月收入</p>
+                            <p class="stat-value" id="monthly-income">¥0.00</p>
+                        </div>
+                    </div>
+                    <div class="stat-card expense">
+                        <div class="stat-icon">💸</div>
+                        <div class="stat-info">
+                            <p class="stat-label">本月支出</p>
+                            <p class="stat-value" id="monthly-expense">¥0.00</p>
+                        </div>
+                    </div>
+                    <div class="stat-card balance">
+                        <div class="stat-icon">🏦</div>
+                        <div class="stat-info">
+                            <p class="stat-label">本月结余</p>
+                            <p class="stat-value" id="monthly-balance">¥0.00</p>
+                        </div>
+                    </div>
+                    <div class="stat-card net-worth">
+                        <div class="stat-icon">💎</div>
+                        <div class="stat-info">
+                            <p class="stat-label">净资产</p>
+                            <p class="stat-value" id="net-worth">¥0.00</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-grid">
+                    <div class="card accounts-card">
+                        <div class="card-header">
+                            <h3>账户总览</h3>
+                            <button class="btn btn-sm" onclick="app.openAccountModal()">管理账户</button>
+                        </div>
+                        <div class="accounts-list" id="accounts-list"></div>
+                    </div>
+
+                    <div class="card recent-transactions">
+                        <div class="card-header">
+                            <h3>最近交易</h3>
+                            <button class="btn btn-sm" onclick="switchModule('transactions')">查看全部</button>
+                        </div>
+                        <div class="transactions-list" id="recent-transactions"></div>
+                    </div>
+
+                    <div class="card budget-overview">
+                        <div class="card-header">
+                            <h3>预算概览</h3>
+                            <button class="btn btn-sm" onclick="switchModule('budget')">详细</button>
+                        </div>
+                        <div class="budget-progress-small" id="budget-overview"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="module-transactions" class="module-content">
+                <div class="module-header">
+                    <h2>收支记录</h2>
+                    <div class="module-actions">
+                        <button class="btn btn-primary" onclick="app.openAddTransactionModal()">+ 新增记录</button>
+                        <button class="btn" onclick="app.openOCRModal()">📷 OCR识别</button>
+                        <button class="btn" onclick="app.startVoiceInput()">🎤 语音输入</button>
+                    </div>
+                </div>
+
+                <div class="transactions-toolbar">
+                    <div class="search-box">
+                        <input type="text" id="transaction-search" placeholder="搜索记录..." oninput="app.filterTransactions()">
+                    </div>
+                    <div class="filter-group">
+                        <select id="filter-type" onchange="app.filterTransactions()">
+                            <option value="all">全部类型</option>
+                            <option value="income">收入</option>
+                            <option value="expense">支出</option>
+                        </select>
+                        <select id="filter-category" onchange="app.filterTransactions()">
+                            <option value="all">全部分类</option>
+                        </select>
+                        <select id="filter-account" onchange="app.filterTransactions()">
+                            <option value="all">全部账户</option>
+                        </select>
+                        <input type="date" id="filter-date-start" onchange="app.filterTransactions()">
+                        <input type="date" id="filter-date-end" onchange="app.filterTransactions()">
+                    </div>
+                </div>
+
+                <div class="transactions-table-container">
+                    <table class="transactions-table">
+                        <thead>
+                            <tr>
+                                <th>日期</th>
+                                <th>类型</th>
+                                <th>分类</th>
+                                <th>账户</th>
+                                <th>金额</th>
+                                <th>备注</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="transactions-table-body"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="module-budget" class="module-content">
+                <div class="module-header">
+                    <h2>预算管理</h2>
+                    <div class="module-actions">
+                        <button class="btn btn-primary" onclick="app.openBudgetModal()">+ 设置预算</button>
+                    </div>
+                </div>
+
+                <div class="budget-header">
+                    <div class="budget-summary">
+                        <div class="budget-info">
+                            <p class="budget-label">本月总预算</p>
+                            <p class="budget-value" id="total-budget">¥0.00</p>
+                        </div>
+                        <div class="budget-info">
+                            <p class="budget-label">已使用</p>
+                            <p class="budget-value" id="budget-used">¥0.00</p>
+                        </div>
+                        <div class="budget-info">
+                            <p class="budget-label">剩余</p>
+                            <p class="budget-value" id="budget-remaining">¥0.00</p>
+                        </div>
+                    </div>
+                    <div class="month-selector">
+                        <select id="budget-month" onchange="app.updateBudgetView()"></select>
+                    </div>
+                </div>
+
+                <div class="budget-cards" id="budget-cards"></div>
+
+                <div class="budget-history">
+                    <h3>预算历史对比</h3>
+                    <div class="chart-container">
+                        <canvas id="budgetHistoryChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div id="module-planning" class="module-content">
+                <div class="module-header">
+                    <h2>财务规划</h2>
+                </div>
+
+                <div class="planning-grid">
+                    <div class="card savings-goals">
+                        <div class="card-header">
+                            <h3>🎯 储蓄目标</h3>
+                            <button class="btn btn-sm" onclick="app.openSavingsGoalModal()">+ 新增目标</button>
+                        </div>
+                        <div class="savings-list" id="savings-list"></div>
+                    </div>
+
+                    <div class="card loan-calculator">
+                        <div class="card-header">
+                            <h3>🏠 贷款还款计划</h3>
+                        </div>
+                        <div class="loan-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>贷款本金</label>
+                                    <input type="number" id="loan-principal" placeholder="输入本金" oninput="app.calculateLoan()">
+                                </div>
+                                <div class="form-group">
+                                    <label>年利率 (%)</label>
+                                    <input type="number" id="loan-rate" step="0.01" placeholder="输入利率" oninput="app.calculateLoan()">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>贷款期数 (月)</label>
+                                    <input type="number" id="loan-months" placeholder="输入期数" oninput="app.calculateLoan()">
+                                </div>
+                                <div class="form-group">
+                                    <label>还款方式</label>
+                                    <select id="loan-type" onchange="calculateLoan()">
+                                        <option value="equal">等额本息</option>
+                                        <option value="principal">等额本金</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="loan-results" id="loan-results"></div>
+                    </div>
+
+                    <div class="card financial-freedom">
+                        <div class="card-header">
+                            <h3>✨ 财务自由测算</h3>
+                        </div>
+                        <div class="freedom-form">
+                            <div class="form-group">
+                                <label>当前可投资资产</label>
+                                <input type="number" id="current-assets" placeholder="输入金额" oninput="app.calculateFreedom()">
+                            </div>
+                            <div class="form-group">
+                                <label>月均支出</label>
+                                <input type="number" id="monthly-spending" placeholder="输入金额" oninput="app.calculateFreedom()">
+                            </div>
+                            <div class="form-group">
+                                <label>预期年化收益率 (%)</label>
+                                <input type="number" id="expected-return" step="0.01" value="4" oninput="app.calculateFreedom()">
+                            </div>
+                            <div class="form-group">
+                                <label>安全提款率 (%)</label>
+                                <input type="number" id="withdrawal-rate" step="0.01" value="4" oninput="app.calculateFreedom()">
+                            </div>
+                        </div>
+                        <div class="freedom-results" id="freedom-results"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="module-insights" class="module-content">
+                <div class="module-header">
+                    <h2>数据洞察</h2>
+                </div>
+
+                <div class="insights-grid">
+                    <div class="card spending-trend">
+                        <div class="card-header">
+                            <h3>📈 支出趋势分析</h3>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="spendingTrendChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="card category-radar">
+                        <div class="card-header">
+                            <h3>🕸️ 消费分类雷达图</h3>
+                            <p class="card-subtitle">与同类用户匿名对比</p>
+                        </div>
+                        <div class="chart-container radar-chart">
+                            <canvas id="categoryRadarChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="card anomaly-detection">
+                        <div class="card-header">
+                            <h3>⚠️ 异常消费检测</h3>
+                        </div>
+                        <div class="anomaly-list" id="anomaly-list"></div>
+                    </div>
+
+                    <div class="card category-breakdown">
+                        <div class="card-header">
+                            <h3>🥧 分类支出占比</h3>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="categoryPieChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="module-settings" class="module-content">
+                <div class="module-header">
+                    <h2>数据管理</h2>
+                </div>
+
+                <div class="settings-grid">
+                    <div class="card import-export">
+                        <div class="card-header">
+                            <h3>📥 数据导入</h3>
+                        </div>
+                        <div class="import-options">
+                            <div class="import-option">
+                                <h4>支付宝账单导入</h4>
+                                <p>支持支付宝导出的CSV格式账单</p>
+                                <input type="file" id="alipay-import" accept=".csv" onchange="app.importAlipayBill(this)">
+                                <label for="alipay-import" class="btn">选择文件</label>
+                            </div>
+                            <div class="import-option">
+                                <h4>微信账单导入</h4>
+                                <p>支持微信支付导出的CSV格式账单</p>
+                                <input type="file" id="wechat-import" accept=".csv" onchange="app.importWechatBill(this)">
+                                <label for="wechat-import" class="btn">选择文件</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card import-export">
+                        <div class="card-header">
+                            <h3>📤 数据导出</h3>
+                        </div>
+                        <div class="export-options">
+                            <button class="btn btn-primary" onclick="app.exportToExcel()">
+                                📊 导出Excel报表
+                            </button>
+                            <button class="btn" onclick="app.exportToJSON()">
+                                📋 导出JSON数据
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="card backup-section">
+                        <div class="card-header">
+                            <h3>🔐 数据备份</h3>
+                        </div>
+                        <div class="backup-options">
+                            <div class="backup-info">
+                                <p>所有数据将使用AES加密存储在本地</p>
+                                <p class="backup-hint" id="backup-time">上次备份: 从未备份</p>
+                            </div>
+                            <button class="btn btn-success" onclick="app.createEncryptedBackup()">
+                                创建加密备份
+                            </button>
+                            <input type="file" id="restore-backup" accept=".json" onchange="app.restoreBackup(this)">
+                            <label for="restore-backup" class="btn">从备份恢复</label>
+                        </div>
+                    </div>
+
+                    <div class="card data-reset">
+                        <div class="card-header">
+                            <h3>🗑️ 数据管理</h3>
+                        </div>
+                        <div class="reset-options">
+                            <button class="btn btn-danger" onclick="app.clearAllData()">
+                                清除所有数据
+                            </button>
+                            <button class="btn" onclick="app.loadDemoData()">
+                                加载演示数据
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div class="modal" id="transaction-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="transaction-modal-title">添加收支记录</h3>
+                <span class="close" onclick="app.closeModal('transaction-modal')">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="transaction-form">
+                    <input type="hidden" id="transaction-id">
+                    <div class="type-selector">
+                        <button type="button" class="type-btn active" data-type="expense" onclick="app.selectTransactionType('expense')">支出</button>
+                        <button type="button" class="type-btn" data-type="income" onclick="app.selectTransactionType('income')">收入</button>
+                    </div>
+                    <div class="form-group">
+                        <label>金额 *</label>
+                        <input type="number" id="transaction-amount" step="0.01" required placeholder="输入金额">
+                    </div>
+                    <div class="form-group">
+                        <label>分类 *</label>
+                        <select id="transaction-category" required></select>
+                    </div>
+                    <div class="form-group">
+                        <label>账户 *</label>
+                        <select id="transaction-account" required></select>
+                    </div>
+                    <div class="form-group">
+                        <label>日期 *</label>
+                        <input type="date" id="transaction-date" required>
+                    </div>
+                    <div class="form-group">
+                        <label>备注</label>
+                        <textarea id="transaction-note" rows="2" placeholder="添加备注..."></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-full">保存</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="account-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>账户管理</h3>
+                <span class="close" onclick="app.closeModal('account-modal')">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="account-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>账户名称</label>
+                            <input type="text" id="account-name" placeholder="例如：工商银行">
+                        </div>
+                        <div class="form-group">
+                            <label>账户类型</label>
+                            <select id="account-type">
+                                <option value="cash">现金</option>
+                                <option value="debit">银行卡</option>
+                                <option value="credit">信用卡</option>
+                                <option value="investment">投资账户</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>初始余额</label>
+                        <input type="number" id="account-balance" step="0.01" placeholder="输入初始余额">
+                    </div>
+                    <button class="btn btn-primary btn-full" onclick="app.addAccount()">添加账户</button>
+                </div>
+                <div class="accounts-manage-list" id="accounts-manage-list"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="budget-modal">
+        <div class="modal-content medium">
+            <div class="modal-header">
+                <h3>设置预算</h3>
+                <span class="close" onclick="app.closeModal('budget-modal')">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="budget-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>月份</label>
+                            <input type="month" id="budget-month-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label>分类</label>
+                            <select id="budget-category" required></select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>预算金额</label>
+                        <input type="number" id="budget-amount" step="0.01" required placeholder="输入预算金额">
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-full">保存预算</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="savings-modal">
+        <div class="modal-content medium">
+            <div class="modal-header">
+                <h3>设置储蓄目标</h3>
+                <span class="close" onclick="app.closeModal('savings-modal')">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="savings-form">
+                    <div class="form-group">
+                        <label>目标名称</label>
+                        <input type="text" id="savings-name" required placeholder="例如：买房首付">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>目标金额</label>
+                            <input type="number" id="savings-target" step="0.01" required placeholder="输入目标金额">
+                        </div>
+                        <div class="form-group">
+                            <label>已存金额</label>
+                            <input type="number" id="savings-current" step="0.01" value="0" placeholder="输入已存金额">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>目标截止日期</label>
+                        <input type="date" id="savings-deadline" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-full">保存目标</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="ocr-modal">
+        <div class="modal-content medium">
+            <div class="modal-header">
+                <h3>📷 OCR账单识别</h3>
+                <span class="close" onclick="app.closeModal('ocr-modal')">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="ocr-upload">
+                    <div class="ocr-drop-zone" id="ocr-drop-zone">
+                        <p>📸 拖拽图片到此处或点击上传</p>
+                        <p class="small">支持超市小票、发票等</p>
+                        <input type="file" id="ocr-file" accept="image/*" onchange="app.handleOCRUpload(this)">
+                    </div>
+                </div>
+                <div class="ocr-results" id="ocr-results" style="display: none;">
+                    <h4>识别结果：</h4>
+                    <div id="ocr-extracted-data"></div>
+                    <button class="btn btn-primary" onclick="app.confirmOCRData()">确认并创建记录</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
