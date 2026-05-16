@@ -1,0 +1,6 @@
+Flask==2.0.3
+Flask-CORS==3.0.10
+Flask-SQLAlchemy==2.5.1
+python-docx==0.8.11
+python-dotenv==0.20.0
+markdown==3.3.7
