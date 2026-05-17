@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>手语学习平台 - SignMaster</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="logo">
+                <div class="logo-icon">✋</div>
+                <h1>SignMaster</h1>
+            </div>
+            <nav class="nav-menu">
+                <a href="#" class="nav-item active" data-module="home">
+                    <span class="nav-icon">🏠</span>
+                    <span>首页</span>
+                </a>
+                <a href="#" class="nav-item" data-module="courses">
+                    <span class="nav-icon">📚</span>
+                    <span>课程学习</span>
+                </a>
+                <a href="#" class="nav-item" data-module="vocabulary">
+                    <span class="nav-icon">📖</span>
+                    <span>词汇库</span>
+                </a>
+                <a href="#" class="nav-item" data-module="practice">
+                    <span class="nav-icon">✏️</span>
+                    <span>练习测评</span>
+                </a>
+                <a href="#" class="nav-item" data-module="dialogue">
+                    <span class="nav-icon">💬</span>
+                    <span>情景对话</span>
+                </a>
+                <a href="#" class="nav-item" data-module="community">
+                    <span class="nav-icon">👥</span>
+                    <span>社区互动</span>
+                </a>
+            </nav>
+            <div class="user-profile">
+                <div class="avatar">👤</div>
+                <div class="user-info">
+                    <p class="user-name">学习者</p>
+                    <p class="user-level">初级学员</p>
+                </div>
+                <div class="progress-ring">
+                    <svg width="40" height="40">
+                        <circle cx="20" cy="20" r="15" stroke="#e0e0e0" stroke-width="4" fill="none"/>
+                        <circle cx="20" cy="20" r="15" stroke="#6366f1" stroke-width="4" fill="none" 
+                                stroke-dasharray="94.2" stroke-dashoffset="47" transform="rotate(-90 20 20)"/>
+                    </svg>
+                    <span>50%</span>
+                </div>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="top-header">
+                <div class="search-bar">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" placeholder="搜索课程、词汇、话题...">
+                </div>
+                <div class="header-actions">
+                    <button class="notification-btn">🔔</button>
+                    <button class="theme-toggle">🌙</button>
+                </div>
+            </header>
+
+            <div class="content-area">
+                <section id="home" class="module-section active">
+                    <div class="welcome-banner">
+                        <div class="welcome-text">
+                            <h2>欢迎回来！👋</h2>
+                            <p>继续你的手语学习之旅，每天进步一点点</p>
+                            <button class="btn-primary" data-module="courses">继续学习</button>
+                        </div>
+                        <div class="welcome-illustration">
+                            <div class="floating-hands">
+                                <span>👋</span>
+                                <span>👍</span>
+                                <span>✌️</span>
+                                <span>🤟</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stats-cards">
+                        <div class="stat-card">
+                            <div class="stat-icon">📚</div>
+                            <div class="stat-info">
+                                <h3>12</h3>
+                                <p>已完成课程</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">🎯</div>
+                            <div class="stat-info">
+                                <h3>156</h3>
+                                <p>已学词汇</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">⏱️</div>
+                            <div class="stat-info">
+                                <h3>24h</h3>
+                                <p>学习时长</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">🔥</div>
+                            <div class="stat-info">
+                                <h3>7</h3>
+                                <p>连续打卡</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="home-sections">
+                        <div class="section-card">
+                            <div class="section-header">
+                                <h3>推荐课程</h3>
+                                <a href="#" class="see-more" data-module="courses">查看全部 →</a>
+                            </div>
+                            <div class="course-grid-mini">
+                                <div class="course-card-mini">
+                                    <div class="course-thumb">🎬</div>
+                                    <div class="course-info">
+                                        <h4>入门基础课程</h4>
+                                        <p>20个课时 · 初级</p>
+                                    </div>
+                                </div>
+                                <div class="course-card-mini">
+                                    <div class="course-thumb">🎥</div>
+                                    <div class="course-info">
+                                        <h4>日常问候篇</h4>
+                                        <p>15个课时 · 初级</p>
+                                    </div>
+                                </div>
+                                <div class="course-card-mini">
+                                    <div class="course-thumb">🎞️</div>
+                                    <div class="course-info">
+                                        <h4>数字表达法</h4>
+                                        <p>10个课时 · 初级</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="section-card">
+                            <div class="section-header">
+                                <h3>今日练习</h3>
+                                <a href="#" class="see-more" data-module="practice">开始练习 →</a>
+                            </div>
+                            <div class="practice-today">
+                                <div class="practice-item">
+                                    <div class="practice-icon">🔤</div>
+                                    <div class="practice-info">
+                                        <h4>手势识别练习</h4>
+                                        <p>观看视频，识别手势</p>
+                                    </div>
+                                    <span class="practice-status">待完成</span>
+                                </div>
+                                <div class="practice-item">
+                                    <div class="practice-icon">📝</div>
+                                    <div class="practice-info">
+                                        <h4>词汇翻译练习</h4>
+                                        <p>看文字做手势</p>
+                                    </div>
+                                    <span class="practice-status">待完成</span>
+                                </div>
+                                <div class="practice-item">
+                                    <div class="practice-icon">⚡</div>
+                                    <div class="practice-info">
+                                        <h4>速度挑战</h4>
+                                        <p>限时完成句子表达</p>
+                                    </div>
+                                    <span class="practice-status">待完成</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="courses" class="module-section">
+                    <div class="module-header">
+                        <h2>📚 课程学习</h2>
+                        <p>系统学习手语，从基础到精通</p>
+                    </div>
+
+                    <div class="course-tabs">
+                        <button class="tab-btn active" data-tab="video-lessons">视频教学</button>
+                        <button class="tab-btn" data-tab="vocabulary">词汇库</button>
+                        <button class="tab-btn" data-tab="key-points">记忆要点</button>
+                    </div>
+
+                    <div class="tab-content active" id="video-lessons">
+                        <div class="course-filters">
+                            <select class="filter-select">
+                                <option>所有难度</option>
+                                <option>初级</option>
+                                <option>中级</option>
+                                <option>高级</option>
+                            </select>
+                            <select class="filter-select">
+                                <option>所有分类</option>
+                                <option>基础</option>
+                                <option>问候</option>
+                                <option>数字</option>
+                                <option>家庭</option>
+                                <option>食物</option>
+                                <option>动作</option>
+                                <option>情感</option>
+                                <option>日常</option>
+                            </select>
+                        </div>
+
+                        <div class="course-grid" id="courseGrid">
+                        </div>
+                    </div>
+
+                    <div class="tab-content" id="vocabulary">
+                        <div class="vocab-categories">
+                            <div class="category-card" data-category="greetings">
+                                <div class="category-icon">👋</div>
+                                <h3>问候</h3>
+                                <p>35个词汇</p>
+                            </div>
+                            <div class="category-card" data-category="numbers">
+                                <div class="category-icon">🔢</div>
+                                <h3>数字</h3>
+                                <p>30个词汇</p>
+                            </div>
+                            <div class="category-card" data-category="family">
+                                <div class="category-icon">👨‍👩‍👧‍👦</div>
+                                <h3>家庭</h3>
+                                <p>25个词汇</p>
+                            </div>
+                            <div class="category-card" data-category="food">
+                                <div class="category-icon">🍽️</div>
+                                <h3>食物</h3>
+                                <p>40个词汇</p>
+                            </div>
+                            <div class="category-card" data-category="actions">
+                                <div class="category-icon">🏃</div>
+                                <h3>日常动作</h3>
+                                <p>45个词汇</p>
+                            </div>
+                            <div class="category-card" data-category="emotions">
+                                <div class="category-icon">😊</div>
+                                <h3>情感</h3>
+                                <p>20个词汇</p>
+                            </div>
+                        </div>
+
+                        <div class="vocab-list" id="vocabList">
+                        </div>
+                    </div>
+
+                    <div class="tab-content" id="key-points">
+                        <div class="key-points-intro">
+                            <h3>手势学习的四大核心要素</h3>
+                            <p>掌握这些要点，让你的手语表达更准确、更自然</p>
+                        </div>
+
+                        <div class="key-points-grid">
+                            <div class="key-point-card">
+                                <div class="key-point-icon">✋</div>
+                                <h3>手形</h3>
+                                <p>手指的形状和位置，包括握拳、张开、特定指型等</p>
+                                <div class="key-point-examples">
+                                    <span class="example-tag">握拳</span>
+                                    <span class="example-tag">张开</span>
+                                    <span class="example-tag">指人</span>
+                                    <span class="example-tag">捏合</span>
+                                </div>
+                            </div>
+                            <div class="key-point-card">
+                                <div class="key-point-icon">📍</div>
+                                <h3>位置</h3>
+                                <p>手势在身体前方的空间位置，不同位置代表不同含义</p>
+                                <div class="key-point-examples">
+                                    <span class="example-tag">胸前</span>
+                                    <span class="example-tag">脸侧</span>
+                                    <span class="example-tag">头顶</span>
+                                    <span class="example-tag">腹前</span>
+                                </div>
+                            </div>
+                            <div class="key-point-card">
+                                <div class="key-point-icon">➡️</div>
+                                <h3>运动方向</h3>
+                                <p>手势移动的轨迹和方向，是表达意义的关键</p>
+                                <div class="key-point-examples">
+                                    <span class="example-tag">上下</span>
+                                    <span class="example-tag">左右</span>
+                                    <span class="example-tag">前后</span>
+                                    <span class="example-tag">画圈</span>
+                                </div>
+                            </div>
+                            <div class="key-point-card">
+                                <div class="key-point-icon">👀</div>
+                                <h3>非手势要素</h3>
+                                <p>面部表情、眼神、头部动作等辅助表达的要素</p>
+                                <div class="key-point-examples">
+                                    <span class="example-tag">表情</span>
+                                    <span class="example-tag">眼神</span>
+                                    <span class="example-tag">头姿</span>
+                                    <span class="example-tag">体态</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="learning-tips">
+                            <h3>💡 学习小贴士</h3>
+                            <ul>
+                                <li><strong>手形准确：</strong>注意每个手指的位置和弯曲程度，手形错误可能导致意思完全不同</li>
+                                <li><strong>位置精准：</strong>在特定的空间区域内完成动作，位置偏差会影响理解</li>
+                                <li><strong>运动流畅：</strong>保持动作的连贯性和节奏感，避免生硬或断断续续</li>
+                                <li><strong>表情配合：</strong>面部表情是手语的重要组成部分，不要忽视情感的表达</li>
+                                <li><strong>反复练习：</strong>肌肉记忆需要时间，每天坚持练习才能熟能生巧</li>
+                                <li><strong>镜子练习：</strong>对着镜子观察自己的动作，及时发现和纠正问题</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="vocabulary-section" class="module-section">
+                    <div class="module-header">
+                        <h2>📖 手势词汇库</h2>
+                        <p>丰富的词汇资源，多角度演示，轻松掌握</p>
+                    </div>
+
+                    <div class="vocab-search-section">
+                        <div class="search-box-large">
+                            <span class="search-icon">🔍</span>
+                            <input type="text" placeholder="搜索词汇，输入中文或拼音..." id="vocabSearch">
+                        </div>
+                        <div class="vocab-tags">
+                            <span class="vocab-tag active">全部</span>
+                            <span class="vocab-tag">问候</span>
+                            <span class="vocab-tag">数字</span>
+                            <span class="vocab-tag">家庭</span>
+                            <span class="vocab-tag">食物</span>
+                            <span class="vocab-tag">动作</span>
+                            <span class="vocab-tag">情感</span>
+                        </div>
+                    </div>
+
+                    <div class="vocab-detail-grid" id="vocabDetailGrid">
+                    </div>
+                </section>
+
+                <section id="practice" class="module-section">
+                    <div class="module-header">
+                        <h2>✏️ 练习与测评</h2>
+                        <p>通过多种练习方式，巩固所学知识</p>
+                    </div>
+
+                    <div class="practice-modes">
+                        <div class="practice-mode-card" data-mode="recognition">
+                            <div class="mode-icon">🎬</div>
+                            <h3>手势识别练习</h3>
+                            <p>观看视频，认出是哪个手势</p>
+                            <button class="btn-outline">开始练习</button>
+                        </div>
+                        <div class="practice-mode-card" data-mode="translation">
+                            <div class="mode-icon">📝</div>
+                            <h3>词汇翻译练习</h3>
+                            <p>看文字做出对应手势</p>
+                            <button class="btn-outline">开始练习</button>
+                        </div>
+                        <div class="practice-mode-card" data-mode="speed">
+                            <div class="mode-icon">⚡</div>
+                            <h3>速度练习</h3>
+                            <p>限定时间内表达句子</p>
+                            <button class="btn-outline">开始练习</button>
+                        </div>
+                    </div>
+
+                    <div class="practice-area" id="practiceArea">
+                    </div>
+                </section>
+
+                <section id="dialogue" class="module-section">
+                    <div class="module-header">
+                        <h2>💬 情景对话</h2>
+                        <p>在真实场景中应用手语，了解聋人文化</p>
+                    </div>
+
+                    <div class="dialogue-tabs">
+                        <button class="tab-btn active" data-tab="scenes">对话场景</button>
+                        <button class="tab-btn" data-tab="culture">文化知识</button>
+                        <button class="tab-btn" data-tab="test">情景测试</button>
+                    </div>
+
+                    <div class="tab-content active" id="scenes">
+                        <div class="scene-grid" id="sceneGrid">
+                        </div>
+                    </div>
+
+                    <div class="tab-content" id="culture">
+                        <div class="culture-cards">
+                            <div class="culture-card">
+                                <div class="culture-icon">🎭</div>
+                                <h3>聋人文化简介</h3>
+                                <p>聋人社区有着独特的文化和价值观。手语不仅是交流工具，更是文化认同的标志。了解聋人文化，有助于更好地与聋人朋友沟通。</p>
+                                <div class="culture-points">
+                                    <div class="culture-point">
+                                        <strong>视觉中心：</strong>聋人文化以视觉为主要感知方式，注重视觉表达和理解
+                                    </div>
+                                    <div class="culture-point">
+                                        <strong>直接表达：</strong>聋人交流通常比较直接，注重真实情感的表达
+                                    </div>
+                                    <div class="culture-point">
+                                        <strong>社区意识：</strong>聋人社区有很强的归属感和互助精神
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="culture-card">
+                                <div class="culture-icon">🤝</div>
+                                <h3>交流礼仪</h3>
+                                <p>与聋人交流时，了解并遵循基本的交流礼仪，是尊重和有效沟通的基础。</p>
+                                <div class="culture-points">
+                                    <div class="culture-point">
+                                        <strong>视线接触：</strong>保持眼神交流，不要在对方看你时转移视线
+                                    </div>
+                                    <div class="culture-point">
+                                        <strong>举手示意：</strong>需要打断对话时，轻轻举手示意
+                                    </div>
+                                    <div class="culture-point">
+                                        <strong>光线充足：</strong>确保交流环境光线充足，让对方能看清你的手势
+                                    </div>
+                                    <div class="culture-point">
+                                        <strong>语速适中：</strong>手语表达要清晰，不要太快也不要太慢
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="culture-card">
+                                <div class="culture-icon">⚠️</div>
+                                <h3>注意事项</h3>
+                                <p>一些常见的误解和需要避免的行为。</p>
+                                <div class="culture-points">
+                                    <div class="culture-point">
+                                        <strong>不要大声喊叫：</strong>聋人听不到，大声喊叫是不礼貌且无效的
+                                    </div>
+                                    <div class="culture-point">
+                                        <strong>不要随意触碰：</strong>不要从背后拍打聋人，应从正面轻轻拍肩
+                                    </div>
+                                    <div class="culture-point">
+                                        <strong>不要说"哑巴"：</strong>使用"聋人"或"听障人士"等尊重的称呼
+                                    </div>
+                                    <div class="culture-point">
+                                        <strong>不要过度简化：</strong>按正常方式交流，不要刻意简化表达
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-content" id="test">
+                        <div class="dialogue-test-area" id="dialogueTestArea">
+                        </div>
+                    </div>
+                </section>
+
+                <section id="community" class="module-section">
+                    <div class="module-header">
+                        <h2>👥 社区互动</h2>
+                        <p>与其他学习者交流分享，共同进步</p>
+                    </div>
+
+                    <div class="community-tabs">
+                        <button class="tab-btn active" data-tab="checkin">打卡分享</button>
+                        <button class="tab-btn" data-tab="videos">视频互评</button>
+                        <button class="tab-btn" data-tab="challenge">翻译挑战</button>
+                    </div>
+
+                    <div class="tab-content active" id="checkin">
+                        <div class="checkin-section">
+                            <div class="checkin-card">
+                                <div class="checkin-header">
+                                    <h3>今日打卡</h3>
+                                    <div class="streak-badge">
+                                        <span class="flame">🔥</span>
+                                        <span id="streakCount">7</span> 天连续
+                                    </div>
+                                </div>
+                                <div class="checkin-calendar">
+                                    <div class="calendar-week">
+                                        <span>一</span>
+                                        <span>二</span>
+                                        <span>三</span>
+                                        <span>四</span>
+                                        <span>五</span>
+                                        <span>六</span>
+                                        <span>日</span>
+                                    </div>
+                                    <div class="calendar-days">
+                                        <div class="calendar-day completed">✓</div>
+                                        <div class="calendar-day completed">✓</div>
+                                        <div class="calendar-day completed">✓</div>
+                                        <div class="calendar-day completed">✓</div>
+                                        <div class="calendar-day completed">✓</div>
+                                        <div class="calendar-day completed">✓</div>
+                                        <div class="calendar-day today">今</div>
+                                    </div>
+                                </div>
+                                <button class="btn-primary" id="checkinBtn">立即打卡</button>
+                            </div>
+
+                            <div class="checkin-feed">
+                                <h3>社区打卡动态</h3>
+                                <div class="feed-list" id="checkinFeed">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-content" id="videos">
+                        <div class="video-community">
+                            <div class="upload-section">
+                                <button class="btn-primary" id="uploadVideoBtn">
+                                    📹 上传练习视频
+                                </button>
+                                <p class="upload-tip">分享你的练习视频，获得社区成员的反馈和建议</p>
+                            </div>
+
+                            <div class="video-grid" id="videoGrid">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-content" id="challenge">
+                        <div class="translation-challenge">
+                            <div class="challenge-header">
+                                <h3>🏆 本期翻译挑战</h3>
+                                <div class="challenge-timer">
+                                    剩余时间：<span id="challengeTimer">3天 12小时</span>
+                                </div>
+                            </div>
+                            
+                            <div class="challenge-content">
+                                <div class="challenge-text">
+                                    <h4>挑战内容：</h4>
+                                    <p id="challengeText">将以下句子翻译成手语："今天天气真好，我们一起去公园散步吧。"</p>
+                                </div>
+                                
+                                <div class="challenge-actions">
+                                    <button class="btn-primary" id="startChallengeBtn">开始挑战</button>
+                                    <button class="btn-outline">查看示范</button>
+                                </div>
+
+                                <div class="challenge-submissions">
+                                    <h4>优秀作品</h4>
+                                    <div class="submission-list" id="submissionList">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <div class="modal" id="courseModal">
+        <div class="modal-content">
+            <button class="modal-close">&times;</button>
+            <div class="modal-body" id="courseModalBody">
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="videoModal">
+        <div class="modal-content large">
+            <button class="modal-close">&times;</button>
+            <div class="modal-body" id="videoModalBody">
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
