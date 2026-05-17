@@ -1,0 +1,1 @@
+const e={water:"浇水",fertilize:"施肥",repot:"换盆",prune:"修剪",spray:"喷药"},r={water:"bg-blue-500",fertilize:"bg-yellow-500",repot:"bg-amber-600",prune:"bg-green-500",spray:"bg-purple-500"};export{r as T,e as a};
