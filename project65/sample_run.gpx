@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="Sample GPX for Testing">
+  <metadata>
+    <name>示例跑步记录 - 奥林匹克森林公园</name>
+    <time>2026-05-16T07:30:00Z</time>
+  </metadata>
+  <trk>
+    <name>晨跑 - 奥森南园</name>
+    <type>running</type>
+    <trkseg>
+      <trkpt lat="40.0250" lon="116.3900">
+        <ele>45.0</ele>
+        <time>2026-05-16T07:30:00Z</time>
+      </trkpt>
+      <trkpt lat="40.0255" lon="116.3910">
+        <ele>45.2</ele>
+        <time>2026-05-16T07:30:30Z</time>
+      </trkpt>
+      <trkpt lat="40.0260" lon="116.3920">
+        <ele>45.5</ele>
+        <time>2026-05-16T07:31:00Z</time>
+      </trkpt>
+      <trkpt lat="40.0270" lon="116.3930">
+        <ele>46.0</ele>
+        <time>2026-05-16T07:31:30Z</time>
+      </trkpt>
+      <trkpt lat="40.0280" lon="116.3935">
+        <ele>46.2</ele>
+        <time>2026-05-16T07:32:00Z</time>
+      </trkpt>
+      <trkpt lat="40.0290" lon="116.3940">
+        <ele>46.5</ele>
+        <time>2026-05-16T07:32:30Z</time>
+      </trkpt>
+      <trkpt lat="40.0300" lon="116.3945">
+        <ele>46.8</ele>
+        <time>2026-05-16T07:33:00Z</time>
+      </trkpt>
+      <trkpt lat="40.0310" lon="116.3940">
+        <ele>47.0</ele>
+        <time>2026-05-16T07:33:30Z</time>
+      </trkpt>
+      <trkpt lat="40.0320" lon="116.3935">
+        <ele>47.2</ele>
+        <time>2026-05-16T07:34:00Z</time>
+      </trkpt>
+      <trkpt lat="40.0330" lon="116.3930">
+        <ele>47.5</ele>
+        <time>2026-05-16T07:34:30Z</time>
+      </trkpt>
+      <trkpt lat="40.0335" lon="116.3920">
+        <ele>47.8</ele>
+        <time>2026-05-16T07:35:00Z</time>
+      </trkpt>
+      <trkpt lat="40.0340" lon="116.3910">
+        <ele>48.0</ele>
+        <time>2026-05-16T07:35:30Z</time>
+      </trkpt>
+      <trkpt lat="40.0335" lon="116.3900">
+        <ele>47.5</ele>
+        <time>2026-05-16T07:36:00Z</time>
+      </trkpt>
+      <trkpt lat="40.0330" lon="116.3890">
+        <ele>47.0</ele>
+        <time>2026-05-16T07:36:30Z</time>
+      </trkpt>
+      <trkpt lat="40.0320" lon="116.3885">
+        <ele>46.5</ele>
+        <time>2026-05-16T07:37:00Z</time>
+      </trkpt>
+      <trkpt lat="40.0310" lon="116.3880">
+        <ele>46.0</ele>
+        <time>2026-05-16T07:37:30Z</time>
+      </trkpt>
+      <trkpt lat="40.0300" lon="116.3875">
+        <ele>45.8</ele>
+        <time>2026-05-16T07:38:00Z</time>
+      </trkpt>
+      <trkpt lat="40.0290" lon="116.3880">
+        <ele>45.5</ele>
+        <time>2026-05-16T07:38:30Z</time>
+      </trkpt>
+      <trkpt lat="40.0280" lon="116.3885">
+        <ele>45.2</ele>
+        <time>2026-05-16T07:39:00Z</time>
+      </trkpt>
+      <trkpt lat="40.0270" lon="116.3890">
+        <ele>45.0</ele>
+        <time>2026-05-16T07:39:30Z</time>
+      </trkpt>
+      <trkpt lat="40.0260" lon="116.3895">
+        <ele>44.8</ele>
+        <time>2026-05-16T07:40:00Z</time>
+      </trkpt>
+      <trkpt lat="40.0250" lon="116.3900">
+        <ele>45.0</ele>
+        <time>2026-05-16T07:40:30Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+</gpx>
