@@ -128,16 +128,26 @@ const PerformanceManagement: React.FC = () => {
     setDetailVisible(true);
   };
 
-  const handleAddSetlistItem = (songId: string) => {
-    if (!viewingPerformance) return;
-    const newItem: SetlistItem = {
+  const handleAddSetlistItem = (songIds: string[]) => {
+    if (!viewingPerformance || songIds.length === 0) return;
+    
+    const existingSongIds = viewingPerformance.setlist.map(s => s.songId);
+    const newSongIds = songIds.filter(id => !existingSongIds.includes(id));
+    
+    if (newSongIds.length === 0) {
+      message.info('曲目已在演出单中');
+      return;
+    }
+    
+    const newItems = newSongIds.map((songId, idx) => ({
       id: generateId(),
       songId,
-      order: viewingPerformance.setlist.length + 1,
-    };
-    const updatedSetlist = [...viewingPerformance.setlist, newItem];
+      order: viewingPerformance.setlist.length + idx + 1,
+    }));
+    
+    const updatedSetlist = [...viewingPerformance.setlist, ...newItems];
     performanceStorage.update(viewingPerformance.id, { setlist: updatedSetlist });
-    message.success('已添加到演出曲目单');
+    message.success(`已添加 ${newItems.length} 首曲目到演出单`);
     loadData();
     setViewingPerformance({ ...viewingPerformance, setlist: updatedSetlist });
   };
@@ -487,12 +497,13 @@ const PerformanceManagement: React.FC = () => {
             <Card title="添加曲目到演出单" size="small" style={{ marginBottom: 24 }}>
               <Select
                 mode="multiple"
-                placeholder="选择要添加的曲目"
+                placeholder="选择要添加的曲目（可多选）"
                 style={{ width: '100%' }}
                 options={songs
                   .filter(s => s.status === '可演出')
                   .map(s => ({ label: `${s.name} - ${s.artist}`, value: s.id }))}
-                onSelect={songId => handleAddSetlistItem(songId)}
+                onChange={handleAddSetlistItem}
+                allowClear
               />
             </Card>
 

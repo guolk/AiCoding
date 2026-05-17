@@ -67,15 +67,20 @@ const SongLibrary: React.FC = () => {
   };
 
   const handleAdd = () => {
-    setEditingSong(null);
-    form.resetFields();
-    form.setFieldsValue({
-      version: '原版',
-      status: '学习中',
-      difficulty: 3,
-    });
-    setFileList([]);
-    setModalVisible(true);
+    try {
+      setEditingSong(null);
+      form.resetFields();
+      form.setFieldsValue({
+        version: '原版',
+        status: '学习中',
+        difficulty: 3,
+      });
+      setFileList([]);
+      setModalVisible(true);
+    } catch (e) {
+      console.error('打开添加曲目弹窗失败:', e);
+      message.error('操作失败，请刷新页面重试');
+    }
   };
 
   const handleEdit = (song: Song) => {
