@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>骑行管理平台</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="logo">
+                <h2>🚴 骑行管理</h2>
+            </div>
+            <nav class="nav-menu">
+                <a href="#" class="nav-item active" data-module="dashboard">
+                    <span class="icon">📊</span>
+                    <span>数据概览</span>
+                </a>
+                <a href="#" class="nav-item" data-module="rides">
+                    <span class="icon">📝</span>
+                    <span>骑行记录</span>
+                </a>
+                <a href="#" class="nav-item" data-module="statistics">
+                    <span class="icon">📈</span>
+                    <span>统计分析</span>
+                </a>
+                <a href="#" class="nav-item" data-module="equipment">
+                    <span class="icon">⚙️</span>
+                    <span>装备管理</span>
+                </a>
+                <a href="#" class="nav-item" data-module="routes">
+                    <span class="icon">🗺️</span>
+                    <span>路线规划</span>
+                </a>
+                <a href="#" class="nav-item" data-module="goals">
+                    <span class="icon">🎯</span>
+                    <span>骑行目标</span>
+                </a>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="top-bar">
+                <h1 id="page-title">数据概览</h1>
+                <div class="user-info">
+                    <span class="notification-bell">🔔</span>
+                    <span class="user-avatar">👤</span>
+                </div>
+            </header>
+
+            <div class="content-area">
+                <!-- 数据概览 -->
+                <div id="module-dashboard" class="module-content active">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon">🚴</div>
+                            <div class="stat-info">
+                                <h3 id="total-rides">0</h3>
+                                <p>总骑行次数</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">📏</div>
+                            <div class="stat-info">
+                                <h3 id="total-distance">0</h3>
+                                <p>总里程 (公里)</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">⛰️</div>
+                            <div class="stat-info">
+                                <h3 id="total-elevation">0</h3>
+                                <p>总爬升 (米)</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">⏱️</div>
+                            <div class="stat-info">
+                                <h3 id="total-duration">0</h3>
+                                <p>总时长 (小时)</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-grid">
+                        <div class="dashboard-panel">
+                            <h3>月度骑行统计</h3>
+                            <canvas id="monthly-chart"></canvas>
+                        </div>
+                        <div class="dashboard-panel">
+                            <h3>个人最佳记录</h3>
+                            <div class="records-list">
+                                <div class="record-item">
+                                    <span class="record-label">最快速度</span>
+                                    <span class="record-value" id="record-speed">- km/h</span>
+                                </div>
+                                <div class="record-item">
+                                    <span class="record-label">最长距离</span>
+                                    <span class="record-value" id="record-distance">- km</span>
+                                </div>
+                                <div class="record-item">
+                                    <span class="record-label">最大爬升</span>
+                                    <span class="record-value" id="record-elevation">- m</span>
+                                </div>
+                                <div class="record-item">
+                                    <span class="record-label">最长时长</span>
+                                    <span class="record-value" id="record-duration">- h</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-grid">
+                        <div class="dashboard-panel">
+                            <h3>年度目标进度</h3>
+                            <div id="yearly-goals-progress"></div>
+                        </div>
+                        <div class="dashboard-panel">
+                            <h3>装备保养提醒</h3>
+                            <div id="maintenance-alerts"></div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-grid">
+                        <div class="dashboard-panel full-width">
+                            <h3>骑行热力图</h3>
+                            <div id="heatmap-container" class="map-container"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 骑行记录 -->
+                <div id="module-rides" class="module-content">
+                    <div class="toolbar">
+                        <button class="btn btn-primary" onclick="showAddRideModal()">
+                            <span>+</span> 添加骑行记录
+                        </button>
+                        <div class="filter-group">
+                            <select id="ride-year-filter" onchange="loadRides()">
+                                <option value="">全部年份</option>
+                            </select>
+                            <select id="ride-month-filter" onchange="loadRides()">
+                                <option value="">全部月份</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>日期</th>
+                                    <th>距离</th>
+                                    <th>时长</th>
+                                    <th>爬升</th>
+                                    <th>平均速度</th>
+                                    <th>心率</th>
+                                    <th>类型</th>
+                                    <th>轨迹</th>
+                                    <th>照片</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="rides-table-body">
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="pagination" id="rides-pagination"></div>
+                </div>
+
+                <!-- 统计分析 -->
+                <div id="module-statistics" class="module-content">
+                    <div class="stats-tabs">
+                        <button class="tab-btn active" data-tab="monthly">月度统计</button>
+                        <button class="tab-btn" data-tab="yearly">年度统计</button>
+                        <button class="tab-btn" data-tab="records">个人最佳</button>
+                        <button class="tab-btn" data-tab="heatmap">热力图</button>
+                    </div>
+
+                    <div id="stats-monthly" class="tab-content active">
+                        <div class="filter-group">
+                            <label>年份：</label>
+                            <select id="stats-year" onchange="loadMonthlyStats()">
+                            </select>
+                        </div>
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <h3 id="monthly-total-distance">0</h3>
+                                <p>年度总里程 (km)</p>
+                            </div>
+                            <div class="stat-card">
+                                <h3 id="monthly-total-elevation">0</h3>
+                                <p>年度总爬升 (m)</p>
+                            </div>
+                            <div class="stat-card">
+                                <h3 id="monthly-total-rides">0</h3>
+                                <p>年度骑行次数</p>
+                            </div>
+                            <div class="stat-card">
+                                <h3 id="monthly-avg-distance">0</h3>
+                                <p>单次平均里程 (km)</p>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <h4>各月骑行里程</h4>
+                            <canvas id="monthly-distance-chart"></canvas>
+                        </div>
+                        <div class="chart-container">
+                            <h4>各月爬升统计</h4>
+                            <canvas id="monthly-elevation-chart"></canvas>
+                        </div>
+                    </div>
+
+                    <div id="stats-yearly" class="tab-content">
+                        <div class="table-container">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>年份</th>
+                                        <th>骑行次数</th>
+                                        <th>总里程 (km)</th>
+                                        <th>总爬升 (m)</th>
+                                        <th>总时长 (h)</th>
+                                        <th>平均里程 (km)</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="yearly-stats-body"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div id="stats-records" class="tab-content">
+                        <div class="records-detail">
+                            <div class="record-card">
+                                <div class="record-icon">⚡</div>
+                                <h3>最快速度</h3>
+                                <div class="record-value" id="detail-record-speed">- km/h</div>
+                                <div class="record-date" id="detail-record-speed-date">-</div>
+                            </div>
+                            <div class="record-card">
+                                <div class="record-icon">🛣️</div>
+                                <h3>最长距离</h3>
+                                <div class="record-value" id="detail-record-distance">- km</div>
+                                <div class="record-date" id="detail-record-distance-date">-</div>
+                            </div>
+                            <div class="record-card">
+                                <div class="record-icon">🏔️</div>
+                                <h3>最大爬升</h3>
+                                <div class="record-value" id="detail-record-elevation">- m</div>
+                                <div class="record-date" id="detail-record-elevation-date">-</div>
+                            </div>
+                            <div class="record-card">
+                                <div class="record-icon">⏰</div>
+                                <h3>最长时长</h3>
+                                <div class="record-value" id="detail-record-duration">- h</div>
+                                <div class="record-date">-</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="stats-heatmap" class="tab-content">
+                        <div id="full-heatmap" class="map-container large"></div>
+                    </div>
+                </div>
+
+                <!-- 装备管理 -->
+                <div id="module-equipment" class="module-content">
+                    <div class="toolbar">
+                        <button class="btn btn-primary" onclick="showAddEquipmentModal()">
+                            <span>+</span> 添加装备
+                        </button>
+                    </div>
+
+                    <div class="equipment-grid" id="equipment-grid">
+                    </div>
+
+                    <div class="mt-4">
+                        <h3>保养日历</h3>
+                        <div class="table-container">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>装备</th>
+                                        <th>零件</th>
+                                        <th>已使用里程</th>
+                                        <th>剩余里程</th>
+                                        <th>状态</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="maintenance-table-body"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 路线规划 -->
+                <div id="module-routes" class="module-content">
+                    <div class="toolbar">
+                        <button class="btn btn-primary" onclick="showAddRouteModal()">
+                            <span>+</span> 添加路线
+                        </button>
+                        <div class="filter-group">
+                            <select id="route-category-filter" onchange="loadRoutes()">
+                                <option value="">全部分类</option>
+                                <option value="通勤">通勤路线</option>
+                                <option value="休闲">休闲路线</option>
+                                <option value="挑战">挑战路线</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="routes-grid" id="routes-grid">
+                    </div>
+                </div>
+
+                <!-- 骑行目标 -->
+                <div id="module-goals" class="module-content">
+                    <div class="goals-section">
+                        <div class="section-header">
+                            <h3>年度目标</h3>
+                            <button class="btn btn-primary" onclick="showAddYearlyGoalModal()">设置年度目标</button>
+                        </div>
+                        <div id="yearly-goals-list" class="goals-list">
+                        </div>
+                    </div>
+
+                    <div class="goals-section">
+                        <div class="section-header">
+                            <h3>自定义挑战</h3>
+                            <button class="btn btn-primary" onclick="showAddChallengeModal()">创建挑战</button>
+                        </div>
+                        <div id="challenges-list" class="challenges-list">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- 模态框容器 -->
+    <div id="modal-container"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.heat/0.2.0/leaflet-heat.min.js" onerror="window.heatmapUnavailable = true;"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+    <script src="/js/app.js"></script>
+</body>
+</html>
