@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>宝贝成长记录 - 儿童成长管理系统</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <header class="app-header">
+            <div class="header-content">
+                <div class="logo">
+                    <span class="logo-icon">🌈</span>
+                    <h1>宝贝成长记录</h1>
+                </div>
+                <div class="child-selector">
+                    <select id="childSelector">
+                        <option value="0">小明 - 3岁</option>
+                    </select>
+                    <button class="btn btn-primary btn-sm" onclick="showAddChildModal()">+ 添加孩子</button>
+                </div>
+            </div>
+        </header>
+
+        <nav class="main-nav">
+            <ul>
+                <li class="nav-item active" data-module="growth">
+                    <span class="nav-icon">📈</span>
+                    <span>成长记录</span>
+                </li>
+                <li class="nav-item" data-module="learning">
+                    <span class="nav-icon">📚</span>
+                    <span>学习追踪</span>
+                </li>
+                <li class="nav-item" data-module="resources">
+                    <span class="nav-icon">🎒</span>
+                    <span>教育资源</span>
+                </li>
+                <li class="nav-item" data-module="activities">
+                    <span class="nav-icon">👨‍👩‍👧</span>
+                    <span>亲子活动</span>
+                </li>
+                <li class="nav-item" data-module="health">
+                    <span class="nav-icon">💉</span>
+                    <span>健康管理</span>
+                </li>
+                <li class="nav-item" data-module="report">
+                    <span class="nav-icon">📄</span>
+                    <span>成长报告</span>
+                </li>
+            </ul>
+        </nav>
+
+        <main class="main-content">
+            <div id="growth-module" class="module active">
+                <div class="module-header">
+                    <h2>🌱 成长记录</h2>
+                    <p>记录孩子的每一步成长，见证生命的奇迹</p>
+                </div>
+                <div class="growth-container">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>👶 基本信息</h3>
+                            <button class="btn btn-primary btn-sm" onclick="showEditChildInfo()">编辑</button>
+                        </div>
+                        <div id="childBasicInfo" class="child-info-grid">
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>📊 发育数据追踪</h3>
+                            <button class="btn btn-primary btn-sm" onclick="showAddGrowthData()">+ 添加记录</button>
+                        </div>
+                        <div class="chart-tabs">
+                            <button class="chart-tab active" data-chart="height">身高</button>
+                            <button class="chart-tab" data-chart="weight">体重</button>
+                            <button class="chart-tab" data-chart="head">头围</button>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="growthChart"></canvas>
+                        </div>
+                        <div class="growth-table-container">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>日期</th>
+                                        <th>年龄</th>
+                                        <th>身高(cm)</th>
+                                        <th>体重(kg)</th>
+                                        <th>头围(cm)</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="growthDataTable">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>🏆 里程碑事件</h3>
+                            <button class="btn btn-primary btn-sm" onclick="showAddMilestone()">+ 添加里程碑</button>
+                        </div>
+                        <div id="milestonesList" class="milestones-list">
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>📸 成长照片时间轴</h3>
+                            <button class="btn btn-primary btn-sm" onclick="showAddPhoto()">+ 添加照片</button>
+                        </div>
+                        <div id="photoTimeline" class="photo-timeline">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="learning-module" class="module">
+                <div class="module-header">
+                    <h2>📚 学习追踪</h2>
+                    <p>记录学习历程，见证每一次进步</p>
+                </div>
+                <div class="learning-container">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>📝 科目成绩记录</h3>
+                            <button class="btn btn-primary btn-sm" onclick="showAddScore()">+ 添加成绩</button>
+                        </div>
+                        <div class="subject-selector">
+                            <select id="subjectSelector" onchange="updateScoreChart()">
+                                <option value="all">全部科目</option>
+                                <option value="语文">语文</option>
+                                <option value="数学">数学</option>
+                                <option value="英语">英语</option>
+                                <option value="科学">科学</option>
+                            </select>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="scoreChart"></canvas>
+                        </div>
+                        <div class="score-table-container">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>日期</th>
+                                        <th>科目</th>
+                                        <th>考试类型</th>
+                                        <th>分数</th>
+                                        <th>班级排名</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="scoreTable">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>🎯 课外活动记录</h3>
+                            <button class="btn btn-primary btn-sm" onclick="showAddActivity()">+ 添加活动</button>
+                        </div>
+                        <div id="activitiesList" class="activities-grid">
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>📖 阅读书目记录</h3>
+                            <button class="btn btn-primary btn-sm" onclick="showAddBook()">+ 添加书籍</button>
+                        </div>
+                        <div class="reading-stats">
+                            <div class="stat-item">
+                                <span class="stat-value" id="totalBooks">0</span>
+                                <span class="stat-label">已读书籍</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-value" id="readingNow">0</span>
+                                <span class="stat-label">正在阅读</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-value" id="totalPages">0</span>
+                                <span class="stat-label">总页数</span>
+                            </div>
+                        </div>
+                        <div id="booksList" class="books-grid">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="resources-module" class="module">
+                <div class="module-header">
+                    <h2>🎒 教育资源管理</h2>
+                    <p>精选优质资源，助力孩子成长</p>
+                </div>
+                <div class="resources-container">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>📂 教育资源收藏</h3>
+                            <div class="resource-filters">
+                                <select id="resourceTypeFilter" onchange="filterResources()">
+                                    <option value="all">全部类型</option>
+                                    <option value="书籍">书籍</option>
+                                    <option value="视频">视频</option>
+                                    <option value="APP">APP</option>
+                                    <option value="网站">网站</option>
+                                </select>
+                                <select id="resourceAgeFilter" onchange="filterResources()">
+                                    <option value="all">全部年龄</option>
+                                    <option value="0-3">0-3岁</option>
+                                    <option value="3-6">3-6岁</option>
+                                    <option value="6-9">6-9岁</option>
+                                    <option value="9-12">9-12岁</option>
+                                </select>
+                                <button class="btn btn-primary btn-sm" onclick="showAddResource()">+ 添加资源</button>
+                            </div>
+                        </div>
+                        <div id="resourcesList" class="resources-grid">
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>⭐ 推荐资源试用记录</h3>
+                            <button class="btn btn-primary btn-sm" onclick="showAddTrial()">+ 添加试用</button>
+                        </div>
+                        <div id="trialsList" class="trials-list">
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>🖨️ 学习材料打印模板</h3>
+                        </div>
+                        <div class="print-templates">
+                            <div class="template-card" onclick="generateMathWorksheet()">
+                                <div class="template-icon">🔢</div>
+                                <h4>数学练习</h4>
+                                <p>加减法、乘除法练习题</p>
+                                <button class="btn btn-secondary btn-sm">生成并打印</button>
+                            </div>
+                            <div class="template-card" onclick="generateChineseWorksheet()">
+                                <div class="template-icon">✍️</div>
+                                <h4>汉字描红</h4>
+                                <p>常用汉字描红练习</p>
+                                <button class="btn btn-secondary btn-sm">生成并打印</button>
+                            </div>
+                            <div class="template-card" onclick="generateEnglishWorksheet()">
+                                <div class="template-icon">🔤</div>
+                                <h4>英语练习</h4>
+                                <p>字母、单词书写练习</p>
+                                <button class="btn btn-secondary btn-sm">生成并打印</button>
+                            </div>
+                            <div class="template-card" onclick="generateDrawingPaper()">
+                                <div class="template-icon">🎨</div>
+                                <h4>绘画纸</h4>
+                                <p>田字格、米字格画纸</p>
+                                <button class="btn btn-secondary btn-sm">生成并打印</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="activities-module" class="module">
+                <div class="module-header">
+                    <h2>👨‍👩‍👧 亲子活动记录</h2>
+                    <p>珍藏每一个温馨的亲子时光</p>
+                </div>
+                <div class="activities-container">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>📅 亲子活动计划</h3>
+                            <div class="activity-tabs">
+                                <button class="activity-tab active" data-status="planned">待进行</button>
+                                <button class="activity-tab" data-status="completed">已完成</button>
+                            </div>
+                            <button class="btn btn-primary btn-sm" onclick="showAddParentActivity()">+ 添加活动</button>
+                        </div>
+                        <div id="parentActivitiesList" class="parent-activities-list">
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>🎨 活动照片与作品收藏</h3>
+                            <button class="btn btn-primary btn-sm" onclick="showAddWork()">+ 添加作品</button>
+                        </div>
+                        <div id="worksList" class="works-grid">
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>💬 亲子对话记录</h3>
+                            <button class="btn btn-primary btn-sm" onclick="showAddDialog()">+ 记录对话</button>
+                        </div>
+                        <div id="dialogsList" class="dialogs-list">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="health-module" class="module">
+                <div class="module-header">
+                    <h2>💉 健康管理</h2>
+                    <p>守护孩子健康成长</p>
+                </div>
+                <div class="health-container">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>💉 疫苗接种记录</h3>
+                            <button class="btn btn-primary btn-sm" onclick="showAddVaccine()">+ 添加接种</button>
+                        </div>
+                        <div class="vaccine-stats">
+                            <div class="stat-item stat-success">
+                                <span class="stat-value" id="vaccinatedCount">0</span>
+                                <span class="stat-label">已接种</span>
+                            </div>
+                            <div class="stat-item stat-warning">
+                                <span class="stat-value" id="upcomingCount">0</span>
+                                <span class="stat-label">待接种</span>
+                            </div>
+                            <div class="stat-item stat-info">
+                                <span class="stat-value" id="totalVaccines">0</span>
+                                <span class="stat-label">总计</span>
+                            </div>
+                        </div>
+                        <div id="vaccinesList" class="vaccines-list">
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>🏥 就医记录</h3>
+                            <button class="btn btn-primary btn-sm" onclick="showAddMedical()">+ 添加记录</button>
+                        </div>
+                        <div id="medicalList" class="medical-list">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="report-module" class="module">
+                <div class="module-header">
+                    <h2>📄 成长报告</h2>
+                    <p>生成精美的成长纪念册</p>
+                </div>
+                <div class="report-container">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>📸 电子相册导出</h3>
+                        </div>
+                        <div class="report-options">
+                            <div class="option-group">
+                                <label>选择时间范围</label>
+                                <div class="date-range">
+                                    <input type="date" id="reportStartDate">
+                                    <span>至</span>
+                                    <input type="date" id="reportEndDate">
+                                </div>
+                            </div>
+                            <div class="option-group">
+                                <label>包含内容</label>
+                                <div class="checkbox-group">
+                                    <label><input type="checkbox" id="includePhotos" checked> 成长照片</label>
+                                    <label><input type="checkbox" id="includeMilestones" checked> 里程碑事件</label>
+                                    <label><input type="checkbox" id="includeGrowth" checked> 发育数据</label>
+                                    <label><input type="checkbox" id="includeLearning" checked> 学习记录</label>
+                                    <label><input type="checkbox" id="includeActivities" checked> 亲子活动</label>
+                                    <label><input type="checkbox" id="includeHealth" checked> 健康记录</label>
+                                </div>
+                            </div>
+                            <div class="option-group">
+                                <label>相册主题</label>
+                                <div class="theme-selector">
+                                    <button class="theme-btn active" data-theme="warm">🌅 温暖</button>
+                                    <button class="theme-btn" data-theme="blue">🌊 海洋</button>
+                                    <button class="theme-btn" data-theme="green">🌲 森林</button>
+                                    <button class="theme-btn" data-theme="pink">🌸 粉色</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="report-preview">
+                            <h4>相册预览</h4>
+                            <div id="reportPreview" class="album-preview">
+                                <div class="album-cover">
+                                    <div class="cover-content">
+                                        <div class="cover-icon">🌈</div>
+                                        <h2 id="albumTitle">小明的成长相册</h2>
+                                        <p id="albumDate">2023 - 2026</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="report-actions">
+                            <button class="btn btn-primary btn-lg" onclick="generatePDFReport()">
+                                📄 生成PDF电子相册
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div id="modalContainer" class="modal-container">
+    </div>
+
+    <div id="printContainer" class="print-container">
+    </div>
+
+    <script src="js/data.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/growth.js"></script>
+    <script src="js/learning.js"></script>
+    <script src="js/resources.js"></script>
+    <script src="js/parentActivities.js"></script>
+    <script src="js/health.js"></script>
+    <script src="js/report.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
