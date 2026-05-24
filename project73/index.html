@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>创意写作工具箱 - Creative Writing Studio</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- 顶部导航栏 -->
+    <header class="main-header" id="mainHeader">
+        <div class="logo">
+            <span class="logo-icon">✍️</span>
+            <h1>创意写作工具箱</h1>
+        </div>
+        <nav class="main-nav">
+            <button class="nav-btn active" data-module="projects">📁 项目管理</button>
+            <button class="nav-btn" data-module="editor">📝 写作环境</button>
+            <button class="nav-btn" data-module="creation">🎨 创作辅助</button>
+            <button class="nav-btn" data-module="analysis">📊 写作分析</button>
+            <button class="nav-btn" data-module="inspiration">💡 灵感工具</button>
+        </nav>
+        <div class="header-actions">
+            <button id="themeToggle" class="icon-btn" title="切换主题">🌓</button>
+            <button id="fullscreenBtn" class="icon-btn" title="全屏">⛶</button>
+        </div>
+    </header>
+
+    <!-- 主内容区 -->
+    <main class="main-content">
+        <!-- 项目管理模块 -->
+        <section class="module active" id="projects-module">
+            <div class="module-header">
+                <h2>📁 写作项目管理</h2>
+                <button class="primary-btn" id="addProjectBtn">+ 新建项目</button>
+            </div>
+            
+            <div class="projects-grid" id="projectsGrid">
+            </div>
+
+            <!-- 项目详情模态框 -->
+            <div class="modal" id="projectModal">
+                <div class="modal-content large">
+                    <div class="modal-header">
+                        <h3 id="projectModalTitle">新建项目</h3>
+                        <button class="close-btn" data-close="projectModal">×</button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="projectForm">
+                            <div class="form-row">
+                                <label>项目名称</label>
+                                <input type="text" id="projectName" required placeholder="例如：我的第一部小说">
+                            </div>
+                            <div class="form-row">
+                                <label>项目类型</label>
+                                <select id="projectType">
+                                    <option value="novel">长篇小说</option>
+                                    <option value="short">短篇小说</option>
+                                    <option value="script">剧本</option>
+                                    <option value="essay">随笔</option>
+                                    <option value="poem">诗歌</option>
+                                    <option value="other">其他</option>
+                                </select>
+                            </div>
+                            <div class="form-row">
+                                <label>项目简介</label>
+                                <textarea id="projectDesc" rows="3" placeholder="简要描述你的项目..."></textarea>
+                            </div>
+                            <div class="form-grid">
+                                <div class="form-row">
+                                    <label>总字数目标</label>
+                                    <input type="number" id="wordGoal" min="1000" value="50000">
+                                </div>
+                                <div class="form-row">
+                                    <label>完成日期</label>
+                                    <input type="date" id="deadline">
+                                </div>
+                                <div class="form-row">
+                                    <label>每日写作目标</label>
+                                    <input type="number" id="dailyGoal" min="100" value="1000">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="secondary-btn" data-close="projectModal">取消</button>
+                        <button class="primary-btn" id="saveProjectBtn">保存项目</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 项目详情面板 -->
+            <div class="modal" id="projectDetailModal">
+                <div class="modal-content extra-large">
+                    <div class="modal-header">
+                        <h3 id="detailProjectTitle">项目详情</h3>
+                        <button class="close-btn" data-close="projectDetailModal">×</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="project-detail-layout">
+                            <div class="detail-sidebar">
+                                <div class="project-info-card">
+                                    <h4>项目信息</h4>
+                                    <p><strong>类型：</strong><span id="detailType"></span></p>
+                                    <p><strong>创建日期：</strong><span id="detailCreated"></span></p>
+                                    <p><strong>截止日期：</strong><span id="detailDeadline"></span></p>
+                                    <p><strong>总字数目标：</strong><span id="detailGoal"></span></p>
+                                    <p><strong>每日目标：</strong><span id="detailDaily"></span></p>
+                                </div>
+                                <div class="progress-card">
+                                    <h4>写作进度</h4>
+                                    <div class="progress-stat">
+                                        <span class="stat-label">已完成</span>
+                                        <span class="stat-value" id="detailCurrentWords">0</span>
+                                    </div>
+                                    <div class="progress-stat">
+                                        <span class="stat-label">目标</span>
+                                        <span class="stat-value" id="detailGoalWords">0</span>
+                                    </div>
+                                    <div class="progress-bar-container">
+                                        <div class="progress-bar" id="detailProgressBar" style="width: 0%"></div>
+                                    </div>
+                                    <p class="progress-percent" id="detailProgressPercent">0%</p>
+                                </div>
+                                <div class="detail-actions">
+                                    <button class="primary-btn full-width" id="startWritingBtn">✍️ 开始写作</button>
+                                    <button class="secondary-btn full-width" id="editProjectBtn">⚙️ 编辑项目</button>
+                                    <button class="danger-btn full-width" id="deleteProjectBtn">🗑️ 删除项目</button>
+                                </div>
+                            </div>
+                            <div class="detail-main">
+                                <div class="calendar-section">
+                                    <h4>📅 写作日历热图</h4>
+                                    <div class="calendar-heatmap" id="calendarHeatmap"></div>
+                                    <div class="calendar-legend">
+                                        <span>少</span>
+                                        <div class="heat-level level-0"></div>
+                                        <div class="heat-level level-1"></div>
+                                        <div class="heat-level level-2"></div>
+                                        <div class="heat-level level-3"></div>
+                                        <div class="heat-level level-4"></div>
+                                        <span>多</span>
+                                    </div>
+                                </div>
+                                <div class="daily-progress-section">
+                                    <h4>📈 近期写作进度</h4>
+                                    <div class="daily-chart" id="dailyChart"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 写作环境模块 -->
+        <section class="module" id="editor-module">
+            <div class="editor-layout">
+                <!-- 编辑器工具栏 -->
+                <div class="editor-toolbar" id="editorToolbar">
+                    <div class="toolbar-left">
+                        <select id="editorProjectSelect">
+                            <option value="">-- 选择项目 --</option>
+                        </select>
+                    </div>
+                    <div class="toolbar-center">
+                        <span class="word-count" id="editorWordCount">0 字</span>
+                        <span class="session-count" id="sessionWordCount">本次: 0 字</span>
+                    </div>
+                    <div class="toolbar-right">
+                        <button class="toolbar-btn" id="typewriterBtn" title="Typewriter模式">⌨️</button>
+                        <div class="sound-selector">
+                            <button class="toolbar-btn" id="soundBtn" title="背景音效">🔊</button>
+                            <div class="sound-menu" id="soundMenu">
+                                <button class="sound-option" data-sound="none">🔇 安静</button>
+                                <button class="sound-option" data-sound="cafe">☕ 咖啡馆</button>
+                                <button class="sound-option" data-sound="rain">🌧️ 雨天</button>
+                                <button class="sound-option" data-sound="white">📻 白噪音</button>
+                                <div class="volume-control">
+                                    <label>音量</label>
+                                    <input type="range" id="volumeSlider" min="0" max="100" value="50">
+                                </div>
+                            </div>
+                        </div>
+                        <button class="toolbar-btn" id="immersionBtn" title="沉浸式模式">🎯</button>
+                        <button class="toolbar-btn" id="saveBtn" title="保存">💾</button>
+                    </div>
+                </div>
+
+                <!-- 编辑器主体 -->
+                <div class="editor-container" id="editorContainer">
+                    <textarea 
+                        id="mainEditor" 
+                        class="main-editor" 
+                        placeholder="开始你的创作之旅...
+&#10;在这里写下你的故事、想法、灵感。
+&#10;点击右上角的 🎯 按钮进入沉浸式写作模式。
+&#10;点击 ⌨️ 按钮开启 Typewriter 模式，让当前行始终保持在屏幕中央。"
+                    ></textarea>
+                </div>
+
+                <!-- 状态栏 -->
+                <div class="editor-statusbar" id="editorStatusbar">
+                    <span id="statusProject">未选择项目</span>
+                    <span id="statusSaved">✓ 已保存</span>
+                    <span id="statusTime">--:--</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- 创作辅助模块 -->
+        <section class="module" id="creation-module">
+            <div class="module-header">
+                <h2>🎨 创作辅助</h2>
+                <div class="tab-buttons">
+                    <button class="tab-btn active" data-tab="characters">👤 角色卡</button>
+                    <button class="tab-btn" data-tab="world">🌍 世界观设定</button>
+                    <button class="tab-btn" data-tab="plotboard">🎬 情节板</button>
+                </div>
+            </div>
+
+            <!-- 角色卡面板 -->
+            <div class="tab-content active" id="characters-tab">
+                <div class="creation-toolbar">
+                    <div class="filter-section">
+                        <select id="characterProjectFilter">
+                            <option value="">所有项目</option>
+                        </select>
+                    </div>
+                    <button class="primary-btn" id="addCharacterBtn">+ 新建角色</button>
+                </div>
+                <div class="characters-grid" id="charactersGrid">
+                </div>
+
+                <!-- 角色编辑模态框 -->
+                <div class="modal" id="characterModal">
+                    <div class="modal-content large">
+                        <div class="modal-header">
+                            <h3 id="characterModalTitle">新建角色</h3>
+                            <button class="close-btn" data-close="characterModal">×</button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="characterForm">
+                                <div class="form-row">
+                                    <label>所属项目</label>
+                                    <select id="characterProject" required></select>
+                                </div>
+                                <div class="form-grid">
+                                    <div class="form-row">
+                                        <label>角色姓名</label>
+                                        <input type="text" id="charName" required>
+                                    </div>
+                                    <div class="form-row">
+                                        <label>角色昵称</label>
+                                        <input type="text" id="charNickname">
+                                    </div>
+                                </div>
+                                <div class="form-grid">
+                                    <div class="form-row">
+                                        <label>年龄</label>
+                                        <input type="text" id="charAge">
+                                    </div>
+                                    <div class="form-row">
+                                        <label>性别</label>
+                                        <select id="charGender">
+                                            <option value="">未设定</option>
+                                            <option value="male">男</option>
+                                            <option value="female">女</option>
+                                            <option value="other">其他</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <label>外貌特征</label>
+                                    <textarea id="charAppearance" rows="3" placeholder="身高、体型、发型、五官、穿着风格..."></textarea>
+                                </div>
+                                <div class="form-row">
+                                    <label>性格特点</label>
+                                    <textarea id="charPersonality" rows="3" placeholder="性格、习惯、优缺点、口头禅..."></textarea>
+                                </div>
+                                <div class="form-row">
+                                    <label>背景故事</label>
+                                    <textarea id="charBackground" rows="4" placeholder="成长经历、重要事件、秘密..."></textarea>
+                                </div>
+                                <div class="form-row">
+                                    <label>与其他角色的关系</label>
+                                    <textarea id="charRelations" rows="3" placeholder="例如：张三 - 挚友；李四 - 竞争对手..."></textarea>
+                                </div>
+                                <div class="form-row">
+                                    <label>角色标签（用逗号分隔）</label>
+                                    <input type="text" id="charTags" placeholder="例如：勇敢, 正直, 有些冲动">
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="secondary-btn" data-close="characterModal">取消</button>
+                            <button class="primary-btn" id="saveCharacterBtn">保存</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 角色详情模态框 -->
+                <div class="modal" id="characterDetailModal">
+                    <div class="modal-content large">
+                        <div class="modal-header">
+                            <h3 id="detailCharName">角色详情</h3>
+                            <button class="close-btn" data-close="characterDetailModal">×</button>
+                        </div>
+                        <div class="modal-body" id="characterDetailContent">
+                        </div>
+                        <div class="modal-footer">
+                            <button class="secondary-btn" data-close="characterDetailModal">关闭</button>
+                            <button class="primary-btn" id="editCharacterBtn">编辑</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 世界观设定面板 -->
+            <div class="tab-content" id="world-tab">
+                <div class="creation-toolbar">
+                    <div class="filter-section">
+                        <select id="worldProjectFilter">
+                            <option value="">所有项目</option>
+                        </select>
+                    </div>
+                    <button class="primary-btn" id="addWorldEntryBtn">+ 新建设定</button>
+                </div>
+                <div class="world-settings-layout">
+                    <div class="world-categories">
+                        <div class="category-item active" data-category="geography">🗺️ 地理</div>
+                        <div class="category-item" data-category="history">📜 历史</div>
+                        <div class="category-item" data-category="rules">⚖️ 规则</div>
+                        <div class="category-item" data-category="culture">🎭 文化</div>
+                        <div class="category-item" data-category="other">📎 其他</div>
+                    </div>
+                    <div class="world-entries" id="worldEntries">
+                    </div>
+                </div>
+
+                <!-- 设定编辑模态框 -->
+                <div class="modal" id="worldModal">
+                    <div class="modal-content large">
+                        <div class="modal-header">
+                            <h3 id="worldModalTitle">新建设定</h3>
+                            <button class="close-btn" data-close="worldModal">×</button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="worldForm">
+                                <div class="form-row">
+                                    <label>所属项目</label>
+                                    <select id="worldProject" required></select>
+                                </div>
+                                <div class="form-grid">
+                                    <div class="form-row">
+                                        <label>设定分类</label>
+                                        <select id="worldCategory">
+                                            <option value="geography">🗺️ 地理</option>
+                                            <option value="history">📜 历史</option>
+                                            <option value="rules">⚖️ 规则</option>
+                                            <option value="culture">🎭 文化</option>
+                                            <option value="other">📎 其他</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-row">
+                                        <label>设定名称</label>
+                                        <input type="text" id="worldName" required placeholder="例如：云雾山脉">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <label>设定内容</label>
+                                    <textarea id="worldContent" rows="8" placeholder="详细描述这个设定..."></textarea>
+                                </div>
+                                <div class="form-row">
+                                    <label>关联设定（用逗号分隔）</label>
+                                    <input type="text" id="worldRelated" placeholder="例如：迷雾森林, 精灵王国">
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="secondary-btn" data-close="worldModal">取消</button>
+                            <button class="primary-btn" id="saveWorldBtn">保存</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 情节板面板 -->
+            <div class="tab-content" id="plotboard-tab">
+                <div class="creation-toolbar">
+                    <div class="filter-section">
+                        <select id="plotProjectFilter">
+                            <option value="">选择项目</option>
+                        </select>
+                    </div>
+                    <div class="toolbar-actions">
+                        <button class="secondary-btn" id="addActBtn">+ 添加幕</button>
+                        <button class="primary-btn" id="addSceneBtn">+ 场景卡片</button>
+                    </div>
+                </div>
+                <div class="plotboard-container" id="plotboardContainer">
+                    <div class="empty-plotboard" id="emptyPlotboard">
+                        <div class="empty-icon">🎬</div>
+                        <h3>开始构建你的故事结构</h3>
+                        <p>选择一个项目，然后添加幕和场景卡片来组织你的情节</p>
+                        <p class="hint">提示：你可以拖拽场景卡片来调整顺序</p>
+                    </div>
+                </div>
+
+                <!-- 场景卡片编辑模态框 -->
+                <div class="modal" id="sceneModal">
+                    <div class="modal-content large">
+                        <div class="modal-header">
+                            <h3 id="sceneModalTitle">新建场景</h3>
+                            <button class="close-btn" data-close="sceneModal">×</button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="sceneForm">
+                                <div class="form-row">
+                                    <label>所属项目</label>
+                                    <select id="sceneProject" required></select>
+                                </div>
+                                <div class="form-row">
+                                    <label>所属幕</label>
+                                    <select id="sceneAct" required></select>
+                                </div>
+                                <div class="form-grid">
+                                    <div class="form-row">
+                                        <label>场景标题</label>
+                                        <input type="text" id="sceneTitle" required>
+                                    </div>
+                                    <div class="form-row">
+                                        <label>场景序号</label>
+                                        <input type="number" id="sceneOrder" value="1">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <label>场景地点</label>
+                                    <input type="text" id="sceneLocation" placeholder="例如：皇宫大殿">
+                                </div>
+                                <div class="form-row">
+                                    <label>参与角色</label>
+                                    <input type="text" id="sceneCharacters" placeholder="用逗号分隔角色名">
+                                </div>
+                                <div class="form-row">
+                                    <label>场景概要</label>
+                                    <textarea id="sceneSummary" rows="3" placeholder="这个场景发生了什么？"></textarea>
+                                </div>
+                                <div class="form-row">
+                                    <label>主要冲突</label>
+                                    <textarea id="sceneConflict" rows="2" placeholder="场景中的核心矛盾"></textarea>
+                                </div>
+                                <div class="form-row">
+                                    <label>场景目的</label>
+                                    <textarea id="scenePurpose" rows="2" placeholder="这个场景在故事中的作用"></textarea>
+                                </div>
+                                <div class="form-row">
+                                    <label>场景标签</label>
+                                    <input type="text" id="sceneTags" placeholder="例如：动作, 感情, 转折">
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="secondary-btn" data-close="sceneModal">取消</button>
+                            <button class="primary-btn" id="saveSceneBtn">保存</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 添加幕模态框 -->
+                <div class="modal" id="actModal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3>添加幕</h3>
+                            <button class="close-btn" data-close="actModal">×</button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="actForm">
+                                <div class="form-row">
+                                    <label>幕名称</label>
+                                    <input type="text" id="actName" required placeholder="例如：第一幕 - 启程">
+                                </div>
+                                <div class="form-row">
+                                    <label>幕描述</label>
+                                    <textarea id="actDesc" rows="3" placeholder="这一幕的主要内容..."></textarea>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="secondary-btn" data-close="actModal">取消</button>
+                            <button class="primary-btn" id="saveActBtn">保存</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 写作分析模块 -->
+        <section class="module" id="analysis-module">
+            <div class="module-header">
+                <h2>📊 写作分析</h2>
+            </div>
+            
+            <div class="analysis-layout">
+                <div class="analysis-sidebar">
+                    <div class="analysis-project-select">
+                        <label>选择项目</label>
+                        <select id="analysisProjectSelect">
+                            <option value="">-- 选择项目 --</option>
+                        </select>
+                    </div>
+                    <div class="analysis-nav">
+                        <button class="analysis-nav-btn active" data-analysis="stats">📈 文本统计</button>
+                        <button class="analysis-nav-btn" data-analysis="readability">📖 阅读难度</button>
+                        <button class="analysis-nav-btn" data-analysis="habits">⏰ 写作习惯</button>
+                    </div>
+                </div>
+
+                <div class="analysis-content">
+                    <!-- 文本统计 -->
+                    <div class="analysis-panel active" id="stats-analysis">
+                        <h3>📈 文本统计</h3>
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <div class="stat-icon">📝</div>
+                                <div class="stat-info">
+                                    <span class="stat-label">总字数</span>
+                                    <span class="stat-number" id="totalWords">0</span>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon">📄</div>
+                                <div class="stat-info">
+                                    <span class="stat-label">段落数</span>
+                                    <span class="stat-number" id="totalParagraphs">0</span>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon">📏</div>
+                                <div class="stat-info">
+                                    <span class="stat-label">平均句长</span>
+                                    <span class="stat-number" id="avgSentenceLength">0</span>
+                                    <span class="stat-unit">字</span>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon">💬</div>
+                                <div class="stat-info">
+                                    <span class="stat-label">对话比例</span>
+                                    <span class="stat-number" id="dialogueRatio">0%</span>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon">📚</div>
+                                <div class="stat-info">
+                                    <span class="stat-label">词汇量</span>
+                                    <span class="stat-number" id="vocabularyCount">0</span>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon">🔤</div>
+                                <div class="stat-info">
+                                    <span class="stat-label">常用词前5</span>
+                                    <div class="common-words" id="commonWords">-</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="chart-section">
+                            <h4>段落长度分布</h4>
+                            <div class="bar-chart" id="paragraphChart"></div>
+                        </div>
+
+                        <div class="chart-section">
+                            <h4>句子长度分布</h4>
+                            <div class="bar-chart" id="sentenceChart"></div>
+                        </div>
+                    </div>
+
+                    <!-- 阅读难度 -->
+                    <div class="analysis-panel" id="readability-analysis">
+                        <h3>📖 阅读难度评估</h3>
+                        <div class="readability-score">
+                            <div class="score-circle" id="scoreCircle">
+                                <span class="score-value" id="scoreValue">--</span>
+                                <span class="score-label" id="scoreLabel">--</span>
+                            </div>
+                            <div class="score-description" id="scoreDescription">
+                                请选择一个项目查看阅读难度分析
+                            </div>
+                        </div>
+
+                        <div class="readability-details">
+                            <div class="detail-row">
+                                <span class="detail-label">平均句子长度</span>
+                                <div class="detail-bar-container">
+                                    <div class="detail-bar" id="sentenceLengthBar" style="width: 0%"></div>
+                                </div>
+                                <span class="detail-value" id="sentenceLengthDetail">0 字</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">词汇复杂度</span>
+                                <div class="detail-bar-container">
+                                    <div class="detail-bar" id="vocabComplexityBar" style="width: 0%"></div>
+                                </div>
+                                <span class="detail-value" id="vocabComplexityDetail">0%</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">生僻词比例</span>
+                                <div class="detail-bar-container">
+                                    <div class="detail-bar" id="rareWordsBar" style="width: 0%"></div>
+                                </div>
+                                <span class="detail-value" id="rareWordsDetail">0%</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">段落连贯性</span>
+                                <div class="detail-bar-container">
+                                    <div class="detail-bar" id="coherenceBar" style="width: 0%"></div>
+                                </div>
+                                <span class="detail-value" id="coherenceDetail">--</span>
+                            </div>
+                        </div>
+
+                        <div class="readability-suggestions">
+                            <h4>💡 改进建议</h4>
+                            <ul id="suggestionsList">
+                                <li>选择项目后将显示针对性建议</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- 写作习惯 -->
+                    <div class="analysis-panel" id="habits-analysis">
+                        <h3>⏰ 写作习惯分析</h3>
+                        
+                        <div class="habits-grid">
+                            <div class="habit-card">
+                                <h4>🗓️ 写作时段分布</h4>
+                                <div class="time-distribution" id="timeDistribution"></div>
+                                <p class="habit-highlight">最高产时段：<span id="bestTime">--</span></p>
+                            </div>
+
+                            <div class="habit-card">
+                                <h4>📊 写作频率</h4>
+                                <div class="frequency-stats">
+                                    <div class="freq-item">
+                                        <span class="freq-label">连续写作</span>
+                                        <span class="freq-value" id="streakDays">0 天</span>
+                                    </div>
+                                    <div class="freq-item">
+                                        <span class="freq-label">本周写作</span>
+                                        <span class="freq-value" id="weekDays">0 天</span>
+                                    </div>
+                                    <div class="freq-item">
+                                        <span class="freq-label">本月写作</span>
+                                        <span class="freq-value" id="monthDays">0 天</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="habit-card">
+                                <h4>⚡ 最容易卡文的位置</h4>
+                                <div class="block-points" id="blockPoints">
+                                    <p class="no-data">暂无足够数据分析</p>
+                                </div>
+                            </div>
+
+                            <div class="habit-card">
+                                <h4>📈 效率趋势</h4>
+                                <div class="efficiency-chart" id="efficiencyChart"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 灵感工具模块 -->
+        <section class="module" id="inspiration-module">
+            <div class="module-header">
+                <h2>💡 灵感工具</h2>
+                <div class="tab-buttons">
+                    <button class="tab-btn active" data-tab="prompts">🎲 随机写作提示</button>
+                    <button class="tab-btn" data-tab="thesaurus">📖 词汇扩展</button>
+                </div>
+            </div>
+
+            <!-- 随机写作提示 -->
+            <div class="tab-content active" id="prompts-tab">
+                <div class="prompts-container">
+                    <div class="prompt-generator">
+                        <h3>🎲 随机写作提示生成器</h3>
+                        <p class="generator-desc">选择你想要的提示类型，点击生成按钮获取灵感</p>
+                        
+                        <div class="prompt-options">
+                            <label class="option-checkbox">
+                                <input type="checkbox" id="includeCharacter" checked>
+                                <span>👤 角色</span>
+                            </label>
+                            <label class="option-checkbox">
+                                <input type="checkbox" id="includeScene" checked>
+                                <span>🏞️ 场景</span>
+                            </label>
+                            <label class="option-checkbox">
+                                <input type="checkbox" id="includeConflict" checked>
+                                <span>⚔️ 冲突</span>
+                            </label>
+                            <label class="option-checkbox">
+                                <input type="checkbox" id="includeTheme">
+                                <span>🎯 主题</span>
+                            </label>
+                        </div>
+
+                        <button class="primary-btn large" id="generatePromptBtn">🎲 生成提示</button>
+
+                        <div class="generated-prompt" id="generatedPrompt">
+                            <div class="prompt-placeholder">
+                                <div class="prompt-icon">✨</div>
+                                <p>点击上方按钮生成随机写作提示</p>
+                            </div>
+                        </div>
+
+                        <div class="prompt-actions">
+                            <button class="secondary-btn" id="savePromptBtn" disabled>💾 保存提示</button>
+                            <button class="secondary-btn" id="copyPromptBtn" disabled>📋 复制</button>
+                        </div>
+                    </div>
+
+                    <div class="saved-prompts">
+                        <h3>📚 已保存的提示</h3>
+                        <div class="prompts-list" id="savedPromptsList">
+                            <p class="no-data">暂无保存的提示</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 词汇扩展 -->
+            <div class="tab-content" id="thesaurus-tab">
+                <div class="thesaurus-container">
+                    <div class="thesaurus-search">
+                        <h3>📖 词汇扩展建议</h3>
+                        <p class="generator-desc">输入一个词，获取更有力量的同义词和表达建议</p>
+                        
+                        <div class="search-box">
+                            <input type="text" id="wordInput" placeholder="输入一个词，例如：美丽、高兴、快速...">
+                            <button class="primary-btn" id="searchWordBtn">🔍 查找</button>
+                        </div>
+
+                        <div class="word-results" id="wordResults">
+                            <div class="results-placeholder">
+                                <div class="results-icon">📚</div>
+                                <p>输入词汇后将显示相关的同义词和表达建议</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="word-categories">
+                        <h3>🏷️ 常用词汇分类</h3>
+                        <div class="category-grid">
+                            <div class="word-category" data-category="emotion">
+                                <div class="cat-icon">❤️</div>
+                                <h4>情感表达</h4>
+                                <p>喜怒哀乐的多样表达</p>
+                            </div>
+                            <div class="word-category" data-category="action">
+                                <div class="cat-icon">🏃</div>
+                                <h4>动作描写</h4>
+                                <p>生动的动作词汇</p>
+                            </div>
+                            <div class="word-category" data-category="environment">
+                                <div class="cat-icon">🌄</div>
+                                <h4>环境描写</h4>
+                                <p>场景氛围的营造</p>
+                            </div>
+                            <div class="word-category" data-category="character">
+                                <div class="cat-icon">👤</div>
+                                <h4>人物刻画</h4>
+                                <p>外貌性格的描绘</p>
+                            </div>
+                            <div class="word-category" data-category="dialogue">
+                                <div class="cat-icon">💬</div>
+                                <h4>对话提示</h4>
+                                <p>多样的对话方式</p>
+                            </div>
+                            <div class="word-category" data-category="transition">
+                                <div class="cat-icon">🔄</div>
+                                <h4>过渡连接</h4>
+                                <p>流畅的过渡词</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 词汇详情模态框 -->
+                    <div class="modal" id="wordDetailModal">
+                        <div class="modal-content large">
+                            <div class="modal-header">
+                                <h3 id="wordDetailTitle">词汇详情</h3>
+                                <button class="close-btn" data-close="wordDetailModal">×</button>
+                            </div>
+                            <div class="modal-body" id="wordDetailContent">
+                            </div>
+                            <div class="modal-footer">
+                                <button class="secondary-btn" data-close="wordDetailModal">关闭</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 沉浸式模式遮罩 -->
+    <div class="immersion-overlay" id="immersionOverlay">
+        <button class="exit-immersion" id="exitImmersionBtn" title="退出沉浸式模式 (ESC)">
+            ✕ 退出沉浸式模式
+        </button>
+    </div>
+
+    <!-- 提示消息 -->
+    <div class="toast" id="toast"></div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
