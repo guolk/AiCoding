@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>家庭急救与安全管理系统</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <header class="app-header">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-heartbeat"></i>
+                    <h1>家庭急救与安全管理系统</h1>
+                </div>
+                <div class="header-actions">
+                    <span class="status-indicator" id="statusIndicator">
+                        <i class="fas fa-shield-alt"></i>
+                        <span id="alertCount">0</span> 项待处理
+                    </span>
+                </div>
+            </div>
+        </header>
+
+        <nav class="main-nav">
+            <div class="nav-container">
+                <button class="nav-item active" data-module="knowledge">
+                    <i class="fas fa-book-medical"></i>
+                    <span>急救知识库</span>
+                </button>
+                <button class="nav-item" data-module="emergency">
+                    <i class="fas fa-ambulance"></i>
+                    <span>应急预案</span>
+                </button>
+                <button class="nav-item" data-module="medicine">
+                    <i class="fas fa-pills"></i>
+                    <span>药品管理</span>
+                </button>
+                <button class="nav-item" data-module="safety">
+                    <i class="fas fa-home"></i>
+                    <span>安全评估</span>
+                </button>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <section id="knowledge-module" class="module active">
+                <div class="module-header">
+                    <h2><i class="fas fa-book-medical"></i> 急救知识库</h2>
+                    <div class="module-tabs">
+                        <button class="tab-btn active" data-tab="scenes">急救场景</button>
+                        <button class="tab-btn" data-tab="quiz">知识测验</button>
+                        <button class="tab-btn" data-tab="certificates">证书管理</button>
+                    </div>
+                </div>
+                <div class="module-content">
+                    <div id="scenes-tab" class="tab-content active">
+                        <div class="search-bar">
+                            <input type="text" id="sceneSearch" placeholder="搜索急救场景...">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <div class="scenes-grid" id="scenesGrid"></div>
+                    </div>
+                    <div id="quiz-tab" class="tab-content">
+                        <div class="quiz-container" id="quizContainer"></div>
+                    </div>
+                    <div id="certificates-tab" class="tab-content">
+                        <div class="certificates-header">
+                            <button class="btn btn-primary" onclick="KnowledgeModule.showAddCertificateModal()">
+                                <i class="fas fa-plus"></i> 添加证书
+                            </button>
+                        </div>
+                        <div class="certificates-list" id="certificatesList"></div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="emergency-module" class="module">
+                <div class="module-header">
+                    <h2><i class="fas fa-ambulance"></i> 家庭应急预案</h2>
+                    <div class="module-tabs">
+                        <button class="tab-btn active" data-tab="contacts">紧急联系人</button>
+                        <button class="tab-btn" data-tab="medical">医疗信息卡</button>
+                        <button class="tab-btn" data-tab="rally">紧急集合点</button>
+                    </div>
+                </div>
+                <div class="module-content">
+                    <div id="contacts-tab" class="tab-content active">
+                        <div class="emergency-contacts">
+                            <div class="quick-contacts" id="quickContacts"></div>
+                            <div class="custom-contacts-header">
+                                <h3>自定义联系人</h3>
+                                <button class="btn btn-primary" onclick="EmergencyModule.showAddContactModal()">
+                                    <i class="fas fa-plus"></i> 添加
+                                </button>
+                            </div>
+                            <div class="custom-contacts-list" id="customContactsList"></div>
+                        </div>
+                    </div>
+                    <div id="medical-tab" class="tab-content">
+                        <div class="medical-header">
+                            <button class="btn btn-primary" onclick="EmergencyModule.showAddMemberModal()">
+                                <i class="fas fa-plus"></i> 添加成员
+                            </button>
+                        </div>
+                        <div class="members-list" id="membersList"></div>
+                    </div>
+                    <div id="rally-tab" class="tab-content">
+                        <div class="rally-header">
+                            <button class="btn btn-primary" onclick="EmergencyModule.showAddRallyPointModal()">
+                                <i class="fas fa-plus"></i> 添加集合点
+                            </button>
+                        </div>
+                        <div class="rally-points-list" id="rallyPointsList"></div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="medicine-module" class="module">
+                <div class="module-header">
+                    <h2><i class="fas fa-pills"></i> 药品管理</h2>
+                    <div class="module-tabs">
+                        <button class="tab-btn active" data-tab="inventory">库存追踪</button>
+                        <button class="tab-btn" data-tab="records">用药记录</button>
+                    </div>
+                </div>
+                <div class="module-content">
+                    <div id="inventory-tab" class="tab-content active">
+                        <div class="medicine-header">
+                            <button class="btn btn-primary" onclick="MedicineModule.showAddMedicineModal()">
+                                <i class="fas fa-plus"></i> 添加药品
+                            </button>
+                        </div>
+                        <div class="warnings-section" id="warningsSection"></div>
+                        <div class="medicine-grid" id="medicineGrid"></div>
+                    </div>
+                    <div id="records-tab" class="tab-content">
+                        <div class="records-header">
+                            <button class="btn btn-primary" onclick="MedicineModule.showAddRecordModal()">
+                                <i class="fas fa-plus"></i> 添加记录
+                            </button>
+                        </div>
+                        <div class="records-list" id="recordsList"></div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="safety-module" class="module">
+                <div class="module-header">
+                    <h2><i class="fas fa-home"></i> 家庭安全评估</h2>
+                    <div class="module-tabs">
+                        <button class="tab-btn active" data-tab="checklist">隐患自查</button>
+                        <button class="tab-btn" data-tab="supplies">紧急物资</button>
+                    </div>
+                </div>
+                <div class="module-content">
+                    <div id="checklist-tab" class="tab-content active">
+                        <div class="checklist-container" id="checklistContainer"></div>
+                    </div>
+                    <div id="supplies-tab" class="tab-content">
+                        <div class="supplies-header">
+                            <button class="btn btn-primary" onclick="SafetyModule.showAddSupplyModal()">
+                                <i class="fas fa-plus"></i> 添加物资
+                            </button>
+                        </div>
+                        <div class="supplies-list" id="suppliesList"></div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <div id="modalContainer"></div>
+    <div id="toastContainer" class="toast-container"></div>
+
+    <div id="sceneModal" class="modal">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h3 id="sceneModalTitle">急救场景详情</h3>
+                <button class="modal-close" onclick="closeSceneModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="sceneModalBody"></div>
+        </div>
+    </div>
+
+    <script src="js/storage.js"></script>
+    <script src="js/knowledge.js"></script>
+    <script src="js/emergency.js"></script>
+    <script src="js/medicine.js"></script>
+    <script src="js/safety.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
