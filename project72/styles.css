@@ -1,0 +1,195 @@
+* {
+    font-family: 'Noto Sans SC', sans-serif;
+}
+
+.coffee-gradient {
+    background: linear-gradient(135deg, #6F4E37 0%, #8B4513 100%);
+}
+
+.tab-active {
+    border-bottom: 3px solid #8B4513;
+    color: #8B4513;
+}
+
+.card-hover {
+    transition: all 0.3s ease;
+}
+
+.card-hover:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(139, 69, 19, 0.15);
+}
+
+.progress-ring {
+    transform: rotate(-90deg);
+}
+
+.rating-star {
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.rating-star:hover {
+    transform: scale(1.2);
+}
+
+.modal-overlay {
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+}
+
+.slide-in {
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in {
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.pulse-timer {
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+}
+
+input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 6px;
+    border-radius: 3px;
+    background: #e5e7eb;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #8B4513;
+    cursor: pointer;
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+    background: #8B4513;
+    border-radius: 3px;
+}
+
+.flavor-tag.selected {
+    background-color: #fcd34d;
+    color: #92400e;
+}
+
+.bean-card-status-opened {
+    border-left: 4px solid #22c55e;
+}
+
+.bean-card-status-unopened {
+    border-left: 4px solid #e5e7eb;
+}
+
+.bean-card-status-expired {
+    border-left: 4px solid #ef4444;
+}
+
+.brew-card {
+    border-left: 4px solid #8B4513;
+}
+
+.brew-card.favorite {
+    border-left: 4px solid #eab308;
+}
+
+.share-card {
+    background: linear-gradient(135deg, #fef3c7 0%, #fed7aa 100%);
+    border: 2px solid #d97706;
+}
+
+.timer-active {
+    color: #22c55e;
+}
+
+.timer-paused {
+    color: #eab308;
+}
+
+.stage-indicator {
+    transition: all 0.3s ease;
+}
+
+.stage-indicator.active {
+    background-color: #8B4513;
+    color: white;
+}
+
+.stage-indicator.completed {
+    background-color: #22c55e;
+    color: white;
+}
+
+.toast {
+    animation: toastIn 0.3s ease, toastOut 0.3s ease 2.7s ease forwards;
+}
+
+@keyframes toastIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes toastOut {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+}
+
+.chart-bar {
+    transition: height 0.5s ease;
+}
+
+.checkin-badge {
+    animation: bounce 0.5s ease;
+}
+
+@keyframes bounce {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}

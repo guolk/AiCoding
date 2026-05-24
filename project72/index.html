@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>咖啡日记 - 手冲咖啡参数管理工具</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-amber-50 min-h-screen">
+    <!-- Header -->
+    <header class="coffee-gradient text-white shadow-lg sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <svg class="w-10 h-10" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M2 21v-2h18v2H2zm2-4v-7h12v7H4zm14-3h2c1.1 0 2-.9 2-2v-3c0-1.1-.9-2-2-2h-2v7zm0-9h-4v2V5h-2v3H4V5H2v11h18V5h-2zm-2 0h2v3h-2V5z"/>
+                    </svg>
+                    <div>
+                        <h1 class="text-2xl font-bold">咖啡日记</h1>
+                        <p class="text-amber-200 text-sm">记录每一杯完美的手冲咖啡</p>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <span class="text-amber-200 text-sm" id="currentDate"></span>
+                    <button onclick="resetTestData()" class="ml-4 bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                        🔄 重置测试数据
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <nav class="bg-white shadow-md sticky top-16 z-40">
+        <div class="container mx-auto px-4">
+            <div class="flex overflow-x-auto scrollbar-thin">
+                <button onclick="switchTab('beans')" class="tab-btn px-6 py-4 font-medium text-gray-600 hover:text-amber-800 whitespace-nowrap transition-colors tab-active" data-tab="beans">
+                    <span class="flex items-center space-x-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+                        <span>咖啡豆档案</span>
+                    </span>
+                </button>
+                <button onclick="switchTab('brewing')" class="tab-btn px-6 py-4 font-medium text-gray-600 hover:text-amber-800 whitespace-nowrap transition-colors" data-tab="brewing">
+                    <span class="flex items-center space-x-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21v.001a2 2 0 00-1.022.546m14.4-.001a2 2 0 01.546 1.022l.477 2.387a6 6 0 01-.517 3.86l-.158.318a6 6 0 00-.517 3.86l.477 2.387m-14.4 0a2 2 0 01-.546-1.022l-.477-2.387a6 6 0 01.517-3.86l.158-.318a6 6 0 00.517-3.86l-.477-2.387m14.4 0a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21"/></svg>
+                        <span>冲煮记录</span>
+                    </span>
+                </button>
+                <button onclick="switchTab('optimize')" class="tab-btn px-6 py-4 font-medium text-gray-600 hover:text-amber-800 whitespace-nowrap transition-colors" data-tab="optimize">
+                    <span class="flex items-center space-x-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+                        <span>参数优化</span>
+                    </span>
+                </button>
+                <button onclick="switchTab('assistant')" class="tab-btn px-6 py-4 font-medium text-gray-600 hover:text-amber-800 whitespace-nowrap transition-colors" data-tab="assistant">
+                    <span class="flex items-center space-x-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        <span>冲煮辅助</span>
+                    </span>
+                </button>
+                <button onclick="switchTab('community')" class="tab-btn px-6 py-4 font-medium text-gray-600 hover:text-amber-800 whitespace-nowrap transition-colors" data-tab="community">
+                    <span class="flex items-center space-x-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+                        <span>社区分享</span>
+                    </span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-6">
+        <!-- 咖啡豆档案模块 -->
+        <div id="tab-beans" class="tab-content fade-in">
+            <div class="mb-6 flex justify-between items-center">
+                <h2 class="text-2xl font-bold text-amber-900">咖啡豆档案</h2>
+                <button onclick="openBeanModal()" class="bg-amber-700 hover:bg-amber-800 text-white px-6 py-2 rounded-lg font-medium flex items-center space-x-2 transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                    <span>添加咖啡豆</span>
+                </button>
+            </div>
+
+            <!-- 统计卡片 -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <div class="bg-white rounded-xl p-6 shadow-md card-hover">
+                    <div class="flex items-center justify-between">
+                        <div><p class="text-gray-500 text-sm">在库咖啡豆</p><p class="text-3xl font-bold text-amber-800" id="totalBeans">0</p></div>
+                        <div class="w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center">
+                            <svg class="w-6 h-6 text-amber-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-xl p-6 shadow-md card-hover">
+                    <div class="flex items-center justify-between">
+                        <div><p class="text-gray-500 text-sm">已开封</p><p class="text-3xl font-bold text-green-700" id="openedBeans">0</p></div>
+                        <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                            <svg class="w-6 h-6 text-green-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-xl p-6 shadow-md card-hover">
+                    <div class="flex items-center justify-between">
+                        <div><p class="text-gray-500 text-sm">即将过期</p><p class="text-3xl font-bold text-red-600" id="expiringBeans">0</p></div>
+                        <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
+                            <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 筛选和搜索 -->
+            <div class="bg-white rounded-xl p-4 shadow-md mb-6">
+                <div class="flex flex-wrap gap-4">
+                    <div class="flex-1 min-w-64">
+                        <input type="text" id="beanSearch" placeholder="搜索咖啡豆名称、产地..." class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none" oninput="filterBeans()">
+                    </div>
+                    <select id="beanFilter" class="px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none" onchange="filterBeans()">
+                        <option value="all">全部状态</option>
+                        <option value="unopened">未开封</option>
+                        <option value="opened">已开封</option>
+                        <option value="expired">已过期</option>
+                    </select>
+                    <button onclick="openCompareModal()" class="bg-amber-100 hover:bg-amber-200 text-amber-800 px-4 py-2 rounded-lg font-medium transition-colors">风味对比</button>
+                </div>
+            </div>
+
+            <!-- 咖啡豆列表 -->
+            <div id="beansList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+        </div>
+
+        <!-- 冲煮参数记录模块 -->
+        <div id="tab-brewing" class="tab-content hidden">
+            <div class="mb-6 flex justify-between items-center">
+                <h2 class="text-2xl font-bold text-amber-900">冲煮记录</h2>
+                <div class="flex space-x-3">
+                    <button onclick="showFavoritesOnly()" id="favoritesBtn" class="bg-amber-100 hover:bg-amber-200 text-amber-800 px-4 py-2 rounded-lg font-medium transition-colors">查看收藏</button>
+                    <button onclick="openBrewingModal()" class="bg-amber-700 hover:bg-amber-800 text-white px-6 py-2 rounded-lg font-medium flex items-center space-x-2 transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                        <span>记录冲煮</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 冲煮统计 -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                <div class="bg-white rounded-xl p-6 shadow-md card-hover"><p class="text-gray-500 text-sm">总冲煮次数</p><p class="text-3xl font-bold text-amber-800" id="totalBrews">0</p></div>
+                <div class="bg-white rounded-xl p-6 shadow-md card-hover"><p class="text-gray-500 text-sm">收藏配方</p><p class="text-3xl font-bold text-yellow-600" id="favoriteRecipes">0</p></div>
+                <div class="bg-white rounded-xl p-6 shadow-md card-hover"><p class="text-gray-500 text-sm">平均评分</p><p class="text-3xl font-bold text-green-700" id="avgRating">-</p></div>
+                <div class="bg-white rounded-xl p-6 shadow-md card-hover"><p class="text-gray-500 text-sm">本月冲煮</p><p class="text-3xl font-bold text-blue-700" id="monthlyBrews">0</p></div>
+            </div>
+
+            <!-- 冲煮记录列表 -->
+            <div id="brewingList" class="space-y-4"></div>
+        </div>
+
+        <!-- 参数优化模块 -->
+        <div id="tab-optimize" class="tab-content hidden">
+            <div class="mb-6"><h2 class="text-2xl font-bold text-amber-900">参数优化</h2></div>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- 变量控制实验 -->
+                <div class="bg-white rounded-xl p-6 shadow-md">
+                    <h3 class="text-xl font-semibold text-amber-800 mb-4 flex items-center">
+                        <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21v.001a2 2 0 00-1.022.546m14.4-.001a2 2 0 01.546 1.022l.477 2.387a6 6 0 01-.517 3.86l-.158.318a6 6 0 00-.517 3.86l.477 2.387m-14.4 0a2 2 0 01-.546-1.022l-.477-2.387a6 6 0 01.517-3.86l.158-.318a6 6 0 00.517-3.86l-.477-2.387m14.4 0a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21"/></svg>
+                        变量控制实验设计
+                    </h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">基准配方</label>
+                            <select id="baseRecipe" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none">
+                                <option value="">选择一个收藏的配方作为基准</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">要调整的变量</label>
+                            <select id="variableToChange" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none">
+                                <option value="beanAmount">豆量 (g)</option>
+                                <option value="waterAmount">水量 (ml)</option>
+                                <option value="waterTemp">水温 (°C)</option>
+                                <option value="grindSize">研磨度</option>
+                                <option value="ratio">粉水比</option>
+                                <option value="brewTime">总萃取时间</option>
+                            </select>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">起始值</label>
+                                <input type="number" id="startValue" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">终止值</label>
+                                <input type="number" id="endValue" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">实验步数</label>
+                            <input type="number" id="experimentSteps" value="3" min="2" max="10" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none">
+                        </div>
+                        <button onclick="generateExperiment()" class="w-full bg-amber-700 hover:bg-amber-800 text-white py-2 rounded-lg font-medium transition-colors">生成实验计划</button>
+                    </div>
+                    <div id="experimentResult" class="mt-6 hidden">
+                        <h4 class="font-semibold text-amber-800 mb-3">实验计划</h4>
+                        <div id="experimentPlan" class="space-y-2"></div>
+                    </div>
+                </div>
+
+                <!-- 萃取率计算器 -->
+                <div class="bg-white rounded-xl p-6 shadow-md">
+                    <h3 class="text-xl font-semibold text-amber-800 mb-4 flex items-center">
+                        <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+                        萃取率计算器
+                    </h3>
+                    <div class="space-y-4">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">咖啡粉量 (g)</label>
+                                <input type="number" id="calcDose" value="15" step="0.1" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none" oninput="calculateExtraction()">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">产水量 (g)</label>
+                                <input type="number" id="calcYield" value="225" step="1" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none" oninput="calculateExtraction()">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">TDS (%)</label>
+                            <input type="range" id="calcTDS" min="1.0" max="1.8" step="0.01" value="1.35" class="w-full" oninput="calculateExtraction()">
+                            <div class="flex justify-between text-sm text-gray-500">
+                                <span>1.0%</span><span id="tdsValue">1.35%</span><span>1.8%</span>
+                            </div>
+                        </div>
+                        <div class="bg-amber-50 rounded-lg p-6 text-center">
+                            <p class="text-gray-600 mb-2">萃取率</p>
+                            <p class="text-4xl font-bold text-amber-800" id="extractionResult">--%</p>
+                            <p class="text-sm mt-2" id="extractionAdvice">请输入参数计算</p>
+                        </div>
+                        <div class="flex justify-between text-xs text-gray-500">
+                            <span class="text-yellow-600">18% 不足</span>
+                            <span class="text-green-600">18-22% 理想</span>
+                            <span class="text-red-600">22% 过度</span>
+                        </div>
+                        <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
+                            <div class="flex h-full">
+                                <div class="bg-yellow-400" style="width: 40%"></div>
+                                <div class="bg-green-500" style="width: 20%"></div>
+                                <div class="bg-red-500" style="width: 40%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 最佳参数收敛追踪 -->
+                <div class="bg-white rounded-xl p-6 shadow-md lg:col-span-2">
+                    <h3 class="text-xl font-semibold text-amber-800 mb-4 flex items-center">
+                        <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+                        最佳参数收敛追踪
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                        <div class="bg-amber-50 rounded-lg p-4">
+                            <p class="text-sm text-gray-600">最佳粉水比</p>
+                            <p class="text-2xl font-bold text-amber-800" id="bestRatio">-</p>
+                            <p class="text-xs text-gray-500">高分配方平均</p>
+                        </div>
+                        <div class="bg-amber-50 rounded-lg p-4">
+                            <p class="text-sm text-gray-600">最佳水温</p>
+                            <p class="text-2xl font-bold text-amber-800" id="bestTemp">-</p>
+                            <p class="text-xs text-gray-500">高分配方平均</p>
+                        </div>
+                        <div class="bg-amber-50 rounded-lg p-4">
+                            <p class="text-sm text-gray-600">最佳萃取时间</p>
+                            <p class="text-2xl font-bold text-amber-800" id="bestTime">-</p>
+                            <p class="text-xs text-gray-500">高分配方平均</p>
+                        </div>
+                        <div class="bg-amber-50 rounded-lg p-4">
+                            <p class="text-sm text-gray-600">最佳研磨度</p>
+                            <p class="text-2xl font-bold text-amber-800" id="bestGrind">-</p>
+                            <p class="text-xs text-gray-500">高分配方最常见</p>
+                        </div>
+                    </div>
+                    <div id="convergenceChart" class="h-64 bg-gray-50 rounded-lg flex items-center justify-center">
+                        <p class="text-gray-400">需要更多冲煮记录来分析参数规律</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 冲煮辅助模块 -->
+        <div id="tab-assistant" class="tab-content hidden">
+            <div class="mb-6"><h2 class="text-2xl font-bold text-amber-900">冲煮辅助</h2></div>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- 分段注水计时器 -->
+                <div class="bg-white rounded-xl p-6 shadow-md">
+                    <h3 class="text-xl font-semibold text-amber-800 mb-4 flex items-center">
+                        <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        分段注水计时器
+                    </h3>
+                    <div class="mb-4">
+                        <div class="flex justify-between items-center mb-2">
+                            <label class="text-sm font-medium text-gray-700">注水阶段</label>
+                            <button onclick="addPourStage()" class="text-amber-700 hover:text-amber-800 text-sm font-medium">+ 添加阶段</button>
+                        </div>
+                        <div id="pourStages" class="space-y-2">
+                            <div class="pour-stage flex items-center space-x-2 bg-gray-50 p-3 rounded-lg">
+                                <span class="stage-num text-sm font-medium text-gray-500 w-6">1</span>
+                                <input type="number" class="pour-amount w-20 px-2 py-1 border border-gray-200 rounded text-sm" placeholder="水量ml" value="45">
+                                <span class="text-gray-400">ml</span>
+                                <input type="number" class="pour-time w-20 px-2 py-1 border border-gray-200 rounded text-sm" placeholder="时间s" value="30">
+                                <span class="text-gray-400">s</span>
+                                <button onclick="removePourStage(this)" class="text-red-500 hover:text-red-600 ml-auto">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-center mb-6">
+                        <div class="relative inline-block">
+                            <svg class="progress-ring w-48 h-48">
+                                <circle cx="96" cy="96" r="88" fill="none" stroke="#e5e7eb" stroke-width="8"/>
+                                <circle id="timerProgress" cx="96" cy="96" r="88" fill="none" stroke="#8B4513" stroke-width="8" stroke-dasharray="552.92" stroke-dashoffset="552.92" stroke-linecap="round"/>
+                            </svg>
+                            <div class="absolute inset-0 flex flex-col items-center justify-center">
+                                <span id="timerDisplay" class="text-4xl font-bold text-amber-800">00:00</span>
+                                <span id="timerStage" class="text-sm text-gray-500">准备开始</span>
+                                <span id="timerWater" class="text-xs text-gray-400">目标: 0ml / 0ml</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <div class="flex justify-between text-sm mb-1">
+                            <span class="text-gray-600">注水进度</span>
+                            <span id="waterProgressText">0%</span>
+                        </div>
+                        <div class="h-3 bg-gray-200 rounded-full overflow-hidden">
+                            <div id="waterProgress" class="h-full bg-amber-600 transition-all duration-300" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    <div class="flex space-x-3">
+                        <button onclick="startTimer()" id="startBtn" class="flex-1 bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg font-medium transition-colors flex items-center justify-center space-x-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            <span>开始</span>
+                        </button>
+                        <button onclick="pauseTimer()" id="pauseBtn" class="flex-1 bg-yellow-500 hover:bg-yellow-600 text-white py-3 rounded-lg font-medium transition-colors hidden">暂停</button>
+                        <button onclick="resetTimer()" class="flex-1 bg-gray-500 hover:bg-gray-600 text-white py-3 rounded-lg font-medium transition-colors">重置</button>
+                    </div>
+                </div>
+
+                <!-- 器具参数建议 -->
+                <div class="bg-white rounded-xl p-6 shadow-md">
+                    <h3 class="text-xl font-semibold text-amber-800 mb-4 flex items-center">
+                        <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21v.001a2 2 0 00-1.022.546m14.4-.001a2 2 0 01.546 1.022l.477 2.387a6 6 0 01-.517 3.86l-.158.318a6 6 0 00-.517 3.86l.477 2.387m-14.4 0a2 2 0 01-.546-1.022l-.477-2.387a6 6 0 01.517-3.86l.158-.318a6 6 0 00.517-3.86l-.477-2.387m14.4 0a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21"/></svg>
+                        器具参数建议
+                    </h3>
+                    <div class="grid grid-cols-2 gap-3 mb-6">
+                        <button onclick="selectEquipment('v60')" class="equipment-btn p-4 border-2 border-amber-600 bg-amber-50 rounded-xl text-center transition-all">
+                            <div class="text-3xl mb-2">☕</div>
+                            <p class="font-medium text-amber-800">V60</p>
+                            <p class="text-xs text-gray-500">锥形滤杯</p>
+                        </button>
+                        <button onclick="selectEquipment('chemex')" class="equipment-btn p-4 border-2 border-gray-200 rounded-xl text-center transition-all hover:border-amber-400">
+                            <div class="text-3xl mb-2">🍶</div>
+                            <p class="font-medium text-gray-700">Chemex</p>
+                            <p class="text-xs text-gray-500">玻璃壶</p>
+                        </button>
+                        <button onclick="selectEquipment('switch')" class="equipment-btn p-4 border-2 border-gray-200 rounded-xl text-center transition-all hover:border-amber-400">
+                            <div class="text-3xl mb-2">🔄</div>
+                            <p class="font-medium text-gray-700">Hario Switch</p>
+                            <p class="text-xs text-gray-500">浸泡/滴滤</p>
+                        </button>
+                        <button onclick="selectEquipment('origami')" class="equipment-btn p-4 border-2 border-gray-200 rounded-xl text-center transition-all hover:border-amber-400">
+                            <div class="text-3xl mb-2">🎭</div>
+                            <p class="font-medium text-gray-700">Origami</p>
+                            <p class="text-xs text-gray-500">折纸滤杯</p>
+                        </button>
+                    </div>
+                    <div id="equipmentParams" class="bg-amber-50 rounded-lg p-4">
+                        <h4 class="font-semibold text-amber-800 mb-3">Hario V60 推荐参数</h4>
+                        <div class="space-y-3">
+                            <div class="flex justify-between"><span class="text-gray-600">粉水比</span><span class="font-medium">1:15</span></div>
+                            <div class="flex justify-between"><span class="text-gray-600">粉量</span><span class="font-medium">15g</span></div>
+                            <div class="flex justify-between"><span class="text-gray-600">水量</span><span class="font-medium">225ml</span></div>
+                            <div class="flex justify-between"><span class="text-gray-600">水温</span><span class="font-medium">90-93°C</span></div>
+                            <div class="flex justify-between"><span class="text-gray-600">研磨度</span><span class="font-medium">中细研磨</span></div>
+                            <div class="flex justify-between"><span class="text-gray-600">总时间</span><span class="font-medium">2:30-3:00</span></div>
+                        </div>
+                        <div class="mt-4 pt-4 border-t border-amber-200">
+                            <p class="text-sm text-gray-600 mb-2">注水方案：</p>
+                            <ol class="text-sm text-gray-600 space-y-1">
+                                <li>1. 45ml 水闷蒸 30秒</li>
+                                <li>2. 注至 150ml</li>
+                                <li>3. 注至 225ml</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 社区功能模块 -->
+        <div id="tab-community" class="tab-content hidden">
+            <div class="mb-6"><h2 class="text-2xl font-bold text-amber-900">社区分享</h2></div>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- 配方分享卡片 -->
+                <div class="bg-white rounded-xl p-6 shadow-md">
+                    <h3 class="text-xl font-semibold text-amber-800 mb-4 flex items-center">
+                        <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z"/></svg>
+                        配方分享
+                    </h3>
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">选择要分享的配方</label>
+                        <select id="shareRecipe" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none" onchange="previewShareCard()">
+                            <option value="">选择一个收藏的配方</option>
+                        </select>
+                    </div>
+                    <div id="shareCardPreview" class="bg-gradient-to-br from-amber-100 to-orange-100 rounded-xl p-6 text-center">
+                        <p class="text-gray-500">选择一个配方生成分享卡片</p>
+                    </div>
+                    <div class="flex space-x-3 mt-4">
+                        <button onclick="exportAsImage()" class="flex-1 bg-amber-700 hover:bg-amber-800 text-white py-2 rounded-lg font-medium transition-colors">导出图片</button>
+                        <button onclick="copyShareText()" class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-700 py-2 rounded-lg font-medium transition-colors">复制文字</button>
+                    </div>
+                </div>
+
+                <!-- 咖啡馆打卡 -->
+                <div class="bg-white rounded-xl p-6 shadow-md">
+                    <h3 class="text-xl font-semibold text-amber-800 mb-4 flex items-center justify-between">
+                        <span class="flex items-center">
+                            <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                            咖啡馆打卡
+                        </span>
+                        <button onclick="openCafeModal()" class="text-amber-700 hover:text-amber-800 text-sm font-medium">+ 添加</button>
+                    </h3>
+                    <div id="cafeList" class="space-y-3 max-h-96 overflow-y-auto scrollbar-thin"></div>
+                </div>
+            </div>
+            <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="bg-white rounded-xl p-6 shadow-md card-hover"><p class="text-gray-500 text-sm">打卡咖啡馆</p><p class="text-3xl font-bold text-amber-800" id="totalCafes">0</p></div>
+                <div class="bg-white rounded-xl p-6 shadow-md card-hover"><p class="text-gray-500 text-sm">总打卡次数</p><p class="text-3xl font-bold text-green-700" id="totalCheckins">0</p></div>
+                <div class="bg-white rounded-xl p-6 shadow-md card-hover"><p class="text-gray-500 text-sm">本月打卡</p><p class="text-3xl font-bold text-blue-700" id="monthlyCheckins">0</p></div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modals -->
+    <!-- 添加咖啡豆 Modal -->
+    <div id="beanModal" class="fixed inset-0 z-50 hidden">
+        <div class="modal-overlay absolute inset-0" onclick="closeBeanModal()"></div>
+        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-2xl p-6 w-full max-w-lg max-h-[90vh] overflow-y-auto slide-in">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-bold text-amber-900" id="beanModalTitle">添加咖啡豆</h3>
+                <button onclick="closeBeanModal()" class="text-gray-400 hover:text-gray-600">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+            <form id="beanForm" class="space-y-4">
+                <input type="hidden" id="beanId">
+                <div><label class="block text-sm font-medium text-gray-700 mb-1">咖啡豆名称 *</label><input type="text" id="beanName" required class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none"></div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div><label class="block text-sm font-medium text-gray-700 mb-1">产地 *</label><input type="text" id="beanOrigin" required class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none"></div>
+                    <div><label class="block text-sm font-medium text-gray-700 mb-1">处理法</label><select id="beanProcess" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none"><option value="水洗">水洗</option><option value="日晒">日晒</option><option value="蜜处理">蜜处理</option><option value="厌氧">厌氧</option><option value="湿刨">湿刨</option><option value="其他">其他</option></select></div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div><label class="block text-sm font-medium text-gray-700 mb-1">烘焙度</label><select id="beanRoast" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none"><option value="浅烘">浅烘</option><option value="中浅烘">中浅烘</option><option value="中烘">中烘</option><option value="中深烘">中深烘</option><option value="深烘">深烘</option></select></div>
+                    <div><label class="block text-sm font-medium text-gray-700 mb-1">重量 (g)</label><input type="number" id="beanWeight" value="200" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none"></div>
+                </div>
+                <div class="grid grid-cols-3 gap-4">
+                    <div><label class="block text-sm font-medium text-gray-700 mb-1">购入日期</label><input type="date" id="beanPurchaseDate" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none"></div>
+                    <div><label class="block text-sm font-medium text-gray-700 mb-1">烘焙日期</label><input type="date" id="beanRoastDate" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none"></div>
+                    <div><label class="block text-sm font-medium text-gray-700 mb-1">赏味期 (天)</label><input type="number" id="beanShelfLife" value="30" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none"></div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">风味描述</label>
+                    <div class="flex flex-wrap gap-2 mb-2">
+                        <span class="flavor-tag px-3 py-1 bg-gray-100 rounded-full text-sm cursor-pointer hover:bg-amber-100" onclick="toggleFlavor(this, '花香')">🌸 花香</span>
+                        <span class="flavor-tag px-3 py-1 bg-gray-100 rounded-full text-sm cursor-pointer hover:bg-amber-100" onclick="toggleFlavor(this, '柑橘')">🍊 柑橘</span>
+                        <span class="flavor-tag px-3 py-1 bg-gray-100 rounded-full text-sm cursor-pointer hover:bg-amber-100" onclick="toggleFlavor(this, '莓果')">🍓 莓果</span>
+                        <span class="flavor-tag px-3 py-1 bg-gray-100 rounded-full text-sm cursor-pointer hover:bg-amber-100" onclick="toggleFlavor(this, '焦糖')">🍯 焦糖</span>
+                        <span class="flavor-tag px-3 py-1 bg-gray-100 rounded-full text-sm cursor-pointer hover:bg-amber-100" onclick="toggleFlavor(this, '巧克力')">🍫 巧克力</span>
+                        <span class="flavor-tag px-3 py-1 bg-gray-100 rounded-full text-sm cursor-pointer hover:bg-amber-100" onclick="toggleFlavor(this, '坚果')">🥜 坚果</span>
+                        <span class="flavor-tag px-3 py-1 bg-gray-100 rounded-full text-sm cursor-pointer hover:bg-amber-100" onclick="toggleFlavor(this, '茶感')">🍵 茶感</span>
+                        <span class="flavor-tag px-3 py-1 bg-gray-100 rounded-full text-sm cursor-pointer hover:bg-amber-100" onclick="toggleFlavor(this, '酒香')">🍷 酒香</span>
+                    </div>
+                    <input type="hidden" id="beanFlavors">
+                </div>
+                <div><label class="block text-sm font-medium text-gray-700 mb-1">备注</label><textarea id="beanNotes" rows="2" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none"></textarea></div>
+                <div class="flex space-x-3 pt-4">
+                    <button type="button" onclick="closeBeanModal()" class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-700 py-2 rounded-lg font-medium transition-colors">取消</button>
+                    <button type="submit" class="flex-1 bg-amber-700 hover:bg-amber-800 text-white py-2 rounded-lg font-medium transition-colors">保存</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 添加冲煮记录 Modal -->
+    <div id="brewingModal" class="fixed inset-0 z-50 hidden">
+        <div class="modal-overlay absolute inset-0" onclick="closeBrewingModal()"></div>
+        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-2xl p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto slide-in">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-bold text-amber-900">记录冲煮</h3>
+                <button onclick="closeBrewingModal()" class="text-gray-400 hover:text-gray-600">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+            <form id="brewingForm" class="space-y-6">
+                <input type="hidden" id="brewingId">
+                <div class="bg-gray-50 rounded-xl p-4">
+                    <h4 class="font-semibold text-amber-800 mb-4">冲煮参数</h4>
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                        <div><label class="block text-sm font-medium text-gray-700 mb-1">咖啡豆</label><select id="brewBeanId" required class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none"><option value="">选择咖啡豆</option></select></div>
+                        <div><label class="block text-sm font-medium text-gray-700 mb-1">冲煮器具</label><select id="brewEquipment" class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none"><option value="V60">V60</option><option value="Chemex">Chemex</option><option value="Hario Switch">Hario Switch</option><option value="Origami">Origami</option><option value="Kalita">Kalita</option><option value="其他">其他</option></select></div>
+                        <div><label class="block text-sm font-medium text-gray-700 mb-1">豆量 (g)</label><input type="number" id="brewBeanAmount" step="0.1" value="15" class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none"></div>
+                        <div><label class="block text-sm font-medium text-gray-700 mb-1">水量 (ml)</label><input type="number" id="brewWaterAmount" value="225" class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none"></div>
+                        <div><label class="block text-sm font-medium text-gray-700 mb-1">水温 (°C)</label><input type="number" id="brewWaterTemp" value="92" class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none"></div>
+                        <div><label class="block text-sm font-medium text-gray-700 mb-1">研磨度</label><select id="brewGrindSize" class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none"><option value="极细">极细研磨</option><option value="细">细研磨</option><option value="中细">中细研磨</option><option value="中">中研磨</option><option value="中粗">中粗研磨</option><option value="粗">粗研磨</option></select></div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4 mt-4">
+                        <div><label class="block text-sm font-medium text-gray-700 mb-1">注水方式</label><select id="brewPourMethod" class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none"><option value="分段注水">分段注水</option><option value="中心注水">中心注水</option><option value="螺旋注水">螺旋注水</option><option value="点滴法">点滴法</option><option value="浸泡法">浸泡法</option></select></div>
+                        <div><label class="block text-sm font-medium text-gray-700 mb-1">总萃取时间 (秒)</label><input type="number" id="brewTime" value="150" class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none"></div>
+                    </div>
+                </div>
+                <div class="bg-gray-50 rounded-xl p-4">
+                    <h4 class="font-semibold text-amber-800 mb-4">感官评分</h4>
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm font-medium text-gray-700 w-20">酸度</span>
+                            <div class="flex-1 mx-4 flex justify-center space-x-1" id="rating-acidity"></div>
+                            <input type="hidden" id="brewAcidity" value="0">
+                            <span class="w-8 text-center text-amber-800 font-medium" id="acidityValue">0</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm font-medium text-gray-700 w-20">甜度</span>
+                            <div class="flex-1 mx-4 flex justify-center space-x-1" id="rating-sweetness"></div>
+                            <input type="hidden" id="brewSweetness" value="0">
+                            <span class="w-8 text-center text-amber-800 font-medium" id="sweetnessValue">0</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm font-medium text-gray-700 w-20">苦度</span>
+                            <div class="flex-1 mx-4 flex justify-center space-x-1" id="rating-bitterness"></div>
+                            <input type="hidden" id="brewBitterness" value="0">
+                            <span class="w-8 text-center text-amber-800 font-medium" id="bitternessValue">0</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm font-medium text-gray-700 w-20">醇厚度</span>
+                            <div class="flex-1 mx-4 flex justify-center space-x-1" id="rating-body"></div>
+                            <input type="hidden" id="brewBody" value="0">
+                            <span class="w-8 text-center text-amber-800 font-medium" id="bodyValue">0</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm font-medium text-gray-700 w-20">余韵</span>
+                            <div class="flex-1 mx-4 flex justify-center space-x-1" id="rating-aftertaste"></div>
+                            <input type="hidden" id="brewAftertaste" value="0">
+                            <span class="w-8 text-center text-amber-800 font-medium" id="aftertasteValue">0</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-gray-50 rounded-xl p-4">
+                    <h4 class="font-semibold text-amber-800 mb-4">备注和评价</h4>
+                    <div class="space-y-4">
+                        <div><label class="block text-sm font-medium text-gray-700 mb-1">冲煮备注</label><textarea id="brewNotes" rows="2" class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none" placeholder="记录冲煮过程中的观察..."></textarea></div>
+                        <div><label class="block text-sm font-medium text-gray-700 mb-1">风味描述</label><input type="text" id="brewFlavorNotes" class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none" placeholder="例如：花香、柑橘、焦糖..."></textarea></div>
+                        <div class="flex items-center space-x-3">
+                            <input type="checkbox" id="brewFavorite" class="w-5 h-5 text-amber-600 rounded focus:ring-amber-500">
+                            <label for="brewFavorite" class="text-sm font-medium text-gray-700">标记为收藏配方</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex space-x-3">
+                    <button type="button" onclick="closeBrewingModal()" class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-700 py-2 rounded-lg font-medium transition-colors">取消</button>
+                    <button type="submit" class="flex-1 bg-amber-700 hover:bg-amber-800 text-white py-2 rounded-lg font-medium transition-colors">保存记录</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 风味对比 Modal -->
+    <div id="compareModal" class="fixed inset-0 z-50 hidden">
+        <div class="modal-overlay absolute inset-0" onclick="closeCompareModal()"></div>
+        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-2xl p-6 w-full max-w-4xl max-h-[90vh] overflow-y-auto slide-in">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-bold text-amber-900">咖啡豆风味对比</h3>
+                <button onclick="closeCompareModal()" class="text-gray-400 hover:text-gray-600">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+            <div class="mb-6">
+                <p class="text-sm text-gray-600 mb-3">选择2-3款咖啡豆进行对比：</p>
+                <div id="compareSelect" class="grid grid-cols-2 md:grid-cols-3 gap-3 max-h-60 overflow-y-auto scrollbar-thin"></div>
+            </div>
+            <div id="compareResult" class="hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead>
+                            <tr class="bg-amber-50">
+                                <th class="px-4 py-3 text-left text-sm font-semibold text-amber-800">对比项</th>
+                            </tr>
+                        </thead>
+                        <tbody id="compareTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="flex justify-end mt-6">
+                <button onclick="startCompare()" id="startCompareBtn" class="bg-amber-700 hover:bg-amber-800 text-white px-6 py-2 rounded-lg font-medium transition-colors disabled:opacity-50" disabled>开始对比</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 咖啡馆打卡 Modal -->
+    <div id="cafeModal" class="fixed inset-0 z-50 hidden">
+        <div class="modal-overlay absolute inset-0" onclick="closeCafeModal()"></div>
+        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-2xl p-6 w-full max-w-lg max-h-[90vh] overflow-y-auto slide-in">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-bold text-amber-900" id="cafeModalTitle">添加咖啡馆</h3>
+                <button onclick="closeCafeModal()" class="text-gray-400 hover:text-gray-600">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+            <form id="cafeForm" class="space-y-4">
+                <input type="hidden" id="cafeId">
+                <div><label class="block text-sm font-medium text-gray-700 mb-1">咖啡馆名称 *</label><input type="text" id="cafeName" required class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none"></div>
+                <div><label class="block text-sm font-medium text-gray-700 mb-1">地址</label><input type="text" id="cafeAddress" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none"></div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div><label class="block text-sm font-medium text-gray-700 mb-1">城市</label><input type="text" id="cafeCity" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none"></div>
+                    <div><label class="block text-sm font-medium text-gray-700 mb-1">评分</label><select id="cafeRating" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none"><option value="5">★★★★★ 5</option><option value="4">★★★★ 4</option><option value="3">★★★ 3</option><option value="2">★★ 2</option><option value="1">★ 1</option></select></div>
+                </div>
+                <div><label class="block text-sm font-medium text-gray-700 mb-1">主打咖啡/特色</label><input type="text" id="cafeSpecialty" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none" placeholder="例如：手冲、意式、冷萃..."></div>
+                <div><label class="block text-sm font-medium text-gray-700 mb-1">打卡备注</label><textarea id="cafeNotes" rows="2" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none" placeholder="环境、服务、价格等印象..."></textarea></div>
+                <div class="flex items-center space-x-3">
+                    <input type="checkbox" id="cafeCheckinNow" class="w-5 h-5 text-amber-600 rounded focus:ring-amber-500" checked>
+                    <label for="cafeCheckinNow" class="text-sm font-medium text-gray-700">同时记录打卡</label>
+                </div>
+                <div class="flex space-x-3 pt-4">
+                    <button type="button" onclick="closeCafeModal()" class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-700 py-2 rounded-lg font-medium transition-colors">取消</button>
+                    <button type="submit" class="flex-1 bg-amber-700 hover:bg-amber-800 text-white py-2 rounded-lg font-medium transition-colors">保存</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
