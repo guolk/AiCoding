@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智能食谱与餐饮计划管理系统</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="app">
+        <header class="app-header">
+            <div class="logo">
+                <span class="logo-icon">🍳</span>
+                <h1>智能食谱管家</h1>
+            </div>
+            <nav class="main-nav">
+                <button class="nav-item active" data-section="recipes">
+                    <span class="nav-icon">📖</span>
+                    <span class="nav-text">食谱管理</span>
+                </button>
+                <button class="nav-item" data-section="planner">
+                    <span class="nav-icon">📅</span>
+                    <span class="nav-text">餐饮计划</span>
+                </button>
+                <button class="nav-item" data-section="shopping">
+                    <span class="nav-icon">🛒</span>
+                    <span class="nav-text">购物清单</span>
+                </button>
+                <button class="nav-item" data-section="cooking">
+                    <span class="nav-icon">👨‍🍳</span>
+                    <span class="nav-text">烹饪辅助</span>
+                </button>
+            </nav>
+        </header>
+
+        <main class="main-content">
+            <div id="recipes" class="module-section active">
+                <div class="module-header">
+                    <h2>食谱管理</h2>
+                    <div class="module-actions">
+                        <button class="btn btn-primary" id="btn-add-recipe" onclick="safeCall('Modal.addRecipe');">
+                            <span>+</span> 新增食谱
+                        </button>
+                        <button class="btn btn-secondary" id="btn-scrape-recipe" onclick="safeCall('fetchRecipeFromURL');">
+                            <span>🌐</span> 从URL导入
+                        </button>
+                    </div>
+                </div>
+
+                <div class="recipes-container">
+                    <aside class="recipes-sidebar">
+                        <div class="search-box">
+                            <input type="text" id="recipe-search" placeholder="搜索食谱...">
+                        </div>
+                        
+                        <div class="filter-section">
+                            <h3>分类筛选</h3>
+                            <div class="filter-group">
+                                <h4>菜系</h4>
+                                <div class="filter-options" id="cuisine-filters"></div>
+                            </div>
+                            <div class="filter-group">
+                                <h4>烹饪方式</h4>
+                                <div class="filter-options" id="cooking-method-filters"></div>
+                            </div>
+                            <div class="filter-group">
+                                <h4>饮食类型</h4>
+                                <div class="filter-options" id="diet-type-filters"></div>
+                            </div>
+                            <div class="filter-group">
+                                <h4>难度等级</h4>
+                                <div class="filter-options" id="difficulty-filters"></div>
+                            </div>
+                        </div>
+
+                        <div class="tag-section">
+                            <h3>标签</h3>
+                            <div class="tag-cloud" id="tag-cloud"></div>
+                        </div>
+                    </aside>
+
+                    <section class="recipes-grid" id="recipes-grid"></section>
+                </div>
+            </div>
+
+            <div id="planner" class="module-section">
+                <div class="module-header">
+                    <h2>餐饮计划</h2>
+                    <div class="module-actions">
+                        <button class="btn btn-primary" id="btn-generate-plan" onclick="safeCall('PlannerModule.generateSmartPlan');">
+                            <span>✨</span> 智能推荐
+                        </button>
+                        <button class="btn btn-secondary" id="btn-settings" onclick="safeCall('Modal.openDietSettings');">
+                            <span>⚙️</span> 饮食设置
+                        </button>
+                    </div>
+                </div>
+
+                <div class="planner-container">
+                    <div class="nutrition-goals">
+                        <h3>每日营养目标</h3>
+                        <div class="goal-inputs">
+                            <div class="goal-item">
+                                <label>热量目标 (千卡)</label>
+                                <input type="number" id="calorie-goal" value="2000" min="500" max="5000">
+                            </div>
+                            <div class="goal-item">
+                                <label>蛋白质 (克)</label>
+                                <input type="number" id="protein-goal" value="60" min="10" max="300">
+                            </div>
+                            <div class="goal-item">
+                                <label>脂肪 (克)</label>
+                                <input type="number" id="fat-goal" value="65" min="10" max="200">
+                            </div>
+                            <div class="goal-item">
+                                <label>碳水化合物 (克)</label>
+                                <input type="number" id="carbs-goal" value="250" min="50" max="500">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="weekly-planner">
+                        <div class="planner-header">
+                            <div class="planner-nav">
+                                <button class="btn-icon" id="prev-week">←</button>
+                                <span id="week-display">本周</span>
+                                <button class="btn-icon" id="next-week">→</button>
+                            </div>
+                            <div class="meal-legend">
+                                <span class="legend-item breakfast">🌅 早餐</span>
+                                <span class="legend-item lunch">☀️ 午餐</span>
+                                <span class="legend-item dinner">🌙 晚餐</span>
+                            </div>
+                        </div>
+                        <div class="planner-grid" id="planner-grid"></div>
+                    </div>
+
+                    <div class="daily-summary">
+                        <h3>今日营养摄入</h3>
+                        <div class="nutrition-bars" id="nutrition-bars"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="shopping" class="module-section">
+                <div class="module-header">
+                    <h2>购物清单</h2>
+                    <div class="module-actions">
+                        <button class="btn btn-primary" id="btn-generate-list" onclick="safeCall('ShoppingModule.generateFromMealPlans');">
+                            <span>📋</span> 从餐单生成
+                        </button>
+                        <button class="btn btn-secondary" id="btn-clear-list" onclick="safeCall('ShoppingModule.clearList');">
+                            <span>🗑️</span> 清空清单
+                        </button>
+                        <button class="btn btn-secondary" id="btn-export-list" onclick="safeCall('ShoppingModule.exportList');">
+                            <span>📤</span> 导出
+                        </button>
+                    </div>
+                </div>
+
+                <div class="shopping-container">
+                    <div class="shopping-sidebar">
+                        <div class="inventory-section">
+                            <h3>🏠 家中库存</h3>
+                            <div class="inventory-input">
+                                <input type="text" id="inventory-input" placeholder="添加已有食材...">
+                                <button class="btn-icon" id="btn-add-inventory">+</button>
+                            </div>
+                            <div class="inventory-list" id="inventory-list"></div>
+                        </div>
+
+                        <div class="shopping-stats">
+                            <h3>清单统计</h3>
+                            <div class="stat-item">
+                                <span>总食材种类</span>
+                                <strong id="total-items">0</strong>
+                            </div>
+                            <div class="stat-item">
+                                <span>已勾选</span>
+                                <strong id="checked-items">0</strong>
+                            </div>
+                            <div class="stat-item">
+                                <span>待购买</span>
+                                <strong id="pending-items">0</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="shopping-list-section">
+                        <div class="aisle-tabs" id="aisle-tabs"></div>
+                        <div class="shopping-items" id="shopping-items"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="cooking" class="module-section">
+                <div class="module-header">
+                    <h2>烹饪辅助</h2>
+                    <div class="module-actions">
+                        <div class="servings-control">
+                            <label>份数调整:</label>
+                            <button class="btn-icon" id="decrease-servings">-</button>
+                            <span id="current-servings">1</span>
+                            <button class="btn-icon" id="increase-servings">+</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cooking-container">
+                    <div class="recipe-selector">
+                        <label>选择要烹饪的食谱:</label>
+                        <select id="cooking-recipe-select">
+                            <option value="">-- 请选择食谱 --</option>
+                        </select>
+                    </div>
+
+                    <div class="cooking-content" id="cooking-content" style="display: none;">
+                        <div class="cooking-ingredients">
+                            <h3>🥗 食材清单 <span class="servings-badge" id="servings-badge">(1人份)</span></h3>
+                            <div class="ingredients-list" id="cooking-ingredients"></div>
+                            <div class="substitutions-section" id="substitutions-section"></div>
+                        </div>
+
+                        <div class="cooking-steps">
+                            <div class="steps-header">
+                                <h3>👨‍🍳 烹饪步骤</h3>
+                                <div class="cooking-controls">
+                                    <button class="btn btn-secondary" id="btn-fullscreen">
+                                        <span>⛶</span> 全屏模式
+                                    </button>
+                                    <button class="btn btn-secondary" id="btn-voice-control">
+                                        <span>🔊</span> 语音控制
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="steps-container" id="steps-container">
+                                <div class="step-nav">
+                                    <button class="btn-icon" id="prev-step">←</button>
+                                    <span class="step-indicator">
+                                        步骤 <span id="current-step-num">1</span> / <span id="total-steps">1</span>
+                                    </span>
+                                    <button class="btn-icon" id="next-step">→</button>
+                                </div>
+                                <div class="step-content" id="step-content"></div>
+                                <div class="timer-section" id="timer-section"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div id="fullscreen-cooking" class="fullscreen-mode hidden">
+        <div class="fullscreen-content">
+            <div class="fullscreen-header">
+                <h2 id="fullscreen-recipe-title">食谱名称</h2>
+                <button class="btn-icon" id="exit-fullscreen">✕</button>
+            </div>
+            <div class="fullscreen-step" id="fullscreen-step"></div>
+            <div class="fullscreen-nav">
+                <button class="btn btn-secondary" id="fs-prev-step">← 上一步</button>
+                <div class="step-indicator-large">
+                    <span id="fs-current-step">1</span> / <span id="fs-total-steps">1</span>
+                </div>
+                <button class="btn btn-primary" id="fs-next-step">下一步 →</button>
+            </div>
+            <div class="fullscreen-timer" id="fullscreen-timer"></div>
+        </div>
+    </div>
+
+    <div id="toast-container" class="toast-container"></div>
+
+    <script src="js/data/models.js"></script>
+    <script src="js/data/mockData.js"></script>
+    <script src="js/data/usdaApi.js"></script>
+    <script src="js/state/state.js"></script>
+    <script src="js/ui/toast.js"></script>
+    <script src="js/ui/modal.js"></script>
+    <script src="js/modules/recipes.js"></script>
+    <script src="js/modules/planner.js"></script>
+    <script src="js/modules/shopping.js"></script>
+    <script src="js/modules/cooking.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+        // 全局错误处理
+        window.onerror = function(message, source, lineno, colno, error) {
+            console.error('全局错误:', message, 'at', source, lineno, colno);
+            if (typeof Toast !== 'undefined') {
+                Toast.error('操作出错: ' + message);
+            }
+            return false;
+        };
+        
+        // 确保关键函数在全局作用域可用
+        function safeCall(fnName, args) {
+            try {
+                const parts = fnName.split('.');
+                let fn = window;
+                for (const part of parts) {
+                    fn = fn[part];
+                    if (!fn) throw new Error(`${fnName} 未定义`);
+                }
+                return fn.apply(null, args || []);
+            } catch(err) {
+                console.error(`调用 ${fnName} 出错:`, err);
+                if (typeof Toast !== 'undefined') {
+                    Toast.error('操作出错: ' + err.message);
+                }
+                throw err;
+            }
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('=== 应用初始化完成 ===');
+            console.log('演示模式：每次刷新使用系统演示数据');
+            console.log('Modal:', typeof Modal);
+            console.log('Toast:', typeof Toast);
+            console.log('AppState:', typeof AppState);
+            console.log('ShoppingModule:', typeof ShoppingModule);
+            console.log('PlannerModule:', typeof PlannerModule);
+            
+            // 演示模式：清除本地存储，确保每次使用系统演示数据
+            try {
+                localStorage.removeItem('recipeApp_mealPlans');
+                localStorage.removeItem('recipeApp_recipes');
+                localStorage.removeItem('recipeApp_shoppingList');
+                localStorage.removeItem('recipeApp_inventory');
+                localStorage.removeItem('recipeApp_dietSettings');
+                console.log('演示模式：已清除本地存储，使用系统演示数据');
+            } catch(e) {
+                console.warn('清除本地存储失败:', e);
+            }
+        });
+    </script>
+</body>
+</html>
