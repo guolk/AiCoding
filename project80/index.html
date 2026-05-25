@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>写作马拉松 · Writing Marathon</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <nav class="sidebar">
+            <div class="logo">
+                <span class="logo-icon">✍️</span>
+                <span class="logo-text">写作马拉松</span>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item active" data-module="challenge">
+                    <span class="nav-icon">🏆</span>
+                    <span class="nav-label">写作挑战</span>
+                </li>
+                <li class="nav-item" data-module="stats">
+                    <span class="nav-icon">📊</span>
+                    <span class="nav-label">写作统计</span>
+                </li>
+                <li class="nav-item" data-module="motivation">
+                    <span class="nav-icon">🔥</span>
+                    <span class="nav-label">激励系统</span>
+                </li>
+                <li class="nav-item" data-module="environment">
+                    <span class="nav-icon">🎯</span>
+                    <span class="nav-label">写作环境</span>
+                </li>
+                <li class="nav-item" data-module="insights">
+                    <span class="nav-icon">💡</span>
+                    <span class="nav-label">分析洞察</span>
+                </li>
+            </ul>
+            <div class="sidebar-footer">
+                <div class="streak-mini">
+                    <span class="streak-icon">🔥</span>
+                    <span id="sidebarStreak">0</span> 天连续
+                </div>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <!-- 写作挑战模块 -->
+            <section class="module active" id="module-challenge">
+                <div class="module-header">
+                    <h1>🏆 写作挑战</h1>
+                    <p class="module-subtitle">设定目标，完成挑战，获得徽章</p>
+                </div>
+
+                <div class="challenge-setup-card">
+                    <h3>创建新挑战</h3>
+                    <div class="challenge-type-tabs">
+                        <button class="tab-btn active" data-type="nanowrimo">NaNoWriMo 模式</button>
+                        <button class="tab-btn" data-type="daily">每日挑战模式</button>
+                    </div>
+
+                    <div class="challenge-config" id="nanowrimoConfig">
+                        <div class="config-row">
+                            <label>挑战名称</label>
+                            <input type="text" id="challengeName" placeholder="我的 NaNoWriMo 挑战" value="我的 NaNoWriMo 挑战">
+                        </div>
+                        <div class="config-row">
+                            <label>目标字数</label>
+                            <input type="number" id="challengeGoal" value="100000" min="1000" step="1000">
+                            <span class="unit">字</span>
+                        </div>
+                        <div class="config-row">
+                            <label>持续天数</label>
+                            <input type="number" id="challengeDays" value="30" min="1" max="365">
+                            <span class="unit">天</span>
+                        </div>
+                        <div class="config-row">
+                            <label>开始日期</label>
+                            <input type="date" id="challengeStart">
+                        </div>
+                    </div>
+
+                    <div class="challenge-config hidden" id="dailyConfig">
+                        <div class="config-row">
+                            <label>挑战名称</label>
+                            <input type="text" id="dailyChallengeName" placeholder="每日写作习惯" value="每日写作习惯">
+                        </div>
+                        <div class="config-row">
+                            <label>每日目标字数</label>
+                            <input type="number" id="dailyGoal" value="500" min="100" step="50">
+                            <span class="unit">字/天</span>
+                        </div>
+                        <div class="config-row">
+                            <label>持续天数</label>
+                            <input type="number" id="dailyDays" value="100" min="1" max="365">
+                            <span class="unit">天</span>
+                        </div>
+                        <div class="config-row">
+                            <label>开始日期</label>
+                            <input type="date" id="dailyStart">
+                        </div>
+                    </div>
+
+                    <button class="btn-primary" id="startChallengeBtn">🚀 开始挑战</button>
+                </div>
+
+                <div class="active-challenges" id="activeChallenges">
+                    <h3>进行中的挑战</h3>
+                    <div class="challenges-list" id="challengesList">
+                        <div class="empty-state">
+                            <div class="empty-icon">📝</div>
+                            <p>还没有进行中的挑战</p>
+                            <p class="empty-hint">创建一个挑战开始你的写作之旅吧！</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="achievements-section">
+                    <h3>🎖️ 成就徽章</h3>
+                    <div class="badges-grid" id="badgesGrid"></div>
+                </div>
+            </section>
+
+            <!-- 写作统计模块 -->
+            <section class="module" id="module-stats">
+                <div class="module-header">
+                    <h1>📊 写作统计</h1>
+                    <p class="module-subtitle">记录每次写作，分析写作效率</p>
+                </div>
+
+                <div class="stats-overview">
+                    <div class="stat-card">
+                        <div class="stat-icon">📝</div>
+                        <div class="stat-info">
+                            <div class="stat-value" id="totalSessions">0</div>
+                            <div class="stat-label">总会话数</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">✍️</div>
+                        <div class="stat-info">
+                            <div class="stat-value" id="totalWords">0</div>
+                            <div class="stat-label">总字数</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">⏱️</div>
+                        <div class="stat-info">
+                            <div class="stat-value" id="totalTime">0</div>
+                            <div class="stat-label">总时长(分钟)</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">⚡</div>
+                        <div class="stat-info">
+                            <div class="stat-value" id="avgSpeed">0</div>
+                            <div class="stat-label">平均速度(字/分)</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sessions-history">
+                    <div class="section-header">
+                        <h3>📋 写作会话记录</h3>
+                        <button class="btn-secondary" id="exportSessionsBtn">导出数据</button>
+                    </div>
+                    <div class="sessions-list" id="sessionsList">
+                        <div class="empty-state">
+                            <div class="empty-icon">📭</div>
+                            <p>还没有写作记录</p>
+                            <p class="empty-hint">开始写作后，这里会显示你的记录</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="time-distribution">
+                    <h3>⏰ 写作时段分布</h3>
+                    <div class="time-chart" id="timeChart"></div>
+                    <div class="time-insight" id="timeInsight"></div>
+                </div>
+
+                <div class="speed-chart-section">
+                    <h3>📈 写作速度趋势</h3>
+                    <div class="speed-chart" id="speedChart"></div>
+                </div>
+            </section>
+
+            <!-- 激励系统模块 -->
+            <section class="module" id="module-motivation">
+                <div class="module-header">
+                    <h1>🔥 激励系统</h1>
+                    <p class="module-subtitle">保持连续，打破纪录，超越自己</p>
+                </div>
+
+                <div class="streak-section">
+                    <div class="streak-display">
+                        <div class="streak-circle">
+                            <div class="streak-number" id="currentStreak">0</div>
+                            <div class="streak-label">天连续写作</div>
+                        </div>
+                        <div class="streak-info">
+                            <div class="streak-row">
+                                <span class="streak-icon-small">🔥</span>
+                                <span>当前连续</span>
+                                <strong id="streakCurrent">0 天</strong>
+                            </div>
+                            <div class="streak-row">
+                                <span class="streak-icon-small">🏔️</span>
+                                <span>历史最高</span>
+                                <strong id="streakMax">0 天</strong>
+                            </div>
+                            <div class="streak-row">
+                                <span class="streak-icon-small">📅</span>
+                                <span>上次写作</span>
+                                <strong id="streakLast">—</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="streak-badges">
+                        <h3>🎖️ Streak 徽章</h3>
+                        <div class="streak-badges-grid" id="streakBadges"></div>
+                    </div>
+                </div>
+
+                <div class="records-section">
+                    <h3>🏅 历史最高纪录</h3>
+                    <div class="records-grid">
+                        <div class="record-card">
+                            <div class="record-icon">📝</div>
+                            <div class="record-info">
+                                <div class="record-value" id="maxDailyWords">0</div>
+                                <div class="record-label">单日最高字数</div>
+                                <div class="record-date" id="maxDailyWordsDate">—</div>
+                            </div>
+                        </div>
+                        <div class="record-card">
+                            <div class="record-icon">⚡</div>
+                            <div class="record-info">
+                                <div class="record-value" id="maxSessionSpeed">0</div>
+                                <div class="record-label">最高写作速度(字/分)</div>
+                                <div class="record-date" id="maxSessionSpeedDate">—</div>
+                            </div>
+                        </div>
+                        <div class="record-card">
+                            <div class="record-icon">⏱️</div>
+                            <div class="record-info">
+                                <div class="record-value" id="maxSessionDuration">0</div>
+                                <div class="record-label">最长写作时长(分钟)</div>
+                                <div class="record-date" id="maxSessionDurationDate">—</div>
+                            </div>
+                        </div>
+                        <div class="record-card">
+                            <div class="record-icon">📚</div>
+                            <div class="record-info">
+                                <div class="record-value" id="maxSessionWords">0</div>
+                                <div class="record-label">单次最多字数</div>
+                                <div class="record-date" id="maxSessionWordsDate">—</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="comparison-section">
+                    <h3>📊 历史对比</h3>
+                    <div class="comparison-grid">
+                        <div class="comparison-card">
+                            <div class="comparison-header">
+                                <span>今日 vs 昨日</span>
+                                <span class="comparison-value" id="cmpYesterday">—</span>
+                            </div>
+                            <div class="comparison-bar-container">
+                                <div class="comparison-bar">
+                                    <div class="bar-label">昨日</div>
+                                    <div class="bar-wrapper"><div class="bar-fill" id="barYesterday" style="width:0%"></div></div>
+                                    <div class="bar-value" id="valYesterday">0字</div>
+                                </div>
+                                <div class="comparison-bar">
+                                    <div class="bar-label">今日</div>
+                                    <div class="bar-wrapper"><div class="bar-fill today" id="barToday" style="width:0%"></div></div>
+                                    <div class="bar-value" id="valToday">0字</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="comparison-card">
+                            <div class="comparison-header">
+                                <span>本周 vs 上周</span>
+                                <span class="comparison-value" id="cmpLastWeek">—</span>
+                            </div>
+                            <div class="comparison-bar-container">
+                                <div class="comparison-bar">
+                                    <div class="bar-label">上周</div>
+                                    <div class="bar-wrapper"><div class="bar-fill" id="barLastWeek" style="width:0%"></div></div>
+                                    <div class="bar-value" id="valLastWeek">0字</div>
+                                </div>
+                                <div class="comparison-bar">
+                                    <div class="bar-label">本周</div>
+                                    <div class="bar-wrapper"><div class="bar-fill today" id="barThisWeek" style="width:0%"></div></div>
+                                    <div class="bar-value" id="valThisWeek">0字</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="comparison-card">
+                            <div class="comparison-header">
+                                <span>本月 vs 上月</span>
+                                <span class="comparison-value" id="cmpLastMonth">—</span>
+                            </div>
+                            <div class="comparison-bar-container">
+                                <div class="comparison-bar">
+                                    <div class="bar-label">上月</div>
+                                    <div class="bar-wrapper"><div class="bar-fill" id="barLastMonth" style="width:0%"></div></div>
+                                    <div class="bar-value" id="valLastMonth">0字</div>
+                                </div>
+                                <div class="comparison-bar">
+                                    <div class="bar-label">本月</div>
+                                    <div class="bar-wrapper"><div class="bar-fill today" id="barThisMonth" style="width:0%"></div></div>
+                                    <div class="bar-value" id="valThisMonth">0字</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 写作环境模块 -->
+            <section class="module" id="module-environment">
+                <div class="module-header">
+                    <h1>🎯 写作环境</h1>
+                    <p class="module-subtitle">纯净编辑器，专注写作</p>
+                </div>
+
+                <div class="editor-container">
+                    <div class="editor-toolbar">
+                        <div class="editor-stats">
+                            <span>字数: <strong id="editorWordCount">0</strong></span>
+                            <span>时长: <strong id="editorTimer">00:00</strong></span>
+                            <span>速度: <strong id="editorSpeed">0</strong> 字/分</span>
+                        </div>
+                        <div class="editor-controls">
+                            <button class="btn-icon" id="toggleMusicBtn" title="音乐">🎵</button>
+                            <button class="btn-icon" id="fullscreenBtn" title="全屏">⛶</button>
+                            <button class="btn-icon" id="darkModeBtn" title="深色模式">🌙</button>
+                        </div>
+                    </div>
+
+                    <div class="editor-wrapper">
+                        <textarea class="writing-editor" id="writingEditor" placeholder="在这里开始你的写作..."></textarea>
+                        <div class="milestone-overlay" id="milestoneOverlay">
+                            <div class="milestone-content">
+                                <div class="milestone-icon">🎉</div>
+                                <div class="milestone-text" id="milestoneText">恭喜完成里程碑！</div>
+                                <div class="milestone-sub" id="milestoneSub">继续加油，创造更多精彩！</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="editor-actions">
+                        <button class="btn-secondary" id="clearEditorBtn">清空编辑器</button>
+                        <button class="btn-secondary" id="pauseTimerBtn">⏸ 暂停计时</button>
+                        <button class="btn-primary" id="finishSessionBtn">✅ 完成会话</button>
+                    </div>
+                </div>
+
+                <div class="music-player" id="musicPlayer">
+                    <div class="player-header">
+                        <h3>🎵 专注音乐</h3>
+                        <button class="btn-close" id="closeMusicBtn">✕</button>
+                    </div>
+                    <div class="player-content">
+                        <div class="music-tracks" id="musicTracks">
+                            <div class="music-track" data-track="lofi">
+                                <div class="track-icon">🎧</div>
+                                <div class="track-info">
+                                    <div class="track-name">Lo-Fi 专注</div>
+                                    <div class="track-desc">轻柔的Lo-Fi节奏</div>
+                                </div>
+                                <button class="play-btn" data-track="lofi">▶</button>
+                            </div>
+                            <div class="music-track" data-track="rain">
+                                <div class="track-icon">🌧️</div>
+                                <div class="track-info">
+                                    <div class="track-name">雨声白噪</div>
+                                    <div class="track-desc">舒缓的雨声背景</div>
+                                </div>
+                                <button class="play-btn" data-track="rain">▶</button>
+                            </div>
+                            <div class="music-track" data-track="forest">
+                                <div class="track-icon">🌲</div>
+                                <div class="track-info">
+                                    <div class="track-name">森林环境</div>
+                                    <div class="track-desc">自然森林声音</div>
+                                </div>
+                                <button class="play-btn" data-track="forest">▶</button>
+                            </div>
+                            <div class="music-track" data-track="cafe">
+                                <div class="track-icon">☕</div>
+                                <div class="track-info">
+                                    <div class="track-name">咖啡馆氛围</div>
+                                    <div class="track-desc">温暖的咖啡背景音</div>
+                                </div>
+                                <button class="play-btn" data-track="cafe">▶</button>
+                            </div>
+                            <div class="music-track" data-track="waves">
+                                <div class="track-icon">🌊</div>
+                                <div class="track-info">
+                                    <div class="track-name">海浪白噪</div>
+                                    <div class="track-desc">平静的海浪声</div>
+                                </div>
+                                <button class="play-btn" data-track="waves">▶</button>
+                            </div>
+                        </div>
+                        <div class="player-controls">
+                            <div class="volume-control">
+                                <span>🔈</span>
+                                <input type="range" id="volumeSlider" min="0" max="100" value="50">
+                                <span>🔊</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 分析洞察模块 -->
+            <section class="module" id="module-insights">
+                <div class="module-header">
+                    <h1>💡 分析洞察</h1>
+                    <p class="module-subtitle">发现你的写作规律，提升写作质量</p>
+                </div>
+
+                <div class="insights-section">
+                    <h3>🎯 速度与质量关联分析</h3>
+                    <div class="insight-card">
+                        <div class="quality-input">
+                            <p>为每次写作评分（1-10分），分析写作速度与质量的关系</p>
+                            <div class="quality-chart" id="qualityChart"></div>
+                            <div class="quality-insight" id="qualityInsight">
+                                <div class="empty-state">
+                                    <p>请在完成写作后进行评分</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="insights-section">
+                    <h3>⭐ 高效写作日特征</h3>
+                    <div class="insight-card">
+                        <div class="efficient-days" id="efficientDays">
+                            <div class="empty-state">
+                                <div class="empty-icon">📊</div>
+                                <p>积累更多写作数据后，这里将显示你的高效写作日特征</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="insights-section">
+                    <h3>📅 年度写作报告</h3>
+                    <div class="report-card">
+                        <div class="report-stats">
+                            <div class="report-stat">
+                                <div class="report-value" id="annualTotalWords">0</div>
+                                <div class="report-label">年度总字数</div>
+                            </div>
+                            <div class="report-stat">
+                                <div class="report-value" id="annualWritingDays">0</div>
+                                <div class="report-label">写作天数</div>
+                            </div>
+                            <div class="report-stat">
+                                <div class="report-value" id="annualMaxStreak">0</div>
+                                <div class="report-label">最长连续天数</div>
+                            </div>
+                            <div class="report-stat">
+                                <div class="report-value" id="annualAvgDaily">0</div>
+                                <div class="report-label">日均字数</div>
+                            </div>
+                        </div>
+                        <div class="report-chart" id="annualChart"></div>
+                        <div class="report-summary">
+                            <h4>📝 年度总结</h4>
+                            <p id="annualSummary">还没有足够的数据生成年度报告</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="insights-section">
+                    <h3>🔮 个性化建议</h3>
+                    <div class="suggestions-card" id="suggestionsCard">
+                        <div class="empty-state">
+                            <div class="empty-icon">✨</div>
+                            <p>继续写作，获取个性化建议</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- 里程碑庆祝动画 -->
+    <div class="celebration-container" id="celebrationContainer">
+        <div class="confetti"></div>
+        <div class="celebration-modal">
+            <div class="celebration-icon">🎊</div>
+            <h2 id="celebrationTitle">恭喜！</h2>
+            <p id="celebrationMessage">你完成了一个重要的里程碑！</p>
+            <button class="btn-primary" id="celebrationCloseBtn">继续写作</button>
+        </div>
+    </div>
+
+    <!-- 质量评分弹窗 -->
+    <div class="modal-overlay" id="qualityModal">
+        <div class="modal">
+            <h3>📝 评估本次写作质量</h3>
+            <p>为本次写作会话评分（1-10分）</p>
+            <div class="rating-input">
+                <input type="range" id="qualityRating" min="1" max="10" value="5">
+                <span class="rating-value" id="qualityRatingValue">5</span>
+            </div>
+            <textarea id="qualityNote" placeholder="备注一下这次写作的感受...（可选）"></textarea>
+            <div class="modal-actions">
+                <button class="btn-secondary" id="qualitySkipBtn">跳过</button>
+                <button class="btn-primary" id="qualitySaveBtn">保存评分</button>
+            </div>
+        </div>
+    </div>
+
+    <audio id="bgAudio" loop></audio>
+
+    <script src="app.js"></script>
+</body>
+</html>
