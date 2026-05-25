@@ -1,0 +1,207 @@
+.nav-item.active {
+    background-color: #3B82F6;
+    color: white;
+}
+
+.nav-item.active:hover {
+    background-color: #2563EB;
+}
+
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+    backdrop-filter: blur(2px);
+}
+
+.modal-content {
+    background: white;
+    border-radius: 12px;
+    max-width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    animation: modalIn 0.2s ease-out;
+}
+
+@keyframes modalIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95) translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.status-potential { background: #FEF3C7; color: #92400E; }
+.status-negotiation { background: #DBEAFE; color: #1E40AF; }
+.status-active { background: #D1FAE5; color: #065F46; }
+.status-completed { background: #E5E7EB; color: #374151; }
+.status-repeat { background: #FCE7F3; color: #9D174D; }
+
+.progress-bar {
+    height: 8px;
+    background: #E5E7EB;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #3B82F6, #10B981);
+    transition: width 0.3s ease;
+}
+
+.timer-active {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+}
+
+.card-hover {
+    transition: all 0.2s ease;
+}
+
+.card-hover:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    ring: 2px;
+    ring-color: #3B82F6;
+}
+
+.table-row:hover {
+    background-color: #F9FAFB;
+}
+
+.win-rate-bar {
+    height: 6px;
+    background: #E5E7EB;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.win-rate-fill {
+    height: 100%;
+    transition: width 0.3s ease;
+}
+
+.invoice-preview {
+    background: white;
+    padding: 40px;
+    font-family: 'Microsoft YaHei', sans-serif;
+}
+
+.invoice-header {
+    border-bottom: 2px solid #3B82F6;
+    padding-bottom: 20px;
+    margin-bottom: 30px;
+}
+
+.invoice-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+
+.invoice-table th,
+.invoice-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #E5E7EB;
+}
+
+.invoice-table th {
+    background: #F9FAFB;
+    font-weight: 600;
+}
+
+.invoice-total {
+    font-size: 1.25rem;
+    font-weight: bold;
+    text-align: right;
+    padding: 20px 0;
+    border-top: 2px solid #3B82F6;
+}
+
+.lifecycle-stage {
+    position: relative;
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.lifecycle-stage.active {
+    font-weight: bold;
+    color: #3B82F6;
+}
+
+.lifecycle-stage.active::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: #3B82F6;
+    border-radius: 2px;
+}
+
+.file-upload-area {
+    border: 2px dashed #D1D5DB;
+    border-radius: 8px;
+    padding: 30px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.file-upload-area:hover {
+    border-color: #3B82F6;
+    background: #EFF6FF;
+}
+
+.chart-bar {
+    transition: height 0.3s ease;
+}
+
+.timeline-item {
+    position: relative;
+    padding-left: 30px;
+    border-left: 2px solid #E5E7EB;
+    margin-left: 10px;
+}
+
+.timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -8px;
+    top: 0;
+    width: 14px;
+    height: 14px;
+    background: #3B82F6;
+    border-radius: 50%;
+    border: 3px solid white;
+    box-shadow: 0 0 0 2px #3B82F6;
+}

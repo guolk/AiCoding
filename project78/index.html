@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>自由职业者管理系统</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3B82F6',
+                        secondary: '#10B981',
+                        warning: '#F59E0B',
+                        danger: '#EF4444',
+                        dark: '#1F2937',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <div id="app" class="flex h-screen overflow-hidden">
+        <aside id="sidebar" class="w-64 bg-dark text-white flex flex-col shadow-xl">
+            <div class="p-4 border-b border-gray-700">
+                <h1 class="text-xl font-bold flex items-center gap-2">
+                    <i class="fas fa-briefcase text-primary"></i>
+                    FreelanceManager
+                </h1>
+            </div>
+            <nav class="flex-1 p-4 space-y-1">
+                <a href="#" class="nav-item active flex items-center gap-3 px-4 py-3 rounded-lg transition-all" data-module="dashboard">
+                    <i class="fas fa-chart-pie w-5"></i>
+                    <span>数据概览</span>
+                </a>
+                <a href="#" class="nav-item flex items-center gap-3 px-4 py-3 rounded-lg transition-all hover:bg-gray-700" data-module="clients">
+                    <i class="fas fa-users w-5"></i>
+                    <span>客户关系</span>
+                </a>
+                <a href="#" class="nav-item flex items-center gap-3 px-4 py-3 rounded-lg transition-all hover:bg-gray-700" data-module="projects">
+                    <i class="fas fa-project-diagram w-5"></i>
+                    <span>项目管理</span>
+                </a>
+                <a href="#" class="nav-item flex items-center gap-3 px-4 py-3 rounded-lg transition-all hover:bg-gray-700" data-module="time">
+                    <i class="fas fa-clock w-5"></i>
+                    <span>时间计费</span>
+                </a>
+                <a href="#" class="nav-item flex items-center gap-3 px-4 py-3 rounded-lg transition-all hover:bg-gray-700" data-module="finance">
+                    <i class="fas fa-dollar-sign w-5"></i>
+                    <span>财务追踪</span>
+                </a>
+                <a href="#" class="nav-item flex items-center gap-3 px-4 py-3 rounded-lg transition-all hover:bg-gray-700" data-module="opportunities">
+                    <i class="fas fa-rocket w-5"></i>
+                    <span>商机管理</span>
+                </a>
+            </nav>
+            <div class="p-4 border-t border-gray-700">
+                <div class="text-sm text-gray-400">
+                    <p id="current-date"></p>
+                </div>
+            </div>
+        </aside>
+
+        <main class="flex-1 flex flex-col overflow-hidden">
+            <header class="bg-white shadow-sm px-6 py-4 flex justify-between items-center">
+                <h2 id="page-title" class="text-2xl font-bold text-gray-800">数据概览</h2>
+                <div class="flex items-center gap-4">
+                    <button onclick="exportData()" class="px-4 py-2 text-sm bg-gray-100 hover:bg-gray-200 rounded-lg transition-all flex items-center gap-2">
+                        <i class="fas fa-download"></i>
+                        导出数据
+                    </button>
+                    <button onclick="importData()" class="px-4 py-2 text-sm bg-gray-100 hover:bg-gray-200 rounded-lg transition-all flex items-center gap-2">
+                        <i class="fas fa-upload"></i>
+                        导入数据
+                    </button>
+                    <button onclick="DemoData.generate()" class="px-4 py-2 text-sm bg-yellow-100 hover:bg-yellow-200 text-yellow-800 rounded-lg transition-all flex items-center gap-2">
+                        <i class="fas fa-magic"></i>
+                        生成演示数据
+                    </button>
+                    <input type="file" id="import-file" accept=".json" class="hidden" onchange="handleImport(event)">
+                </div>
+            </header>
+
+            <div id="content" class="flex-1 overflow-y-auto p-6">
+            </div>
+        </main>
+    </div>
+
+    <div id="modal-container"></div>
+
+    <script src="js/utils/storage.js"></script>
+    <script src="js/utils/helpers.js"></script>
+    <script src="js/utils/demoData.js"></script>
+    <script src="js/modules/dashboard.js"></script>
+    <script src="js/modules/clients.js"></script>
+    <script src="js/modules/projects.js"></script>
+    <script src="js/modules/time.js"></script>
+    <script src="js/modules/finance.js"></script>
+    <script src="js/modules/opportunities.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
