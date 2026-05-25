@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>旅行地图标注与规划工具</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="app-container">
+        <header class="app-header">
+            <div class="logo">
+                <i class="fas fa-globe-americas"></i>
+                <h1>旅行地图标注与规划工具</h1>
+            </div>
+            <nav class="main-nav">
+                <button class="nav-btn active" data-tab="map">
+                    <i class="fas fa-map-marker-alt"></i> 地图标注
+                </button>
+                <button class="nav-btn" data-tab="research">
+                    <i class="fas fa-book"></i> 目的地研究
+                </button>
+                <button class="nav-btn" data-tab="planning">
+                    <i class="fas fa-route"></i> 行程规划
+                </button>
+                <button class="nav-btn" data-tab="review">
+                    <i class="fas fa-camera-retro"></i> 旅行回顾
+                </button>
+                <button class="nav-btn" data-tab="stats">
+                    <i class="fas fa-chart-bar"></i> 统计分析
+                </button>
+            </nav>
+        </header>
+
+        <main class="app-main">
+            <!-- 地图标注模块 -->
+            <section class="tab-content active" id="tab-map">
+                <div class="map-sidebar">
+                    <div class="sidebar-section">
+                        <h3><i class="fas fa-layer-group"></i> 图层管理</h3>
+                        <div class="layer-controls">
+                            <button id="addLayerBtn" class="btn btn-primary">
+                                <i class="fas fa-plus"></i> 新建图层
+                            </button>
+                            <button id="resetDemoBtn" class="btn btn-secondary" style="margin-top: 10px; width: 100%;">
+                                <i class="fas fa-sync-alt"></i> 重置演示数据
+                            </button>
+                            <div id="layerList" class="layer-list"></div>
+                        </div>
+                    </div>
+                    <div class="sidebar-section">
+                        <h3><i class="fas fa-filter"></i> 标注分类</h3>
+                        <div class="category-filters">
+                            <label class="filter-item">
+                                <input type="checkbox" class="category-filter" data-category="want" checked>
+                                <span class="category-icon want">⭐</span> 想去
+                            </label>
+                            <label class="filter-item">
+                                <input type="checkbox" class="category-filter" data-category="visited" checked>
+                                <span class="category-icon visited">✅</span> 已去
+                            </label>
+                            <label class="filter-item">
+                                <input type="checkbox" class="category-filter" data-category="recommend" checked>
+                                <span class="category-icon recommend">💎</span> 推荐
+                            </label>
+                            <label class="filter-item">
+                                <input type="checkbox" class="category-filter" data-category="avoid" checked>
+                                <span class="category-icon avoid">⚠️</span> 避开
+                            </label>
+                        </div>
+                    </div>
+                    <div class="sidebar-section">
+                        <h3><i class="fas fa-list"></i> 标注列表</h3>
+                        <div id="markerList" class="marker-list"></div>
+                    </div>
+                </div>
+                <div class="map-container">
+                    <div id="map"></div>
+                    <div class="map-controls">
+                        <button id="addMarkerBtn" class="btn btn-primary">
+                            <i class="fas fa-plus-circle"></i> 添加标注
+                        </button>
+                        <button id="clearMarkersBtn" class="btn btn-danger">
+                            <i class="fas fa-trash"></i> 清空当前图层
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 目的地研究模块 -->
+            <section class="tab-content" id="tab-research">
+                <div class="research-container">
+                    <div class="research-sidebar">
+                        <div class="sidebar-section">
+                            <h3><i class="fas fa-heart"></i> 心愿清单</h3>
+                            <div class="priority-controls">
+                                <select id="prioritySort" class="form-control">
+                                    <option value="priority">按迫切程度排序</option>
+                                    <option value="name">按名称排序</option>
+                                    <option value="budget">按预算排序</option>
+                                </select>
+                            </div>
+                            <div id="wishList" class="wish-list"></div>
+                            <button id="addDestinationBtn" class="btn btn-primary btn-full">
+                                <i class="fas fa-plus"></i> 添加目的地
+                            </button>
+                        </div>
+                    </div>
+                    <div class="research-content">
+                        <div id="researchDetail" class="research-detail">
+                            <div class="empty-state">
+                                <i class="fas fa-book-open"></i>
+                                <p>从左侧选择一个目的地查看详情，或点击"添加目的地"开始研究</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 行程规划模块 -->
+            <section class="tab-content" id="tab-planning">
+                <div class="planning-container">
+                    <div class="planning-sidebar">
+                        <div class="sidebar-section">
+                            <h3><i class="fas fa-calendar-alt"></i> 行程日期</h3>
+                            <div class="trip-info">
+                                <div class="form-group">
+                                    <label>行程名称</label>
+                                    <input type="text" id="tripName" class="form-control" placeholder="例如：日本东京7日游">
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>开始日期</label>
+                                        <input type="date" id="tripStartDate" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>结束日期</label>
+                                        <input type="date" id="tripEndDate" class="form-control">
+                                    </div>
+                                </div>
+                                <button id="generateDaysBtn" class="btn btn-primary btn-full">
+                                    <i class="fas fa-calendar-plus"></i> 生成行程日
+                                </button>
+                            </div>
+                            <div id="dayList" class="day-list"></div>
+                        </div>
+                    </div>
+                    <div class="planning-content">
+                        <div class="planning-map-container">
+                            <div id="planningMap"></div>
+                        </div>
+                        <div class="itinerary-detail">
+                            <div class="itinerary-header">
+                                <h3 id="currentDayTitle">选择行程日</h3>
+                                <div class="itinerary-actions">
+                                    <button id="checkTimingBtn" class="btn btn-warning">
+                                        <i class="fas fa-clock"></i> 时间合理性检查
+                                    </button>
+                                    <button id="exportPdfBtn" class="btn btn-success">
+                                        <i class="fas fa-file-pdf"></i> 导出PDF
+                                    </button>
+                                </div>
+                            </div>
+                            <div id="timingWarning" class="timing-warning" style="display: none;"></div>
+                            <div id="itineraryStops" class="itinerary-stops">
+                                <div class="empty-state">
+                                    <i class="fas fa-route"></i>
+                                    <p>选择或创建行程日，然后在地图上点击添加停留点</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 旅行回顾模块 -->
+            <section class="tab-content" id="tab-review">
+                <div class="review-container">
+                    <div class="review-sidebar">
+                        <div class="sidebar-section">
+                            <h3><i class="fas fa-history"></i> 已完成旅行</h3>
+                            <div id="tripList" class="trip-list"></div>
+                            <button id="addTripBtn" class="btn btn-primary btn-full">
+                                <i class="fas fa-plus"></i> 添加旅行记录
+                            </button>
+                        </div>
+                    </div>
+                    <div class="review-content">
+                        <div id="tripDetail" class="trip-detail">
+                            <div class="empty-state">
+                                <i class="fas fa-book"></i>
+                                <p>从左侧选择一个旅行记录查看详情，或点击"添加旅行记录"开始回顾</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 统计分析模块 -->
+            <section class="tab-content" id="tab-stats">
+                <div class="stats-container">
+                    <div class="stats-overview">
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: linear-gradient(135deg, #667eea, #764ba2);">
+                                <i class="fas fa-globe"></i>
+                            </div>
+                            <div class="stat-info">
+                                <div class="stat-value" id="statCountries">0</div>
+                                <div class="stat-label">访问国家</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: linear-gradient(135deg, #f093fb, #f5576c);">
+                                <i class="fas fa-city"></i>
+                            </div>
+                            <div class="stat-info">
+                                <div class="stat-value" id="statCities">0</div>
+                                <div class="stat-label">访问城市</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: linear-gradient(135deg, #4facfe, #00f2fe);">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div class="stat-info">
+                                <div class="stat-value" id="statMarkers">0</div>
+                                <div class="stat-label">标注总数</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: linear-gradient(135deg, #43e97b, #38f9d7);">
+                                <i class="fas fa-camera"></i>
+                            </div>
+                            <div class="stat-info">
+                                <div class="stat-value" id="statPhotos">0</div>
+                                <div class="stat-label">照片数量</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: linear-gradient(135deg, #fa709a, #fee140);">
+                                <i class="fas fa-plane"></i>
+                            </div>
+                            <div class="stat-info">
+                                <div class="stat-value" id="statTrips">0</div>
+                                <div class="stat-label">旅行次数</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: linear-gradient(135deg, #a8edea, #fed6e3);">
+                                <i class="fas fa-coins"></i>
+                            </div>
+                            <div class="stat-info">
+                                <div class="stat-value" id="statBudget">¥0</div>
+                                <div class="stat-label">总花费</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="stats-content">
+                        <div class="stats-map-section">
+                            <h3><i class="fas fa-footprints"></i> 足迹地图</h3>
+                            <div id="footprintMap" class="stats-map"></div>
+                        </div>
+                        <div class="stats-chart-section">
+                            <h3><i class="fas fa-chart-line"></i> 年度旅行频率</h3>
+                            <canvas id="yearlyChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- 模态框容器 -->
+    <div id="modalContainer"></div>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
