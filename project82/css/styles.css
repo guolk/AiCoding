@@ -1,0 +1,226 @@
+.tab-btn {
+    color: #9ca3af;
+}
+
+.tab-btn:hover {
+    background-color: #374151;
+    color: #f3f4f6;
+}
+
+.tab-btn.active {
+    background-color: #3b82f6;
+    color: white;
+}
+
+.tab-content.hidden {
+    display: none;
+}
+
+.photo-card {
+    position: relative;
+    overflow: hidden;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.photo-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+.photo-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    display: block;
+}
+
+.photo-card .overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+    padding: 1rem;
+    transform: translateY(100%);
+    transition: transform 0.2s;
+}
+
+.photo-card:hover .overlay {
+    transform: translateY(0);
+}
+
+.photo-card .rating {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.875rem;
+}
+
+.photo-card .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+}
+
+.tag-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.125rem 0.5rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.tag-badge.theme {
+    background-color: rgba(59, 130, 246, 0.2);
+    color: #93c5fd;
+}
+
+.tag-badge.style {
+    background-color: rgba(168, 85, 247, 0.2);
+    color: #d8b4fe;
+}
+
+.note-card {
+    background-color: #1f2937;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    transition: all 0.2s;
+}
+
+.note-card:hover {
+    background-color: #374151;
+}
+
+.note-card .category {
+    display: inline-block;
+    padding: 0.125rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.note-card .category.对焦 {
+    background-color: rgba(34, 197, 94, 0.2);
+    color: #86efac;
+}
+
+.note-card .category.曝光 {
+    background-color: rgba(249, 115, 22, 0.2);
+    color: #fdba74;
+}
+
+.note-card .category.构图 {
+    background-color: rgba(59, 130, 246, 0.2);
+    color: #93c5fd;
+}
+
+.note-card .category.用光 {
+    background-color: rgba(234, 179, 8, 0.2);
+    color: #fde047;
+}
+
+.note-card .category.后期 {
+    background-color: rgba(168, 85, 247, 0.2);
+    color: #d8b4fe;
+}
+
+.heatmap-grid {
+    display: grid;
+    grid-template-columns: repeat(24, 1fr);
+    gap: 2px;
+    min-width: 600px;
+}
+
+.heatmap-cell {
+    aspect-ratio: 1;
+    border-radius: 2px;
+    transition: all 0.2s;
+}
+
+.heatmap-cell:hover {
+    transform: scale(1.2);
+    z-index: 10;
+}
+
+.equipment-card {
+    background-color: #1f2937;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    transition: all 0.2s;
+}
+
+.equipment-card:hover {
+    background-color: #374151;
+}
+
+.plan-card {
+    background-color: #1f2937;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    transition: all 0.2s;
+    border-left: 4px solid #3b82f6;
+}
+
+.plan-card.completed {
+    border-left-color: #22c55e;
+}
+
+.plan-card.cancelled {
+    border-left-color: #6b7280;
+    opacity: 0.7;
+}
+
+input[type="range"] {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 6px;
+    background: #374151;
+    border-radius: 3px;
+    outline: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 16px;
+    height: 16px;
+    background: #3b82f6;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+input[type="range"]::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    background: #3b82f6;
+    border-radius: 50%;
+    cursor: pointer;
+    border: none;
+}
+
+.toast-show {
+    transform: translateY(0) !important;
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #1f2937;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #4b5563;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #6b7280;
+}

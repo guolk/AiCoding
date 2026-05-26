@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>摄影作品管理与技术学习工具</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/exifr@7.1.3/dist/index.umd.js"></script>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="bg-gray-900 text-gray-100 min-h-screen">
+    <nav class="bg-gray-800 border-b border-gray-700 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center space-x-3">
+                    <span class="text-2xl">📷</span>
+                    <h1 class="text-xl font-bold text-white">摄影工作室</h1>
+                </div>
+                <div class="flex space-x-1">
+                    <button onclick="switchTab('photos')" class="tab-btn px-4 py-2 rounded-lg text-sm font-medium transition-all" data-tab="photos">作品管理</button>
+                    <button onclick="switchTab('analysis')" class="tab-btn px-4 py-2 rounded-lg text-sm font-medium transition-all" data-tab="analysis">技术分析</button>
+                    <button onclick="switchTab('learning')" class="tab-btn px-4 py-2 rounded-lg text-sm font-medium transition-all" data-tab="learning">技术学习</button>
+                    <button onclick="switchTab('progress')" class="tab-btn px-4 py-2 rounded-lg text-sm font-medium transition-all" data-tab="progress">进步追踪</button>
+                    <button onclick="switchTab('equipment')" class="tab-btn px-4 py-2 rounded-lg text-sm font-medium transition-all" data-tab="equipment">器材管理</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-4 py-6">
+        <div id="tab-photos" class="tab-content">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold">作品管理</h2>
+                <div class="flex space-x-3">
+                    <input type="file" id="photoInput" accept="image/*" multiple class="hidden">
+                    <button onclick="document.getElementById('photoInput').click()" class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg flex items-center space-x-2 transition-all">
+                        <span>📤</span>
+                        <span>导入照片</span>
+                    </button>
+                    <button onclick="openTagManager()" class="bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded-lg flex items-center space-x-2 transition-all">
+                        <span>🏷️</span>
+                        <span>标签管理</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="bg-gray-800 rounded-lg p-4 mb-6">
+                <div class="flex flex-wrap gap-4 items-center">
+                    <div class="flex items-center space-x-2">
+                        <label class="text-sm text-gray-400">筛选：</label>
+                        <select id="filterTag" onchange="filterPhotos()" class="bg-gray-700 border border-gray-600 rounded px-3 py-1 text-sm">
+                            <option value="">全部标签</option>
+                        </select>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <label class="text-sm text-gray-400">星级：</label>
+                        <select id="filterRating" onchange="filterPhotos()" class="bg-gray-700 border border-gray-600 rounded px-3 py-1 text-sm">
+                            <option value="">全部</option>
+                            <option value="5">★★★★★</option>
+                            <option value="4">★★★★☆</option>
+                            <option value="3">★★★☆☆</option>
+                            <option value="2">★★☆☆☆</option>
+                            <option value="1">★☆☆☆☆</option>
+                        </select>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <label class="text-sm text-gray-400">排序：</label>
+                        <select id="sortBy" onchange="filterPhotos()" class="bg-gray-700 border border-gray-600 rounded px-3 py-1 text-sm">
+                            <option value="date-desc">拍摄时间（最新）</option>
+                            <option value="date-asc">拍摄时间（最早）</option>
+                            <option value="rating-desc">星级（高到低）</option>
+                            <option value="rating-asc">星级（低到高）</option>
+                        </select>
+                    </div>
+                    <div class="text-sm text-gray-400">
+                        共 <span id="photoCount" class="text-white font-medium">0</span> 张照片
+                    </div>
+                </div>
+            </div>
+
+            <div id="photoGrid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            </div>
+
+            <div id="emptyState" class="text-center py-16">
+                <div class="text-6xl mb-4">📸</div>
+                <p class="text-gray-400 text-lg">还没有导入照片</p>
+                <p class="text-gray-500 text-sm mt-2">点击"导入照片"按钮开始管理您的摄影作品</p>
+            </div>
+        </div>
+
+        <div id="tab-analysis" class="tab-content hidden">
+            <h2 class="text-2xl font-bold mb-6">技术分析</h2>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="bg-gray-800 rounded-lg p-6">
+                    <h3 class="text-lg font-semibold mb-4">光圈分布</h3>
+                    <canvas id="apertureChart" height="200"></canvas>
+                </div>
+                <div class="bg-gray-800 rounded-lg p-6">
+                    <h3 class="text-lg font-semibold mb-4">快门速度分布</h3>
+                    <canvas id="shutterChart" height="200"></canvas>
+                </div>
+                <div class="bg-gray-800 rounded-lg p-6">
+                    <h3 class="text-lg font-semibold mb-4">ISO分布</h3>
+                    <canvas id="isoChart" height="200"></canvas>
+                </div>
+                <div class="bg-gray-800 rounded-lg p-6">
+                    <h3 class="text-lg font-semibold mb-4">焦距分布</h3>
+                    <canvas id="focalChart" height="200"></canvas>
+                </div>
+                <div class="bg-gray-800 rounded-lg p-6 lg:col-span-2">
+                    <h3 class="text-lg font-semibold mb-4">拍摄时间分布热图</h3>
+                    <div id="timeHeatmap" class="overflow-x-auto"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="tab-learning" class="tab-content hidden">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold">技术学习</h2>
+                <div class="flex space-x-3">
+                    <button onclick="openNoteEditor()" class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg flex items-center space-x-2 transition-all">
+                        <span>📝</span>
+                        <span>新建笔记</span>
+                    </button>
+                    <button onclick="openPlanEditor()" class="bg-green-600 hover:bg-green-700 px-4 py-2 rounded-lg flex items-center space-x-2 transition-all">
+                        <span>📋</span>
+                        <span>拍摄计划</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="mb-8">
+                <h3 class="text-lg font-semibold mb-4 flex items-center">
+                    <span class="mr-2">📚</span>学习笔记
+                </h3>
+                <div class="flex flex-wrap gap-2 mb-4">
+                    <button onclick="filterNotes('all')" class="note-filter-btn px-3 py-1 rounded-full text-sm bg-blue-600" data-filter="all">全部</button>
+                    <button onclick="filterNotes('对焦')" class="note-filter-btn px-3 py-1 rounded-full text-sm bg-gray-700" data-filter="对焦">对焦</button>
+                    <button onclick="filterNotes('曝光')" class="note-filter-btn px-3 py-1 rounded-full text-sm bg-gray-700" data-filter="曝光">曝光</button>
+                    <button onclick="filterNotes('构图')" class="note-filter-btn px-3 py-1 rounded-full text-sm bg-gray-700" data-filter="构图">构图</button>
+                    <button onclick="filterNotes('用光')" class="note-filter-btn px-3 py-1 rounded-full text-sm bg-gray-700" data-filter="用光">用光</button>
+                    <button onclick="filterNotes('后期')" class="note-filter-btn px-3 py-1 rounded-full text-sm bg-gray-700" data-filter="后期">后期</button>
+                </div>
+                <div id="notesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                </div>
+            </div>
+
+            <div class="mb-8">
+                <h3 class="text-lg font-semibold mb-4 flex items-center">
+                    <span class="mr-2">🎯</span>拍摄计划
+                </h3>
+                <div id="plansList" class="space-y-3">
+                </div>
+            </div>
+        </div>
+
+        <div id="tab-progress" class="tab-content hidden">
+            <h2 class="text-2xl font-bold mb-6">进步追踪</h2>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                <div class="bg-gray-800 rounded-lg p-6">
+                    <h3 class="text-lg font-semibold mb-4">技术掌握度自评</h3>
+                    <div id="skillRadarContainer">
+                        <canvas id="skillRadarChart" height="300"></canvas>
+                    </div>
+                    <button onclick="openSkillEditor()" class="mt-4 text-blue-400 hover:text-blue-300 text-sm">编辑自评</button>
+                </div>
+                <div class="bg-gray-800 rounded-lg p-6">
+                    <h3 class="text-lg font-semibold mb-4">高评价作品特征分析</h3>
+                    <div id="topFeatures" class="space-y-3">
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-gray-800 rounded-lg p-6">
+                <h3 class="text-lg font-semibold mb-4">每月精选作品对比</h3>
+                <div class="flex items-center space-x-4 mb-4">
+                    <label class="text-sm text-gray-400">选择月份：</label>
+                    <select id="compareMonth1" onchange="updateMonthlyCompare()" class="bg-gray-700 border border-gray-600 rounded px-3 py-1 text-sm"></select>
+                    <span class="text-gray-400">与</span>
+                    <select id="compareMonth2" onchange="updateMonthlyCompare()" class="bg-gray-700 border border-gray-600 rounded px-3 py-1 text-sm"></select>
+                </div>
+                <div id="monthlyCompare" class="grid grid-cols-2 gap-6">
+                </div>
+            </div>
+        </div>
+
+        <div id="tab-equipment" class="tab-content hidden">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold">器材管理</h2>
+                <div class="flex space-x-3">
+                    <button onclick="openCameraEditor()" class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg flex items-center space-x-2 transition-all">
+                        <span>📷</span>
+                        <span>添加相机</span>
+                    </button>
+                    <button onclick="openLensEditor()" class="bg-green-600 hover:bg-green-700 px-4 py-2 rounded-lg flex items-center space-x-2 transition-all">
+                        <span>🔍</span>
+                        <span>添加镜头</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="bg-gray-800 rounded-lg p-6">
+                    <h3 class="text-lg font-semibold mb-4">相机档案</h3>
+                    <div id="cameraList" class="space-y-3">
+                    </div>
+                </div>
+                <div class="bg-gray-800 rounded-lg p-6">
+                    <h3 class="text-lg font-semibold mb-4">镜头档案</h3>
+                    <div id="lensList" class="space-y-3">
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-gray-800 rounded-lg p-6 mt-6">
+                <h3 class="text-lg font-semibold mb-4">镜头使用统计</h3>
+                <canvas id="lensUsageChart" height="200"></canvas>
+            </div>
+        </div>
+    </main>
+
+    <div id="photoModal" class="fixed inset-0 bg-black bg-opacity-75 hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-gray-800 rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="p-6">
+                <div class="flex justify-between items-start mb-4">
+                    <h3 id="modalTitle" class="text-xl font-bold">照片详情</h3>
+                    <button onclick="closePhotoModal()" class="text-gray-400 hover:text-white text-2xl">&times;</button>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <img id="modalImage" class="w-full rounded-lg" src="" alt="">
+                    </div>
+                    <div>
+                        <div class="mb-4">
+                            <label class="text-sm text-gray-400 block mb-1">星级评分</label>
+                            <div id="modalRating" class="flex space-x-1 text-2xl"></div>
+                        </div>
+                        <div class="mb-4">
+                            <label class="text-sm text-gray-400 block mb-1">标签</label>
+                            <div id="modalTags" class="flex flex-wrap gap-2"></div>
+                            <div class="mt-2 flex items-center space-x-2">
+                                <select id="modalTagSelect" class="bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm flex-1">
+                                    <option value="">选择标签...</option>
+                                </select>
+                                <button onclick="addTagToPhoto()" class="bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded text-sm">添加</button>
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <label class="text-sm text-gray-400 block mb-1">关联笔记</label>
+                            <div id="modalNotes" class="flex flex-wrap gap-2 mb-2"></div>
+                            <div class="flex items-center space-x-2">
+                                <select id="modalNoteSelect" class="bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm flex-1">
+                                    <option value="">选择笔记...</option>
+                                </select>
+                                <button onclick="addNoteToPhoto()" class="bg-green-600 hover:bg-green-700 px-3 py-1 rounded text-sm">关联</button>
+                            </div>
+                        </div>
+                        <div class="border-t border-gray-700 pt-4">
+                            <h4 class="font-semibold mb-2">EXIF 数据</h4>
+                            <div id="modalExif" class="text-sm space-y-1 text-gray-300"></div>
+                        </div>
+                        <button onclick="deletePhoto()" class="mt-4 text-red-400 hover:text-red-300 text-sm">删除照片</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="tagModal" class="fixed inset-0 bg-black bg-opacity-75 hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-gray-800 rounded-lg max-w-md w-full">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-xl font-bold">标签管理</h3>
+                    <button onclick="closeTagManager()" class="text-gray-400 hover:text-white text-2xl">&times;</button>
+                </div>
+                <div class="mb-4">
+                    <div class="flex space-x-2">
+                        <input type="text" id="newTagName" placeholder="新标签名称" class="bg-gray-700 border border-gray-600 rounded px-3 py-2 flex-1 text-sm">
+                        <select id="newTagType" class="bg-gray-700 border border-gray-600 rounded px-3 py-2 text-sm">
+                            <option value="theme">主题</option>
+                            <option value="style">风格</option>
+                        </select>
+                        <button onclick="addNewTag()" class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded text-sm">添加</button>
+                    </div>
+                </div>
+                <div class="space-y-2">
+                    <h4 class="text-sm font-medium text-gray-400">主题标签</h4>
+                    <div id="themeTags" class="flex flex-wrap gap-2"></div>
+                    <h4 class="text-sm font-medium text-gray-400 mt-4">风格标签</h4>
+                    <div id="styleTags" class="flex flex-wrap gap-2"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="noteModal" class="fixed inset-0 bg-black bg-opacity-75 hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-gray-800 rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 id="noteModalTitle" class="text-xl font-bold">新建笔记</h3>
+                    <button onclick="closeNoteEditor()" class="text-gray-400 hover:text-white text-2xl">&times;</button>
+                </div>
+                <div class="space-y-4">
+                    <div>
+                        <label class="text-sm text-gray-400 block mb-1">标题</label>
+                        <input type="text" id="noteTitle" class="bg-gray-700 border border-gray-600 rounded px-3 py-2 w-full">
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="text-sm text-gray-400 block mb-1">分类</label>
+                            <select id="noteCategory" class="bg-gray-700 border border-gray-600 rounded px-3 py-2 w-full">
+                                <option value="对焦">对焦</option>
+                                <option value="曝光">曝光</option>
+                                <option value="构图">构图</option>
+                                <option value="用光">用光</option>
+                                <option value="后期">后期</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="text-sm text-gray-400 block mb-1">难度</label>
+                            <select id="noteLevel" class="bg-gray-700 border border-gray-600 rounded px-3 py-2 w-full">
+                                <option value="入门">入门</option>
+                                <option value="进阶">进阶</option>
+                                <option value="高级">高级</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="text-sm text-gray-400 block mb-1">关键要点</label>
+                        <textarea id="noteKeyPoints" rows="2" class="bg-gray-700 border border-gray-600 rounded px-3 py-2 w-full" placeholder="每行一个要点"></textarea>
+                    </div>
+                    <div>
+                        <label class="text-sm text-gray-400 block mb-1">详细内容</label>
+                        <textarea id="noteContent" rows="6" class="bg-gray-700 border border-gray-600 rounded px-3 py-2 w-full"></textarea>
+                    </div>
+                    <div class="flex justify-end space-x-3">
+                        <button onclick="closeNoteEditor()" class="bg-gray-600 hover:bg-gray-500 px-4 py-2 rounded">取消</button>
+                        <button onclick="saveNote()" class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded">保存</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="planModal" class="fixed inset-0 bg-black bg-opacity-75 hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-gray-800 rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 id="planModalTitle" class="text-xl font-bold">新建拍摄计划</h3>
+                    <button onclick="closePlanEditor()" class="text-gray-400 hover:text-white text-2xl">&times;</button>
+                </div>
+                <div class="space-y-4">
+                    <div>
+                        <label class="text-sm text-gray-400 block mb-1">计划标题</label>
+                        <input type="text" id="planTitle" class="bg-gray-700 border border-gray-600 rounded px-3 py-2 w-full">
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="text-sm text-gray-400 block mb-1">计划日期</label>
+                            <input type="date" id="planDate" class="bg-gray-700 border border-gray-600 rounded px-3 py-2 w-full">
+                        </div>
+                        <div>
+                            <label class="text-sm text-gray-400 block mb-1">状态</label>
+                            <select id="planStatus" class="bg-gray-700 border border-gray-600 rounded px-3 py-2 w-full">
+                                <option value="planned">计划中</option>
+                                <option value="completed">已完成</option>
+                                <option value="cancelled">已取消</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="text-sm text-gray-400 block mb-1">练习技法</label>
+                        <input type="text" id="planSkill" class="bg-gray-700 border border-gray-600 rounded px-3 py-2 w-full" placeholder="如：逆光人像、慢门风光">
+                    </div>
+                    <div>
+                        <label class="text-sm text-gray-400 block mb-1">拍摄地点</label>
+                        <input type="text" id="planLocation" class="bg-gray-700 border border-gray-600 rounded px-3 py-2 w-full" placeholder="如：城市街拍、海边日落">
+                    </div>
+                    <div>
+                        <label class="text-sm text-gray-400 block mb-1">备注</label>
+                        <textarea id="planNotes" rows="3" class="bg-gray-700 border border-gray-600 rounded px-3 py-2 w-full"></textarea>
+                    </div>
+                    <div class="flex justify-end space-x-3">
+                        <button onclick="closePlanEditor()" class="bg-gray-600 hover:bg-gray-500 px-4 py-2 rounded">取消</button>
+                        <button onclick="savePlan()" class="bg-green-600 hover:bg-green-700 px-4 py-2 rounded">保存</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="skillModal" class="fixed inset-0 bg-black bg-opacity-75 hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-gray-800 rounded-lg max-w-md w-full">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-xl font-bold">技术掌握度自评</h3>
+                    <button onclick="closeSkillEditor()" class="text-gray-400 hover:text-white text-2xl">&times;</button>
+                </div>
+                <div id="skillInputs" class="space-y-3">
+                </div>
+                <div class="flex justify-end space-x-3 mt-6">
+                    <button onclick="closeSkillEditor()" class="bg-gray-600 hover:bg-gray-500 px-4 py-2 rounded">取消</button>
+                    <button onclick="saveSkills()" class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="equipmentModal" class="fixed inset-0 bg-black bg-opacity-75 hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-gray-800 rounded-lg max-w-md w-full">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 id="equipmentModalTitle" class="text-xl font-bold">添加器材</h3>
+                    <button onclick="closeEquipmentEditor()" class="text-gray-400 hover:text-white text-2xl">&times;</button>
+                </div>
+                <div id="equipmentForm" class="space-y-4">
+                </div>
+                <div class="flex justify-end space-x-3 mt-6">
+                    <button onclick="closeEquipmentEditor()" class="bg-gray-600 hover:bg-gray-500 px-4 py-2 rounded">取消</button>
+                    <button onclick="saveEquipment()" class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast" class="fixed bottom-4 right-4 bg-gray-800 text-white px-6 py-3 rounded-lg shadow-lg transform translate-y-full transition-transform z-50">
+        <span id="toastMessage"></span>
+    </div>
+
+    <script src="js/storage.js"></script>
+    <script src="js/mockData.js"></script>
+    <script src="js/photos.js"></script>
+    <script src="js/analysis.js"></script>
+    <script src="js/learning.js"></script>
+    <script src="js/progress.js"></script>
+    <script src="js/equipment.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
