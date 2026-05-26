@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>家庭维修与房屋管理工具</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="app-header">
+    <h1>🏠 家庭维修与房屋管理</h1>
+    <nav class="app-nav">
+      <button class="nav-btn active" data-tab="dashboard">概览</button>
+      <button class="nav-btn" data-tab="house">房屋档案</button>
+      <button class="nav-btn" data-tab="repair">维修记录</button>
+      <button class="nav-btn" data-tab="maintenance">定期维护</button>
+      <button class="nav-btn" data-tab="appliance">家电档案</button>
+      <button class="nav-btn" data-tab="cost">费用统计</button>
+    </nav>
+  </header>
+
+  <main id="app">
+    <!-- 概览 -->
+    <section class="tab-content active" id="tab-dashboard">
+      <div class="dashboard-grid">
+        <div class="card">
+          <h3>🏡 房屋档案</h3>
+          <div id="dash-house" class="dash-block">—</div>
+        </div>
+        <div class="card">
+          <h3>🔧 待办维护</h3>
+          <div id="dash-maintenance" class="dash-block">—</div>
+        </div>
+        <div class="card">
+          <h3>📅 保修到期</h3>
+          <div id="dash-warranty" class="dash-block">—</div>
+        </div>
+        <div class="card">
+          <h3>💰 本月账单</h3>
+          <div id="dash-cost" class="dash-block">—</div>
+        </div>
+      </div>
+      <div class="card">
+        <h3>最近活动</h3>
+        <ul id="dash-activity" class="activity-list"></ul>
+      </div>
+    </section>
+
+    <!-- 房屋档案 -->
+    <section class="tab-content" id="tab-house">
+      <div class="section-title">
+        <h2>房屋档案</h2>
+      </div>
+
+      <div class="card">
+        <h3>基本信息</h3>
+        <form id="house-form" class="grid-form">
+          <label>建筑年份 <input type="number" name="buildYear" placeholder="如 2015" required /></label>
+          <label>建筑面积(㎡) <input type="number" step="0.01" name="area" required /></label>
+          <label>房间数量 <input type="number" name="roomCount" required /></label>
+          <label>主要建材
+            <select name="material">
+              <option value="钢筋混凝土">钢筋混凝土</option>
+              <option value="砖混">砖混</option>
+              <option value="钢结构">钢结构</option>
+              <option value="木质">木质</option>
+              <option value="其他">其他</option>
+            </select>
+          </label>
+          <label>地址 <input type="text" name="address" placeholder="房屋详细地址" /></label>
+          <label>业主 <input type="text" name="owner" /></label>
+          <div class="form-actions">
+            <button type="submit" class="btn-primary">保存基本信息</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="card">
+        <h3>价值评估历史</h3>
+        <form id="valuation-form" class="inline-form">
+          <input type="date" name="date" required />
+          <input type="number" step="0.01" name="value" placeholder="市场估值(元)" required />
+          <input type="text" name="note" placeholder="备注(如 市场上涨)" />
+          <button type="submit" class="btn-primary">添加记录</button>
+        </form>
+        <table class="data-table" id="valuation-table">
+          <thead><tr><th>日期</th><th>市场估值</th><th>变化</th><th>备注</th><th>操作</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <div class="card">
+        <h3>房屋平面图</h3>
+        <div class="floorplan-tools">
+          <label class="btn-secondary">
+            上传平面图
+            <input type="file" id="floorplan-input" accept="image/*" hidden />
+          </label>
+          <button id="btn-annotate-water" class="btn-secondary" data-annotate="water">标注水管</button>
+          <button id="btn-annotate-electric" class="btn-secondary" data-annotate="electric">标注电路</button>
+          <button id="btn-annotate-gas" class="btn-secondary" data-annotate="gas">标注燃气</button>
+          <button id="btn-annotate-wall" class="btn-secondary" data-annotate="wall">标注承重墙</button>
+          <button id="btn-annotate-none" class="btn-secondary">查看模式</button>
+          <button id="btn-clear-annotations" class="btn-danger">清除标注</button>
+        </div>
+        <div class="floorplan-wrapper">
+          <canvas id="floorplan-canvas" width="800" height="500"></canvas>
+          <div id="floorplan-legend" class="legend">
+            <span><i style="background:#3498db"></i>水管</span>
+            <span><i style="background:#f1c40f"></i>电路</span>
+            <span><i style="background:#e74c3c"></i>燃气</span>
+            <span><i style="background:#2c3e50"></i>承重墙</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 维修记录 -->
+    <section class="tab-content" id="tab-repair">
+      <div class="section-title">
+        <h2>维修记录</h2>
+        <button id="btn-add-repair" class="btn-primary">+ 新增维修记录</button>
+      </div>
+      <div id="repair-list" class="record-list"></div>
+    </section>
+
+    <!-- 定期维护 -->
+    <section class="tab-content" id="tab-maintenance">
+      <div class="section-title">
+        <h2>定期维护计划</h2>
+        <button id="btn-add-maintenance" class="btn-primary">+ 新增维护任务</button>
+      </div>
+
+      <div class="card">
+        <h3>待办 / 即将到期</h3>
+        <div id="maintenance-upcoming" class="upcoming-list"></div>
+      </div>
+
+      <div class="card">
+        <h3>维护任务列表</h3>
+        <div id="maintenance-list" class="record-list"></div>
+      </div>
+    </section>
+
+    <!-- 家电档案 -->
+    <section class="tab-content" id="tab-appliance">
+      <div class="section-title">
+        <h2>家电档案</h2>
+        <button id="btn-add-appliance" class="btn-primary">+ 新增家电</button>
+      </div>
+      <div id="appliance-list" class="record-list"></div>
+    </section>
+
+    <!-- 费用统计 -->
+    <section class="tab-content" id="tab-cost">
+      <div class="section-title">
+        <h2>费用统计</h2>
+      </div>
+
+      <div class="card">
+        <h3>月度账单录入</h3>
+        <form id="bill-form" class="inline-form">
+          <input type="month" name="month" required />
+          <select name="type">
+            <option value="water">水费</option>
+            <option value="electric">电费</option>
+            <option value="gas">燃气费</option>
+            <option value="internet">网络费</option>
+            <option value="property">物业费</option>
+            <option value="other">其他</option>
+          </select>
+          <input type="number" step="0.01" name="amount" placeholder="金额" required />
+          <button type="submit" class="btn-primary">添加</button>
+        </form>
+        <table class="data-table" id="bill-table">
+          <thead><tr><th>月份</th><th>类型</th><th>金额</th><th>操作</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <div class="card">
+        <h3>年度维护预算</h3>
+        <form id="budget-form" class="inline-form">
+          <input type="number" name="year" placeholder="年份" required />
+          <input type="number" step="0.01" name="budget" placeholder="年度预算" required />
+          <button type="submit" class="btn-primary">设置预算</button>
+        </form>
+        <div id="budget-summary" class="budget-summary"></div>
+      </div>
+
+      <div class="card">
+        <h3>账单趋势</h3>
+        <canvas id="cost-chart" width="900" height="300"></canvas>
+      </div>
+    </section>
+  </main>
+
+  <!-- 模态框 -->
+  <div id="modal" class="modal hidden">
+    <div class="modal-content">
+      <button class="modal-close">&times;</button>
+      <div id="modal-body"></div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast hidden"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
