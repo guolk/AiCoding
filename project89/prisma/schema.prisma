@@ -1,0 +1,142 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+
+
+model Wine {
+  id            String       @id @default(cuid())
+  name          String
+  winery        String
+  vintage       Int
+  region        String?
+  country       String?
+  grapeVarieties String
+  type          String
+  alcoholContent Float?
+  agingPotential Int?
+  vivinoId      String?
+  vivinoRating  Float?
+  vivinoUrl     String?
+  description   String?
+  imageUrl      String?
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  bottles       WineBottle[]
+  tastingNotes  TastingNote[]
+  wishlistItems WishlistItem[]
+  pairings      FoodPairing[]
+}
+
+model WineBottle {
+  id              String       @id @default(cuid())
+  wineId          String
+  purchasePrice   Float
+  purchaseDate    DateTime
+  purchaseChannel String?
+  storageLocation String?
+  currentMarketPrice Float?
+  status          String @default("IN_CELLAR")
+  purchaseId      String?
+  purchase        Purchase?    @relation(fields: [purchaseId], references: [id])
+  wine            Wine         @relation(fields: [wineId], references: [id])
+  tastingNotes    TastingNote[]
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+}
+
+model TastingNote {
+  id               String         @id @default(cuid())
+  wineBottleId     String
+  wineId           String
+  tastingDate      DateTime
+  decantingTime    Int?
+  servingTemp      Float?
+  pairedFood       String?
+  appearanceScore  Int
+  appearanceNotes  String?
+  aromaScore       Int
+  aromaNotes       String?
+  aromaDescriptors String
+  tasteScore       Int
+  tasteNotes       String?
+  tasteDescriptors String
+  finishScore      Int
+  finishNotes      String?
+  overallScore     Int
+  notes            String?
+  expectationMatch Int?
+  expectationNotes String?
+  bottle           WineBottle     @relation(fields: [wineBottleId], references: [id])
+  wine             Wine           @relation(fields: [wineId], references: [id])
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+}
+
+model Purchase {
+  id            String         @id @default(cuid())
+  vendor        String
+  purchaseDate  DateTime
+  totalAmount   Float
+  status        String @default("RECEIVED")
+  notes         String?
+  bottles       WineBottle[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+}
+
+model WishlistItem {
+  id        String   @id @default(cuid())
+  wineId    String
+  priority  Int
+  budget    Float?
+  notes     String?
+  wine      Wine     @relation(fields: [wineId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Promotion {
+  id          String   @id @default(cuid())
+  vendor      String
+  wineName    String
+  winery      String
+  vintage     Int?
+  price       Float
+  originalPrice Float?
+  validUntil  DateTime?
+  url         String?
+  notes       String?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model FoodPairing {
+  id          String   @id @default(cuid())
+  wineId      String
+  dishName    String
+  dishType    String
+  description String?
+  rating      Int?
+  wine        Wine     @relation(fields: [wineId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model UserPreference {
+  id              String   @id @default(cuid())
+  favoriteTypes   String
+  favoriteRegions String
+  favoriteGrapes  String
+  priceRangeMin   Float?
+  priceRangeMax   Float?
+  lowStockThreshold Int @default(2)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
