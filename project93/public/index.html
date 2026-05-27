@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>阳光花园社区平台</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app">
+        <header class="header">
+            <div class="header-content">
+                <h1>🏘️ 阳光花园社区平台</h1>
+                <div class="user-info">
+                    <span id="currentUser">访客</span>
+                    <button onclick="showUserSelector()" class="btn btn-sm">切换用户</button>
+                </div>
+            </div>
+        </header>
+
+        <nav class="nav-tabs">
+            <button class="nav-btn active" data-tab="posts">📢 信息发布</button>
+            <button class="nav-btn" data-tab="help">🤝 邻里互助</button>
+            <button class="nav-btn" data-tab="market">🛒 二手交易</button>
+            <button class="nav-btn" data-tab="activities">🎉 社区活动</button>
+            <button class="nav-btn" data-tab="info">📋 便民信息</button>
+        </nav>
+
+        <main class="main-content">
+            <section id="posts-tab" class="tab-content active">
+                <div class="section-header">
+                    <h2>社区信息板</h2>
+                    <button onclick="showPostForm()" class="btn btn-primary">+ 发布信息</button>
+                </div>
+                <div class="filters">
+                    <select id="postCategoryFilter" onchange="loadPosts()">
+                        <option value="">全部分类</option>
+                        <option value="lost">失物招领</option>
+                        <option value="found">拾物告知</option>
+                        <option value="service">便民服务</option>
+                        <option value="activity_info">邻里活动</option>
+                        <option value="recommend">好物推荐</option>
+                        <option value="exchange">转让交换</option>
+                    </select>
+                    <input type="text" id="postLocationFilter" placeholder="按位置筛选" oninput="loadPosts()">
+                </div>
+                <div id="postsList" class="card-grid"></div>
+            </section>
+
+            <section id="help-tab" class="tab-content">
+                <div class="section-header">
+                    <h2>邻里互助</h2>
+                    <div class="btn-group">
+                        <button onclick="showHelpForm('offer')" class="btn btn-success">+ 我能帮忙</button>
+                        <button onclick="showHelpForm('need')" class="btn btn-warning">+ 我需要帮助</button>
+                        <button onclick="showHelpForm('urgent')" class="btn btn-danger">🚨 紧急求助</button>
+                    </div>
+                </div>
+                <div class="filters">
+                    <select id="helpTypeFilter" onchange="loadHelpPosts()">
+                        <option value="">全部类型</option>
+                        <option value="offer">技能提供</option>
+                        <option value="need">需求帮助</option>
+                    </select>
+                </div>
+                <div id="helpList" class="card-list"></div>
+                <div class="section-header" style="margin-top: 30px;">
+                    <h2>💖 感谢墙</h2>
+                </div>
+                <div id="thanksList" class="thanks-list"></div>
+            </section>
+
+            <section id="market-tab" class="tab-content">
+                <div class="section-header">
+                    <h2>二手市场</h2>
+                    <button onclick="showItemForm()" class="btn btn-primary">+ 发布闲置</button>
+                </div>
+                <div class="filters">
+                    <select id="itemCategoryFilter" onchange="loadItems()">
+                        <option value="">全部分类</option>
+                        <option value="electronics">数码家电</option>
+                        <option value="furniture">家具家居</option>
+                        <option value="clothes">服装箱包</option>
+                        <option value="books">图书文具</option>
+                        <option value="sports">运动户外</option>
+                        <option value="other">其他</option>
+                    </select>
+                </div>
+                <div id="itemsList" class="card-grid"></div>
+            </section>
+
+            <section id="activities-tab" class="tab-content">
+                <div class="section-header">
+                    <h2>社区活动</h2>
+                    <button onclick="showActivityForm()" class="btn btn-primary">+ 发起活动</button>
+                </div>
+                <div id="activitiesList" class="card-list"></div>
+            </section>
+
+            <section id="info-tab" class="tab-content">
+                <div class="info-sections">
+                    <div class="info-section">
+                        <div class="section-header">
+                            <h2>🏪 周边优惠</h2>
+                            <button onclick="showDealForm()" class="btn btn-primary">+ 分享优惠</button>
+                        </div>
+                        <div id="dealsList" class="card-list"></div>
+                    </div>
+                    <div class="info-section">
+                        <div class="section-header">
+                            <h2>📞 实用电话</h2>
+                            <button onclick="showContactForm()" class="btn btn-primary">+ 添加电话</button>
+                        </div>
+                        <div class="filters">
+                            <select id="contactCategoryFilter" onchange="loadContacts()">
+                                <option value="">全部类别</option>
+                                <option value="快递">快递</option>
+                                <option value="维修">维修</option>
+                                <option value="外卖">外卖</option>
+                                <option value="医疗">医疗</option>
+                                <option value="警务">警务</option>
+                                <option value="其他">其他</option>
+                            </select>
+                        </div>
+                        <div id="contactsList" class="contacts-grid"></div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
