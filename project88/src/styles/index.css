@@ -1,0 +1,66 @@
+* {
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+.ant-layout-sider {
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.06);
+}
+
+.ant-menu-dark .ant-menu-item-selected {
+  background-color: #1677ff !important;
+}
+
+.ant-card-hoverable:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.ant-table-wrapper {
+  border-radius: 8px;
+}
+
+.ant-modal-content {
+  border-radius: 12px;
+}
+
+.ant-btn-primary {
+  border-radius: 6px;
+}
+
+.ant-tag {
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a1a1a1;
+}
+
+.ant-descriptions-item-label {
+  font-weight: 500;
+  color: #333;
+}
+
+.ant-timeline-item-content {
+  margin-inline-start: 12px;
+}
