@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { ChevronLeft, ChevronRight, Plus, Home, CalendarDays, CheckCircle, XCircle, Clock } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Plus, Home, CalendarDays, CheckCircle, XCircle, Clock, Trash2, AlertTriangle } from 'lucide-react';
 import { useAppStore } from '@/stores/useAppStore';
 import { Booking, BookingStatus, BOOKING_STATUS_LABELS, PLATFORM_LABELS } from '@/types';
 import { formatCurrency } from '@/lib/utils';
@@ -44,7 +44,7 @@ const bookingStatusBadgeStyles: Record<BookingStatus, string> = {
 };
 
 export default function BookingCalendar() {
-  const { properties, bookings } = useAppStore();
+  const { properties, bookings, updateBookingStatus } = useAppStore();
   const today = new Date();
   const [currentYear, setCurrentYear] = useState(today.getFullYear());
   const [currentMonth, setCurrentMonth] = useState(today.getMonth());
@@ -52,6 +52,7 @@ export default function BookingCalendar() {
   const [showForm, setShowForm] = useState(false);
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [hoveredBooking, setHoveredBooking] = useState<Booking | null>(null);
+  const [showCancelConfirm, setShowCancelConfirm] = useState<Booking | null>(null);
 
   const selectedProperty = properties.find((p) => p.id === selectedPropertyId);
   const propertyBookings = useMemo(() => {
@@ -149,6 +150,12 @@ export default function BookingCalendar() {
     if (!cell.isCurrentMonth || cell.status === 'past') return;
     setSelectedDate(cell.dateStr);
     setShowForm(true);
+  };
+
+  const handleCancelBooking = (booking: Booking) => {
+    updateBookingStatus(booking.id, 'cancelled');
+    setShowCancelConfirm(null);
+    setHoveredBooking(null);
   };
 
   const stats = useMemo(() => {
@@ -362,19 +369,18 @@ export default function BookingCalendar() {
                     {cell.bookings.length > 0 && (
                       <div className="space-y-1 mt-1">
                         {cell.bookings.slice(0, 2).map((booking) => (
-                          <div
+                          <button
                             key={booking.id}
-                            onMouseEnter={(e) => {
+                            onClick={(e) => {
                               e.stopPropagation();
                               setHoveredBooking(booking);
                             }}
-                            onMouseLeave={() => setHoveredBooking(null)}
-                            className={`text-xs px-2 py-1 rounded truncate ${
+                            className={`text-xs px-2 py-1 rounded truncate w-full text-left cursor-pointer hover:opacity-80 transition-opacity ${
                               bookingStatusBadgeStyles[booking.status]
                             }`}
                           >
                             {booking.customerName}
-                          </div>
+                          </button>
                         ))}
                         {cell.bookings.length > 2 && (
                           <div className="text-xs text-gray-500 px-2">
@@ -391,7 +397,7 @@ export default function BookingCalendar() {
             {hoveredBooking && (
               <div className="mt-4 bg-white rounded-xl shadow-sm border border-gray-100 p-4">
                 <div className="flex items-start justify-between">
-                  <div>
+                  <div className="flex-1">
                     <h4 className="font-semibold text-gray-900 flex items-center gap-2">
                       {hoveredBooking.customerName}
                       <span className={`text-xs px-2 py-0.5 rounded-full ${
@@ -408,7 +414,7 @@ export default function BookingCalendar() {
                       {PLATFORM_LABELS[hoveredBooking.platform]} · {formatCurrency(hoveredBooking.totalAmount)}
                     </p>
                   </div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 ml-4">
                     {hoveredBooking.status === 'pending' && (
                       <CheckCircle className="w-5 h-5 text-yellow-500" />
                     )}
@@ -424,6 +430,13 @@ export default function BookingCalendar() {
                     {hoveredBooking.status === 'cancelled' && (
                       <XCircle className="w-5 h-5 text-red-500" />
                     )}
+                    <button
+                      onClick={() => setHoveredBooking(null)}
+                      className="p-1 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded transition-colors"
+                      title="关闭"
+                    >
+                      <XCircle className="w-5 h-5" />
+                    </button>
                   </div>
                 </div>
                 {hoveredBooking.notes && (
@@ -431,6 +444,61 @@ export default function BookingCalendar() {
                     {hoveredBooking.notes}
                   </p>
                 )}
+                {hoveredBooking.status !== 'cancelled' && hoveredBooking.status !== 'checked-out' && (
+                  <div className="mt-4 pt-4 border-t border-gray-100 flex gap-2">
+                    <button
+                      onClick={() => setShowCancelConfirm(hoveredBooking)}
+                      className="inline-flex items-center gap-1.5 px-3 py-2 text-sm text-red-600 bg-red-50 rounded-lg hover:bg-red-100 transition-colors"
+                    >
+                      <XCircle className="w-4 h-4" />
+                      取消预订
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {showCancelConfirm && (
+              <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+                <div className="bg-white rounded-xl shadow-xl max-w-md w-full mx-4 overflow-hidden">
+                  <div className="p-6">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
+                        <AlertTriangle className="w-6 h-6 text-red-600" />
+                      </div>
+                      <div>
+                        <h3 className="text-lg font-semibold text-gray-900">确认取消预订</h3>
+                        <p className="text-sm text-gray-500">此操作不可撤销</p>
+                      </div>
+                    </div>
+                    <div className="bg-gray-50 rounded-lg p-4 mb-6">
+                      <p className="text-sm text-gray-700">
+                        客户：<span className="font-medium">{showCancelConfirm.customerName}</span>
+                      </p>
+                      <p className="text-sm text-gray-700 mt-1">
+                        日期：<span className="font-medium">{showCancelConfirm.checkIn} → {showCancelConfirm.checkOut}</span>
+                      </p>
+                      <p className="text-sm text-gray-700 mt-1">
+                        金额：<span className="font-medium">{formatCurrency(showCancelConfirm.totalAmount)}</span>
+                      </p>
+                    </div>
+                    <div className="flex gap-3">
+                      <button
+                        onClick={() => setShowCancelConfirm(null)}
+                        className="flex-1 px-4 py-2.5 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
+                      >
+                        返回
+                      </button>
+                      <button
+                        onClick={() => handleCancelBooking(showCancelConfirm)}
+                        className="flex-1 inline-flex items-center justify-center gap-1.5 px-4 py-2.5 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 transition-colors"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                        确认取消
+                      </button>
+                    </div>
+                  </div>
+                </div>
               </div>
             )}
           </div>

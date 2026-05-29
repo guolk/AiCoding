@@ -34,17 +34,19 @@ const tagIcons: Record<CustomerTag, React.ReactNode> = {
 
 export default function CustomerList() {
   const navigate = useNavigate();
-  const customers = useAppStore((state) => state.customers);
-  const getBookingsByCustomer = useAppStore((state) => state.getBookingsByCustomer);
+  const store = useAppStore();
+  const customers = store.customers;
+  const getBookingsByCustomer = store.getBookingsByCustomer;
 
   const [searchQuery, setSearchQuery] = useState('');
   const [tagFilter, setTagFilter] = useState<TagFilter>('all');
 
   const filteredCustomers = useMemo(() => {
+    const query = searchQuery.trim().toLowerCase();
     return customers.filter((customer) => {
-      const matchesSearch = searchQuery.trim() === '' ||
-        customer.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        customer.phone.includes(searchQuery);
+      const matchesSearch = query === '' ||
+        customer.name.toLowerCase().includes(query) ||
+        customer.phone.includes(searchQuery.trim());
 
       const matchesTag = tagFilter === 'all' || customer.tags.includes(tagFilter);
 
