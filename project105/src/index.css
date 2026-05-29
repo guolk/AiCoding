@@ -1,0 +1,94 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    font-family: 'Roboto', system-ui, sans-serif;
+    line-height: 1.5;
+    font-weight: 400;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-lego-cream text-lego-dark min-h-screen;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display font-semibold;
+  }
+}
+
+@layer components {
+  .brick-card {
+    @apply bg-white rounded-brick shadow-lego-sm hover:shadow-lego-md transition-all duration-300 border border-gray-100;
+  }
+
+  .brick-btn {
+    @apply px-4 py-2 rounded-brick font-medium transition-all duration-200 shadow-lego-stud active:shadow-none active:translate-y-[1px];
+  }
+
+  .brick-btn-primary {
+    @apply brick-btn bg-lego-red text-white hover:bg-red-700;
+  }
+
+  .brick-btn-secondary {
+    @apply brick-btn bg-lego-yellow text-lego-dark hover:bg-yellow-400;
+  }
+
+  .brick-btn-outline {
+    @apply brick-btn border-2 border-lego-blue text-lego-blue hover:bg-lego-blue hover:text-white;
+  }
+
+  .brick-input {
+    @apply w-full px-4 py-2 rounded-brick border border-gray-200 focus:border-lego-blue focus:ring-2 focus:ring-lego-blue/20 outline-none transition-all duration-200;
+  }
+
+  .lego-stud {
+    @apply w-4 h-4 rounded-full bg-white/20 absolute;
+  }
+
+  .status-badge {
+    @apply px-2 py-1 rounded-full text-xs font-medium;
+  }
+}
+
+@layer utilities {
+  .text-shadow {
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  .lego-pattern {
+    background-image: radial-gradient(circle, rgba(10, 36, 99, 0.05) 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-gray-100 rounded-full;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-300 rounded-full hover:bg-gray-400 transition-colors;
+}
