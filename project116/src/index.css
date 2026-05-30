@@ -1,0 +1,130 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    @apply bg-theater-navy text-ivory;
+  }
+  body {
+    @apply font-body text-ivory bg-gradient-to-br from-theater-navy via-theater-dark to-theater-darker;
+    min-height: 100vh;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-stage-red text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300 hover:bg-red-700 hover:shadow-lg hover:shadow-spotlight-gold/20 hover:-translate-y-0.5 active:translate-y-0;
+  }
+
+  .btn-secondary {
+    @apply border-2 border-spotlight-gold text-spotlight-gold px-6 py-3 rounded-xl font-semibold transition-all duration-300 hover:bg-spotlight-gold hover:text-theater-navy hover:-translate-y-0.5 active:translate-y-0;
+  }
+
+  .card {
+    @apply bg-theater-dark/60 backdrop-blur-sm rounded-2xl border border-white/10 shadow-xl transition-all duration-300 hover:border-spotlight-gold/30 hover:shadow-spotlight-gold/10;
+  }
+
+  .input {
+    @apply w-full bg-theater-darker border border-white/10 text-ivory px-4 py-3 rounded-xl focus:outline-none focus:border-spotlight-gold/50 focus:ring-2 focus:ring-spotlight-gold/20 transition-all duration-200 placeholder-gray-500;
+  }
+
+  .label {
+    @apply block text-sm font-medium text-ivory/80 mb-2;
+  }
+
+  .badge {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-medium;
+  }
+
+  .sidebar-link {
+    @apply flex items-center gap-3 px-4 py-3 rounded-xl text-ivory/70 transition-all duration-200 hover:bg-white/5 hover:text-ivory;
+  }
+
+  .sidebar-link.active {
+    @apply bg-stage-red/20 text-ivory border-l-2 border-stage-red;
+  }
+
+  .star-active {
+    @apply text-spotlight-gold fill-spotlight-gold;
+  }
+
+  .star-inactive {
+    @apply text-gray-600;
+  }
+
+  .divider {
+    @apply h-px bg-white/10 my-6;
+  }
+
+  .scrollbar-thin {
+    /* Custom scrollbar defined in utilities layer */
+  }
+}
+
+@layer utilities {
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 3px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .text-shadow-glow {
+    text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+  }
+
+  .text-shadow-red {
+    text-shadow: 0 2px 4px rgba(196, 30, 58, 0.3);
+  }
+
+  .glass {
+    @apply bg-white/5 backdrop-blur-md;
+  }
+
+  .spotlight {
+    box-shadow: 0 0 40px rgba(212, 175, 55, 0.15);
+  }
+
+  .stage-curtain-top {
+    background: linear-gradient(180deg, #C41E3A 0%, #8B1428 100%);
+  }
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+::selection {
+  background: rgba(212, 175, 55, 0.3);
+}
+
+input[type="range"] {
+  @apply accent-spotlight-gold;
+}
+
+textarea {
+  resize: vertical;
+}
