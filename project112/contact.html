@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>联系 - Alex Chen</title>
+  <meta name="description" content="联系Alex Chen，探讨合作机会或获取更多设计服务信息。">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container">
+      <a href="index.html" class="nav-brand">Alex.Chen</a>
+      <button class="mobile-menu-btn">
+        <i class="fas fa-bars"></i>
+      </button>
+      <ul class="nav-links">
+        <li><a href="index.html" class="nav-link">首页</a></li>
+        <li><a href="portfolio.html" class="nav-link">作品集</a></li>
+        <li><a href="about.html" class="nav-link">关于我</a></li>
+        <li><a href="contact.html" class="nav-link active">联系</a></li>
+      </ul>
+    </div>
+  </nav>
+  
+  <section class="page-header">
+    <div class="container">
+      <div class="page-breadcrumb">
+        <a href="index.html">首页</a>
+        <span>/</span>
+        <span>联系</span>
+      </div>
+      <h1 class="page-title">联系我</h1>
+      <p class="section-subtitle" style="margin-bottom: 0;">无论是项目合作、咨询还是简单的交流，都欢迎随时联系我。</p>
+    </div>
+  </section>
+  
+  <section class="section">
+    <div class="container">
+      <div class="grid grid-2 gap-xl" style="grid-template-columns: 1fr 1.2fr;">
+        <div>
+          <h2 class="section-title">让我们聊聊</h2>
+          <p class="text-secondary mb-xl">
+            如果您有产品设计或品牌设计的需求，或者只是想聊聊设计相关的话题，请随时通过以下方式联系我。我通常会在24小时内回复。
+          </p>
+          
+          <div class="contact-info">
+            <div class="info-item">
+              <div class="info-icon">
+                <i class="fas fa-envelope"></i>
+              </div>
+              <div class="info-content">
+                <h5>邮箱</h5>
+                <p><a href="mailto:alex@designstudio.com" id="contactEmail" style="color: inherit; text-decoration: none;">alex@designstudio.com</a></p>
+              </div>
+            </div>
+            
+            <div class="info-item">
+              <div class="info-icon">
+                <i class="fas fa-phone"></i>
+              </div>
+              <div class="info-content">
+                <h5>电话</h5>
+                <p><a href="tel:+8613800000000" id="contactPhone" style="color: inherit; text-decoration: none;">+86 138 0000 0000</a></p>
+              </div>
+            </div>
+            
+            <div class="info-item">
+              <div class="info-icon">
+                <i class="fas fa-map-marker-alt"></i>
+              </div>
+              <div class="info-content">
+                <h5>所在地</h5>
+                <p id="contactLocation">上海, 中国</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="social-links mt-xl">
+            <a href="#" class="social-link"><i class="fab fa-dribbble"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-behance"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+          </div>
+        </div>
+        
+        <div class="contact-form">
+          <h2 class="mb-lg">发送消息</h2>
+          <form id="contactForm">
+            <div class="grid grid-2 gap-md">
+              <div class="form-group">
+                <label for="name">姓名</label>
+                <input type="text" id="name" name="name" placeholder="您的姓名" required>
+              </div>
+              <div class="form-group">
+                <label for="email">邮箱</label>
+                <input type="email" id="email" name="email" placeholder="您的邮箱" required>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="subject">主题</label>
+              <input type="text" id="subject" name="subject" placeholder="项目合作 / 设计咨询 / 其他">
+            </div>
+            
+            <div class="form-group">
+              <label for="budget">预算范围（可选）</label>
+              <select id="budget" name="budget" style="width: 100%; padding: var(--spacing-md); background: var(--color-bg-tertiary); border: 1px solid var(--color-border); border-radius: var(--radius-md); color: var(--color-text-primary); font-family: inherit; font-size: 1rem;">
+                <option value="">请选择</option>
+                <option value="5k-10k">¥5,000 - ¥10,000</option>
+                <option value="10k-30k">¥10,000 - ¥30,000</option>
+                <option value="30k-50k">¥30,000 - ¥50,000</option>
+                <option value="50k+">¥50,000 以上</option>
+              </select>
+            </div>
+            
+            <div class="form-group">
+              <label for="message">消息内容</label>
+              <textarea id="message" name="message" placeholder="请描述您的项目需求或想法..." required></textarea>
+            </div>
+            
+            <button type="submit" class="btn btn-primary" style="width: 100%;">
+              <i class="fas fa-paper-plane"></i> 发送消息
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <section class="section" style="background: var(--color-bg-secondary);">
+    <div class="container">
+      <h2 class="section-title text-center" style="display: inline-block; margin: 0 auto; left: 50%; transform: translateX(-50%); position: relative;">常见问题</h2>
+      <div class="grid grid-2 gap-lg mt-xl">
+        <div class="card">
+          <div class="card-content">
+            <h3 class="card-title" style="font-size: 1.25rem;"><i class="fas fa-question-circle text-accent mr-md"></i> 设计流程是怎样的？</h3>
+            <p class="card-desc">通常包括：需求沟通 → 竞品分析 → 用户研究 → 概念设计 → 视觉设计 → 原型交互 → 交付物输出。具体流程会根据项目类型和规模进行调整。</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-content">
+            <h3 class="card-title" style="font-size: 1.25rem;"><i class="fas fa-question-circle text-accent mr-md"></i> 项目周期需要多久？</h3>
+            <p class="card-desc">简单的Logo设计约1-2周，品牌VI系统约4-6周，完整的APP设计约8-12周。具体时间取决于项目复杂度和迭代需求。</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-content">
+            <h3 class="card-title" style="font-size: 1.25rem;"><i class="fas fa-question-circle text-accent mr-md"></i> 如何开始一个项目？</h3>
+            <p class="card-desc">您可以通过本页的联系表单或邮件告诉我您的需求，我会在24小时内回复，安排详细的需求沟通会议。</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-content">
+            <h3 class="card-title" style="font-size: 1.25rem;"><i class="fas fa-question-circle text-accent mr-md"></i> 远程合作是否可行？</h3>
+            <p class="card-desc">当然可以！我有丰富的远程合作经验，通过Figma、Notion、Zoom等工具可以高效地完成协作，服务全球客户。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div>
+          <div class="footer-brand">Alex.Chen</div>
+          <p class="footer-desc">专注于用户体验的产品设计师，致力于通过设计为产品创造真正的用户价值。</p>
+          <div class="social-links">
+            <a href="#" class="social-link"><i class="fab fa-dribbble"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-behance"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+          </div>
+        </div>
+        <div class="footer-links">
+          <h4>快速导航</h4>
+          <ul>
+            <li><a href="index.html">首页</a></li>
+            <li><a href="portfolio.html">作品集</a></li>
+            <li><a href="about.html">关于我</a></li>
+            <li><a href="contact.html">联系</a></li>
+          </ul>
+        </div>
+        <div class="footer-links">
+          <h4>联系方式</h4>
+          <ul>
+            <li><a href="mailto:alex@designstudio.com"><i class="fas fa-envelope"></i> alex@designstudio.com</a></li>
+            <li><i class="fas fa-phone"></i> +86 138 0000 0000</li>
+            <li><i class="fas fa-map-marker-alt"></i> 上海, 中国</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2024 Alex Chen. All rights reserved.</p>
+        <p>Designed with <i class="fas fa-heart text-accent"></i> and crafted with care</p>
+      </div>
+    </div>
+  </footer>
+  
+  <script src="js/data.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>关于我 - Alex Chen</title>
+  <meta name="description" content="了解Alex Chen的专业背景、设计技能和获奖经历。">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container">
+      <a href="index.html" class="nav-brand">Alex.Chen</a>
+      <button class="mobile-menu-btn">
+        <i class="fas fa-bars"></i>
+      </button>
+      <ul class="nav-links">
+        <li><a href="index.html" class="nav-link">首页</a></li>
+        <li><a href="portfolio.html" class="nav-link">作品集</a></li>
+        <li><a href="about.html" class="nav-link active">关于我</a></li>
+        <li><a href="contact.html" class="nav-link">联系</a></li>
+      </ul>
+    </div>
+  </nav>
+  
+  <section class="page-header">
+    <div class="container">
+      <div class="page-breadcrumb">
+        <a href="index.html">首页</a>
+        <span>/</span>
+        <span>关于我</span>
+      </div>
+      <h1 class="page-title">关于我</h1>
+    </div>
+  </section>
+  
+  <section class="section">
+    <div class="container">
+      <div class="bio-section">
+        <div class="bio-image">
+          <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=professional%20asian%20male%20designer%20portrait%20headshot%20modern%20studio%20lighting&image_size=square" alt="Alex Chen" id="designerAvatar">
+        </div>
+        <div>
+          <h2 class="section-title" id="designerName">Alex Chen</h2>
+          <p class="text-gold mb-lg" style="font-size: 1.25rem;" id="designerTitle">Senior Product Designer</p>
+          
+          <h3 class="mb-md">个人简介</h3>
+          <p class="text-secondary mb-xl" id="designerBio">
+            拥有8年数字产品设计经验，专注于用户体验设计和品牌视觉系统。曾在多家知名科技公司担任设计负责人，主导过超过50个产品项目的设计工作。
+          </p>
+          
+          <h3 class="mb-md">设计理念</h3>
+          <p class="text-secondary mb-xl" id="designerPhilosophy">
+            设计不是装饰，而是沟通。每一个像素、每一个交互，都在向用户传递信息。我的设计理念是：以用户为中心，以数据为依据，以美感为表达。追求简洁而不简单，功能与形式的完美平衡。
+          </p>
+          
+          <h3 class="mb-md">设计风格</h3>
+          <p class="text-secondary" id="designStyle">
+            我的设计风格追求极简与功能的平衡。偏好大面积留白、清晰的层次结构、以及精致的微交互。色彩运用上注重克制，用少量强调色引导用户注意力。
+          </p>
+          
+          <div class="flex gap-md mt-xl" style="flex-wrap: wrap;">
+            <a href="portfolio.html" class="btn btn-primary">
+              <i class="fas fa-eye"></i> 查看作品
+            </a>
+            <a href="contact.html" class="btn btn-secondary">
+              <i class="fas fa-paper-plane"></i> 联系我
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <section class="section" style="background: var(--color-bg-secondary);">
+    <div class="container">
+      <h2 class="section-title">技能能力</h2>
+      <div class="grid grid-2 gap-xl" style="align-items: center;">
+        <div class="radar-container">
+          <canvas id="radarCanvas" class="radar-canvas"></canvas>
+        </div>
+        <div class="skills-list" id="skillsList">
+          <div class="skill-item">
+            <div class="skill-header">
+              <span class="skill-name">UI设计</span>
+              <span class="skill-level">95%</span>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-fill" style="width: 95%"></div>
+            </div>
+          </div>
+          <div class="skill-item">
+            <div class="skill-header">
+              <span class="skill-name">品牌设计</span>
+              <span class="skill-level">88%</span>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-fill" style="width: 88%"></div>
+            </div>
+          </div>
+          <div class="skill-item">
+            <div class="skill-header">
+              <span class="skill-name">动效设计</span>
+              <span class="skill-level">82%</span>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-fill" style="width: 82%"></div>
+            </div>
+          </div>
+          <div class="skill-item">
+            <div class="skill-header">
+              <span class="skill-name">UX研究</span>
+              <span class="skill-level">90%</span>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-fill" style="width: 90%"></div>
+            </div>
+          </div>
+          <div class="skill-item">
+            <div class="skill-header">
+              <span class="skill-name">交互设计</span>
+              <span class="skill-level">92%</span>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-fill" style="width: 92%"></div>
+            </div>
+          </div>
+          <div class="skill-item">
+            <div class="skill-header">
+              <span class="skill-name">原型设计</span>
+              <span class="skill-level">85%</span>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-fill" style="width: 85%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <section class="section">
+    <div class="container">
+      <h2 class="section-title">使用工具</h2>
+      <p class="section-subtitle">以下是我日常工作中使用的主要设计工具，每个工具都在特定项目中发挥着重要作用。</p>
+      
+      <div class="tools-list" id="toolsList">
+        <div class="tools-category">
+          <h4>UI设计</h4>
+          <div class="tools-grid">
+            <div class="tool-card">
+              <div class="tool-icon">
+                <i class="fas fa-figma"></i>
+              </div>
+              <div class="tool-name">Figma</div>
+              <div class="tool-projects">3 个项目</div>
+            </div>
+            <div class="tool-card">
+              <div class="tool-icon">
+                <i class="fas fa-pencil-ruler"></i>
+              </div>
+              <div class="tool-name">Sketch</div>
+              <div class="tool-projects">2 个项目</div>
+            </div>
+          </div>
+        </div>
+        <div class="tools-category">
+          <h4>品牌设计</h4>
+          <div class="tools-grid">
+            <div class="tool-card">
+              <div class="tool-icon">
+                <i class="fas fa-bezier-curve"></i>
+              </div>
+              <div class="tool-name">Adobe Illustrator</div>
+              <div class="tool-projects">2 个项目</div>
+            </div>
+            <div class="tool-card">
+              <div class="tool-icon">
+                <i class="fas fa-image"></i>
+              </div>
+              <div class="tool-name">Adobe Photoshop</div>
+              <div class="tool-projects">2 个项目</div>
+            </div>
+          </div>
+        </div>
+        <div class="tools-category">
+          <h4>动效设计</h4>
+          <div class="tools-grid">
+            <div class="tool-card">
+              <div class="tool-icon">
+                <i class="fas fa-film"></i>
+              </div>
+              <div class="tool-name">After Effects</div>
+              <div class="tool-projects">2 个项目</div>
+            </div>
+            <div class="tool-card">
+              <div class="tool-icon">
+                <i class="fas fa-play-circle"></i>
+              </div>
+              <div class="tool-name">Principle</div>
+              <div class="tool-projects">2 个项目</div>
+            </div>
+          </div>
+        </div>
+        <div class="tools-category">
+          <h4>原型设计</h4>
+          <div class="tools-grid">
+            <div class="tool-card">
+              <div class="tool-icon">
+                <i class="fas fa-mobile-alt"></i>
+              </div>
+              <div class="tool-name">Framer</div>
+              <div class="tool-projects">2 个项目</div>
+            </div>
+            <div class="tool-card">
+              <div class="tool-icon">
+                <i class="fas fa-eye"></i>
+              </div>
+              <div class="tool-name">InVision</div>
+              <div class="tool-projects">2 个项目</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <section class="section" style="background: var(--color-bg-secondary);">
+    <div class="container">
+      <h2 class="section-title">奖项荣誉</h2>
+      <div class="awards-timeline" id="awardsList">
+        <div class="award-item">
+          <div class="award-year">2024</div>
+          <div class="award-content">
+            <h4 class="award-title">Red Dot Design Award</h4>
+            <p class="award-org">Red Dot</p>
+            <p class="award-desc">凭借Nova银行APP项目获得产品设计类红点奖</p>
+          </div>
+        </div>
+        <div class="award-item">
+          <div class="award-year">2023</div>
+          <div class="award-content">
+            <h4 class="award-title">iF Design Award</h4>
+            <p class="award-org">iF</p>
+            <p class="award-desc">HealthHub健康管理平台获得界面设计奖</p>
+          </div>
+        </div>
+        <div class="award-item">
+          <div class="award-year">2023</div>
+          <div class="award-content">
+            <h4 class="award-title">Awwwards SOTD</h4>
+            <p class="award-org">Awwwards</p>
+            <p class="award-desc">个人作品集网站被评选为当日最佳网站</p>
+          </div>
+        </div>
+        <div class="award-item">
+          <div class="award-year">2022</div>
+          <div class="award-content">
+            <h4 class="award-title">CSS Design Awards</h4>
+            <p class="award-org">CSSDA</p>
+            <p class="award-desc">StyleMate时尚APP获得UI设计特别奖</p>
+          </div>
+        </div>
+        <div class="award-item">
+          <div class="award-year">2022</div>
+          <div class="award-content">
+            <h4 class="award-title">Behance Featured</h4>
+            <p class="award-org">Behance</p>
+            <p class="award-desc">EcoShop品牌设计项目被Behance官方精选推荐</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <section class="section">
+    <div class="container">
+      <h2 class="section-title">客户评价</h2>
+      <div class="testimonial-slider" id="testimonialsSlider">
+        <div class="testimonial-track">
+          <div class="testimonial-card">
+            <p class="testimonial-quote quote">Alex是我合作过的最出色的设计师之一。他不仅在视觉设计上有独到的见解，更重要的是能够深入理解业务需求，将复杂的金融产品转化为用户友好的体验。</p>
+            <div class="testimonial-author">
+              <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=professional%20chinese%20businessman%20portrait%20headshot%20formal%20suit&image_size=square" alt="张伟" class="testimonial-avatar">
+              <div class="testimonial-info">
+                <h5>张伟</h5>
+                <p>CEO · Nova银行</p>
+              </div>
+            </div>
+          </div>
+          <div class="testimonial-card">
+            <p class="testimonial-quote quote">与Alex的合作非常愉快。他对细节的关注令人印象深刻，每一个交互、每一个动画都经过精心设计。他带来的不仅是设计能力，更是产品思维。</p>
+            <div class="testimonial-author">
+              <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=professional%20chinese%20businesswoman%20portrait%20headshot%20modern%20office&image_size=square" alt="李娜" class="testimonial-avatar">
+              <div class="testimonial-info">
+                <h5>李娜</h5>
+                <p>产品总监 · HealthHub</p>
+              </div>
+            </div>
+          </div>
+          <div class="testimonial-card">
+            <p class="testimonial-quote quote">Alex帮助我们从零打造了整个品牌和产品体验。他的设计理念和执行力都是一流的。更难能可贵的是，他能够站在用户的角度思考问题，让产品真正有温度。</p>
+            <div class="testimonial-author">
+              <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=creative%20young%20entrepreneur%20portrait%20casual%20professional&image_size=square" alt="王强" class="testimonial-avatar">
+              <div class="testimonial-info">
+                <h5>王强</h5>
+                <p>创始人 · StyleMate</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <section class="section" style="background: var(--color-bg-secondary);">
+    <div class="container text-center">
+      <h2 class="section-title" style="display: inline-block;">开始合作</h2>
+      <p class="section-subtitle" style="margin: 0 auto var(--spacing-2xl);">有项目想法？让我们一起探讨如何通过设计为您的产品创造价值。</p>
+      <a href="contact.html" class="btn btn-primary">
+        <i class="fas fa-rocket"></i> 联系我
+      </a>
+    </div>
+  </section>
+  
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div>
+          <div class="footer-brand">Alex.Chen</div>
+          <p class="footer-desc">专注于用户体验的产品设计师，致力于通过设计为产品创造真正的用户价值。</p>
+          <div class="social-links">
+            <a href="#" class="social-link"><i class="fab fa-dribbble"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-behance"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+          </div>
+        </div>
+        <div class="footer-links">
+          <h4>快速导航</h4>
+          <ul>
+            <li><a href="index.html">首页</a></li>
+            <li><a href="portfolio.html">作品集</a></li>
+            <li><a href="about.html">关于我</a></li>
+            <li><a href="contact.html">联系</a></li>
+          </ul>
+        </div>
+        <div class="footer-links">
+          <h4>联系方式</h4>
+          <ul>
+            <li><a href="mailto:alex@designstudio.com"><i class="fas fa-envelope"></i> alex@designstudio.com</a></li>
+            <li><i class="fas fa-phone"></i> +86 138 0000 0000</li>
+            <li><i class="fas fa-map-marker-alt"></i> 上海, 中国</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2024 Alex Chen. All rights reserved.</p>
+        <p>Designed with <i class="fas fa-heart text-accent"></i> and crafted with care</p>
+      </div>
+    </div>
+  </footer>
+  
+  <script src="js/data.js"></script>
+  <script src="js/radar-chart.js"></script>
+  <script src="js/carousels.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

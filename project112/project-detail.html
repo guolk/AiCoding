@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>项目详情 - Alex Chen</title>
+  <meta name="description" content="查看设计项目的详细Case Study，了解设计过程、决策和成果。">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container">
+      <a href="index.html" class="nav-brand">Alex.Chen</a>
+      <button class="mobile-menu-btn">
+        <i class="fas fa-bars"></i>
+      </button>
+      <ul class="nav-links">
+        <li><a href="index.html" class="nav-link">首页</a></li>
+        <li><a href="portfolio.html" class="nav-link active">作品集</a></li>
+        <li><a href="about.html" class="nav-link">关于我</a></li>
+        <li><a href="contact.html" class="nav-link">联系</a></li>
+      </ul>
+    </div>
+  </nav>
+  
+  <section class="project-hero">
+    <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=modern%20mobile%20banking%20app%20interface%20design%20showcase%20multiple%20screens%20clean%20minimal%20dark%20theme&image_size=landscape_16_9" alt="Nova银行APP" class="project-hero-image">
+    <div class="project-hero-overlay"></div>
+    <div class="project-hero-content">
+      <div class="container">
+        <div class="page-breadcrumb">
+          <a href="index.html">首页</a>
+          <span>/</span>
+          <a href="portfolio.html">作品集</a>
+          <span>/</span>
+          <span id="projectTitle">Nova银行APP</span>
+        </div>
+        <h1 class="page-title" id="projectTitle">Nova银行APP</h1>
+        <div class="project-meta" id="projectMeta">
+          <div class="meta-item">
+            <span class="meta-label">客户</span>
+            <span class="meta-value">Nova Digital Bank</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">行业</span>
+            <span class="meta-value">金融科技</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">完成时间</span>
+            <span class="meta-value">2024年3月</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">使用工具</span>
+            <span class="meta-value">Figma, After Effects, Principle</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <section class="section">
+    <div class="container">
+      <div class="grid grid-3" style="grid-template-columns: 280px 1fr;">
+        <div class="project-sidebar">
+          <nav class="project-nav">
+            <a href="#background" class="active">项目背景</a>
+            <a href="#gallery">设计成果</a>
+            <a href="#process">设计过程</a>
+            <a href="#caseStudy">Case Study</a>
+            <a href="#metrics">成果数据</a>
+            <a href="#decisions">设计决策</a>
+          </nav>
+        </div>
+        
+        <div>
+          <section id="background" class="case-study-section">
+            <h3>项目背景</h3>
+            <p class="text-secondary" id="projectBackground">Nova银行是一家新兴的数字银行，需要一套全新的移动银行体验来吸引年轻用户群体。传统银行APP功能繁杂、操作复杂，用户体验普遍不佳。</p>
+          </section>
+          
+          <div class="divider"></div>
+          
+          <section id="gallery" class="case-study-section">
+            <h3>设计成果</h3>
+            <div class="carousel" id="projectGallery">
+              <div class="carousel-track">
+                <div class="carousel-slide">
+                  <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=mobile%20banking%20home%20screen%20dashboard%20clean%20modern%20UI%20financial%20app&image_size=portrait_4_3" alt="首页设计" class="carousel-image">
+                  <div class="carousel-caption">
+                    <h4>首页设计 - 信息架构优化</h4>
+                    <p>静态图片</p>
+                  </div>
+                </div>
+                <div class="carousel-slide">
+                  <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=mobile%20banking%20transfer%20payment%20screen%20UX%20design%20finance%20app&image_size=portrait_4_3" alt="转账功能" class="carousel-image">
+                  <div class="carousel-caption">
+                    <h4>转账功能 - 简化操作流程</h4>
+                    <p>静态图片</p>
+                  </div>
+                </div>
+              </div>
+              <div class="carousel-controls">
+                <button class="carousel-btn prev"><i class="fas fa-chevron-left"></i></button>
+                <button class="carousel-btn next"><i class="fas fa-chevron-right"></i></button>
+              </div>
+              <div class="carousel-dots">
+                <button class="carousel-dot active"></button>
+                <button class="carousel-dot"></button>
+              </div>
+            </div>
+          </section>
+          
+          <div class="divider"></div>
+          
+          <section id="process" class="case-study-section">
+            <h3>设计过程</h3>
+            <div class="timeline" id="processTimeline">
+              <div class="timeline-item">
+                <span class="timeline-stage">调研阶段</span>
+                <h4 class="timeline-title">用户研究与竞品分析</h4>
+                <p class="timeline-desc">通过深度访谈、问卷调查和竞品分析，我们发现用户在使用银行APP时面临的主要痛点：信息过载、操作复杂、信任感不足。</p>
+                <div class="process-gallery">
+                  <div class="process-image">
+                    <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=user%20research%20workshop%20whiteboard%20post%20it%20notes%20brainstorming&image_size=square" alt="用户研究">
+                  </div>
+                  <div class="process-image">
+                    <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=competitive%20analysis%20chart%20UX%20research%20data%20visualization&image_size=square" alt="竞品分析">
+                  </div>
+                </div>
+              </div>
+              <div class="timeline-item">
+                <span class="timeline-stage">草图阶段</span>
+                <h4 class="timeline-title">信息架构与低保真原型</h4>
+                <p class="timeline-desc">基于调研结果，重新设计信息架构。将核心功能前置，减少操作层级。通过手绘草图快速验证多个导航方案。</p>
+                <div class="process-gallery">
+                  <div class="process-image">
+                    <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=hand%20drawn%20wireframes%20sketches%20mobile%20app%20design%20paper%20prototypes&image_size=square" alt="手绘草图">
+                  </div>
+                  <div class="process-image">
+                    <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=ux%20wireframes%20low%20fidelity%20mobile%20app%20screens%20layout&image_size=square" alt="低保真原型">
+                  </div>
+                </div>
+              </div>
+              <div class="timeline-item">
+                <span class="timeline-stage">方案迭代</span>
+                <h4 class="timeline-title">可用性测试与迭代优化</h4>
+                <p class="timeline-desc">进行了5轮可用性测试，每轮8-12名用户。针对转账流程、理财页面等关键路径进行了多次迭代优化。</p>
+                <div class="process-gallery">
+                  <div class="process-image">
+                    <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=usability%20testing%20session%20user%20research%20observation&image_size=square" alt="可用性测试">
+                  </div>
+                  <div class="process-image">
+                    <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=design%20iteration%20comparison%20before%20after%20UI%20improvement&image_size=square" alt="设计迭代">
+                  </div>
+                </div>
+              </div>
+              <div class="timeline-item">
+                <span class="timeline-stage">最终稿</span>
+                <h4 class="timeline-title">视觉设计与动效规范</h4>
+                <p class="timeline-desc">确立深色主题的视觉风格，配合精心设计的微交互动效，提升整体使用体验。制定完整的设计系统和组件库。</p>
+                <div class="process-gallery">
+                  <div class="process-image">
+                    <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=design%20system%20components%20UI%20kit%20atoms%20molecules&image_size=square" alt="设计系统">
+                  </div>
+                  <div class="process-image">
+                    <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=motion%20design%20animation%20ui%20transitions%20microinteractions&image_size=square" alt="动效规范">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+          
+          <div class="divider"></div>
+          
+          <section id="caseStudy" class="case-study-section">
+            <h3>Case Study</h3>
+            <div class="case-study-section">
+              <h3>问题定义</h3>
+              <p class="text-secondary">传统银行APP普遍存在功能堆积、操作复杂、缺乏信任感等问题。Nova银行作为新成立的数字银行，需要通过卓越的用户体验来建立竞争优势，吸引对传统银行不满的年轻用户群体。</p>
+            </div>
+            <div class="case-study-section">
+              <h3>设计目标</h3>
+              <ul style="list-style: none; padding: 0;">
+                <li style="margin-bottom: 12px; display: flex; align-items: flex-start; gap: 12px;">
+                  <i class="fas fa-check-circle text-accent" style="margin-top: 4px;"></i>
+                  <span>打造简洁、直观的银行操作体验</span>
+                </li>
+                <li style="margin-bottom: 12px; display: flex; align-items: flex-start; gap: 12px;">
+                  <i class="fas fa-check-circle text-accent" style="margin-top: 4px;"></i>
+                  <span>建立用户对数字银行的信任感</span>
+                </li>
+                <li style="margin-bottom: 12px; display: flex; align-items: flex-start; gap: 12px;">
+                  <i class="fas fa-check-circle text-accent" style="margin-top: 4px;"></i>
+                  <span>提升核心业务的转化率（转账、理财）</span>
+                </li>
+                <li style="margin-bottom: 12px; display: flex; align-items: flex-start; gap: 12px;">
+                  <i class="fas fa-check-circle text-accent" style="margin-top: 4px;"></i>
+                  <span>创建可扩展的设计系统</span>
+                </li>
+              </ul>
+            </div>
+            <div class="case-study-section">
+              <h3>解决方案</h3>
+              <p class="text-secondary">我们采用了以用户为中心的设计方法，通过深入的用户研究理解目标用户的真实需求。重新设计了信息架构，将核心功能前置展示。引入深色主题配合精心设计的微交互动效，创造出既专业又现代的品牌形象。同时建立了完整的设计系统，确保产品在快速迭代中保持一致性。</p>
+            </div>
+            <div class="case-study-section">
+              <h3>执行过程</h3>
+              <p class="text-secondary">项目历时5个月，经历了多轮用户研究、原型设计、可用性测试和视觉迭代。设计团队与产品、开发团队紧密协作，确保设计方案能够高质量落地。最终交付了完整的移动端设计稿、设计系统文档、以及动效规范。</p>
+            </div>
+            <div class="case-study-section">
+              <h3>最终成果</h3>
+              <p class="text-secondary">上线后获得了用户的积极反馈，各项核心指标显著提升。产品设计获得红点奖认可，为Nova银行建立了良好的品牌形象。</p>
+            </div>
+          </section>
+          
+          <div class="divider"></div>
+          
+          <section id="metrics" class="case-study-section">
+            <h3>成果数据</h3>
+            <div class="grid grid-2 gap-lg" id="metricsSection">
+              <div class="metrics-card">
+                <h3>84%</h3>
+                <p>用户满意度</p>
+                <div class="metrics-change">
+                  <i class="fas fa-arrow-up"></i>
+                  +45%
+                </div>
+              </div>
+              <div class="metrics-card">
+                <h3>89%</h3>
+                <p>转账完成率</p>
+                <div class="metrics-change">
+                  <i class="fas fa-arrow-up"></i>
+                  +44%
+                </div>
+              </div>
+              <div class="metrics-card">
+                <h3>4</h3>
+                <p>平均操作步骤</p>
+                <div class="metrics-change">
+                  <i class="fas fa-arrow-down"></i>
+                  -50%
+                </div>
+              </div>
+              <div class="metrics-card">
+                <h3>250K</h3>
+                <p>月活跃用户</p>
+                <div class="metrics-change">
+                  <i class="fas fa-arrow-up"></i>
+                  +150%
+                </div>
+              </div>
+            </div>
+          </section>
+          
+          <div class="divider"></div>
+          
+          <section id="decisions" class="case-study-section">
+            <h3>设计决策</h3>
+            <div class="grid gap-lg" id="designDecisions">
+              <div class="decision-card chosen">
+                <div class="decision-header">
+                  <h4>深色主题</h4>
+                  <span class="decision-badge chosen">最终方案</span>
+                </div>
+                <p class="text-secondary">采用深炭灰作为主背景，配合渐变强调色</p>
+                <p class="text-gold mt-md" style="font-size: 0.9rem;"><i class="fas fa-star"></i> 深色主题更符合金融产品的专业感，同时能减少眼睛疲劳，突出关键数据和操作按钮。用户测试显示80%的用户偏好深色模式。</p>
+              </div>
+              <div class="decision-card">
+                <div class="decision-header">
+                  <h4>浅色主题</h4>
+                  <span class="decision-badge alternative">备选方案</span>
+                </div>
+                <p class="text-secondary">传统的白色背景+黑色文字</p>
+              </div>
+              <div class="decision-card chosen">
+                <div class="decision-header">
+                  <h4>底部Tab导航</h4>
+                  <span class="decision-badge chosen">最终方案</span>
+                </div>
+                <p class="text-secondary">将核心功能放在底部导航栏</p>
+                <p class="text-gold mt-md" style="font-size: 0.9rem;"><i class="fas fa-star"></i> 移动端单手操作友好，用户可以快速在各模块间切换。减少了深层级导航带来的迷失感。</p>
+              </div>
+              <div class="decision-card">
+                <div class="decision-header">
+                  <h4>汉堡菜单</h4>
+                  <span class="decision-badge alternative">备选方案</span>
+                </div>
+                <p class="text-secondary">侧边抽屉式导航</p>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <section class="section" style="background: var(--color-bg-secondary);">
+    <div class="container text-center">
+      <h2 class="section-title" style="display: inline-block;">探索更多项目</h2>
+      <p class="section-subtitle" style="margin: 0 auto var(--spacing-2xl);">每个项目都有独特的设计挑战和解决方案。</p>
+      <a href="portfolio.html" class="btn btn-secondary">
+        查看全部作品 <i class="fas fa-arrow-right"></i>
+      </a>
+    </div>
+  </section>
+  
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div>
+          <div class="footer-brand">Alex.Chen</div>
+          <p class="footer-desc">专注于用户体验的产品设计师，致力于通过设计为产品创造真正的用户价值。</p>
+          <div class="social-links">
+            <a href="#" class="social-link"><i class="fab fa-dribbble"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-behance"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+          </div>
+        </div>
+        <div class="footer-links">
+          <h4>快速导航</h4>
+          <ul>
+            <li><a href="index.html">首页</a></li>
+            <li><a href="portfolio.html">作品集</a></li>
+            <li><a href="about.html">关于我</a></li>
+            <li><a href="contact.html">联系</a></li>
+          </ul>
+        </div>
+        <div class="footer-links">
+          <h4>联系方式</h4>
+          <ul>
+            <li><a href="mailto:alex@designstudio.com"><i class="fas fa-envelope"></i> alex@designstudio.com</a></li>
+            <li><i class="fas fa-phone"></i> +86 138 0000 0000</li>
+            <li><i class="fas fa-map-marker-alt"></i> 上海, 中国</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2024 Alex Chen. All rights reserved.</p>
+        <p>Designed with <i class="fas fa-heart text-accent"></i> and crafted with care</p>
+      </div>
+    </div>
+  </footer>
+  
+  <script src="js/data.js"></script>
+  <script src="js/carousels.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

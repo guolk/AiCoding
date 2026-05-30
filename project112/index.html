@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alex Chen - 设计师作品集</title>
+  <meta name="description" content="Alex Chen - 资深产品设计师作品集，展示UI/UX设计、品牌设计和动效设计作品。">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container">
+      <a href="index.html" class="nav-brand">Alex.Chen</a>
+      <button class="mobile-menu-btn">
+        <i class="fas fa-bars"></i>
+      </button>
+      <ul class="nav-links">
+        <li><a href="index.html" class="nav-link active">首页</a></li>
+        <li><a href="portfolio.html" class="nav-link">作品集</a></li>
+        <li><a href="about.html" class="nav-link">关于我</a></li>
+        <li><a href="contact.html" class="nav-link">联系</a></li>
+      </ul>
+    </div>
+  </nav>
+  
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-text">
+          <h1>创意设计<br><span>驱动产品价值</span></h1>
+          <p>我是一名专注于用户体验的产品设计师，擅长将复杂的业务需求转化为优雅直观的设计方案。通过设计思维和数据驱动，为产品创造真正的用户价值。</p>
+          <div class="hero-cta">
+            <a href="portfolio.html" class="btn btn-primary">
+              <i class="fas fa-eye"></i> 查看作品
+            </a>
+            <a href="contact.html" class="btn btn-secondary">
+              <i class="fas fa-paper-plane"></i> 联系合作
+            </a>
+          </div>
+          <div class="hero-stats">
+            <div>
+              <div class="stat-number" id="statsYears">8+</div>
+              <div class="stat-label">设计经验</div>
+            </div>
+            <div>
+              <div class="stat-number" id="statsProjects">50+</div>
+              <div class="stat-label">完成项目</div>
+            </div>
+            <div>
+              <div class="stat-number" id="statsAwards">12+</div>
+              <div class="stat-label">设计奖项</div>
+            </div>
+          </div>
+        </div>
+        <div class="hero-visual">
+          <div class="hero-image-container">
+            <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=creative%20asian%20male%20designer%20working%20on%20laptop%20modern%20minimal%20studio%20portrait&image_size=portrait_4_3" alt="Alex Chen" class="hero-image">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="scroll-indicator">
+      <span>向下滚动</span>
+      <i class="fas fa-chevron-down"></i>
+    </div>
+  </section>
+  
+  <section class="section featured-works">
+    <div class="container">
+      <h2 class="section-title">精选作品</h2>
+      <p class="section-subtitle">以下是我近期完成的一些代表性项目，每个项目都凝聚了对用户需求的深入理解和创意解决方案。</p>
+      <div class="portfolio-grid" id="featuredWorks"></div>
+      <div class="text-center mt-2xl">
+        <a href="portfolio.html" class="btn btn-secondary">
+          查看全部作品 <i class="fas fa-arrow-right"></i>
+        </a>
+      </div>
+    </div>
+  </section>
+  
+  <section class="section" style="background: var(--color-bg-secondary);">
+    <div class="container">
+      <h2 class="section-title">服务范围</h2>
+      <div class="grid grid-3 gap-xl">
+        <div class="card">
+          <div class="card-content" style="text-align: center;">
+            <div class="tool-icon" style="margin: 0 auto var(--spacing-lg);">
+              <i class="fas fa-mobile-alt text-accent"></i>
+            </div>
+            <h3 class="card-title">UI/UX 设计</h3>
+            <p class="card-desc">从用户研究到视觉设计，提供完整的产品设计解决方案。注重用户体验与商业目标的平衡。</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-content" style="text-align: center;">
+            <div class="tool-icon" style="margin: 0 auto var(--spacing-lg);">
+              <i class="fas fa-palette text-gold"></i>
+            </div>
+            <h3 class="card-title">品牌设计</h3>
+            <p class="card-desc">构建完整的品牌视觉系统，包括Logo设计、VI手册、品牌应用规范等。</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-content" style="text-align: center;">
+            <div class="tool-icon" style="margin: 0 auto var(--spacing-lg);">
+              <i class="fas fa-play-circle text-accent"></i>
+            </div>
+            <h3 class="card-title">动效设计</h3>
+            <p class="card-desc">通过精心设计的微交互动效，提升产品体验的质感和趣味性。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <section class="section">
+    <div class="container">
+      <h2 class="section-title">客户评价</h2>
+      <div class="testimonial-slider" id="testimonialsSlider">
+        <div class="testimonial-track">
+          <div class="testimonial-card">
+            <p class="testimonial-quote quote">Alex是我合作过的最出色的设计师之一。他不仅在视觉设计上有独到的见解，更重要的是能够深入理解业务需求，将复杂的金融产品转化为用户友好的体验。</p>
+            <div class="testimonial-author">
+              <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=professional%20chinese%20businessman%20portrait%20headshot%20formal%20suit&image_size=square" alt="张伟" class="testimonial-avatar">
+              <div class="testimonial-info">
+                <h5>张伟</h5>
+                <p>CEO · Nova银行</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <section class="section" style="background: var(--color-bg-secondary);">
+    <div class="container text-center">
+      <h2 class="section-title" style="display: inline-block;">一起创造精彩</h2>
+      <p class="section-subtitle" style="margin: 0 auto var(--spacing-2xl);">有项目想法？让我们一起探讨如何通过设计为您的产品创造价值。</p>
+      <a href="contact.html" class="btn btn-primary">
+        <i class="fas fa-rocket"></i> 开始合作
+      </a>
+    </div>
+  </section>
+  
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div>
+          <div class="footer-brand">Alex.Chen</div>
+          <p class="footer-desc">专注于用户体验的产品设计师，致力于通过设计为产品创造真正的用户价值。</p>
+          <div class="social-links">
+            <a href="#" class="social-link"><i class="fab fa-dribbble"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-behance"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+          </div>
+        </div>
+        <div class="footer-links">
+          <h4>快速导航</h4>
+          <ul>
+            <li><a href="index.html">首页</a></li>
+            <li><a href="portfolio.html">作品集</a></li>
+            <li><a href="about.html">关于我</a></li>
+            <li><a href="contact.html">联系</a></li>
+          </ul>
+        </div>
+        <div class="footer-links">
+          <h4>联系方式</h4>
+          <ul>
+            <li><a href="mailto:alex@designstudio.com"><i class="fas fa-envelope"></i> alex@designstudio.com</a></li>
+            <li><i class="fas fa-phone"></i> +86 138 0000 0000</li>
+            <li><i class="fas fa-map-marker-alt"></i> 上海, 中国</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2024 Alex Chen. All rights reserved.</p>
+        <p>Designed with <i class="fas fa-heart text-accent"></i> and crafted with care</p>
+      </div>
+    </div>
+  </footer>
+  
+  <script src="js/data.js"></script>
+  <script src="js/carousels.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

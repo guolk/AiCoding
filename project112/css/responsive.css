@@ -1,0 +1,362 @@
+@media (max-width: 1200px) {
+  .hero-content {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-2xl);
+  }
+  
+  .hero-text {
+    text-align: center;
+  }
+  
+  .hero-text p {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .hero-cta {
+    justify-content: center;
+  }
+  
+  .hero-stats {
+    justify-content: center;
+  }
+  
+  .hero-visual {
+    order: -1;
+  }
+  
+  .hero-image-container {
+    width: 300px;
+    height: 375px;
+  }
+  
+  .hero-text h1 {
+    font-size: 3.5rem;
+  }
+}
+
+@media (max-width: 1024px) {
+  .navbar .container {
+    padding: 0 var(--spacing-lg);
+  }
+  
+  .nav-links {
+    display: none;
+  }
+  
+  .mobile-menu-btn {
+    display: block;
+  }
+  
+  .nav-links.active {
+    display: flex;
+    position: absolute;
+    top: 80px;
+    left: 0;
+    right: 0;
+    background: var(--color-bg-primary);
+    flex-direction: column;
+    padding: var(--spacing-xl);
+    gap: var(--spacing-lg);
+    border-bottom: 1px solid var(--color-border);
+  }
+  
+  .container {
+    padding: 0 var(--spacing-lg);
+  }
+  
+  .section-title {
+    font-size: 2rem;
+  }
+  
+  .hero-text h1 {
+    font-size: 3rem;
+  }
+  
+  .hero-text p {
+    font-size: 1.1rem;
+  }
+  
+  .portfolio-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .portfolio-item.large {
+    grid-column: span 1;
+    aspect-ratio: 4/3;
+  }
+  
+  .grid-2,
+  .grid-3,
+  .grid-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .bio-section {
+    grid-template-columns: 1fr;
+  }
+  
+  .bio-image {
+    max-width: 300px;
+    margin: 0 auto;
+  }
+  
+  .footer-content {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-2xl);
+  }
+  
+  .project-hero {
+    height: 50vh;
+  }
+}
+
+@media (max-width: 768px) {
+  .section {
+    padding: var(--spacing-2xl) 0;
+  }
+  
+  .section-title {
+    font-size: 1.75rem;
+  }
+  
+  .hero-text h1 {
+    font-size: 2.5rem;
+  }
+  
+  .hero-text p {
+    font-size: 1rem;
+    margin-bottom: var(--spacing-xl);
+  }
+  
+  .hero-cta {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .hero-cta .btn {
+    width: 100%;
+    max-width: 280px;
+  }
+  
+  .hero-stats {
+    flex-direction: column;
+    gap: var(--spacing-lg);
+    text-align: center;
+  }
+  
+  .hero-image-container {
+    width: 250px;
+    height: 312px;
+  }
+  
+  .portfolio-overlay {
+    opacity: 1;
+    background: linear-gradient(180deg, transparent 40%, rgba(26, 26, 26, 0.95) 100%);
+  }
+  
+  .portfolio-title {
+    transform: translateY(0);
+    font-size: 1.5rem;
+  }
+  
+  .portfolio-meta {
+    transform: translateY(0);
+  }
+  
+  .grid-2,
+  .grid-3,
+  .grid-4,
+  .skills-grid,
+  .tools-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .tools-category {
+    margin-bottom: var(--spacing-xl);
+  }
+  
+  .timeline {
+    padding-left: 30px;
+  }
+  
+  .timeline-item::before {
+    left: -30px;
+    width: 14px;
+    height: 14px;
+  }
+  
+  .timeline::before {
+    left: 6px;
+  }
+  
+  .award-item {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+  }
+  
+  .award-year {
+    font-size: 1.5rem;
+  }
+  
+  .footer-content {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-xl);
+  }
+  
+  .footer-bottom {
+    flex-direction: column;
+    gap: var(--spacing-md);
+    text-align: center;
+  }
+  
+  .social-links {
+    justify-content: center;
+  }
+  
+  .page-header {
+    padding: calc(80px + var(--spacing-2xl)) 0 var(--spacing-xl);
+  }
+  
+  .page-title {
+    font-size: 2.25rem;
+  }
+  
+  .project-meta {
+    flex-direction: column;
+    gap: var(--spacing-md);
+  }
+  
+  .metrics-card h3 {
+    font-size: 2rem;
+  }
+  
+  .testimonial-quote {
+    font-size: 1.1rem;
+  }
+  
+  .carousel-caption {
+    padding: var(--spacing-lg);
+  }
+  
+  .carousel-caption h4 {
+    font-size: 1.1rem;
+  }
+  
+  .carousel-caption p {
+    font-size: 0.85rem;
+  }
+  
+  .contact-form {
+    padding: var(--spacing-xl);
+  }
+  
+  .contact-info {
+    margin-top: var(--spacing-2xl);
+  }
+  
+  .case-study-section h3 {
+    font-size: 1.25rem;
+  }
+  
+  .process-gallery {
+    grid-template-columns: 1fr;
+  }
+  
+  .project-info-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar .container {
+    height: 70px;
+    padding: 0 var(--spacing-md);
+  }
+  
+  .nav-brand {
+    font-size: 1.5rem;
+  }
+  
+  .container {
+    padding: 0 var(--spacing-md);
+  }
+  
+  .hero {
+    padding-top: 70px;
+  }
+  
+  .hero-text h1 {
+    font-size: 2rem;
+  }
+  
+  .hero-image-container {
+    width: 200px;
+    height: 250px;
+  }
+  
+  .section-title {
+    font-size: 1.5rem;
+  }
+  
+  .card-title {
+    font-size: 1.25rem;
+  }
+  
+  .portfolio-title {
+    font-size: 1.25rem;
+  }
+  
+  .btn {
+    padding: var(--spacing-sm) var(--spacing-lg);
+    font-size: 0.95rem;
+  }
+  
+  .tool-card {
+    padding: var(--spacing-md);
+  }
+  
+  .testimonial-card {
+    padding: var(--spacing-lg);
+  }
+  
+  .testimonial-author {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .radar-container {
+    max-width: 300px;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 360px) {
+  .hero-text h1 {
+    font-size: 1.75rem;
+  }
+  
+  .hero-image-container {
+    width: 180px;
+    height: 225px;
+  }
+  
+  .stat-number {
+    font-size: 2rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  .scroll-indicator {
+    animation: none;
+  }
+}
