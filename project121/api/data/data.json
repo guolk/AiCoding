@@ -1,0 +1,605 @@
+{
+  "composers": [
+    {
+      "id": "composer-1",
+      "name": "Ludwig van Beethoven",
+      "birthYear": 1770,
+      "deathYear": 1827,
+      "nationality": "German",
+      "period": "古典主义/浪漫主义早期",
+      "biography": "路德维希·凡·贝多芬是德国作曲家和钢琴家，是西方古典音乐传统中最重要的人物之一。他的创作跨越了古典时代到浪漫时代，作品包括9部交响曲、5部钢琴协奏曲、32首钢琴奏鸣曲等。",
+      "timelineEvents": [
+        {
+          "year": 1770,
+          "event": "出生于德国波恩",
+          "type": "birth"
+        },
+        {
+          "year": 1787,
+          "event": "前往维也纳学习",
+          "type": "life"
+        },
+        {
+          "year": 1800,
+          "event": "创作第一交响曲",
+          "type": "work"
+        },
+        {
+          "year": 1808,
+          "event": "完成第五、第六交响曲",
+          "type": "work"
+        },
+        {
+          "year": 1824,
+          "event": "第九交响曲首演",
+          "type": "work"
+        },
+        {
+          "year": 1827,
+          "event": "在维也纳逝世",
+          "type": "death"
+        }
+      ],
+      "relationships": [
+        {
+          "composerId": "composer-2",
+          "composerName": "Wolfgang Amadeus Mozart",
+          "relationship": "前辈与偶像"
+        },
+        {
+          "composerId": "composer-3",
+          "composerName": "Johann Sebastian Bach",
+          "relationship": "崇敬的先辈"
+        }
+      ],
+      "representativeWorks": [
+        {
+          "title": "Symphony No. 9",
+          "year": 1824,
+          "form": "交响曲"
+        },
+        {
+          "title": "Symphony No. 5",
+          "year": 1808,
+          "form": "交响曲"
+        },
+        {
+          "title": "Piano Sonata No. 14 \"Moonlight\"",
+          "year": 1801,
+          "form": "钢琴奏鸣曲"
+        }
+      ],
+      "createdAt": "2026-05-30T14:26:00.729Z"
+    },
+    {
+      "id": "composer-2",
+      "name": "Wolfgang Amadeus Mozart",
+      "birthYear": 1756,
+      "deathYear": 1791,
+      "nationality": "Austrian",
+      "period": "古典主义",
+      "biography": "沃尔夫冈·阿马德乌斯·莫扎特是古典时期最伟大的作曲家之一，以其惊人的音乐天赋和丰富的作品著称。他创作了超过600部作品，涵盖了几乎所有音乐体裁。",
+      "timelineEvents": [
+        {
+          "year": 1756,
+          "event": "出生于奥地利萨尔茨堡",
+          "type": "birth"
+        },
+        {
+          "year": 1762,
+          "event": "开始在欧洲各地巡演",
+          "type": "life"
+        },
+        {
+          "year": 1781,
+          "event": "定居维也纳",
+          "type": "life"
+        },
+        {
+          "year": 1786,
+          "event": "创作歌剧《费加罗的婚礼》",
+          "type": "work"
+        },
+        {
+          "year": 1791,
+          "event": "创作《安魂曲》并逝世",
+          "type": "death"
+        }
+      ],
+      "relationships": [
+        {
+          "composerId": "composer-1",
+          "composerName": "Ludwig van Beethoven",
+          "relationship": "对其有深远影响"
+        },
+        {
+          "composerId": "composer-3",
+          "composerName": "Johann Sebastian Bach",
+          "relationship": "崇敬与学习"
+        }
+      ],
+      "representativeWorks": [
+        {
+          "title": "Piano Concerto No. 21",
+          "year": 1785,
+          "form": "钢琴协奏曲"
+        },
+        {
+          "title": "Symphony No. 40",
+          "year": 1788,
+          "form": "交响曲"
+        },
+        {
+          "title": "Requiem",
+          "year": 1791,
+          "form": "宗教音乐"
+        }
+      ],
+      "createdAt": "2026-05-30T14:26:00.731Z"
+    },
+    {
+      "id": "composer-3",
+      "name": "Johann Sebastian Bach",
+      "birthYear": 1685,
+      "deathYear": 1750,
+      "nationality": "German",
+      "period": "巴洛克",
+      "biography": "约翰·塞巴斯蒂安·巴赫是巴洛克时期最伟大的作曲家之一，以其复调音乐的巅峰成就而闻名于世。他的作品代表了巴洛克音乐的最高成就。",
+      "timelineEvents": [
+        {
+          "year": 1685,
+          "event": "出生于德国埃森纳赫",
+          "type": "birth"
+        },
+        {
+          "year": 1703,
+          "event": "在阿恩施塔特担任管风琴师",
+          "type": "life"
+        },
+        {
+          "year": 1717,
+          "event": "担任科滕宫廷乐长",
+          "type": "life"
+        },
+        {
+          "year": 1721,
+          "event": "创作《勃兰登堡协奏曲》",
+          "type": "work"
+        },
+        {
+          "year": 1723,
+          "event": "担任莱比锡圣托马斯教堂乐长",
+          "type": "life"
+        },
+        {
+          "year": 1750,
+          "event": "在莱比锡逝世",
+          "type": "death"
+        }
+      ],
+      "relationships": [
+        {
+          "composerId": "composer-1",
+          "composerName": "Ludwig van Beethoven",
+          "relationship": "被其称为\"音乐之父\""
+        },
+        {
+          "composerId": "composer-2",
+          "composerName": "Wolfgang Amadeus Mozart",
+          "relationship": "对其有深刻影响"
+        }
+      ],
+      "representativeWorks": [
+        {
+          "title": "Brandenburg Concertos",
+          "year": 1721,
+          "form": "协奏曲集"
+        },
+        {
+          "title": "Mass in B Minor",
+          "year": 1749,
+          "form": "弥撒曲"
+        },
+        {
+          "title": "Goldberg Variations",
+          "year": 1741,
+          "form": "变奏曲"
+        }
+      ],
+      "createdAt": "2026-05-30T14:26:00.731Z"
+    },
+    {
+      "id": "composer-4",
+      "name": "Frédéric Chopin",
+      "birthYear": 1810,
+      "deathYear": 1849,
+      "nationality": "Polish-French",
+      "period": "浪漫主义",
+      "biography": "弗里德里克·肖邦是波兰作曲家和钢琴家，浪漫主义音乐的代表人物之一。他的作品几乎全部为钢琴创作，以其诗意和技术难度著称。",
+      "timelineEvents": [
+        {
+          "year": 1810,
+          "event": "出生于波兰热拉佐瓦沃拉",
+          "type": "birth"
+        },
+        {
+          "year": 1829,
+          "event": "在华沙音乐学院毕业",
+          "type": "life"
+        },
+        {
+          "year": 1831,
+          "event": "定居巴黎",
+          "type": "life"
+        },
+        {
+          "year": 1832,
+          "event": "创作《降E大调夜曲》",
+          "type": "work"
+        },
+        {
+          "year": 1849,
+          "event": "在巴黎逝世",
+          "type": "death"
+        }
+      ],
+      "relationships": [],
+      "representativeWorks": [
+        {
+          "title": "Nocturne Op. 9 No. 2",
+          "year": 1832,
+          "form": "夜曲"
+        },
+        {
+          "title": "Ballade No. 1",
+          "year": 1835,
+          "form": "叙事曲"
+        },
+        {
+          "title": "Piano Concerto No. 1",
+          "year": 1830,
+          "form": "钢琴协奏曲"
+        }
+      ],
+      "createdAt": "2026-05-30T14:26:00.731Z"
+    }
+  ],
+  "works": [
+    {
+      "id": "work-1",
+      "composer": "Ludwig van Beethoven",
+      "composerId": "composer-1",
+      "title": "Symphony No. 9 in D minor",
+      "opus": "Op. 125",
+      "catalogNumber": "\"Choral\"",
+      "compositionYear": 1824,
+      "duration": 4200,
+      "instrumentation": "管弦乐队、混声合唱团、4位独唱家",
+      "form": "交响曲",
+      "movements": [
+        {
+          "number": 1,
+          "title": "Allegro ma non troppo, un poco maestoso",
+          "tempo": "Allegro",
+          "key": "D minor"
+        },
+        {
+          "number": 2,
+          "title": "Molto vivace",
+          "tempo": "Molto vivace",
+          "key": "D minor"
+        },
+        {
+          "number": 3,
+          "title": "Adagio molto e cantabile",
+          "tempo": "Adagio",
+          "key": "B-flat major"
+        },
+        {
+          "number": 4,
+          "title": "Presto",
+          "tempo": "Presto",
+          "key": "D major"
+        }
+      ],
+      "personalRating": 5,
+      "listenCount": 12,
+      "favoriteVersionId": "version-1",
+      "createdAt": "2026-05-30T14:26:00.731Z",
+      "updatedAt": "2026-05-30T14:26:00.731Z"
+    },
+    {
+      "id": "work-2",
+      "composer": "Wolfgang Amadeus Mozart",
+      "composerId": "composer-2",
+      "title": "Piano Concerto No. 21 in C major",
+      "opus": "",
+      "catalogNumber": "K. 467",
+      "compositionYear": 1785,
+      "duration": 1800,
+      "instrumentation": "钢琴独奏、管弦乐队",
+      "form": "钢琴协奏曲",
+      "movements": [
+        {
+          "number": 1,
+          "title": "Allegro maestoso",
+          "tempo": "Allegro",
+          "key": "C major"
+        },
+        {
+          "number": 2,
+          "title": "Andante",
+          "tempo": "Andante",
+          "key": "F major"
+        },
+        {
+          "number": 3,
+          "title": "Allegro vivace assai",
+          "tempo": "Allegro",
+          "key": "C major"
+        }
+      ],
+      "personalRating": 5,
+      "listenCount": 8,
+      "favoriteVersionId": "version-3",
+      "createdAt": "2026-05-30T14:26:00.731Z",
+      "updatedAt": "2026-05-30T14:26:00.731Z"
+    },
+    {
+      "id": "work-3",
+      "composer": "Johann Sebastian Bach",
+      "composerId": "composer-3",
+      "title": "Brandenburg Concerto No. 5 in D major",
+      "opus": "",
+      "catalogNumber": "BWV 1050",
+      "compositionYear": 1721,
+      "duration": 1200,
+      "instrumentation": "长笛、小提琴、羽管键琴、弦乐队",
+      "form": "协奏曲",
+      "movements": [
+        {
+          "number": 1,
+          "title": "Allegro",
+          "tempo": "Allegro",
+          "key": "D major"
+        },
+        {
+          "number": 2,
+          "title": "Affettuoso",
+          "tempo": "Affettuoso",
+          "key": "B minor"
+        },
+        {
+          "number": 3,
+          "title": "Allegro",
+          "tempo": "Allegro",
+          "key": "D major"
+        }
+      ],
+      "personalRating": 4,
+      "listenCount": 5,
+      "createdAt": "2026-05-30T14:26:00.731Z",
+      "updatedAt": "2026-05-30T14:26:00.731Z"
+    },
+    {
+      "id": "work-4",
+      "composer": "Frédéric Chopin",
+      "composerId": "composer-4",
+      "title": "Nocturne in E-flat major",
+      "opus": "Op. 9, No. 2",
+      "catalogNumber": "",
+      "compositionYear": 1832,
+      "duration": 300,
+      "instrumentation": "钢琴独奏",
+      "form": "夜曲",
+      "personalRating": 5,
+      "listenCount": 15,
+      "createdAt": "2026-05-30T14:26:00.731Z",
+      "updatedAt": "2026-05-30T14:26:00.731Z"
+    }
+  ],
+  "versions": [
+    {
+      "id": "version-1",
+      "workId": "work-1",
+      "conductor": "Wilhelm Furtwängler",
+      "orchestra": "Bayreuth Festival Orchestra",
+      "soloists": "Elisabeth Grümmer, Margarete Klose, Helge Rosvaenge, Otto Edelmann",
+      "recordingYear": 1951,
+      "releaseYear": 1951,
+      "duration": 4380,
+      "characteristics": "传奇版本，极富戏剧性的演绎，Furtwängler 对这部作品的理解被认为是无与伦比的。",
+      "historicalContext": "1951年拜罗伊特音乐节现场录音，被认为是20世纪最伟大的\"欢乐颂\"之一。",
+      "personalRank": 1,
+      "label": "EMI",
+      "format": "CD",
+      "createdAt": "2026-05-30T14:26:00.732Z"
+    },
+    {
+      "id": "version-2",
+      "workId": "work-1",
+      "conductor": "Herbert von Karajan",
+      "orchestra": "Berliner Philharmoniker",
+      "soloists": "Gundula Janowitz, Hilde Rössel-Majdan, Waldemar Kmentt, Walter Berry",
+      "recordingYear": 1968,
+      "releaseYear": 1968,
+      "duration": 4140,
+      "characteristics": "精准的控制，辉煌的乐团声音，Karajan 典型的精致演绎。",
+      "historicalContext": "Karajan 与柏林爱乐的经典合作，是录音技术黄金时代的产物。",
+      "personalRank": 2,
+      "label": "Deutsche Grammophon",
+      "format": "CD",
+      "createdAt": "2026-05-30T14:26:00.732Z"
+    },
+    {
+      "id": "version-3",
+      "workId": "work-2",
+      "conductor": "Daniel Barenboim",
+      "orchestra": "English Chamber Orchestra",
+      "soloists": "Daniel Barenboim (piano)",
+      "recordingYear": 1988,
+      "releaseYear": 1988,
+      "duration": 1860,
+      "characteristics": "温暖而富有歌唱性的演绎，钢琴与乐队的对话极为自然。",
+      "personalRank": 1,
+      "label": "EMI Classics",
+      "format": "CD",
+      "createdAt": "2026-05-30T14:26:00.732Z"
+    },
+    {
+      "id": "version-4",
+      "workId": "work-2",
+      "conductor": "Murray Perahia",
+      "orchestra": "English Chamber Orchestra",
+      "soloists": "Murray Perahia (piano)",
+      "recordingYear": 1980,
+      "releaseYear": 1980,
+      "duration": 1780,
+      "characteristics": "优雅精致的演奏，展现了莫扎特作品的诗意。",
+      "personalRank": 2,
+      "label": "Sony Classical",
+      "format": "CD",
+      "createdAt": "2026-05-30T14:26:00.732Z"
+    }
+  ],
+  "listeningNotes": [
+    {
+      "id": "note-1",
+      "workId": "work-1",
+      "versionId": "version-1",
+      "listenDate": "2024-05-15",
+      "movementNotes": [
+        {
+          "movementNumber": 1,
+          "title": "Allegro ma non troppo, un poco maestoso",
+          "impression": "开篇极具气势，乐团的张力令人震撼。Furtwängler 对节奏的把握极为精妙。"
+        },
+        {
+          "movementNumber": 2,
+          "title": "Molto vivace",
+          "impression": "诙谐曲充满活力，与前后乐章形成完美对比。"
+        },
+        {
+          "movementNumber": 3,
+          "title": "Adagio molto e cantabile",
+          "impression": "极其动人的慢板，弦乐声部的歌唱性令人动容。"
+        },
+        {
+          "movementNumber": 4,
+          "title": "Presto",
+          "impression": "终乐章的\"欢乐颂\"激动人心，合唱团和独唱家的表现完美。"
+        }
+      ],
+      "emotionalJourney": "从庄严的开场，经过激烈的动荡，最终抵达人性的升华。",
+      "highlightMoments": [
+        {
+          "timestamp": "58:30",
+          "description": "欢乐颂主题首次完整呈现"
+        },
+        {
+          "timestamp": "62:15",
+          "description": "四重唱开始的瞬间"
+        }
+      ],
+      "structureAnalysis": "四个乐章的结构极为经典，末乐章的变奏结构展现了贝多芬的天才构思。",
+      "historicalNotes": "这部作品在贝多芬失聪的情况下完成，首演时作曲家已完全听不到。",
+      "overallImpression": "真正的经典，每次聆听都能发现新的细节。",
+      "createdAt": "2026-05-30T14:26:00.732Z"
+    },
+    {
+      "id": "note-2",
+      "workId": "work-2",
+      "versionId": "version-3",
+      "listenDate": "2024-04-20",
+      "movementNotes": [
+        {
+          "movementNumber": 2,
+          "title": "Andante",
+          "impression": "第二乐章的旋律太动人了，莫扎特的天才在此展现无遗。"
+        }
+      ],
+      "emotionalJourney": "从光明的C大调，经过深情的F大调，最终回归欢乐。",
+      "highlightMoments": [
+        {
+          "timestamp": "6:45",
+          "description": "第二乐章钢琴独奏的主题进入"
+        }
+      ],
+      "overallImpression": "莫扎特的钢琴协奏曲中最优雅的作品之一。",
+      "createdAt": "2026-05-30T14:26:00.732Z"
+    }
+  ],
+  "concerts": [
+    {
+      "id": "concert-1",
+      "title": "贝多芬第九交响曲特别音乐会",
+      "date": "2024-05-01",
+      "time": "19:30",
+      "venue": "柏林爱乐音乐厅",
+      "city": "柏林",
+      "type": "attended",
+      "programItems": [
+        {
+          "order": 1,
+          "composer": "Ludwig van Beethoven",
+          "workTitle": "Symphony No. 9 in D minor, Op. 125"
+        }
+      ],
+      "performers": "柏林爱乐乐团, 西蒙·拉特（指挥）",
+      "notes": "一场令人难忘的演出，柏林爱乐的演奏无可挑剔。",
+      "rating": 5,
+      "createdAt": "2026-05-30T14:26:00.732Z"
+    },
+    {
+      "id": "concert-2",
+      "title": "莫扎特钢琴协奏曲之夜",
+      "date": "2024-06-15",
+      "time": "20:00",
+      "venue": "维也纳音乐协会",
+      "city": "维也纳",
+      "type": "planned",
+      "programItems": [
+        {
+          "order": 1,
+          "composer": "Wolfgang Amadeus Mozart",
+          "workTitle": "Piano Concerto No. 20 in D minor, K. 466"
+        },
+        {
+          "order": 2,
+          "composer": "Wolfgang Amadeus Mozart",
+          "workTitle": "Piano Concerto No. 21 in C major, K. 467"
+        }
+      ],
+      "performers": "维也纳爱乐乐团, 玛莎·阿格里奇（钢琴）",
+      "createdAt": "2026-05-30T14:26:00.732Z"
+    },
+    {
+      "id": "concert-3",
+      "title": "巴赫《勃兰登堡协奏曲》专场",
+      "date": "2024-07-20",
+      "time": "19:00",
+      "venue": "国家大剧院",
+      "city": "北京",
+      "type": "planned",
+      "programItems": [
+        {
+          "order": 1,
+          "composer": "Johann Sebastian Bach",
+          "workTitle": "Brandenburg Concerto No. 3 in G major, BWV 1048"
+        },
+        {
+          "order": 2,
+          "composer": "Johann Sebastian Bach",
+          "workTitle": "Brandenburg Concerto No. 5 in D major, BWV 1050"
+        },
+        {
+          "order": 3,
+          "composer": "Johann Sebastian Bach",
+          "workTitle": "Brandenburg Concerto No. 6 in B-flat major, BWV 1051"
+        }
+      ],
+      "performers": " Akademie für Alte Musik Berlin",
+      "createdAt": "2026-05-30T14:26:00.732Z"
+    }
+  ]
+}

@@ -1,0 +1,89 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: 'Lato', system-ui, sans-serif;
+  line-height: 1.6;
+  font-weight: 400;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background-color: #FAF7F2;
+  color: #2C2C2C;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+@layer base {
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-weight: 500;
+    line-height: 1.2;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-burgundy-700 hover:bg-burgundy-800 text-white px-6 py-2.5 rounded-lg transition-all duration-300 shadow-elegant hover:shadow-gold;
+  }
+  
+  .btn-secondary {
+    @apply bg-white hover:bg-parchment-100 text-burgundy-700 border-2 border-burgundy-700 px-6 py-2 rounded-lg transition-all duration-300;
+  }
+  
+  .btn-gold {
+    @apply bg-gold-500 hover:bg-gold-600 text-white px-6 py-2.5 rounded-lg transition-all duration-300 shadow-gold;
+  }
+  
+  .card {
+    @apply bg-white rounded-xl shadow-elegant overflow-hidden transition-all duration-300 hover:shadow-gold;
+  }
+  
+  .card-header {
+    @apply bg-gradient-to-r from-burgundy-700 to-burgundy-600 text-white p-4;
+  }
+  
+  .input-field {
+    @apply w-full px-4 py-2 border border-parchment-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold-500 focus:border-transparent transition-all duration-200 bg-white;
+  }
+  
+  .label-field {
+    @apply block text-sm font-medium text-gray-700 mb-1;
+  }
+  
+  .stat-card {
+    @apply bg-gradient-to-br from-burgundy-700 via-burgundy-600 to-burgundy-800 text-white rounded-xl p-6 shadow-elegant;
+  }
+  
+  .nav-link {
+    @apply flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-200 hover:bg-burgundy-50 hover:text-burgundy-700;
+  }
+  
+  .nav-link-active {
+    @apply bg-burgundy-50 text-burgundy-700 font-medium border-l-4 border-gold-500;
+  }
+}
+
+@layer utilities {
+  .text-shadow-gold {
+    text-shadow: 0 2px 4px rgba(212, 175, 55, 0.3);
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
