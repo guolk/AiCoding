@@ -1,0 +1,219 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700;900&family=Noto+Sans+JP:wght@300;400;500;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --ink: #1a1a2e;
+  --ink-light: #2d2d4a;
+  --vermillion: #c0392b;
+  --vermillion-dark: #96281b;
+  --warm-white: #faf3e0;
+  --pale-gold: #d4a574;
+  --n5-green: #27ae60;
+  --n4-blue: #2980b9;
+  --n3-purple: #8e44ad;
+  --n2-amber: #e67e22;
+  --n1-crimson: #c0392b;
+  --sakura: #ffc0cb;
+  --wave: #4a90d9;
+
+  font-family: 'Noto Sans JP', sans-serif;
+  line-height: 1.6;
+  font-weight: 400;
+  color: var(--warm-white);
+  background-color: var(--ink);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--ink);
+  background-image:
+    radial-gradient(ellipse at 20% 50%, rgba(192, 57, 43, 0.04) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(212, 165, 116, 0.04) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 80%, rgba(74, 144, 217, 0.03) 0%, transparent 50%);
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--ink);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--ink-light);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--pale-gold);
+}
+
+@layer utilities {
+  .font-serif-jp {
+    font-family: 'Noto Serif JP', serif;
+  }
+
+  .font-sans-jp {
+    font-family: 'Noto Sans JP', sans-serif;
+  }
+
+  .text-ink {
+    color: var(--ink);
+  }
+
+  .text-vermillion {
+    color: var(--vermillion);
+  }
+
+  .text-warm-white {
+    color: var(--warm-white);
+  }
+
+  .text-pale-gold {
+    color: var(--pale-gold);
+  }
+
+  .bg-ink {
+    background-color: var(--ink);
+  }
+
+  .bg-ink-light {
+    background-color: var(--ink-light);
+  }
+
+  .bg-vermillion {
+    background-color: var(--vermillion);
+  }
+
+  .bg-warm-white {
+    background-color: var(--warm-white);
+  }
+
+  .bg-pale-gold {
+    background-color: var(--pale-gold);
+  }
+
+  .bg-n5-green {
+    background-color: var(--n5-green);
+  }
+
+  .bg-n4-blue {
+    background-color: var(--n4-blue);
+  }
+
+  .bg-n3-purple {
+    background-color: var(--n3-purple);
+  }
+
+  .bg-n2-amber {
+    background-color: var(--n2-amber);
+  }
+
+  .bg-n1-crimson {
+    background-color: var(--n1-crimson);
+  }
+
+  .border-pale-gold {
+    border-color: var(--pale-gold);
+  }
+
+  .border-ink-light {
+    border-color: var(--ink-light);
+  }
+
+  .sakura-divider {
+    background: linear-gradient(90deg, transparent, var(--sakura), transparent);
+    height: 1px;
+  }
+
+  .wave-divider {
+    background: linear-gradient(90deg, transparent, var(--wave), transparent);
+    height: 1px;
+  }
+
+  .card-shine {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card-shine::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+      45deg,
+      transparent 40%,
+      rgba(212, 165, 116, 0.03) 50%,
+      transparent 60%
+    );
+    pointer-events: none;
+  }
+
+  .flip-card {
+    perspective: 1000px;
+  }
+
+  .flip-card-inner {
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+  }
+
+  .flip-card-inner.flipped {
+    transform: rotateY(180deg);
+  }
+
+  .flip-card-front,
+  .flip-card-back {
+    backface-visibility: hidden;
+  }
+
+  .flip-card-back {
+    transform: rotateY(180deg);
+  }
+
+  @keyframes fade-in-up {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fade-in-up {
+    animation: fade-in-up 0.5s ease-out forwards;
+  }
+
+  @keyframes pulse-soft {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+  }
+
+  .animate-pulse-soft {
+    animation: pulse-soft 2s ease-in-out infinite;
+  }
+
+  @keyframes wave-flow {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+
+  .animate-wave {
+    animation: wave-flow 3s ease-in-out infinite;
+  }
+}
