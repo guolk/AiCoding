@@ -1,0 +1,72 @@
+[
+  {
+    "id": 1,
+    "name": "张明",
+    "studentNo": "202301001",
+    "classId": 1,
+    "className": "物理2301班"
+  },
+  {
+    "id": 2,
+    "name": "李华",
+    "studentNo": "202301002",
+    "classId": 1,
+    "className": "物理2301班"
+  },
+  {
+    "id": 3,
+    "name": "王芳",
+    "studentNo": "202301003",
+    "classId": 1,
+    "className": "物理2301班"
+  },
+  {
+    "id": 4,
+    "name": "刘伟",
+    "studentNo": "202301004",
+    "classId": 1,
+    "className": "物理2301班"
+  },
+  {
+    "id": 5,
+    "name": "陈静",
+    "studentNo": "202301005",
+    "classId": 1,
+    "className": "物理2301班"
+  },
+  {
+    "id": 6,
+    "name": "赵强",
+    "studentNo": "202301006",
+    "classId": 1,
+    "className": "物理2301班"
+  },
+  {
+    "id": 7,
+    "name": "孙丽",
+    "studentNo": "202301007",
+    "classId": 1,
+    "className": "物理2301班"
+  },
+  {
+    "id": 8,
+    "name": "周杰",
+    "studentNo": "202301008",
+    "classId": 1,
+    "className": "物理2301班"
+  },
+  {
+    "id": 9,
+    "name": "吴敏",
+    "studentNo": "202302001",
+    "classId": 2,
+    "className": "物理2302班"
+  },
+  {
+    "id": 10,
+    "name": "郑浩",
+    "studentNo": "202302002",
+    "classId": 2,
+    "className": "物理2302班"
+  }
+]

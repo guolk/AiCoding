@@ -1,0 +1,432 @@
+[
+  {
+    "id": 1,
+    "name": "牛顿第二定律验证实验",
+    "courseName": "大学物理实验",
+    "purpose": "验证牛顿第二定律F=ma，理解力、质量和加速度之间的关系",
+    "principle": "当物体质量不变时，加速度与所受合外力成正比；当合外力不变时，加速度与物体质量成反比。即F=ma。",
+    "instruments": [
+      "气垫导轨",
+      "光电门计时器",
+      "滑块",
+      "砝码组",
+      "气源",
+      "游标卡尺"
+    ],
+    "steps": [
+      {
+        "order": 1,
+        "title": "仪器调平",
+        "description": "打开气源，将滑块放在导轨上，调节导轨底脚螺丝使滑块能静止或匀速运动"
+      },
+      {
+        "order": 2,
+        "title": "质量测量",
+        "description": "用天平测量滑块和砝码的质量，记录数据"
+      },
+      {
+        "order": 3,
+        "title": "安装光电门",
+        "description": "将两个光电门固定在导轨上，间距为50cm"
+      },
+      {
+        "order": 4,
+        "title": "连接计时器",
+        "description": "将光电门与计时器连接，设置为计时模式"
+      },
+      {
+        "order": 5,
+        "title": "恒力实验",
+        "description": "保持滑块质量不变，改变拉力（砝码质量），测量加速度"
+      },
+      {
+        "order": 6,
+        "title": "变质量实验",
+        "description": "保持拉力不变，改变滑块质量，测量加速度"
+      },
+      {
+        "order": 7,
+        "title": "数据处理",
+        "description": "记录每组数据，计算加速度，绘制F-a图和m-a图"
+      }
+    ],
+    "dataTable": [
+      {
+        "name": "砝码质量",
+        "unit": "g",
+        "type": "number"
+      },
+      {
+        "name": "滑块质量",
+        "unit": "g",
+        "type": "number"
+      },
+      {
+        "name": "时间t1",
+        "unit": "ms",
+        "type": "number"
+      },
+      {
+        "name": "时间t2",
+        "unit": "ms",
+        "type": "number"
+      },
+      {
+        "name": "加速度",
+        "unit": "m/s²",
+        "type": "number"
+      }
+    ],
+    "questions": [
+      {
+        "id": 1,
+        "content": "如果导轨未调平，对实验结果会产生什么影响？如何消除这种影响？",
+        "type": "essay"
+      },
+      {
+        "id": 2,
+        "content": "已知滑块质量为200g，砝码质量为20g，求理论加速度值（g=9.8m/s²）",
+        "type": "calculation"
+      },
+      {
+        "id": 3,
+        "content": "分析实验中产生误差的主要来源，并提出改进措施。",
+        "type": "essay"
+      }
+    ],
+    "safetyNotes": [
+      "气源使用时注意电源安全，避免潮湿环境",
+      "导轨表面严禁用手触摸或放置异物",
+      "滑块轻拿轻放，防止跌落损坏",
+      "实验结束后先关气源，再整理仪器"
+    ],
+    "previewRequirements": [
+      "复习牛顿第二定律的内容和公式",
+      "预习气垫导轨的工作原理和使用方法",
+      "了解光电门计时器的使用",
+      "预习实验步骤，写出预习报告"
+    ],
+    "assessmentPoints": [
+      "仪器调平操作正确性（20%）",
+      "数据测量准确性（30%）",
+      "数据处理和图表绘制（25%）",
+      "思考题回答质量（15%）",
+      "实验态度和纪律（10%）"
+    ],
+    "createdAt": "2026-05-03T11:19:59.063Z",
+    "updatedAt": "2026-05-23T11:19:59.063Z"
+  },
+  {
+    "id": 2,
+    "name": "酸碱中和滴定实验",
+    "courseName": "基础化学实验",
+    "purpose": "掌握酸碱滴定的基本操作，学会用已知浓度的酸（或碱）测定未知浓度的碱（或酸）",
+    "principle": "酸碱中和反应的本质是H++OH-=H2O，当反应达到化学计量点时，pH值发生突变，通过指示剂颜色变化确定终点。",
+    "instruments": [
+      "酸式滴定管",
+      "碱式滴定管",
+      "锥形瓶",
+      "移液管",
+      "洗耳球",
+      "滴定台",
+      "烧杯"
+    ],
+    "steps": [
+      {
+        "order": 1,
+        "title": "仪器洗涤",
+        "description": "将滴定管、移液管、锥形瓶用蒸馏水洗净，滴定管和移液管用待装溶液润洗"
+      },
+      {
+        "order": 2,
+        "title": "装液",
+        "description": "将标准HCl溶液装入酸式滴定管，将待测NaOH溶液用移液管移入锥形瓶"
+      },
+      {
+        "order": 3,
+        "title": "排气泡",
+        "description": "排气滴定管下端的气泡，调整液面至零刻度或以下"
+      },
+      {
+        "order": 4,
+        "title": "加指示剂",
+        "description": "向锥形瓶中滴加2-3滴酚酞指示剂"
+      },
+      {
+        "order": 5,
+        "title": "滴定操作",
+        "description": "左手控制活塞，右手摇动锥形瓶，眼睛观察颜色变化"
+      },
+      {
+        "order": 6,
+        "title": "终点判断",
+        "description": "当溶液由无色变为浅红色且30秒不褪色时，停止滴定"
+      },
+      {
+        "order": 7,
+        "title": "平行测定",
+        "description": "重复滴定2-3次，记录每次消耗的酸体积"
+      }
+    ],
+    "dataTable": [
+      {
+        "name": "NaOH溶液体积",
+        "unit": "mL",
+        "type": "number"
+      },
+      {
+        "name": "HCl浓度",
+        "unit": "mol/L",
+        "type": "number"
+      },
+      {
+        "name": "HCl初读数",
+        "unit": "mL",
+        "type": "number"
+      },
+      {
+        "name": "HCl终读数",
+        "unit": "mL",
+        "type": "number"
+      },
+      {
+        "name": "HCl消耗体积",
+        "unit": "mL",
+        "type": "number"
+      },
+      {
+        "name": "NaOH浓度",
+        "unit": "mol/L",
+        "type": "number"
+      }
+    ],
+    "questions": [
+      {
+        "id": 1,
+        "content": "为什么滴定管和移液管需要用待装溶液润洗，而锥形瓶不需要？",
+        "type": "essay"
+      },
+      {
+        "id": 2,
+        "content": "若滴定管下端有气泡未排除，对测定结果有何影响？",
+        "type": "essay"
+      },
+      {
+        "id": 3,
+        "content": "用0.1000mol/L HCl滴定25.00mL NaOH溶液，消耗HCl 22.50mL，计算NaOH溶液的浓度",
+        "type": "calculation"
+      }
+    ],
+    "safetyNotes": [
+      "酸碱溶液具有腐蚀性，避免接触皮肤和衣物",
+      "如不慎溅到皮肤上，立即用大量水冲洗",
+      "滴定管竖直放置，防止溶液溅出",
+      "实验结束后将废液倒入指定容器"
+    ],
+    "previewRequirements": [
+      "复习酸碱中和反应原理",
+      "预习滴定管的使用方法和读数规则",
+      "了解指示剂的变色原理和选择",
+      "熟悉实验操作步骤"
+    ],
+    "assessmentPoints": [
+      "滴定管使用规范性（25%）",
+      "移液操作准确性（20%）",
+      "终点判断正确性（25%）",
+      "数据处理和结果计算（20%）",
+      "实验习惯和安全（10%）"
+    ],
+    "createdAt": "2026-05-08T11:19:59.063Z",
+    "updatedAt": "2026-05-28T11:19:59.063Z"
+  },
+  {
+    "id": 3,
+    "name": "惠斯通电桥测电阻",
+    "courseName": "电路分析实验",
+    "purpose": "掌握惠斯通电桥的工作原理，学会用电桥法测量中值电阻",
+    "principle": "惠斯通电桥由四个电阻组成桥臂，当电桥平衡时，对臂电阻乘积相等，即R1/R2=Rx/Rs，由此可求得未知电阻Rx。",
+    "instruments": [
+      "直流稳压电源",
+      "滑线变阻器",
+      "检流计",
+      "电阻箱",
+      "待测电阻",
+      "开关",
+      "导线"
+    ],
+    "steps": [
+      {
+        "order": 1,
+        "title": "电路连接",
+        "description": "按电路图连接电路，将电源电压调至3V"
+      },
+      {
+        "order": 2,
+        "title": "比率选择",
+        "description": "根据待测电阻标称值选择合适的比率臂"
+      },
+      {
+        "order": 3,
+        "title": "粗调平衡",
+        "description": "保护电阻置最大，调节比较臂使检流计指零"
+      },
+      {
+        "order": 4,
+        "title": "细调平衡",
+        "description": "减小保护电阻，重新调节使电桥平衡"
+      },
+      {
+        "order": 5,
+        "title": "记录数据",
+        "description": "记录比率和比较臂电阻值"
+      },
+      {
+        "order": 6,
+        "title": "交换测量",
+        "description": "交换待测电阻和比较臂位置，再次测量以消除系统误差"
+      },
+      {
+        "order": 7,
+        "title": "测量多个电阻",
+        "description": "更换不同待测电阻，重复上述步骤"
+      }
+    ],
+    "dataTable": [
+      {
+        "name": "电阻编号",
+        "unit": "",
+        "type": "text"
+      },
+      {
+        "name": "比率K",
+        "unit": "",
+        "type": "number"
+      },
+      {
+        "name": "比较臂Rs",
+        "unit": "Ω",
+        "type": "number"
+      },
+      {
+        "name": "测量值Rx1",
+        "unit": "Ω",
+        "type": "number"
+      },
+      {
+        "name": "交换测量Rx2",
+        "unit": "Ω",
+        "type": "number"
+      },
+      {
+        "name": "平均值Rx",
+        "unit": "Ω",
+        "type": "number"
+      }
+    ],
+    "questions": [
+      {
+        "id": 1,
+        "content": "惠斯通电桥的平衡条件是什么？影响电桥灵敏度的因素有哪些？",
+        "type": "essay"
+      },
+      {
+        "id": 2,
+        "content": "为什么要采用交换测量法？它能消除哪些系统误差？",
+        "type": "essay"
+      },
+      {
+        "id": 3,
+        "content": "已知比率K=10，比较臂Rs=345.6Ω，求待测电阻Rx的值",
+        "type": "calculation"
+      }
+    ],
+    "safetyNotes": [
+      "电源电压不能过高，避免元件损坏",
+      "电路连接完成后经检查无误再接通电源",
+      "检流计使用时注意保护，避免大电流通过",
+      "实验结束后先关电源再拆线"
+    ],
+    "previewRequirements": [
+      "复习惠斯通电桥工作原理",
+      "预习电阻箱和检流计的使用",
+      "了解电桥灵敏度的概念",
+      "绘制实验电路图"
+    ],
+    "assessmentPoints": [
+      "电路连接正确性（25%）",
+      "电桥调节技巧（25%）",
+      "测量方法掌握（20%）",
+      "数据处理和误差分析（20%）",
+      "实验报告质量（10%）"
+    ],
+    "createdAt": "2026-05-13T11:19:59.063Z",
+    "updatedAt": "2026-05-30T11:19:59.063Z"
+  },
+  {
+    "name": "gdsg",
+    "courseName": "sdfdsg",
+    "purpose": "sdfsdag",
+    "principle": "sdfdsg",
+    "instruments": [],
+    "steps": [],
+    "dataTable": [
+      {
+        "name": "11",
+        "unit": "asd",
+        "type": "number"
+      },
+      {
+        "name": "safsa",
+        "unit": "asdasf",
+        "type": "number"
+      }
+    ],
+    "questions": [
+      {
+        "id": 1,
+        "content": "sfasf",
+        "type": "essay"
+      }
+    ],
+    "safetyNotes": [],
+    "previewRequirements": [],
+    "assessmentPoints": [],
+    "createdAt": "2026-06-02T11:28:04.032Z",
+    "updatedAt": "2026-06-02T11:28:04.032Z",
+    "id": 4
+  },
+  {
+    "name": "ttt",
+    "courseName": "tttt",
+    "purpose": "tttt",
+    "principle": "ttttt",
+    "instruments": [],
+    "steps": [
+      {
+        "order": 1,
+        "title": "rtr",
+        "description": "rtrtr"
+      }
+    ],
+    "dataTable": [
+      {
+        "name": "tt",
+        "unit": "ttt",
+        "type": "number"
+      }
+    ],
+    "questions": [
+      {
+        "id": 1,
+        "content": "trtertrw",
+        "type": "essay"
+      }
+    ],
+    "safetyNotes": [],
+    "previewRequirements": [],
+    "assessmentPoints": [],
+    "createdAt": "2026-06-02T11:36:41.281Z",
+    "updatedAt": "2026-06-02T11:36:41.281Z",
+    "id": 5
+  }
+]

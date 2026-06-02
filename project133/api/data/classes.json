@@ -1,0 +1,22 @@
+[
+  {
+    "id": 1,
+    "name": "物理2301班",
+    "studentCount": 32
+  },
+  {
+    "id": 2,
+    "name": "物理2302班",
+    "studentCount": 30
+  },
+  {
+    "id": 3,
+    "name": "化学2301班",
+    "studentCount": 28
+  },
+  {
+    "id": 4,
+    "name": "电子2301班",
+    "studentCount": 35
+  }
+]

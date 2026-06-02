@@ -1,0 +1,66 @@
+[
+  {
+    "id": 1,
+    "date": "2026-06-02",
+    "timeSlot": "08:00-10:30",
+    "labName": "物理实验室A-301",
+    "courseName": "大学物理实验",
+    "className": "物理2301班"
+  },
+  {
+    "id": 2,
+    "date": "2026-06-02",
+    "timeSlot": "14:00-16:30",
+    "labName": "物理实验室A-301",
+    "courseName": "大学物理实验",
+    "className": "物理2302班"
+  },
+  {
+    "id": 3,
+    "date": "2026-06-02",
+    "timeSlot": "14:00-16:30",
+    "labName": "化学实验室B-205",
+    "courseName": "基础化学实验",
+    "className": "化学2301班"
+  },
+  {
+    "id": 4,
+    "date": "2026-06-02",
+    "timeSlot": "08:00-10:30",
+    "labName": "物理实验室A-302",
+    "courseName": "电路分析实验",
+    "className": "电子2301班"
+  },
+  {
+    "id": 5,
+    "date": "2026-06-02",
+    "timeSlot": "10:45-13:15",
+    "labName": "物理实验室A-301",
+    "courseName": "大学物理实验",
+    "className": "物理2301班"
+  },
+  {
+    "id": 6,
+    "date": "2026-06-03",
+    "timeSlot": "14:00-16:30",
+    "labName": "物理实验室A-301",
+    "courseName": "大学物理实验",
+    "className": "物理2302班"
+  },
+  {
+    "id": 7,
+    "date": "2026-06-04",
+    "timeSlot": "08:00-10:30",
+    "labName": "化学实验室B-205",
+    "courseName": "基础化学实验",
+    "className": "化学2301班"
+  },
+  {
+    "id": 8,
+    "date": "2026-06-05",
+    "timeSlot": "08:00-10:30",
+    "labName": "物理实验室A-302",
+    "courseName": "电路分析实验",
+    "className": "电子2301班"
+  }
+]

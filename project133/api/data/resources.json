@@ -1,0 +1,82 @@
+[
+  {
+    "id": 1,
+    "type": "literature",
+    "title": "大学物理实验教程（第三版）",
+    "description": "包含所有基础物理实验的原理、方法和数据处理，实验教学的主要参考教材。",
+    "url": "https://example.com/physics-lab-book"
+  },
+  {
+    "id": 2,
+    "type": "literature",
+    "title": "误差理论与数据处理",
+    "description": "详细介绍实验误差的来源、分类和处理方法，是实验数据分析的重要参考。",
+    "url": "https://example.com/error-theory"
+  },
+  {
+    "id": 3,
+    "type": "literature",
+    "title": "基础化学实验操作规范",
+    "description": "化学实验基本操作的标准化指导，包括滴定、称量、加热等操作规范。",
+    "url": "https://example.com/chemistry-lab-guide"
+  },
+  {
+    "id": 4,
+    "type": "equipment",
+    "title": "气垫导轨（型号：QDG-1）",
+    "description": "用于力学实验，提供近乎无摩擦的运动环境，配合光电门使用。",
+    "status": "正常",
+    "lastMaintenance": "2026-05-17"
+  },
+  {
+    "id": 5,
+    "type": "equipment",
+    "title": "光电门计时器（型号：J0201）",
+    "description": "高精度计时仪器，测量范围0.01ms-99.99s，精度±0.01ms。",
+    "status": "正常",
+    "lastMaintenance": "2026-05-22"
+  },
+  {
+    "id": 6,
+    "type": "equipment",
+    "title": "分析天平（型号：FA2004）",
+    "description": "万分之一电子分析天平，最大称量200g，分度值0.1mg。",
+    "status": "维护中",
+    "lastMaintenance": "2026-04-17"
+  },
+  {
+    "id": 7,
+    "type": "equipment",
+    "title": "直流稳压电源（型号：WYJ-30V5A）",
+    "description": "可调直流稳压电源，输出0-30V，0-5A，具有过流保护功能。",
+    "status": "正常",
+    "lastMaintenance": "2026-05-12"
+  },
+  {
+    "id": 8,
+    "type": "video",
+    "title": "气垫导轨调平操作示范",
+    "description": "详细演示如何正确调节气垫导轨的水平度，包括静态调平和动态调平两种方法。",
+    "url": "https://example.com/video/air-track-leveling"
+  },
+  {
+    "id": 9,
+    "type": "video",
+    "title": "滴定管的正确使用方法",
+    "description": "从洗涤、润洗、装液、排气泡到读数和滴定操作的完整示范。",
+    "url": "https://example.com/video/burette-tutorial"
+  },
+  {
+    "id": 10,
+    "type": "video",
+    "title": "惠斯通电桥电路连接演示",
+    "description": "逐步演示惠斯通电桥的电路连接方法和注意事项。",
+    "url": "https://example.com/video/wheatstone-bridge"
+  },
+  {
+    "type": "literature",
+    "title": "tetew",
+    "description": "wetwete",
+    "id": 11
+  }
+]
