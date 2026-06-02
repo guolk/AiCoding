@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>思维模型库 - 个人决策辅助工具</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>🧠 思维模型库</h1>
+            <p class="subtitle">个人决策辅助与认知提升工具</p>
+        </header>
+
+        <nav class="nav-tabs">
+            <button class="nav-tab active" data-tab="models">思维模型库</button>
+            <button class="nav-tab" data-tab="decisions">决策辅助</button>
+            <button class="nav-tab" data-tab="tracking">决策追踪</button>
+            <button class="nav-tab" data-tab="learning">学习应用</button>
+        </nav>
+
+        <main class="content">
+            <section id="models" class="tab-content active">
+                <div class="section-header">
+                    <h2>思维模型库</h2>
+                    <button class="btn btn-primary" id="addModelBtn">+ 添加模型</button>
+                </div>
+                
+                <div class="search-bar">
+                    <input type="text" id="modelSearch" placeholder="搜索模型名称或概念...">
+                    <select id="modelCategory">
+                        <option value="">所有分类</option>
+                        <option value="thinking">思维方式</option>
+                        <option value="decision">决策模型</option>
+                        <option value="analysis">分析工具</option>
+                        <option value="psychology">心理学</option>
+                    </select>
+                </div>
+
+                <div class="models-grid" id="modelsGrid"></div>
+            </section>
+
+            <section id="decisions" class="tab-content">
+                <div class="section-header">
+                    <h2>决策辅助</h2>
+                    <button class="btn btn-primary" id="newDecisionBtn">+ 新决策</button>
+                </div>
+
+                <div class="decisions-list" id="decisionsList"></div>
+            </section>
+
+            <section id="tracking" class="tab-content">
+                <div class="section-header">
+                    <h2>决策追踪</h2>
+                    <div class="stats-cards" id="trackingStats"></div>
+                </div>
+
+                <div class="tracking-list" id="trackingList"></div>
+            </section>
+
+            <section id="learning" class="tab-content">
+                <div class="section-header">
+                    <h2>学习应用</h2>
+                </div>
+
+                <div class="learning-dashboard">
+                    <div class="learning-stats" id="learningStats"></div>
+                    
+                    <div class="learning-content">
+                        <div class="cases-section">
+                            <h3>应用案例</h3>
+                            <button class="btn btn-secondary" id="addCaseBtn">+ 记录案例</button>
+                            <div class="cases-list" id="casesList"></div>
+                        </div>
+                        
+                        <div class="evolution-section">
+                            <h3 style="display: flex; justify-content: space-between; align-items: center;">
+                                理解进化
+                                <button class="btn btn-secondary btn-sm" id="addEvolutionBtn" style="font-size: 0.8rem; padding: 6px 12px;">+ 记录</button>
+                            </h3>
+                            <div class="evolution-list" id="evolutionList"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+
+    <script src="js/storage.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
