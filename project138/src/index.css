@@ -1,0 +1,58 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap');
+
+:root {
+  font-family: "Noto Sans SC", system-ui, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background-color: #1a1a2e;
+  color: #f5f0e8;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1a1a2e;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c9a96e40;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #c9a96e80;
+}
+
+@layer utilities {
+  .gold-gradient {
+    background: linear-gradient(135deg, #c9a96e, #d4a848, #e5c070);
+  }
+
+  .ink-gradient {
+    background: linear-gradient(180deg, #1a1a2e, #0f0f1e);
+  }
+
+  .card-shine {
+    background: linear-gradient(135deg, #2a2a40 0%, #1a1a2e 50%, #2a2a40 100%);
+  }
+
+  .text-gold-gradient {
+    background: linear-gradient(135deg, #c9a96e, #e5c070);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}
