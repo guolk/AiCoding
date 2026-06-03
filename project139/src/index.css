@@ -1,0 +1,129 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap');
+
+:root {
+  --color-primary: #0D7377;
+  --color-primary-light: #14A3A8;
+  --color-primary-dark: #095556;
+  --color-accent: #FF6B35;
+  --color-accent-light: #FF8F66;
+  --color-danger: #E74C3C;
+  --color-warning: #F39C12;
+  --color-success: #27AE60;
+  --color-bg: #F0F4F5;
+  --color-card: #FFFFFF;
+  --color-text: #2D3436;
+  --color-text-secondary: #636E72;
+  --color-border: #E0E6E8;
+
+  font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  line-height: 1.6;
+  font-weight: 400;
+  color: var(--color-text);
+  background-color: var(--color-bg);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@layer components {
+  .card {
+    @apply bg-white rounded-xl border border-gray-100 shadow-sm;
+  }
+
+  .card-hover {
+    @apply card transition-all duration-200 hover:shadow-md hover:-translate-y-0.5;
+  }
+
+  .btn-primary {
+    @apply bg-[#0D7377] text-white px-4 py-2 rounded-lg font-medium transition-all duration-200 hover:bg-[#095556] hover:shadow-md active:scale-[0.98];
+  }
+
+  .btn-accent {
+    @apply bg-[#FF6B35] text-white px-4 py-2 rounded-lg font-medium transition-all duration-200 hover:bg-[#E55A25] hover:shadow-md active:scale-[0.98];
+  }
+
+  .btn-outline {
+    @apply border border-[#0D7377] text-[#0D7377] px-4 py-2 rounded-lg font-medium transition-all duration-200 hover:bg-[#0D7377] hover:text-white active:scale-[0.98];
+  }
+
+  .btn-danger {
+    @apply bg-[#E74C3C] text-white px-4 py-2 rounded-lg font-medium transition-all duration-200 hover:bg-[#C0392B] hover:shadow-md active:scale-[0.98];
+  }
+
+  .badge {
+    @apply inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium;
+  }
+
+  .badge-danger {
+    @apply badge bg-red-100 text-red-700;
+  }
+
+  .badge-warning {
+    @apply badge bg-amber-100 text-amber-700;
+  }
+
+  .badge-success {
+    @apply badge bg-emerald-100 text-emerald-700;
+  }
+
+  .badge-info {
+    @apply badge bg-sky-100 text-sky-700;
+  }
+
+  .input-field {
+    @apply w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#0D7377]/30 focus:border-[#0D7377] transition-colors;
+  }
+
+  .select-field {
+    @apply w-full px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-[#0D7377]/30 focus:border-[#0D7377] transition-colors;
+  }
+
+  .label-text {
+    @apply block text-sm font-medium text-gray-700 mb-1;
+  }
+
+  .section-title {
+    @apply text-lg font-bold text-gray-900;
+  }
+}
+
+@keyframes pulse-ring {
+  0% { transform: scale(0.8); opacity: 1; }
+  100% { transform: scale(1.4); opacity: 0; }
+}
+
+.animate-pulse-ring {
+  animation: pulse-ring 1.5s ease-out infinite;
+}
+
+@keyframes slide-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-slide-in {
+  animation: slide-in 0.3s ease-out;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c4cdd2;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a0adb5;
+}
