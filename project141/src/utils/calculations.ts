@@ -111,7 +111,7 @@ export function calculateStyleAllocation(
 
   return Array.from(styleMap.entries())
     .map(([style, value]) => ({
-      style: style as any,
+      styleType: style as any,
       value,
       proportion: totalValue > 0 ? (value / totalValue) * 100 : 0,
     }))

@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Calculator, TrendingUp, ShieldAlert, Save, Info } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import { usePortfolioStore } from '../../store/usePortfolioStore';
@@ -11,7 +11,13 @@ import Input from '../../components/ui/Input';
 import Select from '../../components/ui/Select';
 
 export default function Valuation() {
-  const { stocks, getFundamentalsByStock, getDCFValuationsByStock, addDCFValuation } = usePortfolioStore();
+  const { stocks, holdings, fundamentals: allFundamentals, dcfValuations: allDcfValuations, getFundamentalsByStock, getDCFValuationsByStock, addDCFValuation, initializeWithMockData } = usePortfolioStore();
+
+  useEffect(() => {
+    if (holdings.length === 0) {
+      initializeWithMockData();
+    }
+  }, [holdings.length, initializeWithMockData]);
 
   const [selectedStockCode, setSelectedStockCode] = useState<string>(stocks[0]?.code || '');
   const [fcf, setFcf] = useState<string>('60000000000');
@@ -27,11 +33,11 @@ export default function Valuation() {
 
   const fundamentals = useMemo(() => {
     return getFundamentalsByStock(selectedStockCode);
-  }, [getFundamentalsByStock, selectedStockCode]);
+  }, [allFundamentals, getFundamentalsByStock, selectedStockCode]);
 
   const historicalValuations = useMemo(() => {
     return getDCFValuationsByStock(selectedStockCode);
-  }, [getDCFValuationsByStock, selectedStockCode]);
+  }, [allDcfValuations, getDCFValuationsByStock, selectedStockCode]);
 
   const dcfResult: DCFResult = useMemo(() => {
     const fcfNum = parseFloat(fcf) || 0;

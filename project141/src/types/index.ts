@@ -96,7 +96,7 @@ export interface IndustryAllocation {
 }
 
 export interface StyleAllocation {
-  style: StockStyle;
+  styleType: StockStyle;
   value: number;
   proportion: number;
 }

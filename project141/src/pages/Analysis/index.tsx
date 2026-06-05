@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, LineChart, Line, Area, AreaChart } from 'recharts';
 import { AlertTriangle, TrendingUp, Award, PieChart as PieChartIcon, BarChart3, Activity } from 'lucide-react';
 import { usePortfolioStore } from '../../store/usePortfolioStore';
@@ -8,10 +8,16 @@ import PageHeader from '../../components/ui/PageHeader';
 import StatCard from '../../components/ui/StatCard';
 
 export default function Analysis() {
-  const { holdings, performances, getStockMap, getHoldingsWithMetrics } = usePortfolioStore();
+  const { holdings, performances, stocks, getStockMap, getHoldingsWithMetrics, initializeWithMockData } = usePortfolioStore();
 
-  const stockMap = useMemo(() => getStockMap(), [getStockMap]);
-  const holdingsWithMetrics = useMemo(() => getHoldingsWithMetrics(), [getHoldingsWithMetrics]);
+  useEffect(() => {
+    if (holdings.length === 0) {
+      initializeWithMockData();
+    }
+  }, [holdings.length, initializeWithMockData]);
+
+  const stockMap = useMemo(() => getStockMap(), [stocks, getStockMap]);
+  const holdingsWithMetrics = useMemo(() => getHoldingsWithMetrics(), [holdings, stocks, getHoldingsWithMetrics]);
 
   const industryAllocation = useMemo(
     () => calculateIndustryAllocation(holdings, stockMap),
@@ -356,11 +362,11 @@ export default function Analysis() {
                     dataKey="value"
                   >
                     {styleAllocation.map((entry, index) => (
-                      <Cell
-                        key={`cell-${index}`}
-                        fill={styleColors[entry.style]}
-                      />
-                    ))}
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={styleColors[entry.styleType]}
+                    />
+                  ))}
                   </Pie>
                   <Tooltip
                     formatter={(value: number) => [formatCurrency(value), '市值']}
@@ -372,13 +378,13 @@ export default function Analysis() {
             
             <div className="space-y-2 overflow-y-auto max-h-56">
               {styleAllocation.map((item) => (
-                <div key={item.style} className="flex items-center justify-between text-sm">
+                <div key={item.styleType} className="flex items-center justify-between text-sm">
                   <div className="flex items-center gap-2">
                     <div
                       className="w-3 h-3 rounded-full"
-                      style={{ backgroundColor: styleColors[item.style] }}
+                      style={{ backgroundColor: styleColors[item.styleType] }}
                     />
-                    <span className="text-text-secondary">{styleLabels[item.style]}</span>
+                    <span className="text-text-secondary">{styleLabels[item.styleType]}</span>
                   </div>
                   <span className="font-mono text-text-primary">
                     {item.proportion.toFixed(1)}%

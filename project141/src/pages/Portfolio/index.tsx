@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Plus, RefreshCw, Edit2, Trash2, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
 import { usePortfolioStore } from '../../store/usePortfolioStore';
 import { formatCurrency, formatPercent, getColorClass } from '../../utils/calculations';
@@ -49,7 +49,14 @@ export default function Portfolio() {
     updateHolding,
     deleteHolding,
     refreshPrices,
+    initializeWithMockData,
   } = usePortfolioStore();
+
+  useEffect(() => {
+    if (holdings.length === 0) {
+      initializeWithMockData();
+    }
+  }, [holdings.length, initializeWithMockData]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingHolding, setEditingHolding] = useState<Holding | null>(null);
@@ -82,7 +89,7 @@ export default function Portfolio() {
       }
       return sortOrder === 'asc' ? comparison : -comparison;
     });
-  }, [getHoldingsWithMetrics, sortField, sortOrder]);
+  }, [holdings, stocks, getHoldingsWithMetrics, sortField, sortOrder]);
 
   const availableStocks = useMemo(() => {
     const heldCodes = new Set(holdings.map(h => h.stockCode));
