@@ -101,7 +101,7 @@ export const useAppStore = create<AppState>()(
       })),
 
       addGuest: (guest) => set((state) => ({
-        guests: [...state.guests, { ...guest, id: generateId(), communicationLog: [] }],
+        guests: [...state.guests, { ...guest, id: generateId(), communicationLog: [], lastContact: new Date().toISOString() }],
       })),
       updateGuest: (id, updates) => set((state) => ({
         guests: state.guests.map((g) => g.id === id ? { ...g, ...updates } : g),

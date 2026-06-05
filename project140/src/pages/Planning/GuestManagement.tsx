@@ -219,8 +219,8 @@ export default function GuestManagement() {
       </div>
 
       {showAddModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 animate-fade-in">
-          <div className="bg-white rounded-2xl w-full max-w-md p-6 animate-scale-in">
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 animate-fade-in" onClick={(e) => { e.stopPropagation(); setShowAddModal(false); }}>
+          <div className="bg-white rounded-2xl w-full max-w-md p-6 animate-scale-in" onClick={(e) => e.stopPropagation()}>
             <div className="flex items-center justify-between mb-6">
               <h3 className="font-display text-xl font-semibold">添加新嘉宾</h3>
               <button onClick={() => setShowAddModal(false)} className="p-2 hover:bg-slate-100 rounded-lg">
@@ -303,8 +303,8 @@ export default function GuestManagement() {
       )}
 
       {showCommModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 animate-fade-in">
-          <div className="bg-white rounded-2xl w-full max-w-md p-6 animate-scale-in">
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 animate-fade-in" onClick={(e) => { e.stopPropagation(); setShowCommModal(null); }}>
+          <div className="bg-white rounded-2xl w-full max-w-md p-6 animate-scale-in" onClick={(e) => e.stopPropagation()}>
             <div className="flex items-center justify-between mb-6">
               <h3 className="font-display text-xl font-semibold">添加沟通记录</h3>
               <button onClick={() => setShowCommModal(null)} className="p-2 hover:bg-slate-100 rounded-lg">

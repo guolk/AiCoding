@@ -272,7 +272,7 @@ export default function OutlineEditor() {
                             />
                           </div>
                           <button
-                            onClick={() => deleteQuestion(question.id)}
+                            onClick={(e) => { e.stopPropagation(); deleteQuestion(question.id); }}
                             className="self-end px-4 py-2.5 text-red-600 hover:bg-red-50 rounded-xl transition-colors flex items-center gap-2"
                           >
                             <Trash2 size={18} />
@@ -380,7 +380,7 @@ export default function OutlineEditor() {
                               />
                             </div>
                             <button
-                              onClick={() => deleteFlowItem(item.id)}
+                              onClick={(e) => { e.stopPropagation(); deleteFlowItem(item.id); }}
                               className="self-end px-4 py-2.5 text-red-600 hover:bg-red-50 rounded-xl transition-colors flex items-center gap-2"
                             >
                               <Trash2 size={18} />
@@ -460,7 +460,7 @@ export default function OutlineEditor() {
                         />
                       </div>
                       <button
-                        onClick={() => deleteTransition(transition.id)}
+                        onClick={(e) => { e.stopPropagation(); deleteTransition(transition.id); }}
                         className="p-2 text-red-500 hover:bg-red-100 rounded-lg transition-colors flex-shrink-0"
                       >
                         <Trash2 size={18} />

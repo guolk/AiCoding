@@ -1,24 +1,39 @@
 import { format, formatDistanceToNow, differenceInHours, differenceInDays } from 'date-fns';
 import { zhCN } from 'date-fns/locale';
 
-export const formatDate = (date: string | Date, pattern: string = 'yyyy-MM-dd') => {
-  return format(new Date(date), pattern, { locale: zhCN });
+export const formatDate = (date: string | Date | undefined | null, pattern: string = 'yyyy-MM-dd') => {
+  if (!date) return '';
+  const d = new Date(date);
+  if (isNaN(d.getTime())) return '';
+  return format(d, pattern, { locale: zhCN });
 };
 
-export const formatDateTime = (date: string | Date) => {
-  return format(new Date(date), 'yyyy-MM-dd HH:mm', { locale: zhCN });
+export const formatDateTime = (date: string | Date | undefined | null) => {
+  if (!date) return '';
+  const d = new Date(date);
+  if (isNaN(d.getTime())) return '';
+  return format(d, 'yyyy-MM-dd HH:mm', { locale: zhCN });
 };
 
-export const formatRelative = (date: string | Date) => {
-  return formatDistanceToNow(new Date(date), { addSuffix: true, locale: zhCN });
+export const formatRelative = (date: string | Date | undefined | null) => {
+  if (!date) return '暂无记录';
+  const d = new Date(date);
+  if (isNaN(d.getTime())) return '暂无记录';
+  return formatDistanceToNow(d, { addSuffix: true, locale: zhCN });
 };
 
-export const hoursUntil = (date: string | Date) => {
-  return differenceInHours(new Date(date), new Date());
+export const hoursUntil = (date: string | Date | undefined | null) => {
+  if (!date) return 0;
+  const d = new Date(date);
+  if (isNaN(d.getTime())) return 0;
+  return differenceInHours(d, new Date());
 };
 
-export const daysUntil = (date: string | Date) => {
-  return differenceInDays(new Date(date), new Date());
+export const daysUntil = (date: string | Date | undefined | null) => {
+  if (!date) return 0;
+  const d = new Date(date);
+  if (isNaN(d.getTime())) return 0;
+  return differenceInDays(d, new Date());
 };
 
 export const formatDuration = (seconds: number): string => {
