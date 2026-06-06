@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
-import { Calendar, MapPin, Clock, Navigation, Cloud, Sun, CloudRain, Wind, Edit, Eye } from 'lucide-react';
+import { Calendar, MapPin, Clock, Navigation, Cloud, Sun, CloudRain, Wind, Edit, Eye, Trash2 } from 'lucide-react';
 import { formatDateTime, formatDistance, formatDuration, getWindDirectionArrow } from '../../../utils';
+import { useAppStore } from '../../../store';
 import type { Voyage } from '../../../types';
 
 const getWeatherIcon = (conditions: string) => {
@@ -18,6 +19,14 @@ interface VoyageCardProps {
 
 export default function VoyageCard({ voyage, boatName }: VoyageCardProps) {
   const navigate = useNavigate();
+  const deleteVoyage = useAppStore((state) => state.deleteVoyage);
+
+  const handleDelete = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (confirm(`确定要删除航行记录「${voyage.destination}」吗？此操作不可恢复。`)) {
+      deleteVoyage(voyage.id);
+    }
+  };
 
   return (
     <div className="card p-6 hover:border-ocean-300 transition-all">
@@ -59,13 +68,13 @@ export default function VoyageCard({ voyage, boatName }: VoyageCardProps) {
         </div>
       </div>
 
-      <div className="flex gap-3">
+      <div className="flex gap-2">
         <button
           onClick={() => navigate(`/voyages/${voyage.id}`)}
           className="btn-secondary flex-1 flex items-center justify-center gap-2"
         >
           <Eye className="w-4 h-4" />
-          查看详情
+          详情
         </button>
         <button
           onClick={() => navigate(`/voyages/${voyage.id}/edit`)}
@@ -73,6 +82,13 @@ export default function VoyageCard({ voyage, boatName }: VoyageCardProps) {
         >
           <Edit className="w-4 h-4" />
           编辑
+        </button>
+        <button
+          onClick={handleDelete}
+          className="w-10 h-10 flex items-center justify-center rounded-lg border border-red-200 text-red-500 hover:bg-red-50 transition-colors"
+          title="删除"
+        >
+          <Trash2 className="w-4 h-4" />
         </button>
       </div>
     </div>

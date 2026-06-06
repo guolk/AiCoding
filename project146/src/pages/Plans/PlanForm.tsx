@@ -220,6 +220,13 @@ export default function PlanForm() {
       return;
     }
 
+    const startDate = new Date(formData.startDate);
+    const endDate = new Date(formData.endDate);
+    if (endDate < startDate) {
+      alert('结束日期不能早于开始日期，请重新选择');
+      return;
+    }
+
     const planData = {
       ...formData,
       waypoints: waypoints.map((wp) => ({

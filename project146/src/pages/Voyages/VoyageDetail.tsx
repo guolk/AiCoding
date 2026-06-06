@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
-import { ChevronRight, Home, Navigation, Calendar, MapPin, Clock, Wind, Edit, ArrowLeft } from 'lucide-react';
+import { ChevronRight, Home, Navigation, Calendar, MapPin, Clock, Wind, Edit, ArrowLeft, Trash2 } from 'lucide-react';
 import { useVoyageDetail } from './hooks/useVoyageDetail';
+import { useAppStore } from '../../store';
 import VoyageMap from '../../components/Map/VoyageMap';
 import InfoCard from './components/InfoCard';
 import EventTimeline from './components/EventTimeline';
@@ -8,6 +9,16 @@ import WeatherComparison from './components/WeatherComparison';
 
 export default function VoyageDetail() {
   const { voyage, boat, navigate, formatValue } = useVoyageDetail();
+  const deleteVoyage = useAppStore((state) => state.deleteVoyage);
+
+  const handleDelete = () => {
+    if (confirm(`确定要删除航行记录「${voyage?.destination}」吗？此操作不可恢复。`)) {
+      if (voyage) {
+        deleteVoyage(voyage.id);
+        navigate('/voyages');
+      }
+    }
+  };
 
   if (!voyage) {
     return (
@@ -44,10 +55,15 @@ export default function VoyageDetail() {
           <h1 className="font-display text-4xl font-bold text-ocean-800">{voyage.destination}</h1>
           <p className="text-gray-500 mt-1">{boat?.name || '未知船艇'} · {voyage.startPoint} → {voyage.destination}</p>
         </div>
-        <button onClick={() => navigate(`/voyages/${voyage.id}/edit`)} className="btn-accent flex items-center gap-2">
-          <Edit className="w-4 h-4" />
-          编辑
-        </button>
+        <div className="flex gap-2">
+          <button onClick={handleDelete} className="w-10 h-10 rounded-lg border border-red-200 flex items-center justify-center text-red-500 hover:bg-red-50 transition-colors" title="删除">
+            <Trash2 className="w-4 h-4" />
+          </button>
+          <button onClick={() => navigate(`/voyages/${voyage.id}/edit`)} className="btn-accent flex items-center gap-2">
+            <Edit className="w-4 h-4" />
+            编辑
+          </button>
+        </div>
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
