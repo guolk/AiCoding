@@ -1,14 +1,15 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { Plus, Trash2, Clock, Moon, Zap, Target, CheckCircle2, XCircle, Edit2 } from 'lucide-react';
 import { Modal } from '../components/ui/Modal';
 import { ProgressRing } from '../components/ui/ProgressRing';
-import { useAppStore, useGoalProgress } from '../store/useAppStore';
+import { useAppStore } from '../store/useAppStore';
 import { CATEGORIES, GoalType, GoalFrequency, AppCategory, Goal } from '../types';
 import { formatDuration, getToday } from '../utils/date';
-import { getGoalProgress } from '../utils/statistics';
+import { calculateGoalProgress } from '../utils/statistics';
 
 export default function GoalSetting() {
-  const { goals, screenFreeLogs, addGoal, updateGoal, deleteGoal, addScreenFreeLog, updateScreenFreeLog } = useAppStore();
+  const { goals, screenFreeLogs, appUsage, addGoal, updateGoal, deleteGoal, addScreenFreeLog, updateScreenFreeLog } = useAppStore();
+  const today = useMemo(() => getToday(), []);
   const [showAddModal, setShowAddModal] = useState(false);
   const [editingGoal, setEditingGoal] = useState<Goal | null>(null);
   const [goalType, setGoalType] = useState<GoalType>('dailyLimit');
@@ -104,7 +105,7 @@ export default function GoalSetting() {
           <h1 className="font-serif text-3xl font-bold text-slate-900">目标设定</h1>
           <p className="text-slate-500 mt-1">设定健康的手机使用目标，培养良好习惯</p>
         </div>
-        <button onClick={() => handleOpenModal()} className="btn-primary flex items-center gap-2">
+        <button type="button" onClick={() => handleOpenModal()} className="btn-primary flex items-center gap-2">
           <Plus className="w-4 h-4" />
           新建目标
         </button>
@@ -137,6 +138,7 @@ export default function GoalSetting() {
                 subLabel="今日"
               />
               <button
+                type="button"
                 onClick={handleToggleScreenFree}
                 className={`px-6 py-3 rounded-xl font-medium transition-all flex items-center gap-2 ${
                   todayScreenFree?.completed
@@ -164,18 +166,20 @@ export default function GoalSetting() {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {dailyLimitGoals.map((goal) => {
-            const { current, target, progress } = useGoalProgress(goal.id);
+            const { current, target, progress } = calculateGoalProgress(goal, appUsage, today);
             const cat = CATEGORIES.find((c) => c.key === goal.category);
             return (
               <div key={goal.id} className="card group relative overflow-hidden">
                 <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity flex gap-2">
                   <button
+                    type="button"
                     onClick={() => handleOpenModal(goal)}
                     className="p-2 rounded-lg bg-white shadow-md text-slate-400 hover:text-primary-500"
                   >
                     <Edit2 className="w-4 h-4" />
                   </button>
                   <button
+                    type="button"
                     onClick={() => deleteGoal(goal.id)}
                     className="p-2 rounded-lg bg-white shadow-md text-slate-400 hover:text-rose-500"
                   >
@@ -240,12 +244,14 @@ export default function GoalSetting() {
                 <div key={challenge.id} className="card bg-gradient-to-br from-amber-50 to-orange-50 border-amber-100 group relative">
                   <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity flex gap-2">
                     <button
+                      type="button"
                       onClick={() => handleOpenModal(challenge)}
                       className="p-2 rounded-lg bg-white shadow-md text-slate-400 hover:text-primary-500"
                     >
                       <Edit2 className="w-4 h-4" />
                     </button>
                     <button
+                      type="button"
                       onClick={() => deleteGoal(challenge.id)}
                       className="p-2 rounded-lg bg-white shadow-md text-slate-400 hover:text-rose-500"
                     >
@@ -294,6 +300,7 @@ export default function GoalSetting() {
                 const Icon = info.icon;
                 return (
                   <button
+                    type="button"
                     key={type}
                     onClick={() => {
                       setGoalType(type);
@@ -329,6 +336,7 @@ export default function GoalSetting() {
               <label className="block text-sm font-medium text-slate-700 mb-2">适用分类</label>
               <div className="grid grid-cols-5 gap-2">
                 <button
+                  type="button"
                   onClick={() => setNewGoal({ ...newGoal, category: 'all' })}
                   className={`p-3 rounded-xl text-center transition-all ${
                     newGoal.category === 'all'
@@ -340,12 +348,13 @@ export default function GoalSetting() {
                 </button>
                 {CATEGORIES.map((cat) => (
                   <button
+                    type="button"
                     key={cat.key}
                     onClick={() => setNewGoal({ ...newGoal, category: cat.key })}
                     className={`p-3 rounded-xl text-center transition-all ${
                       newGoal.category === cat.key
                         ? `${cat.bgColor} ring-2 ring-offset-2 ring-primary-400`
-                        : 'bg-slate-50 hover:bg-slate-100'
+                        : `bg-slate-50 hover:bg-slate-100`
                     }`}
                   >
                     <p className={`text-sm font-medium ${cat.color}`}>{cat.label}</p>
@@ -388,6 +397,7 @@ export default function GoalSetting() {
             <div className="grid grid-cols-4 gap-2">
               {(['daily', 'weekdays', 'weekends', 'custom'] as GoalFrequency[]).map((freq) => (
                 <button
+                  type="button"
                   key={freq}
                   onClick={() => setNewGoal({ ...newGoal, frequency: freq })}
                   className={`py-2 px-3 rounded-xl text-sm font-medium transition-all ${
@@ -404,6 +414,7 @@ export default function GoalSetting() {
 
           <div className="flex gap-3 pt-2">
             <button
+              type="button"
               onClick={() => {
                 setShowAddModal(false);
                 setEditingGoal(null);
@@ -412,7 +423,7 @@ export default function GoalSetting() {
             >
               取消
             </button>
-            <button onClick={handleSaveGoal} className="btn-primary flex-1">
+            <button type="button" onClick={handleSaveGoal} className="btn-primary flex-1">
               {editingGoal ? '保存修改' : '创建目标'}
             </button>
           </div>

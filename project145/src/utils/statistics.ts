@@ -1,4 +1,4 @@
-import { AppUsage, HealthMetric, AppCategory, AlternativeActivity, ActivityLog } from '../types';
+import { AppUsage, HealthMetric, AppCategory, AlternativeActivity, ActivityLog, Goal } from '../types';
 import { isWeekday, isWeekend } from './date';
 
 export function sumByCategory(usageData: AppUsage[], date?: string): Record<AppCategory, number> {
@@ -101,6 +101,25 @@ export function calculateActivityEffectiveness(activities: AlternativeActivity[]
 export function getPercentage(value: number, total: number): number {
   if (total === 0) return 0;
   return Math.round((value / total) * 100);
+}
+
+export function calculateGoalProgress(goal: Goal | undefined, appUsage: AppUsage[], today: string) {
+  if (!goal) return { current: 0, target: 0, progress: 0 };
+
+  let current = 0;
+
+  if (goal.type === 'dailyLimit' && goal.category !== 'all') {
+    current = appUsage
+      .filter((u) => u.category === goal.category && u.date === today)
+      .reduce((sum, u) => sum + u.durationMinutes, 0);
+  } else if (goal.type === 'dailyLimit' && goal.category === 'all') {
+    current = appUsage
+      .filter((u) => u.date === today)
+      .reduce((sum, u) => sum + u.durationMinutes, 0);
+  }
+
+  const progress = Math.min(100, Math.round((current / goal.targetValue) * 100));
+  return { current, target: goal.targetValue, progress };
 }
 
 export function calculateTrend(values: number[]): 'increasing' | 'decreasing' | 'stable' {

@@ -119,6 +119,7 @@ export default function AlternativeManagement() {
           <p className="text-slate-500 mt-1">当您想玩手机时，试试这些活动</p>
         </div>
         <button
+          type="button"
           onClick={() => {
             setEditingId(null);
             setNewActivity({
@@ -213,6 +214,7 @@ export default function AlternativeManagement() {
                     <span>{alt.durationMinutes}分钟</span>
                   </div>
                   <button
+                    type="button"
                     onClick={() => handleStartActivity(alt.id)}
                     className="px-4 py-2 bg-gradient-to-r from-primary-500 to-emerald-500 text-white text-sm font-medium rounded-full hover:shadow-lg hover:-translate-y-0.5 transition-all flex items-center gap-1"
                   >
@@ -233,12 +235,14 @@ export default function AlternativeManagement() {
             <div key={alt.id} className="card group relative">
               <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity flex gap-2">
                 <button
+                  type="button"
                   onClick={() => handleOpenEdit(alt.id)}
                   className="p-2 rounded-lg bg-white shadow-md text-slate-400 hover:text-primary-500"
                 >
                   <Edit2 className="w-4 h-4" />
                 </button>
                 <button
+                  type="button"
                   onClick={() => updateAlternative(alt.id, { active: false })}
                   className="p-2 rounded-lg bg-white shadow-md text-slate-400 hover:text-rose-500"
                 >
@@ -269,6 +273,7 @@ export default function AlternativeManagement() {
                   <span className="text-sm text-slate-500">{alt.durationMinutes}分钟</span>
                 </div>
                 <button
+                  type="button"
                   onClick={() => handleStartActivity(alt.id)}
                   className="w-full py-2.5 bg-gradient-to-r from-primary-500 to-emerald-500 text-white font-medium rounded-xl hover:shadow-lg hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2"
                 >
@@ -320,6 +325,7 @@ export default function AlternativeManagement() {
             <div className="grid grid-cols-3 gap-2">
               {activityCategories.map((cat) => (
                 <button
+                  type="button"
                   key={cat}
                   onClick={() => setNewActivity({ ...newActivity, category: cat, emoji: categoryEmojis[cat] })}
                   className={`p-3 rounded-xl text-center transition-all ${
@@ -340,6 +346,7 @@ export default function AlternativeManagement() {
             <div className="flex gap-2 flex-wrap">
               {['🚶', '🧘', '📚', '💧', '🎵', '✍️', '🎨', '👥', '🌳', '☕', '🏃', '🧩'].map((emoji) => (
                 <button
+                  type="button"
                   key={emoji}
                   onClick={() => setNewActivity({ ...newActivity, emoji })}
                   className={`w-12 h-12 rounded-xl text-xl transition-all ${
@@ -370,10 +377,10 @@ export default function AlternativeManagement() {
           </div>
 
           <div className="flex gap-3 pt-2">
-            <button onClick={() => setShowAddModal(false)} className="btn-secondary flex-1">
+            <button type="button" onClick={() => setShowAddModal(false)} className="btn-secondary flex-1">
               取消
             </button>
-            <button onClick={handleSaveActivity} className="btn-primary flex-1">
+            <button type="button" onClick={handleSaveActivity} className="btn-primary flex-1">
               {editingId ? '保存修改' : '添加活动'}
             </button>
           </div>
@@ -401,6 +408,7 @@ export default function AlternativeManagement() {
               <div className="flex justify-center gap-2">
                 {[1, 2, 3, 4, 5].map((star) => (
                   <button
+                    type="button"
                     key={star}
                     onClick={() => setRating(star)}
                     className="p-2 transition-transform hover:scale-110"
@@ -418,11 +426,11 @@ export default function AlternativeManagement() {
             </div>
 
             <div className="flex gap-3 pt-4">
-              <button onClick={() => setShowActivityModal(false)} className="btn-secondary flex-1">
+              <button type="button" onClick={() => setShowActivityModal(false)} className="btn-secondary flex-1">
                 <X className="w-4 h-4" />
                 取消
               </button>
-              <button onClick={handleCompleteActivity} className="btn-primary flex-1 flex items-center justify-center gap-2">
+              <button type="button" onClick={handleCompleteActivity} className="btn-primary flex-1 flex items-center justify-center gap-2">
                 <CheckCircle2 className="w-4 h-4" />
                 完成记录
               </button>

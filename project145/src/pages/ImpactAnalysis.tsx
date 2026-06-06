@@ -98,7 +98,7 @@ export default function ImpactAnalysis() {
           <h1 className="font-serif text-3xl font-bold text-slate-900">影响分析</h1>
           <p className="text-slate-500 mt-1">了解手机使用如何影响您的生活</p>
         </div>
-        <button onClick={() => handleOpenHealthModal()} className="btn-primary flex items-center gap-2">
+        <button type="button" onClick={() => handleOpenHealthModal()} className="btn-primary flex items-center gap-2">
           <Plus className="w-4 h-4" />
           记录健康数据
         </button>
@@ -294,6 +294,7 @@ export default function ImpactAnalysis() {
                     </td>
                     <td className="py-4 px-4 text-right">
                       <button
+                        type="button"
                         onClick={() => handleOpenHealthModal(metric.date)}
                         className="p-2 rounded-lg hover:bg-slate-100 text-slate-400 hover:text-primary-500 transition-colors"
                       >
@@ -419,10 +420,10 @@ export default function ImpactAnalysis() {
           </div>
 
           <div className="flex gap-3 pt-2">
-            <button onClick={() => setShowHealthModal(false)} className="btn-secondary flex-1">
+            <button type="button" onClick={() => setShowHealthModal(false)} className="btn-secondary flex-1">
               取消
             </button>
-            <button onClick={handleSaveHealth} className="btn-primary flex-1">
+            <button type="button" onClick={handleSaveHealth} className="btn-primary flex-1">
               {editingHealth ? '保存修改' : '保存记录'}
             </button>
           </div>

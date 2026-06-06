@@ -99,6 +99,7 @@ export default function UsageTracking() {
               <button
                 key={mode}
                 onClick={() => setViewMode(mode)}
+                type="button"
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-all flex items-center gap-2 ${
                   viewMode === mode
                     ? 'bg-gradient-to-r from-primary-500 to-emerald-500 text-white shadow-md'
@@ -112,7 +113,7 @@ export default function UsageTracking() {
               </button>
             ))}
           </div>
-          <button onClick={() => setShowAddModal(true)} className="btn-primary flex items-center gap-2">
+          <button type="button" onClick={() => setShowAddModal(true)} className="btn-primary flex items-center gap-2">
             <Plus className="w-4 h-4" />
             添加记录
           </button>
@@ -123,6 +124,7 @@ export default function UsageTracking() {
         <span className="text-sm text-slate-500">时间范围：</span>
         {(['week', 'month'] as TimeRange[]).map((range) => (
           <button
+            type="button"
             key={range}
             onClick={() => setTimeRange(range)}
             className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all ${
@@ -195,6 +197,7 @@ export default function UsageTracking() {
                           <p className="font-semibold text-slate-800">{formatDuration(usage.durationMinutes)}</p>
                         </div>
                         <button
+                          type="button"
                           onClick={() => deleteAppUsage(usage.id)}
                           className="p-2 rounded-lg opacity-0 group-hover:opacity-100 hover:bg-rose-100 text-slate-400 hover:text-rose-500 transition-all"
                         >
@@ -300,6 +303,7 @@ export default function UsageTracking() {
             <div className="grid grid-cols-5 gap-2">
               {CATEGORIES.map((cat) => (
                 <button
+                  type="button"
                   key={cat.key}
                   onClick={() => setNewUsage({ ...newUsage, category: cat.key })}
                   className={`p-3 rounded-xl text-center transition-all ${
@@ -345,6 +349,7 @@ export default function UsageTracking() {
             <div className="grid grid-cols-4 gap-2">
               {EMOTIONAL_TRIGGERS.slice(0, 4).map((trigger) => (
                 <button
+                  type="button"
                   key={trigger.key}
                   onClick={() => setNewUsage({ ...newUsage, emotionalTrigger: trigger.key })}
                   className={`p-2 rounded-xl text-center transition-all ${
@@ -365,12 +370,13 @@ export default function UsageTracking() {
             <div className="flex gap-2">
               {USAGE_QUALITY.map((q) => (
                 <button
+                  type="button"
                   key={q.key}
                   onClick={() => setNewUsage({ ...newUsage, usageQuality: q.key })}
                   className={`flex-1 py-2 px-3 rounded-xl text-sm font-medium transition-all ${
                     newUsage.usageQuality === q.key
                       ? `${q.color} bg-slate-100 ring-2 ring-offset-1 ring-primary-400`
-                      : 'bg-slate-50 text-slate-600 hover:bg-slate-100'
+                      : `bg-slate-50 text-slate-600 hover:bg-slate-100`
                   }`}
                 >
                   {q.label}
@@ -380,10 +386,10 @@ export default function UsageTracking() {
           </div>
 
           <div className="flex gap-3 pt-2">
-            <button onClick={() => setShowAddModal(false)} className="btn-secondary flex-1">
+            <button type="button" onClick={() => setShowAddModal(false)} className="btn-secondary flex-1">
               取消
             </button>
-            <button onClick={handleAddUsage} className="btn-primary flex-1">
+            <button type="button" onClick={handleAddUsage} className="btn-primary flex-1">
               保存记录
             </button>
           </div>

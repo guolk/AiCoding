@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import {
   Plus,
   Clock,
@@ -14,14 +14,15 @@ import { StatCard } from '../components/ui/StatCard';
 import { Modal } from '../components/ui/Modal';
 import { UsageTrendChart } from '../components/charts/UsageTrendChart';
 import { CategoryPieChart } from '../components/charts/CategoryPieChart';
-import { useAppStore, useTodayUsage, useGoalProgress } from '../store/useAppStore';
+import { useAppStore, useTodayUsage } from '../store/useAppStore';
 import { CATEGORIES, EMOTIONAL_TRIGGERS, USAGE_QUALITY, AppCategory, EmotionalTrigger, UsageQuality } from '../types';
 import { formatDuration, getWeekDates, getToday, formatDateDisplay } from '../utils/date';
-import { sumByCategory, sumByDate, getGoalProgress } from '../utils/statistics';
+import { sumByCategory, sumByDate, getGoalProgress, calculateGoalProgress } from '../utils/statistics';
 
 export default function Dashboard() {
   const { appUsage, goals, healthMetrics, alternatives, addAppUsage } = useAppStore();
   const todayUsage = useTodayUsage();
+  const today = useMemo(() => getToday(), []);
   const [showAddModal, setShowAddModal] = useState(false);
   const [newUsage, setNewUsage] = useState({
     category: 'social' as AppCategory,
@@ -69,7 +70,7 @@ export default function Dashboard() {
           </h1>
           <p className="text-slate-500 mt-1">{formatDateDisplay(new Date())}</p>
         </div>
-        <button onClick={() => setShowAddModal(true)} className="btn-primary flex items-center gap-2">
+        <button type="button" onClick={() => setShowAddModal(true)} className="btn-primary flex items-center gap-2">
           <Plus className="w-4 h-4" />
           记录使用
         </button>
@@ -155,7 +156,7 @@ export default function Dashboard() {
           </div>
           <div className="space-y-4">
             {activeGoals.slice(0, 3).map((goal) => {
-              const { current, target, progress } = useGoalProgress(goal.id);
+              const { current, target, progress } = calculateGoalProgress(goal, appUsage, today);
               return (
                 <div key={goal.id} className="space-y-2">
                   <div className="flex items-center justify-between text-sm">
@@ -243,6 +244,7 @@ export default function Dashboard() {
             <div className="grid grid-cols-5 gap-2">
               {CATEGORIES.map((cat) => (
                 <button
+                  type="button"
                   key={cat.key}
                   onClick={() => setNewUsage({ ...newUsage, category: cat.key })}
                   className={`p-3 rounded-xl text-center transition-all ${
@@ -292,6 +294,7 @@ export default function Dashboard() {
             <div className="grid grid-cols-4 gap-2">
               {EMOTIONAL_TRIGGERS.slice(0, 4).map((trigger) => (
                 <button
+                  type="button"
                   key={trigger.key}
                   onClick={() => setNewUsage({ ...newUsage, emotionalTrigger: trigger.key })}
                   className={`p-2 rounded-xl text-center transition-all ${
@@ -312,12 +315,13 @@ export default function Dashboard() {
             <div className="flex gap-2">
               {USAGE_QUALITY.map((q) => (
                 <button
+                  type="button"
                   key={q.key}
                   onClick={() => setNewUsage({ ...newUsage, usageQuality: q.key })}
                   className={`flex-1 py-2 px-3 rounded-xl text-sm font-medium transition-all ${
                     newUsage.usageQuality === q.key
                       ? `${q.color} bg-slate-100 ring-2 ring-offset-1 ring-primary-400`
-                      : 'bg-slate-50 text-slate-600 hover:bg-slate-100'
+                      : `bg-slate-50 text-slate-600 hover:bg-slate-100`
                   }`}
                 >
                   {q.label}
@@ -327,10 +331,10 @@ export default function Dashboard() {
           </div>
 
           <div className="flex gap-3 pt-2">
-            <button onClick={() => setShowAddModal(false)} className="btn-secondary flex-1">
+            <button type="button" onClick={() => setShowAddModal(false)} className="btn-secondary flex-1">
               取消
             </button>
-            <button onClick={handleAddUsage} className="btn-primary flex-1">
+            <button type="button" onClick={handleAddUsage} className="btn-primary flex-1">
               保存记录
             </button>
           </div>

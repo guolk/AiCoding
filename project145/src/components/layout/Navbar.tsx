@@ -11,7 +11,7 @@ import { cn } from '../../lib/utils';
 
 const navItems = [
   { path: '/', label: '仪表板', icon: LayoutDashboard },
-  { path: '/tracking', label: '使用追踪', icon: Clock },
+  { path: '/usage', label: '使用追踪', icon: Clock },
   { path: '/goals', label: '目标设定', icon: Target },
   { path: '/impact', label: '影响分析', icon: BarChart3 },
   { path: '/alternatives', label: '替代方案', icon: Lightbulb },
