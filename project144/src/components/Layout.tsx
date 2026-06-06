@@ -23,7 +23,7 @@ interface NavItem {
 }
 
 const navItems: NavItem[] = [
-  { to: '/', label: 'Dashboard', icon: LayoutDashboard },
+  { to: '/dashboard', label: '仪表盘', icon: LayoutDashboard },
   { to: '/accounts', label: '账号管理', icon: Users },
   { to: '/audit', label: '安全审计', icon: ShieldAlert },
   { to: '/breach', label: '泄露追踪', icon: AlertTriangle },
@@ -68,7 +68,7 @@ function Sidebar({ isOpen, onClose }: SidebarProps) {
             <NavLink
               key={item.to}
               to={item.to}
-              end={item.to === '/'}
+              end={item.to === '/dashboard'}
               onClick={onClose}
               className={({ isActive }) =>
                 cn(
@@ -98,7 +98,7 @@ function MobileNav() {
           <NavLink
             key={item.to}
             to={item.to}
-            end={item.to === '/'}
+            end={item.to === '/dashboard'}
             className={({ isActive }) =>
               cn(
                 'flex flex-col items-center justify-center flex-1 h-full transition-colors',

@@ -20,7 +20,7 @@ export default function Login() {
 
   useEffect(() => {
     if (isAuthenticated) {
-      navigate('/');
+      navigate('/dashboard');
     }
   }, [isAuthenticated, navigate]);
 
@@ -65,7 +65,7 @@ export default function Login() {
     }
 
     if (success) {
-      navigate('/');
+      navigate('/dashboard');
     }
   };
 
