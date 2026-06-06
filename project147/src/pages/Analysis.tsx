@@ -338,8 +338,8 @@ export default function Analysis() {
 
       <Dialog.Root open={dialogOpen} onOpenChange={setDialogOpen}>
         <Dialog.Portal>
-          <Dialog.Overlay className="fixed inset-0 bg-black/40 backdrop-blur-sm animate-fade-in z-50" />
-          <Dialog.Content className="fixed top-0 right-0 bottom-0 z-50 w-full max-w-2xl overflow-y-auto">
+          <Dialog.Overlay className="fixed inset-0 bg-black/40 backdrop-blur-sm animate-fade-in z-[1000]" />
+          <Dialog.Content className="fixed top-0 right-0 bottom-0 z-[1000] w-full max-w-2xl overflow-y-auto">
             <div className="bg-white min-h-full shadow-2xl p-6 animate-slide-in-right">
               <div className="flex items-center justify-between mb-6">
                 <Dialog.Title className="font-display text-xl font-semibold text-slate-800">

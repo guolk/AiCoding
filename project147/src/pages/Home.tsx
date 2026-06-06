@@ -257,8 +257,8 @@ export default function Home() {
 
       <Dialog.Root open={dialogOpen} onOpenChange={setDialogOpen}>
         <Dialog.Portal>
-          <Dialog.Overlay className="fixed inset-0 bg-black/40 backdrop-blur-sm animate-fade-in z-50" />
-          <Dialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-full max-w-lg">
+          <Dialog.Overlay className="fixed inset-0 bg-black/40 backdrop-blur-sm animate-fade-in z-[1000]" />
+          <Dialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[1000] w-full max-w-lg">
             <div className="bg-white rounded-2xl shadow-2xl p-6 mx-4 animate-scale-in">
               <Dialog.Title className="font-display text-xl font-semibold text-slate-800 mb-2">
                 {editingProject ? '编辑项目' : '创建新项目'}
