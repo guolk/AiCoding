@@ -22,12 +22,24 @@ export default function TankDetail() {
   const tank = aquariums.find((a) => a.id === id);
 
   useEffect(() => {
-    if (!tank) {
-      navigate('/tanks');
+    if (tank === undefined && id) {
+      const timer = setTimeout(() => {
+        const currentTank = aquariums.find((a) => a.id === id);
+        if (!currentTank) {
+          navigate('/tanks');
+        }
+      }, 100);
+      return () => clearTimeout(timer);
     }
-  }, [tank, navigate]);
+  }, [tank, id, aquariums, navigate]);
 
-  if (!tank) return null;
+  if (!tank) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="animate-pulse text-gray-500">加载中...</div>
+      </div>
+    );
+  }
 
   const activeAnomalies = anomalies.filter(
     (a) => a.tankId === id && a.status !== 'resolved'
@@ -89,7 +101,7 @@ export default function TankDetail() {
             {tabs.map((tab) => (
               <NavLink
                 key={tab.id}
-                to={`/tanks/${id}${tab.path}`}
+                to={tab.path}
                 end={tab.path === ''}
                 onClick={() => setActiveTab(tab.id)}
                 className={({ isActive }) =>
