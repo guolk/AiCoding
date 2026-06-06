@@ -15,12 +15,7 @@ export function Layout({ children, title }: LayoutProps) {
     <div className="min-h-screen bg-cream">
       <Sidebar />
 
-      <div
-        className={clsx(
-          'lg:ml-64 transition-all duration-300',
-          sidebarOpen && 'ml-64'
-        )}
-      >
+      <div className="ml-64 transition-all duration-300">
         <Header title={title} onMenuClick={() => setSidebarOpen(!sidebarOpen)} />
 
         <main className="p-6 animate-fade-in">

@@ -22,12 +22,12 @@ const menuItems: MenuItem[] = [
     icon: <LayoutDashboard className="w-5 h-5" />,
   },
   {
-    to: '/clients',
+    to: '/customers',
     label: '客户管理',
     icon: <Users className="w-5 h-5" />,
   },
   {
-    to: '/menu',
+    to: '/menus',
     label: '菜单定制',
     icon: <BookOpen className="w-5 h-5" />,
   },
