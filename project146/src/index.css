@@ -1,0 +1,91 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-family: 'Open Sans', sans-serif;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Playfair Display', serif;
+  }
+}
+
+@layer components {
+  .card {
+    @apply bg-white rounded-xl shadow-lg border border-ocean-100 overflow-hidden transition-all duration-300 hover:shadow-xl;
+  }
+  .btn-primary {
+    @apply bg-ocean-600 hover:bg-ocean-700 text-white font-medium py-2.5 px-6 rounded-lg transition-all duration-200 hover:shadow-lg active:scale-95;
+  }
+  .btn-secondary {
+    @apply bg-white border-2 border-ocean-200 text-ocean-700 hover:bg-ocean-50 font-medium py-2 px-5 rounded-lg transition-all duration-200;
+  }
+  .btn-accent {
+    @apply bg-nautical-500 hover:bg-nautical-600 text-white font-medium py-2.5 px-6 rounded-lg transition-all duration-200 hover:shadow-lg active:scale-95;
+  }
+  .input-field {
+    @apply w-full px-4 py-2.5 border border-ocean-200 rounded-lg focus:ring-2 focus:ring-ocean-500 focus:border-transparent outline-none transition-all;
+  }
+  .nav-item {
+    @apply flex items-center gap-3 px-4 py-3 rounded-lg text-ocean-100 hover:bg-ocean-800/50 transition-all duration-200;
+  }
+  .nav-item.active {
+    @apply bg-ocean-700/60 text-white border-l-4 border-nautical-500;
+  }
+  .stat-card {
+    @apply bg-gradient-to-br p-6 rounded-2xl text-white shadow-lg;
+  }
+  .section-title {
+    @apply font-display text-2xl font-bold text-ocean-800 mb-4;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+.leaflet-container {
+  border-radius: 0.75rem;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #94a3b8;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+}
+
+@keyframes dash {
+  to {
+    stroke-dashoffset: 1000;
+  }
+}
+
+.animate-dash {
+  stroke-dasharray: 10 5;
+  animation: dash 20s linear infinite;
+}
