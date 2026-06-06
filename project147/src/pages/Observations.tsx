@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from 'react-leaflet';
 import L from 'leaflet';
-import { Plus, Calendar, MapPin, Image, FileText, Edit2, Trash2, X, Check, Camera, PenTool, AlignLeft } from 'lucide-react';
+import { Plus, Calendar, MapPin, Image, FileText, Edit2, Trash2, X, Check, Camera, PenTool, AlignLeft, AlertTriangle } from 'lucide-react';
 import * as Dialog from '@radix-ui/react-dialog';
 import * as Tabs from '@radix-ui/react-tabs';
 import { useStore } from '../store/useStore';
@@ -42,6 +42,7 @@ export default function Observations() {
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'list' | 'timeline'>('list');
   const [isAddingMarker, setIsAddingMarker] = useState(false);
+  const [formError, setFormError] = useState<string | null>(null);
 
   const [formData, setFormData] = useState({
     title: '',
@@ -80,11 +81,12 @@ export default function Observations() {
 
   const handleCreate = () => {
     setEditingObservation(null);
+    setFormError(null);
     setFormData({
       title: '',
       description: '',
       observationTime: new Date().toISOString().slice(0, 16),
-      season: 'spring',
+      season: 'spring' as Season,
       markers: [],
       media: [],
       projectId: projectFilter || activeProjectId || (projects[0]?.id ?? ''),
@@ -94,6 +96,7 @@ export default function Observations() {
 
   const handleEdit = (observation: Observation) => {
     setEditingObservation(observation);
+    setFormError(null);
     setFormData({
       title: observation.title,
       description: observation.description,
@@ -159,22 +162,36 @@ export default function Observations() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.title.trim() || !formData.projectId) return;
+    setFormError(null);
 
-    const observationData = {
-      ...formData,
-      observationTime: new Date(formData.observationTime).toISOString(),
-    };
-
-    if (editingObservation) {
-      await updateObservation({
-        ...editingObservation,
-        ...observationData,
-      });
-    } else {
-      await createObservation(observationData);
+    if (!formData.title.trim()) {
+      setFormError('请填写观察记录标题');
+      return;
     }
-    setDialogOpen(false);
+    if (!formData.projectId) {
+      setFormError('请选择所属项目');
+      return;
+    }
+
+    try {
+      const observationData = {
+        ...formData,
+        observationTime: new Date(formData.observationTime).toISOString(),
+      };
+
+      if (editingObservation) {
+        await updateObservation({
+          ...editingObservation,
+          ...observationData,
+        });
+      } else {
+        await createObservation(observationData);
+      }
+      setDialogOpen(false);
+    } catch (error) {
+      console.error('保存失败:', error);
+      setFormError('保存失败，请重试');
+    }
   };
 
   const handleConfirmDelete = async () => {
@@ -707,6 +724,13 @@ export default function Observations() {
                   )}
                 </div>
 
+                {formError && (
+                  <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm font-sans flex items-center gap-2">
+                    <AlertTriangle className="w-4 h-4 flex-shrink-0" />
+                    {formError}
+                  </div>
+                )}
+
                 <div className="flex justify-end gap-3 pt-4 border-t border-slate-100">
                   <button
                     type="button"
@@ -715,7 +739,11 @@ export default function Observations() {
                   >
                     取消
                   </button>
-                  <button type="submit" className="btn-primary text-sm py-2">
+                  <button
+                    type="submit"
+                    className="btn-primary text-sm py-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                    disabled={!formData.title.trim() || !formData.projectId}
+                  >
                     {editingObservation ? '保存修改' : '创建记录'}
                   </button>
                 </div>

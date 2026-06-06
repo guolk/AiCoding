@@ -28,6 +28,7 @@ import {
   MessageCircle,
   PersonStanding,
   Route,
+  AlertTriangle,
 } from 'lucide-react';
 import * as Dialog from '@radix-ui/react-dialog';
 import { useStore } from '../store/useStore';
@@ -58,6 +59,7 @@ export default function Pedestrian() {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [editingStudy, setEditingStudy] = useState<PedestrianStudy | null>(null);
   const [deleteId, setDeleteId] = useState<string | null>(null);
+  const [formError, setFormError] = useState<string | null>(null);
   const [timerRunning, setTimerRunning] = useState(false);
   const [timerSeconds, setTimerSeconds] = useState(0);
 
@@ -94,6 +96,7 @@ export default function Pedestrian() {
 
   const handleCreate = () => {
     setEditingStudy(null);
+    setFormError(null);
     setFormData({
       location: '',
       projectId: activeProjectId || (projects[0]?.id ?? ''),
@@ -107,6 +110,7 @@ export default function Pedestrian() {
 
   const handleEdit = (study: PedestrianStudy) => {
     setEditingStudy(study);
+    setFormError(null);
     setFormData({
       location: study.location,
       projectId: study.projectId,
@@ -199,22 +203,35 @@ export default function Pedestrian() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.location.trim() || !formData.projectId) return;
+    setFormError(null);
+
+    if (!formData.location.trim()) {
+      setFormError('请填写观测地点');
+      return;
+    }
+    if (!formData.projectId) {
+      setFormError('请选择所属项目');
+      return;
+    }
 
     const studyData = {
       ...formData,
       studyDate: new Date(formData.studyDate).toISOString(),
     };
 
-    if (editingStudy) {
-      await updatePedestrianStudy({
-        ...editingStudy,
-        ...studyData,
-      });
-    } else {
-      await createPedestrianStudy(studyData);
+    try {
+      if (editingStudy) {
+        await updatePedestrianStudy({
+          ...editingStudy,
+          ...studyData,
+        });
+      } else {
+        await createPedestrianStudy(studyData);
+      }
+      setDialogOpen(false);
+    } catch {
+      setFormError('保存失败，请重试');
     }
-    setDialogOpen(false);
   };
 
   const handleConfirmDelete = async () => {
@@ -773,6 +790,13 @@ export default function Pedestrian() {
                   )}
                 </div>
 
+                {formError && (
+                  <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm font-sans flex items-center gap-2">
+                    <AlertTriangle className="w-4 h-4 flex-shrink-0" />
+                    {formError}
+                  </div>
+                )}
+
                 <div className="flex justify-end gap-3 pt-4 border-t border-slate-100">
                   <button
                     type="button"
@@ -781,7 +805,11 @@ export default function Pedestrian() {
                   >
                     取消
                   </button>
-                  <button type="submit" className="btn-primary text-sm py-2">
+                  <button
+                    type="submit"
+                    className="btn-primary text-sm py-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                    disabled={!formData.location.trim() || !formData.projectId}
+                  >
                     {editingStudy ? '保存修改' : '创建研究'}
                   </button>
                 </div>

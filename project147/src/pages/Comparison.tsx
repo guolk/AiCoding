@@ -19,6 +19,7 @@ import {
   ArrowRight,
   LayoutGrid,
   LayoutList,
+  AlertTriangle,
 } from 'lucide-react';
 import * as Dialog from '@radix-ui/react-dialog';
 import * as Tabs from '@radix-ui/react-tabs';
@@ -35,6 +36,7 @@ export default function Comparison() {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [editingComp, setEditingComp] = useState<Comparison | null>(null);
   const [deleteId, setDeleteId] = useState<string | null>(null);
+  const [formError, setFormError] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
   const [formData, setFormData] = useState({
@@ -48,6 +50,7 @@ export default function Comparison() {
 
   const handleCreate = () => {
     setEditingComp(null);
+    setFormError(null);
     setFormData({
       title: '',
       description: '',
@@ -59,6 +62,7 @@ export default function Comparison() {
 
   const handleEdit = (comp: Comparison) => {
     setEditingComp(comp);
+    setFormError(null);
     setFormData({
       title: comp.title,
       description: comp.description,
@@ -100,21 +104,34 @@ export default function Comparison() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.title.trim() || formData.caseIds.length < 2) return;
+    setFormError(null);
+
+    if (!formData.title.trim()) {
+      setFormError('请填写对比标题');
+      return;
+    }
+    if (formData.caseIds.length < 2) {
+      setFormError('请至少选择2个案例');
+      return;
+    }
 
     const compData = {
       ...formData,
     };
 
-    if (editingComp) {
-      await updateComparison({
-        ...editingComp,
-        ...compData,
-      });
-    } else {
-      await createComparison(compData);
+    try {
+      if (editingComp) {
+        await updateComparison({
+          ...editingComp,
+          ...compData,
+        });
+      } else {
+        await createComparison(compData);
+      }
+      setDialogOpen(false);
+    } catch {
+      setFormError('保存失败，请重试');
     }
-    setDialogOpen(false);
   };
 
   const handleConfirmDelete = async () => {
@@ -454,6 +471,13 @@ export default function Comparison() {
                   )}
                 </div>
 
+                {formError && (
+                  <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm font-sans flex items-center gap-2">
+                    <AlertTriangle className="w-4 h-4 flex-shrink-0" />
+                    {formError}
+                  </div>
+                )}
+
                 <div className="flex justify-end gap-3 pt-4 border-t border-slate-100">
                   <button
                     type="button"
@@ -464,8 +488,8 @@ export default function Comparison() {
                   </button>
                   <button
                     type="submit"
-                    className="btn-primary text-sm py-2"
-                    disabled={formData.caseIds.length < 2}
+                    className="btn-primary text-sm py-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                    disabled={!formData.title.trim() || formData.caseIds.length < 2}
                   >
                     {editingComp ? '保存修改' : '创建对比'}
                   </button>

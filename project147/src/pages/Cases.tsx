@@ -36,6 +36,7 @@ export default function Cases() {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [editingCase, setEditingCase] = useState<CaseStudy | null>(null);
   const [deleteId, setDeleteId] = useState<string | null>(null);
+  const [formError, setFormError] = useState<string | null>(null);
   const [detailCase, setDetailCase] = useState<CaseStudy | null>(null);
 
   const [formData, setFormData] = useState({
@@ -60,6 +61,7 @@ export default function Cases() {
 
   const handleCreate = () => {
     setEditingCase(null);
+    setFormError(null);
     setFormData({
       title: '',
       location: '',
@@ -76,6 +78,7 @@ export default function Cases() {
 
   const handleEdit = (caseItem: CaseStudy) => {
     setEditingCase(caseItem);
+    setFormError(null);
     setFormData({
       title: caseItem.title,
       location: caseItem.location,
@@ -129,17 +132,30 @@ export default function Cases() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.title.trim() || !formData.location.trim()) return;
+    setFormError(null);
 
-    if (editingCase) {
-      await updateCaseStudy({
-        ...editingCase,
-        ...formData,
-      });
-    } else {
-      await createCaseStudy(formData);
+    if (!formData.title.trim()) {
+      setFormError('请填写案例名称');
+      return;
     }
-    setDialogOpen(false);
+    if (!formData.location.trim()) {
+      setFormError('请填写所在城市');
+      return;
+    }
+
+    try {
+      if (editingCase) {
+        await updateCaseStudy({
+          ...editingCase,
+          ...formData,
+        });
+      } else {
+        await createCaseStudy(formData);
+      }
+      setDialogOpen(false);
+    } catch {
+      setFormError('保存失败，请重试');
+    }
   };
 
   const handleConfirmDelete = async () => {
@@ -505,6 +521,13 @@ export default function Cases() {
                   )}
                 </div>
 
+                {formError && (
+                  <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm font-sans flex items-center gap-2">
+                    <AlertTriangle className="w-4 h-4 flex-shrink-0" />
+                    {formError}
+                  </div>
+                )}
+
                 <div className="flex justify-end gap-3 pt-4 border-t border-slate-100">
                   <button
                     type="button"
@@ -513,7 +536,11 @@ export default function Cases() {
                   >
                     取消
                   </button>
-                  <button type="submit" className="btn-primary text-sm py-2">
+                  <button
+                    type="submit"
+                    className="btn-primary text-sm py-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                    disabled={!formData.title.trim() || !formData.location.trim()}
+                  >
                     {editingCase ? '保存修改' : '添加案例'}
                   </button>
                 </div>

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Plus, MapPin, Building2, Users, GitCompare, TrendingUp, Clock, BookOpen } from 'lucide-react';
+import { Plus, MapPin, Building2, Users, GitCompare, TrendingUp, Clock, BookOpen, AlertTriangle } from 'lucide-react';
 import * as Dialog from '@radix-ui/react-dialog';
 import { useStore } from '../store/useStore';
 import ProjectCard from '../components/ProjectCard';
@@ -24,16 +24,19 @@ export default function Home() {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [editingProject, setEditingProject] = useState<Project | null>(null);
   const [deleteId, setDeleteId] = useState<string | null>(null);
+  const [formError, setFormError] = useState<string | null>(null);
   const [formData, setFormData] = useState({ title: '', description: '' });
 
   const handleCreate = () => {
     setEditingProject(null);
+    setFormError(null);
     setFormData({ title: '', description: '' });
     setDialogOpen(true);
   };
 
   const handleEdit = (project: Project) => {
     setEditingProject(project);
+    setFormError(null);
     setFormData({ title: project.title, description: project.description });
     setDialogOpen(true);
   };
@@ -45,18 +48,27 @@ export default function Home() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.title.trim()) return;
+    setFormError(null);
 
-    if (editingProject) {
-      await updateProject({
-        ...editingProject,
-        title: formData.title,
-        description: formData.description,
-      });
-    } else {
-      await createProject(formData);
+    if (!formData.title.trim()) {
+      setFormError('请填写项目标题');
+      return;
     }
-    setDialogOpen(false);
+
+    try {
+      if (editingProject) {
+        await updateProject({
+          ...editingProject,
+          title: formData.title,
+          description: formData.description,
+        });
+      } else {
+        await createProject(formData);
+      }
+      setDialogOpen(false);
+    } catch {
+      setFormError('保存失败，请重试');
+    }
   };
 
   const handleConfirmDelete = async () => {
@@ -291,6 +303,13 @@ export default function Home() {
                     className="input-field resize-none"
                   />
                 </div>
+                {formError && (
+                  <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm font-sans flex items-center gap-2">
+                    <AlertTriangle className="w-4 h-4 flex-shrink-0" />
+                    {formError}
+                  </div>
+                )}
+
                 <div className="flex justify-end gap-3 pt-2">
                   <button
                     type="button"
@@ -299,7 +318,11 @@ export default function Home() {
                   >
                     取消
                   </button>
-                  <button type="submit" className="btn-primary text-sm py-2">
+                  <button
+                    type="submit"
+                    className="btn-primary text-sm py-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                    disabled={!formData.title.trim()}
+                  >
                     {editingProject ? '保存修改' : '创建项目'}
                   </button>
                 </div>

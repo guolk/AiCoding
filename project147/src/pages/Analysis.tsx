@@ -29,6 +29,7 @@ export default function Analysis() {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [editingAnalysis, setEditingAnalysis] = useState<SpatialAnalysis | null>(null);
   const [deleteId, setDeleteId] = useState<string | null>(null);
+  const [formError, setFormError] = useState<string | null>(null);
 
   const [formData, setFormData] = useState({
     location: '',
@@ -56,6 +57,7 @@ export default function Analysis() {
 
   const handleCreate = () => {
     setEditingAnalysis(null);
+    setFormError(null);
     setFormData({
       location: '',
       projectId: activeProjectId || (projects[0]?.id ?? ''),
@@ -68,6 +70,7 @@ export default function Analysis() {
 
   const handleEdit = (analysis: SpatialAnalysis) => {
     setEditingAnalysis(analysis);
+    setFormError(null);
     setFormData({
       location: analysis.location,
       projectId: analysis.projectId,
@@ -136,17 +139,31 @@ export default function Analysis() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.location.trim() || !formData.projectId) return;
+    setFormError(null);
 
-    if (editingAnalysis) {
-      await updateAnalysis({
-        ...editingAnalysis,
-        ...formData,
-      });
-    } else {
-      await createAnalysis(formData);
+    if (!formData.location.trim()) {
+      setFormError('请填写分析地点');
+      return;
     }
-    setDialogOpen(false);
+    if (!formData.projectId) {
+      setFormError('请选择所属项目');
+      return;
+    }
+
+    try {
+      if (editingAnalysis) {
+        await updateAnalysis({
+          ...editingAnalysis,
+          ...formData,
+        });
+      } else {
+        await createAnalysis(formData);
+      }
+      setDialogOpen(false);
+    } catch (error) {
+      console.error('保存失败:', error);
+      setFormError('保存失败，请重试');
+    }
   };
 
   const handleConfirmDelete = async () => {
@@ -548,6 +565,13 @@ export default function Analysis() {
                   )}
                 </div>
 
+                {formError && (
+                  <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm font-sans flex items-center gap-2">
+                    <AlertTriangle className="w-4 h-4 flex-shrink-0" />
+                    {formError}
+                  </div>
+                )}
+
                 <div className="flex justify-end gap-3 pt-4 border-t border-slate-100">
                   <button
                     type="button"
@@ -556,7 +580,11 @@ export default function Analysis() {
                   >
                     取消
                   </button>
-                  <button type="submit" className="btn-primary text-sm py-2">
+                  <button
+                    type="submit"
+                    className="btn-primary text-sm py-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                    disabled={!formData.location.trim() || !formData.projectId}
+                  >
                     {editingAnalysis ? '保存修改' : '创建分析'}
                   </button>
                 </div>
