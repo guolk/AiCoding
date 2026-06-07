@@ -13,9 +13,9 @@ function generateTraceCode(): string {
 
 router.get('/', async (req: Request, res: Response) => {
   try {
-    const { plot_id, harvest_record_id } = req.query;
+    const { plot_id, start_date, end_date } = req.query;
     let query = `
-      SELECT tc.*, hr.harvest_date, hr.yield, hr.quality_grade, 
+      SELECT tc.*, hr.harvest_date, hr.yield as yield_kg, hr.quality_grade, 
              pl.plot_number, pr.crop_variety
       FROM traceability_codes tc
       LEFT JOIN harvest_records hr ON tc.harvest_record_id = hr.id
@@ -29,14 +29,35 @@ router.get('/', async (req: Request, res: Response) => {
       query += ' AND tc.plot_id = ?';
       params.push(plot_id);
     }
-    if (harvest_record_id) {
-      query += ' AND tc.harvest_record_id = ?';
-      params.push(harvest_record_id);
+    if (start_date) {
+      query += ' AND tc.generated_at >= ?';
+      params.push(start_date);
+    }
+    if (end_date) {
+      query += ' AND tc.generated_at <= ?';
+      params.push(end_date);
     }
     
     query += ' ORDER BY tc.generated_at DESC';
-    const codes = await allQuery(query, params);
-    res.json(codes);
+    const codes = await allQuery(query, params) as any[];
+    
+    const result = codes.map(code => {
+      let productInfo: any = {};
+      try {
+        productInfo = JSON.parse(code.product_info || '{}');
+      } catch (e) {
+        productInfo = {};
+      }
+      return {
+        ...code,
+        product_name: productInfo.product_name || code.crop_variety || '农产品',
+        product_description: productInfo.product_description || '',
+        production_date: productInfo.production_date || code.harvest_date,
+        batch_number: code.batch_number || productInfo.batch_number || '',
+      };
+    });
+    
+    res.json(result);
   } catch (error) {
     res.status(500).json({ error: '获取追溯码列表失败', details: (error as Error).message });
   }
@@ -156,21 +177,29 @@ router.get('/:code', async (req: Request, res: Response) => {
 
 router.post('/', async (req: Request, res: Response) => {
   try {
-    const { harvest_record_id, batch_number, product_info } = req.body;
+    const { harvest_id, harvest_record_id, batch_number, product_info, product_name, product_description, production_date } = req.body;
     
-    if (!harvest_record_id) {
+    const actualHarvestId = harvest_id || harvest_record_id;
+    
+    if (!actualHarvestId) {
       return res.status(400).json({ error: '收获记录ID为必填项' });
     }
     
-    const harvest = await getQuery('SELECT * FROM harvest_records WHERE id = ?', [harvest_record_id]) as any;
+    const harvest = await getQuery('SELECT * FROM harvest_records WHERE id = ?', [actualHarvestId]) as any;
     if (!harvest) {
       return res.status(404).json({ error: '收获记录不存在' });
     }
     
-    const existingCode = await getQuery('SELECT * FROM traceability_codes WHERE harvest_record_id = ?', [harvest_record_id]);
+    const existingCode = await getQuery('SELECT * FROM traceability_codes WHERE harvest_record_id = ?', [actualHarvestId]);
     if (existingCode) {
       return res.status(400).json({ error: '该收获记录已生成追溯码', code: (existingCode as any).code });
     }
+    
+    const finalProductInfo = product_info || JSON.stringify({
+      product_name,
+      product_description,
+      production_date,
+    });
     
     const id = uuidv4();
     const code = generateTraceCode();
@@ -178,19 +207,33 @@ router.post('/', async (req: Request, res: Response) => {
     await runQuery(`
       INSERT INTO traceability_codes (id, code, harvest_record_id, plot_id, batch_number, product_info)
       VALUES (?, ?, ?, ?, ?, ?)
-    `, [id, code, harvest_record_id, harvest.plot_id, batch_number, product_info]);
+    `, [id, code, actualHarvestId, harvest.plot_id, batch_number, finalProductInfo]);
     
     const traceCode = await getQuery(`
-      SELECT tc.*, hr.harvest_date, hr.yield, hr.quality_grade, 
+      SELECT tc.*, hr.harvest_date, hr.yield as yield_kg, hr.quality_grade, 
              pl.plot_number, pr.crop_variety
       FROM traceability_codes tc
       LEFT JOIN harvest_records hr ON tc.harvest_record_id = hr.id
       LEFT JOIN plots pl ON tc.plot_id = pl.id
       LEFT JOIN planting_records pr ON hr.planting_record_id = pr.id
       WHERE tc.id = ?
-    `, [id]);
+    `, [id]) as any;
     
-    res.status(201).json(traceCode);
+    let productInfoParsed: any = {};
+    try {
+      productInfoParsed = JSON.parse(traceCode.product_info || '{}');
+    } catch (e) {
+      productInfoParsed = {};
+    }
+    
+    const result = {
+      ...traceCode,
+      product_name: productInfoParsed.product_name || traceCode.crop_variety || '农产品',
+      product_description: productInfoParsed.product_description || '',
+      production_date: productInfoParsed.production_date || traceCode.harvest_date,
+    };
+    
+    res.status(201).json(result);
   } catch (error) {
     res.status(500).json({ error: '生成追溯码失败', details: (error as Error).message });
   }
@@ -203,7 +246,23 @@ router.put('/:code', async (req: Request, res: Response) => {
       return res.status(404).json({ error: '追溯码不存在' });
     }
     
-    const { batch_number, product_info, qr_code_path } = req.body;
+    const existingData = existing as any;
+    const { batch_number, product_info, qr_code_path, product_name, product_description, production_date } = req.body;
+    
+    let finalProductInfo = product_info;
+    if (product_name !== undefined || product_description !== undefined || production_date !== undefined) {
+      let existingProductInfo: any = {};
+      try {
+        existingProductInfo = JSON.parse(existingData.product_info || '{}');
+      } catch (e) {
+        existingProductInfo = {};
+      }
+      finalProductInfo = JSON.stringify({
+        product_name: product_name ?? existingProductInfo.product_name,
+        product_description: product_description ?? existingProductInfo.product_description,
+        production_date: production_date ?? existingProductInfo.production_date,
+      });
+    }
     
     await runQuery(`
       UPDATE traceability_codes SET
@@ -211,19 +270,33 @@ router.put('/:code', async (req: Request, res: Response) => {
         product_info = COALESCE(?, product_info),
         qr_code_path = COALESCE(?, qr_code_path)
       WHERE code = ?
-    `, [batch_number, product_info, qr_code_path, req.params.code]);
+    `, [batch_number, finalProductInfo, qr_code_path, req.params.code]);
     
     const traceCode = await getQuery(`
-      SELECT tc.*, hr.harvest_date, hr.yield, hr.quality_grade, 
+      SELECT tc.*, hr.harvest_date, hr.yield as yield_kg, hr.quality_grade, 
              pl.plot_number, pr.crop_variety
       FROM traceability_codes tc
       LEFT JOIN harvest_records hr ON tc.harvest_record_id = hr.id
       LEFT JOIN plots pl ON tc.plot_id = pl.id
       LEFT JOIN planting_records pr ON hr.planting_record_id = pr.id
       WHERE tc.code = ?
-    `, [req.params.code]);
+    `, [req.params.code]) as any;
     
-    res.json(traceCode);
+    let productInfoParsed: any = {};
+    try {
+      productInfoParsed = JSON.parse(traceCode.product_info || '{}');
+    } catch (e) {
+      productInfoParsed = {};
+    }
+    
+    const result = {
+      ...traceCode,
+      product_name: productInfoParsed.product_name || traceCode.crop_variety || '农产品',
+      product_description: productInfoParsed.product_description || '',
+      production_date: productInfoParsed.production_date || traceCode.harvest_date,
+    };
+    
+    res.json(result);
   } catch (error) {
     res.status(500).json({ error: '更新追溯码失败', details: (error as Error).message });
   }

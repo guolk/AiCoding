@@ -28,9 +28,10 @@ const PlotDetail: React.FC = () => {
     test_date: '',
     ph: '',
     organic_matter: '',
-    nitrogen: '',
-    phosphorus: '',
-    potassium: '',
+    total_nitrogen: '',
+    available_phosphorus: '',
+    available_potassium: '',
+    testing_agency: '',
     notes: '',
   });
 
@@ -77,9 +78,9 @@ const PlotDetail: React.FC = () => {
         ...soilTestForm,
         ph: soilTestForm.ph ? parseFloat(soilTestForm.ph) : undefined,
         organic_matter: soilTestForm.organic_matter ? parseFloat(soilTestForm.organic_matter) : undefined,
-        nitrogen: soilTestForm.nitrogen ? parseFloat(soilTestForm.nitrogen) : undefined,
-        phosphorus: soilTestForm.phosphorus ? parseFloat(soilTestForm.phosphorus) : undefined,
-        potassium: soilTestForm.potassium ? parseFloat(soilTestForm.potassium) : undefined,
+        total_nitrogen: soilTestForm.total_nitrogen ? parseFloat(soilTestForm.total_nitrogen) : undefined,
+        available_phosphorus: soilTestForm.available_phosphorus ? parseFloat(soilTestForm.available_phosphorus) : undefined,
+        available_potassium: soilTestForm.available_potassium ? parseFloat(soilTestForm.available_potassium) : undefined,
       };
       if (editingSoilTest) {
         await plotsAPI.updateSoilTest(editingSoilTest.id, data);
@@ -132,9 +133,10 @@ const PlotDetail: React.FC = () => {
       test_date: '',
       ph: '',
       organic_matter: '',
-      nitrogen: '',
-      phosphorus: '',
-      potassium: '',
+      total_nitrogen: '',
+      available_phosphorus: '',
+      available_potassium: '',
+      testing_agency: '',
       notes: '',
     });
   };
@@ -158,9 +160,10 @@ const PlotDetail: React.FC = () => {
       test_date: test.test_date,
       ph: test.ph?.toString() || '',
       organic_matter: test.organic_matter?.toString() || '',
-      nitrogen: test.nitrogen?.toString() || '',
-      phosphorus: test.phosphorus?.toString() || '',
-      potassium: test.potassium?.toString() || '',
+      total_nitrogen: test.total_nitrogen?.toString() || '',
+      available_phosphorus: test.available_phosphorus?.toString() || '',
+      available_potassium: test.available_potassium?.toString() || '',
+      testing_agency: test.testing_agency || '',
       notes: test.notes || '',
     });
     setSoilTestModalOpen(true);
@@ -302,10 +305,11 @@ const PlotDetail: React.FC = () => {
                   <tr>
                     <th>检测日期</th>
                     <th>pH值</th>
-                    <th>有机质(%)</th>
-                    <th>氮(mg/kg)</th>
-                    <th>磷(mg/kg)</th>
-                    <th>钾(mg/kg)</th>
+                    <th>有机质(g/kg)</th>
+                    <th>全氮(g/kg)</th>
+                    <th>有效磷(mg/kg)</th>
+                    <th>速效钾(mg/kg)</th>
+                    <th>检测机构</th>
                     <th>备注</th>
                     <th>操作</th>
                   </tr>
@@ -316,9 +320,10 @@ const PlotDetail: React.FC = () => {
                       <td>{t.test_date}</td>
                       <td>{t.ph || '-'}</td>
                       <td>{t.organic_matter || '-'}</td>
-                      <td>{t.nitrogen || '-'}</td>
-                      <td>{t.phosphorus || '-'}</td>
-                      <td>{t.potassium || '-'}</td>
+                      <td>{t.total_nitrogen || '-'}</td>
+                      <td>{t.available_phosphorus || '-'}</td>
+                      <td>{t.available_potassium || '-'}</td>
+                      <td>{t.testing_agency || '-'}</td>
                       <td>{t.notes || '-'}</td>
                       <td className="actions">
                         <button className="btn btn-sm btn-secondary" onClick={() => editSoilTest(t)}>编辑</button>
@@ -434,7 +439,7 @@ const PlotDetail: React.FC = () => {
               />
             </div>
             <div className="form-group">
-              <label>有机质(%)</label>
+              <label>有机质(g/kg)</label>
               <input
                 type="number"
                 step="0.1"
@@ -446,35 +451,46 @@ const PlotDetail: React.FC = () => {
           </div>
           <div className="form-row">
             <div className="form-group">
-              <label>氮(mg/kg)</label>
+              <label>全氮(g/kg)</label>
               <input
                 type="number"
                 step="0.1"
                 min="0"
-                value={soilTestForm.nitrogen}
-                onChange={e => setSoilTestForm({ ...soilTestForm, nitrogen: e.target.value })}
+                value={soilTestForm.total_nitrogen}
+                onChange={e => setSoilTestForm({ ...soilTestForm, total_nitrogen: e.target.value })}
               />
             </div>
             <div className="form-group">
-              <label>磷(mg/kg)</label>
+              <label>有效磷(mg/kg)</label>
               <input
                 type="number"
                 step="0.1"
                 min="0"
-                value={soilTestForm.phosphorus}
-                onChange={e => setSoilTestForm({ ...soilTestForm, phosphorus: e.target.value })}
+                value={soilTestForm.available_phosphorus}
+                onChange={e => setSoilTestForm({ ...soilTestForm, available_phosphorus: e.target.value })}
               />
             </div>
           </div>
-          <div className="form-group">
-            <label>钾(mg/kg)</label>
-            <input
-              type="number"
-              step="0.1"
-              min="0"
-              value={soilTestForm.potassium}
-              onChange={e => setSoilTestForm({ ...soilTestForm, potassium: e.target.value })}
-            />
+          <div className="form-row">
+            <div className="form-group">
+              <label>速效钾(mg/kg)</label>
+              <input
+                type="number"
+                step="0.1"
+                min="0"
+                value={soilTestForm.available_potassium}
+                onChange={e => setSoilTestForm({ ...soilTestForm, available_potassium: e.target.value })}
+              />
+            </div>
+            <div className="form-group">
+              <label>检测机构</label>
+              <input
+                type="text"
+                value={soilTestForm.testing_agency}
+                onChange={e => setSoilTestForm({ ...soilTestForm, testing_agency: e.target.value })}
+                placeholder="如：县农业检测中心"
+              />
+            </div>
           </div>
           <div className="form-group">
             <label>备注</label>

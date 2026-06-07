@@ -216,7 +216,7 @@ router.get('/:id/soil-tests', async (req: Request, res: Response) => {
 
 router.post('/:id/soil-tests', async (req: Request, res: Response) => {
   try {
-    const { test_date, ph, organic_matter, nitrogen, phosphorus, potassium, notes } = req.body;
+    const { test_date, ph, organic_matter, total_nitrogen, available_phosphorus, available_potassium, testing_agency, notes } = req.body;
     
     if (!test_date) {
       return res.status(400).json({ error: '检测日期为必填项' });
@@ -224,9 +224,9 @@ router.post('/:id/soil-tests', async (req: Request, res: Response) => {
     
     const id = uuidv4();
     await runQuery(`
-      INSERT INTO soil_tests (id, plot_id, test_date, ph, organic_matter, nitrogen, phosphorus, potassium, notes)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-    `, [id, req.params.id, test_date, ph, organic_matter, nitrogen, phosphorus, potassium, notes]);
+      INSERT INTO soil_tests (id, plot_id, test_date, ph, organic_matter, total_nitrogen, available_phosphorus, available_potassium, testing_agency, notes)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `, [id, req.params.id, test_date, ph, organic_matter, total_nitrogen, available_phosphorus, available_potassium, testing_agency, notes]);
     
     const test = await getQuery<SoilTest>('SELECT * FROM soil_tests WHERE id = ?', [id]);
     res.status(201).json(test);
@@ -237,7 +237,7 @@ router.post('/:id/soil-tests', async (req: Request, res: Response) => {
 
 router.put('/soil-tests/:testId', async (req: Request, res: Response) => {
   try {
-    const { test_date, ph, organic_matter, nitrogen, phosphorus, potassium, notes } = req.body;
+    const { test_date, ph, organic_matter, total_nitrogen, available_phosphorus, available_potassium, testing_agency, notes } = req.body;
     const existing = await getQuery('SELECT * FROM soil_tests WHERE id = ?', [req.params.testId]);
     
     if (!existing) {
@@ -249,12 +249,13 @@ router.put('/soil-tests/:testId', async (req: Request, res: Response) => {
         test_date = COALESCE(?, test_date),
         ph = COALESCE(?, ph),
         organic_matter = COALESCE(?, organic_matter),
-        nitrogen = COALESCE(?, nitrogen),
-        phosphorus = COALESCE(?, phosphorus),
-        potassium = COALESCE(?, potassium),
+        total_nitrogen = COALESCE(?, total_nitrogen),
+        available_phosphorus = COALESCE(?, available_phosphorus),
+        available_potassium = COALESCE(?, available_potassium),
+        testing_agency = COALESCE(?, testing_agency),
         notes = COALESCE(?, notes)
       WHERE id = ?
-    `, [test_date, ph, organic_matter, nitrogen, phosphorus, potassium, notes, req.params.testId]);
+    `, [test_date, ph, organic_matter, total_nitrogen, available_phosphorus, available_potassium, testing_agency, notes, req.params.testId]);
     
     const test = await getQuery<SoilTest>('SELECT * FROM soil_tests WHERE id = ?', [req.params.testId]);
     res.json(test);
