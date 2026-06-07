@@ -19,6 +19,8 @@ interface AppState {
   getExhibitionsByStudentId: (studentId: string) => ExhibitionRecord[];
   getPortfolioArtworks: (studentId: string) => Artwork[];
   addCommunication: (comm: Omit<Communication, 'id' | 'date'>) => void;
+  addStudent: (student: Omit<Student, 'id'>) => void;
+  addExhibition: (exhibition: Omit<ExhibitionRecord, 'id'>) => void;
 }
 
 export const useAppStore = create<AppState>((set, get) => ({
@@ -71,5 +73,21 @@ export const useAppStore = create<AppState>((set, get) => ({
       date: new Date().toISOString().split('T')[0],
     };
     set({ communications: [...get().communications, newComm] });
+  },
+
+  addStudent: (student) => {
+    const newStudent: Student = {
+      ...student,
+      id: `student${Date.now()}`,
+    };
+    set({ students: [...get().students, newStudent] });
+  },
+
+  addExhibition: (exhibition) => {
+    const newExhibition: ExhibitionRecord = {
+      ...exhibition,
+      id: `exhibition${Date.now()}`,
+    };
+    set({ exhibitions: [...get().exhibitions, newExhibition] });
   },
 }));

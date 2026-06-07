@@ -3,12 +3,23 @@ import { useNavigate } from 'react-router-dom';
 import { Award, Calendar, MapPin, Star, Plus, Eye } from 'lucide-react';
 import { useAppStore } from '../store';
 import Tabs from '../components/ui/Tabs';
+import Modal from '../components/ui/Modal';
+import type { ExhibitionRecord } from '../types';
 
 export default function Exhibitions() {
   const navigate = useNavigate();
-  const { exhibitions, getStudentById, getPortfolioArtworks, artworks, students } = useAppStore();
+  const { exhibitions, getStudentById, getPortfolioArtworks, artworks, students, addExhibition } = useAppStore();
   const [activeTab, setActiveTab] = useState('exhibitions');
   const [selectedStudent, setSelectedStudent] = useState('all');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [formData, setFormData] = useState({
+    studentId: '',
+    exhibitionName: '',
+    date: new Date().toISOString().split('T')[0],
+    artworkTitle: '',
+    award: '参展',
+    experience: '',
+  });
 
   const tabs = [
     { id: 'exhibitions', label: '参展记录', icon: <Award size={18} /> },
@@ -42,6 +53,27 @@ export default function Exhibitions() {
 
   const portfolioArtworks = getAllPortfolioArtworks();
 
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const newExhibition: Omit<ExhibitionRecord, 'id'> = {
+      ...formData,
+    };
+    addExhibition(newExhibition);
+    setIsModalOpen(false);
+    setFormData({
+      studentId: '',
+      exhibitionName: '',
+      date: new Date().toISOString().split('T')[0],
+      artworkTitle: '',
+      award: '参展',
+      experience: '',
+    });
+  };
+
+  const getStudentArtworks = (studentId: string) => {
+    return artworks.filter(a => a.studentId === studentId);
+  };
+
   return (
     <div className="animate-fade-in">
       <div className="flex items-center justify-between mb-8">
@@ -53,7 +85,10 @@ export default function Exhibitions() {
             记录学员参展经历，整理优秀作品集
           </p>
         </div>
-        <button className="btn-primary flex items-center gap-2">
+        <button 
+          className="btn-primary flex items-center gap-2"
+          onClick={() => setIsModalOpen(true)}
+        >
           <Plus size={20} />
           添加记录
         </button>
@@ -217,6 +252,113 @@ export default function Exhibitions() {
           </div>
         </div>
       )}
+
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="🏅 新增参展记录" maxWidth="max-w-2xl">
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">学员</label>
+            <select
+              required
+              className="input-field"
+              value={formData.studentId}
+              onChange={(e) => setFormData({ ...formData, studentId: e.target.value, artworkTitle: '' })}
+            >
+              <option value="">请选择学员</option>
+              {students.map(student => (
+                <option key={student.id} value={student.id}>
+                  {student.name} - {student.className}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">展览名称</label>
+            <input
+              type="text"
+              required
+              className="input-field"
+              value={formData.exhibitionName}
+              onChange={(e) => setFormData({ ...formData, exhibitionName: e.target.value })}
+              placeholder="例如：2024年全国少儿绘画大赛"
+            />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">展览日期</label>
+              <input
+                type="date"
+                required
+                className="input-field"
+                value={formData.date}
+                onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">获奖情况</label>
+              <select
+                className="input-field"
+                value={formData.award}
+                onChange={(e) => setFormData({ ...formData, award: e.target.value })}
+              >
+                <option>参展</option>
+                <option>铜奖</option>
+                <option>银奖</option>
+                <option>金奖</option>
+                <option>一等奖</option>
+                <option>二等奖</option>
+                <option>三等奖</option>
+                <option>优秀奖</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">参展作品</label>
+            <select
+              required
+              className="input-field"
+              value={formData.artworkTitle}
+              onChange={(e) => setFormData({ ...formData, artworkTitle: e.target.value })}
+            >
+              <option value="">请选择参展作品</option>
+              {formData.studentId && getStudentArtworks(formData.studentId).map(artwork => (
+                <option key={artwork.id} value={artwork.title}>
+                  {artwork.title}
+                </option>
+              ))}
+              {!formData.studentId && (
+                <option value="" disabled>请先选择学员</option>
+              )}
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">展览体验</label>
+            <textarea
+              rows={4}
+              className="input-field"
+              value={formData.experience}
+              onChange={(e) => setFormData({ ...formData, experience: e.target.value })}
+              placeholder="记录学员的参展感受、收获和成长..."
+            />
+          </div>
+
+          <div className="flex justify-end gap-4 pt-4">
+            <button
+              type="button"
+              onClick={() => setIsModalOpen(false)}
+              className="px-6 py-3 rounded-xl bg-gray-100 text-gray-700 font-medium hover:bg-gray-200 transition-colors"
+            >
+              取消
+            </button>
+            <button type="submit" className="btn-primary">
+              确认添加
+            </button>
+          </div>
+        </form>
+      </Modal>
     </div>
   );
 }
