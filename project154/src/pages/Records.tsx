@@ -355,7 +355,14 @@ export default function Records() {
   const watchFeeling = watch('feeling');
 
   const onSubmit = async (data: RecordFormData) => {
-    const success = await createRecord(data);
+    const formattedData: RecordFormData = {
+      ...data,
+      avgSpeed: Number(data.avgSpeed),
+      maxSpeed: Number(data.maxSpeed),
+      duration: Number(data.duration),
+      calories: Number(data.calories),
+    };
+    const success = await createRecord(formattedData);
     if (success) {
       setIsModalOpen(false);
       reset();

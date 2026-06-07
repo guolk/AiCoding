@@ -97,7 +97,7 @@ export default function Routes() {
     }
 
     loadRoutes(newFilters);
-  }, []);
+  }, [searchParams]);
 
   const loadRoutes = async (newFilters = {}) => {
     const result = await fetchRoutes(newFilters);

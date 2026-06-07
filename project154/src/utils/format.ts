@@ -42,51 +42,67 @@ export const formatRelativeTime = (date: string | Date): string => {
   return formatDistanceToNow(new Date(date), { addSuffix: true, locale: zhCN });
 };
 
-export const formatDuration = (minutes: number): string => {
-  const hours = Math.floor(minutes / 60);
-  const mins = Math.floor(minutes % 60);
+export const formatDuration = (minutes: number | string | null | undefined): string => {
+  const numMinutes = typeof minutes === 'string' ? parseFloat(minutes) : Number(minutes);
+  if (isNaN(numMinutes)) return '0分钟';
+  const hours = Math.floor(numMinutes / 60);
+  const mins = Math.floor(numMinutes % 60);
   if (hours > 0) {
     return `${hours}小时${mins}分钟`;
   }
   return `${mins}分钟`;
 };
 
-export const formatDistance = (km: number): string => {
-  if (km < 1) {
-    return `${Math.round(km * 1000)}米`;
+export const formatDistance = (km: number | string | null | undefined): string => {
+  const numKm = typeof km === 'string' ? parseFloat(km) : Number(km);
+  if (isNaN(numKm)) return '0.0公里';
+  if (numKm < 1) {
+    return `${Math.round(numKm * 1000)}米`;
   }
-  return `${km.toFixed(1)}公里`;
+  return `${numKm.toFixed(1)}公里`;
 };
 
-export const formatElevation = (meters: number): string => {
-  return `${meters}米`;
+export const formatElevation = (meters: number | string | null | undefined): string => {
+  const numMeters = typeof meters === 'string' ? parseFloat(meters) : Number(meters);
+  if (isNaN(numMeters)) return '0米';
+  return `${Math.round(numMeters)}米`;
 };
 
-export const formatSpeed = (speed: number): string => {
-  return `${speed.toFixed(1)} km/h`;
+export const formatSpeed = (speed: number | string | null | undefined): string => {
+  const numSpeed = typeof speed === 'string' ? parseFloat(speed) : Number(speed);
+  if (isNaN(numSpeed)) return '0.0 km/h';
+  return `${numSpeed.toFixed(1)} km/h`;
 };
 
-export const formatCalories = (calories: number): string => {
-  return `${calories} 千卡`;
+export const formatCalories = (calories: number | string | null | undefined): string => {
+  const numCalories = typeof calories === 'string' ? parseFloat(calories) : Number(calories);
+  if (isNaN(numCalories)) return '0 千卡';
+  return `${Math.round(numCalories)} 千卡`;
 };
 
-export const formatRating = (rating: number): string => {
-  return rating.toFixed(1);
+export const formatRating = (rating: number | string | null | undefined): string => {
+  const numRating = typeof rating === 'string' ? parseFloat(rating) : Number(rating);
+  if (isNaN(numRating)) return '0.0';
+  return numRating.toFixed(1);
 };
 
-export const getRatingColor = (rating: number): string => {
-  if (rating >= 4.5) return 'text-green-500';
-  if (rating >= 4.0) return 'text-emerald-500';
-  if (rating >= 3.5) return 'text-yellow-500';
-  if (rating >= 3.0) return 'text-orange-500';
+export const getRatingColor = (rating: number | string | null | undefined): string => {
+  const numRating = typeof rating === 'string' ? parseFloat(rating) : Number(rating);
+  if (isNaN(numRating)) return 'text-gray-500';
+  if (numRating >= 4.5) return 'text-green-500';
+  if (numRating >= 4.0) return 'text-emerald-500';
+  if (numRating >= 3.5) return 'text-yellow-500';
+  if (numRating >= 3.0) return 'text-orange-500';
   return 'text-red-500';
 };
 
-export const getRatingBgColor = (rating: number): string => {
-  if (rating >= 4.5) return 'bg-green-500';
-  if (rating >= 4.0) return 'bg-emerald-500';
-  if (rating >= 3.5) return 'bg-yellow-500';
-  if (rating >= 3.0) return 'bg-orange-500';
+export const getRatingBgColor = (rating: number | string | null | undefined): string => {
+  const numRating = typeof rating === 'string' ? parseFloat(rating) : Number(rating);
+  if (isNaN(numRating)) return 'bg-gray-500';
+  if (numRating >= 4.5) return 'bg-green-500';
+  if (numRating >= 4.0) return 'bg-emerald-500';
+  if (numRating >= 3.5) return 'bg-yellow-500';
+  if (numRating >= 3.0) return 'bg-orange-500';
   return 'bg-red-500';
 };
 
