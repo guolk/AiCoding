@@ -183,7 +183,7 @@ export default function RelicForm() {
             </button>
           )}
           {!isView && (
-            <button onClick={handleSubmit} className="btn-primary flex items-center gap-2">
+            <button type="submit" form="relic-form" className="btn-primary flex items-center gap-2">
               <Save className="w-4 h-4" />
               保存
             </button>
@@ -191,7 +191,7 @@ export default function RelicForm() {
         </div>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form id="relic-form" onSubmit={handleSubmit} className="space-y-6">
         <div className="card-border-gold p-6">
           <h2 className="text-lg font-semibold text-ink mb-4 flex items-center gap-2">
             <Image className="w-5 h-5 text-accent-gold" />

@@ -47,7 +47,7 @@ export async function createMaterial(data: Omit<Material, 'id' | 'createdAt'>): 
     VALUES (?, ?, ?, ?, ?, ?, ?)
   `);
   
-  stmt.run(id, data.type, data.title, data.description, data.filePath, JSON.stringify(data.metadata), now);
+  stmt.run([id, data.type, data.title, data.description, data.filePath, JSON.stringify(data.metadata), now]);
   saveDatabase();
   
   return { ...data, id, createdAt: now };
@@ -70,7 +70,7 @@ export async function updateMaterial(id: string, data: Partial<Material>): Promi
   values.push(id);
   
   const stmt = db.prepare(`UPDATE materials SET ${updates.join(', ')} WHERE id = ?`);
-  stmt.run(...values);
+  stmt.run(values);
   
   saveDatabase();
   return getMaterialById(id);

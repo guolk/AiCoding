@@ -110,12 +110,14 @@ export async function createNote(data: Omit<ResearchNote, 'id' | 'createdAt' | '
   const id = uuidv4();
   const now = new Date().toISOString();
   
+  const params = [id, data.relicId || null, data.title, data.content, data.personalInsights, JSON.stringify(data.tags), now, now];
+  
   const stmt = db.prepare(`
     INSERT INTO research_notes (id, relic_id, title, content, personal_insights, tags, created_at, updated_at)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?)
   `);
   
-  stmt.run(id, data.relicId || null, data.title, data.content, data.personalInsights, JSON.stringify(data.tags), now, now);
+  stmt.run(params);
   saveDatabase();
   
   return {
@@ -149,7 +151,7 @@ export async function updateNote(id: string, data: Partial<ResearchNote>): Promi
   values.push(id);
   
   const stmt = db.prepare(`UPDATE research_notes SET ${updates.join(', ')} WHERE id = ?`);
-  stmt.run(...values);
+  stmt.run(values);
   
   saveDatabase();
   return getNoteById(id);
@@ -172,7 +174,7 @@ export async function addReference(noteId: string, ref: Omit<Reference, 'id' | '
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
   `);
   
-  stmt.run(id, noteId, ref.title, ref.author, ref.publication, ref.year, ref.page, ref.excerpt, ref.doi || null);
+  stmt.run([id, noteId, ref.title, ref.author, ref.publication, ref.year, ref.page, ref.excerpt, ref.doi || null]);
   saveDatabase();
   
   return { ...ref, id, noteId };
@@ -200,7 +202,7 @@ export async function updateReference(refId: string, ref: Partial<Reference>): P
   values.push(refId);
   
   const stmt = db.prepare(`UPDATE "references" SET ${updates.join(', ')} WHERE id = ?`);
-  stmt.run(...values);
+  stmt.run(values);
   saveDatabase();
   
   const updated = checkStmt.getAsObject(refId);
@@ -224,7 +226,7 @@ export async function addViewpoint(noteId: string, vp: Omit<Viewpoint, 'id' | 'n
     VALUES (?, ?, ?, ?, ?, ?, ?)
   `);
   
-  stmt.run(id, noteId, vp.scholar, vp.aspect, vp.content, vp.evidence, vp.confidence);
+  stmt.run([id, noteId, vp.scholar, vp.aspect, vp.content, vp.evidence, vp.confidence]);
   saveDatabase();
   
   return { ...vp, id, noteId };
@@ -250,7 +252,7 @@ export async function updateViewpoint(vpId: string, vp: Partial<Viewpoint>): Pro
   values.push(vpId);
   
   const stmt = db.prepare(`UPDATE viewpoints SET ${updates.join(', ')} WHERE id = ?`);
-  stmt.run(...values);
+  stmt.run(values);
   saveDatabase();
   
   const updated = checkStmt.getAsObject(vpId);

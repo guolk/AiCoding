@@ -78,23 +78,21 @@ router.post('/upload', upload.single('file'), async (req, res) => {
       return res.status(400).json({ error: 'No file uploaded' });
     }
     
+    console.log('Upload request received, body:', req.body);
+    console.log('Uploaded file:', req.file);
+    
     const type = req.body.type as Material['type'];
-    const title = req.body.title || req.file.originalname;
-    const description = req.body.description || '';
-    const metadata = req.body.metadata ? JSON.parse(req.body.metadata) : {};
+    if (!type) {
+      return res.status(400).json({ error: 'Type is required' });
+    }
     
     const typeDir = type === 'pdf' ? 'pdfs' : type === 'rubbing' ? 'rubbings' : 'maps';
     const filePath = `/uploads/${typeDir}/${req.file.filename}`;
     
-    const material = await createMaterial({
-      type,
-      title,
-      description,
+    res.status(200).json({
       filePath,
-      metadata
+      title: req.body.title || req.file.originalname
     });
-    
-    res.status(201).json(material);
   } catch (error) {
     console.error('Failed to upload material:', error);
     res.status(500).json({ error: 'Failed to upload material' });

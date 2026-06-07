@@ -47,7 +47,7 @@ export async function createAnalysis(data: Omit<TypeAnalysis, 'id' | 'createdAt'
     VALUES (?, ?, ?, ?, ?, ?, ?)
   `);
   
-  stmt.run(id, data.name, data.type, data.description, JSON.stringify(data.relicIds), JSON.stringify(data.analysisData), now);
+  stmt.run([id, data.name, data.type, data.description, JSON.stringify(data.relicIds), JSON.stringify(data.analysisData), now]);
   saveDatabase();
   
   return { ...data, id, createdAt: now };
@@ -70,7 +70,7 @@ export async function updateAnalysis(id: string, data: Partial<TypeAnalysis>): P
   values.push(id);
   
   const stmt = db.prepare(`UPDATE type_analysis SET ${updates.join(', ')} WHERE id = ?`);
-  stmt.run(...values);
+  stmt.run(values);
   
   saveDatabase();
   return getAnalysisById(id);

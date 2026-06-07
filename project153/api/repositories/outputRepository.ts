@@ -47,7 +47,7 @@ export async function createOutput(data: Omit<Output, 'id' | 'createdAt'>): Prom
     VALUES (?, ?, ?, ?, ?, ?, ?)
   `);
   
-  stmt.run(id, data.type, data.title, JSON.stringify(data.content), JSON.stringify(data.relicIds), JSON.stringify(data.noteIds), now);
+  stmt.run([id, data.type, data.title, JSON.stringify(data.content), JSON.stringify(data.relicIds), JSON.stringify(data.noteIds), now]);
   saveDatabase();
   
   return { ...data, id, createdAt: now };
@@ -70,7 +70,7 @@ export async function updateOutput(id: string, data: Partial<Output>): Promise<O
   values.push(id);
   
   const stmt = db.prepare(`UPDATE outputs SET ${updates.join(', ')} WHERE id = ?`);
-  stmt.run(...values);
+  stmt.run(values);
   
   saveDatabase();
   return getOutputById(id);

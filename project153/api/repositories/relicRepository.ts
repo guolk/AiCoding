@@ -98,13 +98,13 @@ export async function createRelic(data: Omit<Relic, 'id' | 'createdAt' | 'update
     ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `);
   
-  stmt.run(
+  stmt.run([
     id, data.name, data.category, data.era, data.material, data.decoration, data.inscription,
     data.excavateLocation, data.currentLocation, data.relicNumber,
     data.dimensions.height, data.dimensions.width, data.dimensions.length,
     data.dimensions.diameter, data.dimensions.weight, data.dimensions.unit,
     now, now
-  );
+  ]);
   
   saveDatabase();
   
@@ -163,7 +163,7 @@ export async function updateRelic(id: string, data: Partial<Relic>): Promise<Rel
   values.push(id);
   
   const stmt = db.prepare(`UPDATE relics SET ${updates.join(', ')} WHERE id = ?`);
-  stmt.run(...values);
+  stmt.run(values);
   
   saveDatabase();
   
@@ -188,7 +188,7 @@ export async function addPhoto(relicId: string, photo: Omit<RelicPhoto, 'id' | '
     VALUES (?, ?, ?, ?, ?, ?)
   `);
   
-  stmt.run(id, relicId, photo.type, photo.url, photo.caption, now);
+  stmt.run([id, relicId, photo.type, photo.url, photo.caption, now]);
   saveDatabase();
   
   return {

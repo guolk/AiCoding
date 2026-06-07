@@ -234,7 +234,7 @@ export default function ResearchNoteForm() {
             </button>
           )}
           {!isView && (
-            <button onClick={handleSubmit} className="btn-primary flex items-center gap-2">
+            <button type="submit" form="note-form" className="btn-primary flex items-center gap-2">
               <Save className="w-4 h-4" />
               保存
             </button>
@@ -242,7 +242,7 @@ export default function ResearchNoteForm() {
         </div>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form id="note-form" onSubmit={handleSubmit} className="space-y-6">
         <div className="card-border-gold p-6">
           <h2 className="text-lg font-semibold text-ink mb-4">基本信息</h2>
           <div className="divider-gold mb-6" />

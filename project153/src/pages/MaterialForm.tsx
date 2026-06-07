@@ -118,9 +118,9 @@ export default function MaterialForm() {
 
     const file = e.target.files[0];
     const formDataFile = new FormData();
-    formDataFile.append('file', file);
     formDataFile.append('type', formData.type || 'pdf');
     formDataFile.append('title', formData.title || file.name);
+    formDataFile.append('file', file);
 
     try {
       setUploading(true);
@@ -173,13 +173,13 @@ export default function MaterialForm() {
             </p>
           </div>
         </div>
-        <button onClick={handleSubmit} className="btn-primary flex items-center gap-2">
+        <button type="submit" form="material-form" className="btn-primary flex items-center gap-2">
           <Save className="w-4 h-4" />
           保存
         </button>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form id="material-form" onSubmit={handleSubmit} className="space-y-6">
         <div className="card-border-gold p-6">
           <h2 className="text-lg font-semibold text-ink mb-4">基本信息</h2>
           <div className="divider-gold mb-6" />
