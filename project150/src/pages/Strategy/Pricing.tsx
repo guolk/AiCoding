@@ -31,7 +31,7 @@ import {
 import type { PriceAdjustment, Product } from '@/../shared/types';
 
 export function Pricing() {
-  const { priceAdjustments, products } = useAppStore();
+  const { priceAdjustments, products, addPriceAdjustment } = useAppStore();
   const [showAddForm, setShowAddForm] = useState(false);
   const [selectedProductId, setSelectedProductId] = useState('');
   const [newPrice, setNewPrice] = useState('');
@@ -93,7 +93,7 @@ export function Pricing() {
       createdAt: new Date().toISOString().split('T')[0],
     };
 
-    console.log('New adjustment:', newAdjustment);
+    addPriceAdjustment(newAdjustment);
     setShowAddForm(false);
     setSelectedProductId('');
     setNewPrice('');

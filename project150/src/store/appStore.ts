@@ -50,80 +50,128 @@ interface AppState {
   toggleSidebar: () => void;
   updateReviewResponse: (id: string, response: string, category: string) => void;
   updateProductStatus: (id: string, status: Product['status']) => void;
+  addPriceAdjustment: (adjustment: PriceAdjustment) => void;
+  updateInventory: (id: string, quantity: number, type: 'add' | 'reduce') => void;
+  addShipment: (shipment: Shipment) => void;
+  addPromotion: (promotion: Promotion) => void;
+  updatePromotion: (id: string, updates: Partial<Promotion>) => void;
 }
 
 export const useAppStore = create<AppState>((set, get) => ({
-  loading: false,
-  dashboardSummary: null,
-  stores: mockData.stores,
-  salesData: mockData.salesData,
-  products: mockData.products,
-  keywordRanks: mockData.keywordRanks,
-  negativeReviews: mockData.negativeReviews,
-  adCampaigns: mockData.adCampaigns,
-  keywordBids: mockData.keywordBids,
-  inventory: mockData.inventory,
-  shipments: mockData.shipments,
-  priceAdjustments: mockData.priceAdjustments,
-  promotions: mockData.promotions,
-  alerts: mockData.alerts,
-  salesTrend: mockData.salesTrend,
-  platformComparison: mockData.platformComparison,
-  roiChartData: [],
-  selectedPlatform: 'all',
-  selectedDateRange: {
-    start: mockData.dates30[0],
-    end: mockData.dates30[mockData.dates30.length - 1],
-  },
-  sidebarCollapsed: false,
+    loading: false,
+    dashboardSummary: null,
+    stores: mockData.stores,
+    salesData: mockData.salesData,
+    products: mockData.products,
+    keywordRanks: mockData.keywordRanks,
+    negativeReviews: mockData.negativeReviews,
+    adCampaigns: mockData.adCampaigns,
+    keywordBids: mockData.keywordBids,
+    inventory: mockData.inventory,
+    shipments: mockData.shipments,
+    priceAdjustments: mockData.priceAdjustments,
+    promotions: mockData.promotions,
+    alerts: mockData.alerts,
+    salesTrend: mockData.salesTrend,
+    platformComparison: mockData.platformComparison,
+    roiChartData: [],
+    selectedPlatform: 'all',
+    selectedDateRange: {
+      start: mockData.dates30[0],
+      end: mockData.dates30[mockData.dates30.length - 1],
+    },
+    sidebarCollapsed: false,
 
-  fetchDashboard: () => {
-    set({ loading: true });
-    setTimeout(() => {
-      const summary = getDashboardSummary();
-      const roiData = getROIChartData();
-      set({
-        dashboardSummary: summary,
-        salesTrend: summary.salesTrend,
-        platformComparison: summary.platformComparison,
-        alerts: summary.alerts,
-        roiChartData: roiData,
-        loading: false,
-      });
-    }, 500);
-  },
+    fetchDashboard: () => {
+      set({ loading: true });
+      setTimeout(() => {
+        const summary = getDashboardSummary();
+        const roiData = getROIChartData();
+        set({
+          dashboardSummary: summary,
+          salesTrend: summary.salesTrend,
+          platformComparison: summary.platformComparison,
+          alerts: summary.alerts,
+          roiChartData: roiData,
+          loading: false,
+        });
+      }, 500);
+    },
 
-  setSelectedPlatform: (platform) => {
-    set({ selectedPlatform: platform });
-    const trend = getSalesTrend(platform === 'all' ? undefined : platform);
-    set({ salesTrend: trend });
-  },
+    setSelectedPlatform: (platform) => {
+      set({ selectedPlatform: platform });
+      const trend = getSalesTrend(platform === 'all' ? undefined : platform);
+      set({ salesTrend: trend });
+    },
 
-  toggleSidebar: () => {
-    set((state) => ({ sidebarCollapsed: !state.sidebarCollapsed }));
-  },
+    toggleSidebar: () => {
+      set((state) => ({ sidebarCollapsed: !state.sidebarCollapsed }));
+    },
 
-  updateReviewResponse: (id, response, category) => {
-    set((state) => ({
-      negativeReviews: state.negativeReviews.map((r) =>
-        r.id === id
-          ? {
-              ...r,
-              responseStrategy: response,
-              reasonCategory: category,
-              responseDate: new Date().toISOString().split('T')[0],
-              status: 'responded',
-            }
-          : r
-      ),
-    }));
-  },
+    updateReviewResponse: (id, response, category) => {
+      set((state) => ({
+        negativeReviews: state.negativeReviews.map((r) =>
+          r.id === id
+            ? {
+                ...r,
+                responseStrategy: response,
+                reasonCategory: category,
+                responseDate: new Date().toISOString().split('T')[0],
+                status: 'responded',
+              }
+            : r
+        ),
+      }));
+    },
 
-  updateProductStatus: (id, status) => {
-    set((state) => ({
-      products: state.products.map((p) =>
-        p.id === id ? { ...p, status } : p
-      ),
-    }));
-  },
+    updateProductStatus: (id, status) => {
+      set((state) => ({
+        products: state.products.map((p) =>
+          p.id === id ? { ...p, status } : p
+        ),
+      }));
+    },
+
+    addPriceAdjustment: (adjustment) => {
+      set((state) => ({
+        priceAdjustments: [adjustment, ...state.priceAdjustments],
+      }));
+    },
+
+    updateInventory: (id, quantity, type) => {
+      set((state) => ({
+        inventory: state.inventory.map((inv) =>
+          inv.id === id
+            ? {
+                ...inv,
+                currentStock:
+                  type === 'add'
+                    ? inv.currentStock + quantity
+                    : Math.max(0, inv.currentStock - quantity),
+                updatedAt: new Date().toISOString().split('T')[0],
+              }
+            : inv
+        ),
+      }));
+    },
+
+    addShipment: (shipment) => {
+      set((state) => ({
+        shipments: [shipment, ...state.shipments],
+      }));
+    },
+
+    addPromotion: (promotion) => {
+      set((state) => ({
+        promotions: [promotion, ...state.promotions],
+      }));
+    },
+
+    updatePromotion: (id, updates) => {
+      set((state) => ({
+        promotions: state.promotions.map((p) =>
+          p.id === id ? { ...p, ...updates } : p
+        ),
+      }));
+    },
 }));

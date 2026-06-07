@@ -24,7 +24,7 @@ interface InventoryWithProduct extends InventoryType {
 }
 
 export default function Stock() {
-  const { inventory, products, shipments } = useAppStore();
+  const { inventory, products, shipments, updateInventory } = useAppStore();
   const [warehouseFilter, setWarehouseFilter] = useState<string>('all');
   const [lowStockOnly, setLowStockOnly] = useState(false);
   const [showAdjustModal, setShowAdjustModal] = useState(false);
@@ -109,6 +109,13 @@ export default function Stock() {
   };
 
   const handleAdjustSubmit = () => {
+    if (selectedInventory && adjustForm.quantity) {
+      updateInventory(
+        selectedInventory.id,
+        parseInt(adjustForm.quantity),
+        adjustForm.type
+      );
+    }
     setShowAdjustModal(false);
     setAdjustForm({ quantity: '', reason: '', type: 'add' });
     setSelectedInventory(null);

@@ -38,7 +38,7 @@ import type { Promotion, Platform } from '@/../shared/types';
 type PromotionStatus = 'upcoming' | 'active' | 'completed';
 
 export function Promotions() {
-  const { promotions } = useAppStore();
+  const { promotions, addPromotion } = useAppStore();
   const [showAddForm, setShowAddForm] = useState(false);
   const [statusFilter, setStatusFilter] = useState<PromotionStatus | 'all'>('all');
   const [formData, setFormData] = useState({
@@ -122,7 +122,7 @@ export function Promotions() {
       createdAt: new Date().toISOString().split('T')[0],
     };
 
-    console.log('New promotion:', newPromotion);
+    addPromotion(newPromotion);
     setShowAddForm(false);
     setFormData({
       name: '',

@@ -39,7 +39,7 @@ const shippingIcons: Record<string, typeof Ship> = {
 };
 
 export default function Logistics() {
-  const { shipments } = useAppStore();
+  const { shipments, addShipment } = useAppStore();
   const [showAddModal, setShowAddModal] = useState(false);
   const [expandedShipment, setExpandedShipment] = useState<string | null>(null);
   const [shipmentForm, setShipmentForm] = useState({
@@ -121,6 +121,36 @@ export default function Logistics() {
   };
 
   const handleSubmit = () => {
+    if (!shipmentForm.batchNo || !shipmentForm.origin || !shipmentForm.destination || 
+        !shipmentForm.departureDate || !shipmentForm.estimatedArrival || !shipmentForm.cost) {
+      return;
+    }
+
+    const newShipment: ShipmentType = {
+      id: `sh${Date.now()}`,
+      batchNo: shipmentForm.batchNo,
+      origin: shipmentForm.origin,
+      destination: shipmentForm.destination,
+      shippingMethod: shipmentForm.shippingMethod,
+      departureDate: shipmentForm.departureDate,
+      estimatedArrival: shipmentForm.estimatedArrival,
+      cost: parseFloat(shipmentForm.cost),
+      status: 'pending',
+      trackingNo: shipmentForm.trackingNo || undefined,
+      items: shipmentForm.items.map((item, index) => ({
+        id: `shi${Date.now()}-${index}`,
+        shipmentId: `sh${Date.now()}`,
+        productId: `p${index}`,
+        productName: item.productName,
+        sku: item.sku,
+        quantity: parseInt(item.quantity) || 0,
+        unitCost: parseFloat(item.unitCost) || 0,
+        createdAt: new Date().toISOString().split('T')[0],
+      })),
+      createdAt: new Date().toISOString().split('T')[0],
+    };
+
+    addShipment(newShipment);
     setShowAddModal(false);
     setShipmentForm({
       batchNo: '',
