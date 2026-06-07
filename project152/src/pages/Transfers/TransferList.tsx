@@ -32,14 +32,12 @@ import { formatDate } from '@/utils/dateUtils';
 const PAGE_SIZE = 10;
 
 const TRANSFER_TYPE_OPTIONS = [
-  { value: '', label: '全部类型' },
   { value: 'ASSIGNMENT', label: '转让' },
   { value: 'MERGER', label: '合并' },
   { value: 'SPIN_OFF', label: '分拆' },
 ];
 
 const STATUS_OPTIONS = [
-  { value: '', label: '全部状态' },
   { value: 'PENDING', label: '待完成' },
   { value: 'COMPLETED', label: '已完成' },
   { value: 'CANCELLED', label: '已取消' },

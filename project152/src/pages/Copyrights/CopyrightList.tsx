@@ -32,7 +32,6 @@ import { formatDate, getCurrentYear } from '@/utils/dateUtils';
 const PAGE_SIZE = 10;
 
 const WORK_TYPE_OPTIONS = [
-  { value: '', label: '全部类型' },
   { value: '计算机软件', label: '计算机软件' },
   { value: '美术作品', label: '美术作品' },
   { value: '文字作品', label: '文字作品' },
@@ -183,7 +182,7 @@ export default function CopyrightList() {
                 setYearFilter(e.target.value);
                 setCurrentPage(1);
               }}
-              options={[{ value: '', label: '全部年份' }, ...yearOptions]}
+              options={yearOptions}
             />
             <Button variant="ghost" onClick={resetFilters} className="self-end">
               重置筛选

@@ -7,8 +7,9 @@ import { Input } from '@/components/ui/Input';
 import { Select } from '@/components/ui/Select';
 import { Badge } from '@/components/ui/Badge';
 import { useAppStore } from '@/store';
-import { PatentType, PatentStatus } from '@/types/patent';
+import { PatentType, PatentStatus, StatusRecord } from '@/types/patent';
 import { formatDate } from '@/utils/dateUtils';
+import { generateId } from '@/utils/formatters';
 
 const PATENT_TYPE_OPTIONS = [
   { value: 'INVENTION', label: '发明' },
@@ -127,6 +128,13 @@ export default function PatentForm() {
   const handleSubmit = () => {
     if (!validateForm()) return;
 
+    const statusHistory: StatusRecord[] = [{
+      id: generateId(),
+      status: formData.status,
+      date: new Date().toISOString(),
+      note: formData.statusNote.trim() || undefined,
+    }];
+
     const patentData = {
       name: formData.name.trim(),
       applicationNumber: formData.applicationNumber.trim(),
@@ -142,12 +150,7 @@ export default function PatentForm() {
       description: formData.description.trim() || undefined,
       regions: formData.regions.split(',').map((s) => s.trim()).filter(Boolean),
       status: formData.status,
-      statusHistory: [{
-        id: '',
-        status: formData.status,
-        date: new Date().toISOString(),
-        note: formData.statusNote.trim() || undefined,
-      }],
+      statusHistory,
       files: [],
     };
 
@@ -158,13 +161,12 @@ export default function PatentForm() {
           ...patentData,
           statusHistory: existing.statusHistory,
           files: existing.files,
-          annuityRecords: existing.annuityRecords,
         };
         if (formData.status !== existing.status && formData.statusNote.trim()) {
           updatedData.statusHistory = [
             ...existing.statusHistory,
             {
-              id: '',
+              id: generateId(),
               status: formData.status,
               date: new Date().toISOString(),
               note: formData.statusNote.trim(),

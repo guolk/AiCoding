@@ -15,7 +15,6 @@ import { truncateText } from '@/utils/formatters';
 import { formatDate } from '@/utils/dateUtils';
 
 const RISK_LEVEL_OPTIONS = [
-  { value: '', label: '全部风险等级' },
   { value: 'LOW', label: '低风险' },
   { value: 'MEDIUM', label: '中风险' },
   { value: 'HIGH', label: '高风险' },
@@ -84,7 +83,7 @@ export default function InfringementAssessment() {
 
   const ourPatentOptions = useMemo(() => {
     const unique = [...new Set(infringementAssessments.map((a) => a.ourPatent?.name).filter(Boolean))];
-    return [{ value: '', label: '全部我方专利' }, ...unique.map((p) => ({ value: p!, label: p! }))];
+    return unique.map((p) => ({ value: p!, label: p! }));
   }, [infringementAssessments]);
 
   const competitorPatentOptions = useMemo(() =>

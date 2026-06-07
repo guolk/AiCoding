@@ -10,7 +10,6 @@ import { useAppStore } from '@/store';
 import { getCurrentYear } from '@/utils/dateUtils';
 
 const TECHNICAL_FIELD_OPTIONS = [
-  { value: '', label: '全部技术领域' },
 ];
 
 const HOT_WORDS = [
@@ -51,12 +50,12 @@ export default function PatentMap() {
 
   const competitors = useMemo(() => {
     const unique = [...new Set(competitorPatents.map((p) => p.competitorName))];
-    return [{ value: '', label: '全部竞争对手' }, ...unique.map((c) => ({ value: c, label: c }))];
+    return unique.map((c) => ({ value: c, label: c }));
   }, [competitorPatents]);
 
   const technicalFields = useMemo(() => {
     const unique = [...new Set(competitorPatents.map((p) => p.technicalField))];
-    return [{ value: '', label: '全部技术领域' }, ...unique.map((f) => ({ value: f, label: f }))];
+    return unique.map((f) => ({ value: f, label: f }));
   }, [competitorPatents]);
 
   const filteredPatents = useMemo(() => {
@@ -138,8 +137,8 @@ export default function PatentMap() {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <Select placeholder="开始年份" value={startYear} onChange={(e) => setStartYear(e.target.value)} options={[{ value: '', label: '开始年份' }, ...yearOptions]} />
-            <Select placeholder="结束年份" value={endYear} onChange={(e) => setEndYear(e.target.value)} options={[{ value: '', label: '结束年份' }, ...yearOptions]} />
+            <Select placeholder="开始年份" value={startYear} onChange={(e) => setStartYear(e.target.value)} options={yearOptions} />
+            <Select placeholder="结束年份" value={endYear} onChange={(e) => setEndYear(e.target.value)} options={yearOptions} />
             <Select placeholder="技术领域" value={technicalField} onChange={(e) => setTechnicalField(e.target.value)} options={technicalFields} />
             <Select placeholder="竞争对手" value={competitorFilter} onChange={(e) => setCompetitorFilter(e.target.value)} options={competitors} />
           </div>

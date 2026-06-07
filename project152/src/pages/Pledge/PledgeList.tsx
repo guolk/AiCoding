@@ -32,7 +32,6 @@ import { formatDate, isExpired } from '@/utils/dateUtils';
 const PAGE_SIZE = 10;
 
 const STATUS_OPTIONS = [
-  { value: '', label: '全部状态' },
   { value: 'ACTIVE', label: '进行中' },
   { value: 'MATURED', label: '已到期' },
   { value: 'REDEEMED', label: '已赎回' },

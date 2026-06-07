@@ -32,14 +32,12 @@ import { formatDate, isExpired, isExpiringSoon } from '@/utils/dateUtils';
 const PAGE_SIZE = 10;
 
 const LICENSE_TYPE_OPTIONS = [
-  { value: '', label: '全部类型' },
   { value: 'EXCLUSIVE', label: '独占许可' },
   { value: 'NON_EXCLUSIVE', label: '非独占许可' },
   { value: 'SOLE', label: '排他许可' },
 ];
 
 const STATUS_OPTIONS = [
-  { value: '', label: '全部状态' },
   { value: 'ACTIVE', label: '有效' },
   { value: 'EXPIRED', label: '已过期' },
   { value: 'TERMINATED', label: '已终止' },

@@ -32,7 +32,6 @@ import { formatDate, isExpired, isExpiringSoon } from '@/utils/dateUtils';
 const PAGE_SIZE = 10;
 
 const STATUS_OPTIONS = [
-  { value: '', label: '全部状态' },
   { value: 'APPLIED', label: '申请中' },
   { value: 'REGISTERED', label: '已注册' },
   { value: 'RENEWED', label: '已续展' },
@@ -41,7 +40,6 @@ const STATUS_OPTIONS = [
 ];
 
 const CATEGORY_OPTIONS = [
-  { value: '', label: '全部类别' },
   { value: '第9类-科学仪器', label: '第9类-科学仪器' },
   { value: '第35类-广告销售', label: '第35类-广告销售' },
   { value: '第38类-通讯服务', label: '第38类-通讯服务' },

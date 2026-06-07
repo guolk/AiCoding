@@ -30,14 +30,12 @@ import { formatCurrency } from '@/utils/formatters';
 import { cn } from '@/lib/utils';
 
 const PATENT_TYPE_OPTIONS = [
-  { value: '', label: '全部类型' },
   { value: 'INVENTION', label: '发明' },
   { value: 'UTILITY_MODEL', label: '实用新型' },
   { value: 'DESIGN', label: '外观设计' },
 ];
 
 const STATUS_OPTIONS = [
-  { value: '', label: '全部状态' },
   { value: 'PENDING', label: '待缴' },
   { value: 'PAID', label: '已缴' },
   { value: 'OVERDUE', label: '逾期' },
@@ -198,13 +196,13 @@ export default function AnnuityManagement() {
               placeholder="开始年份"
               value={startYear}
               onChange={(e) => setStartYear(e.target.value)}
-              options={[{ value: '', label: '开始年份' }, ...yearOptions]}
+              options={yearOptions}
             />
             <Select
               placeholder="结束年份"
               value={endYear}
               onChange={(e) => setEndYear(e.target.value)}
-              options={[{ value: '', label: '结束年份' }, ...yearOptions]}
+              options={yearOptions}
             />
           </div>
         </CardContent>

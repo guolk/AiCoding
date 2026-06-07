@@ -33,14 +33,12 @@ import { formatDate, getCurrentYear } from '@/utils/dateUtils';
 const PAGE_SIZE = 10;
 
 const PATENT_TYPE_OPTIONS = [
-  { value: '', label: '全部类型' },
   { value: 'INVENTION', label: '发明' },
   { value: 'UTILITY_MODEL', label: '实用新型' },
   { value: 'DESIGN', label: '外观设计' },
 ];
 
 const PATENT_STATUS_OPTIONS = [
-  { value: '', label: '全部状态' },
   { value: 'APPLICATION', label: '申请中' },
   { value: 'SUBSTANTIVE_EXAMINATION', label: '实质审查' },
   { value: 'AUTHORIZED', label: '已授权' },

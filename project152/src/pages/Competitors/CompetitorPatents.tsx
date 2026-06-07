@@ -16,7 +16,6 @@ import { formatDate } from '@/utils/dateUtils';
 const PAGE_SIZE = 10;
 
 const MONITORING_STATUS_OPTIONS = [
-  { value: '', label: '全部状态' },
   { value: 'MONITORING', label: '监控中' },
   { value: 'TRACKING', label: '重点跟踪' },
   { value: 'DISMISSED', label: '已忽略' },
@@ -54,12 +53,12 @@ export default function CompetitorPatents() {
 
   const competitors = useMemo(() => {
     const unique = [...new Set(competitorPatents.map((p) => p.competitorName))];
-    return [{ value: '', label: '全部竞争对手' }, ...unique.map((c) => ({ value: c, label: c }))];
+    return unique.map((c) => ({ value: c, label: c }));
   }, [competitorPatents]);
 
   const technicalFields = useMemo(() => {
     const unique = [...new Set(competitorPatents.map((p) => p.technicalField))];
-    return [{ value: '', label: '全部技术领域' }, ...unique.map((f) => ({ value: f, label: f }))];
+    return unique.map((f) => ({ value: f, label: f }));
   }, [competitorPatents]);
 
   const stats = useMemo(() => {
