@@ -1,0 +1,744 @@
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import type { Student, ParentCommunication, Portfolio, Assessment, Milestone, Report } from '../../shared/types.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const DATA_DIR = path.join(__dirname, '..', 'data');
+const DB_FILE = path.join(DATA_DIR, 'db.json');
+
+interface Database {
+  students: Student[];
+  communications: ParentCommunication[];
+  portfolios: Portfolio[];
+  assessments: Assessment[];
+  milestones: Milestone[];
+  reports: Report[];
+  nextId: {
+    students: number;
+    communications: number;
+    portfolios: number;
+    assessments: number;
+    milestones: number;
+    reports: number;
+  };
+}
+
+const defaultData: Database = {
+  students: [
+    {
+      id: 1,
+      name: '张小明',
+      grade: 3,
+      className: '3班',
+      avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=xiaoming',
+      interests: '绘画、钢琴、篮球',
+      learningStyle: '视觉型学习者，喜欢通过图像和图表理解知识',
+      familyBackground: '父母均为大学教师，重视孩子的全面发展，家庭学习氛围浓厚',
+      shortTermGoals: '本学期数学成绩提升至90分以上，完成一幅完整的水彩画作品',
+      longTermGoals: '培养良好的学习习惯，发展艺术特长，成为有创造力的人',
+      createdAt: '2024-09-01T00:00:00Z'
+    },
+    {
+      id: 2,
+      name: '李小雨',
+      grade: 4,
+      className: '2班',
+      avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=xiaoyu',
+      interests: '阅读、写作、科学实验',
+      learningStyle: '语言型学习者，善于通过阅读和写作获取知识',
+      familyBackground: '母亲是作家，父亲是工程师，鼓励孩子自由探索',
+      shortTermGoals: '在校刊发表一篇文章，完成科学展览项目',
+      longTermGoals: '成为一名优秀的作家或科学家，保持对世界的好奇心',
+      createdAt: '2024-09-01T00:00:00Z'
+    },
+    {
+      id: 3,
+      name: '王小磊',
+      grade: 5,
+      className: '1班',
+      avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=xiaolei',
+      interests: '数学、编程、机器人',
+      learningStyle: '逻辑型学习者，喜欢解决问题和抽象思考',
+      familyBackground: '父亲是程序员，母亲是会计师，注重逻辑思维培养',
+      shortTermGoals: '参加市数学竞赛，完成一个机器人项目',
+      longTermGoals: '在人工智能领域深入发展，成为技术创新者',
+      createdAt: '2024-09-01T00:00:00Z'
+    },
+    {
+      id: 4,
+      name: '陈朵朵',
+      grade: 2,
+      className: '3班',
+      avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=duoduo',
+      interests: '舞蹈、唱歌、手工制作',
+      learningStyle: '动觉型学习者，通过动手实践效果最好',
+      familyBackground: '母亲是舞蹈老师，父亲是设计师，艺术氛围浓厚',
+      shortTermGoals: '通过舞蹈考级，完成一件手工作品参加展览',
+      longTermGoals: '在艺术领域发展，成为有艺术修养的人',
+      createdAt: '2024-09-01T00:00:00Z'
+    },
+    {
+      id: 5,
+      name: '刘子轩',
+      grade: 6,
+      className: '4班',
+      avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=zixuan',
+      interests: '历史、辩论、社会活动',
+      learningStyle: '人际型学习者，善于在团队中学习',
+      familyBackground: '父母都是公务员，注重社会责任感培养',
+      shortTermGoals: '带领班级赢得辩论赛，完成小学历史研究报告',
+      longTermGoals: '在社会科学领域发展，成为有社会责任感的领导者',
+      createdAt: '2024-09-01T00:00:00Z'
+    },
+    {
+      id: 6,
+      name: '赵思琪',
+      grade: 3,
+      className: '1班',
+      avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=siqi',
+      interests: '书法、围棋、古筝',
+      learningStyle: '内省型学习者，善于独立思考和自我反思',
+      familyBackground: '祖父母是传统文化爱好者，从小接受传统文化熏陶',
+      shortTermGoals: '通过书法五级考试，在围棋比赛中进入前八',
+      longTermGoals: '传承中华传统文化，成为有文化底蕴的人',
+      createdAt: '2024-09-01T00:00:00Z'
+    }
+  ],
+  communications: [
+    {
+      id: 1,
+      studentId: 1,
+      date: '2025-03-15',
+      type: 'parent_meeting',
+      content: '家长会上与张小明父母讨论了孩子的学习进度。小明数学成绩有明显进步，但英语还需加强。建议增加英语阅读时间，每天15分钟。家长表示会配合。小明的绘画作品在学校展览中获得好评，建议继续发展艺术特长。',
+      teacher: '王老师'
+    },
+    {
+      id: 2,
+      studentId: 1,
+      date: '2025-01-20',
+      type: 'home_visit',
+      content: '家访了解到小明在家学习习惯良好，每天按时完成作业。家庭学习环境很好，有独立的学习空间。父母对孩子的期望较高，但也注重孩子的身心健康。建议增加户外活动时间，保持学习与休息的平衡。',
+      teacher: '李老师'
+    },
+    {
+      id: 3,
+      studentId: 2,
+      date: '2025-03-10',
+      type: 'parent_meeting',
+      content: '小雨的写作天赋突出，多篇作文被选为范文。科学项目进展顺利，选题有创意。建议参加学校的科学社团。家长反映孩子最近阅读量很大，需要注意用眼卫生。',
+      teacher: '张老师'
+    },
+    {
+      id: 4,
+      studentId: 3,
+      date: '2025-02-28',
+      type: 'home_visit',
+      content: '小磊的数学和编程能力远超同龄孩子，正在准备市数学竞赛。但孩子有时会因为专注编程而忽略其他作业。家长表示会引导孩子合理分配时间。建议学校为其提供更有挑战性的学习资源。',
+      teacher: '刘老师'
+    },
+    {
+      id: 5,
+      studentId: 5,
+      date: '2025-03-05',
+      type: 'parent_meeting',
+      content: '子轩的领导才能在班级活动中充分展现，辩论赛表现优异。但最近几次测验显示理科成绩有所下滑。家长和老师一致认为需要平衡各学科发展，制定了详细的学习计划。',
+      teacher: '陈老师'
+    }
+  ],
+  portfolios: [
+    {
+      id: 1,
+      studentId: 1,
+      title: '春天的花园',
+      category: 'art',
+      description: '水彩画作品，描绘了学校花园的春景。色彩运用丰富，层次感强，展现了对自然的细腻观察。',
+      fileUrl: 'https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=800',
+      thumbnail: 'https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=400',
+      grade: 2,
+      semester: 2,
+      isFeatured: true,
+      createdAt: '2025-02-15T00:00:00Z'
+    },
+    {
+      id: 2,
+      studentId: 1,
+      title: '我的数学日记',
+      category: 'math',
+      description: '记录了一周的数学学习心得，包括对分数的理解和几道难题的解题过程。思路清晰，表达准确。',
+      fileUrl: 'https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=800',
+      thumbnail: 'https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=400',
+      grade: 3,
+      semester: 1,
+      isFeatured: false,
+      createdAt: '2025-03-01T00:00:00Z'
+    },
+    {
+      id: 3,
+      studentId: 1,
+      title: '快乐的寒假',
+      category: 'writing',
+      description: '作文记录了寒假期间参加滑雪冬令营的经历，语言生动，情感真挚。被选为年级范文。',
+      fileUrl: 'https://images.unsplash.com/photo-1455390582262-044cdead277a?w=800',
+      thumbnail: 'https://images.unsplash.com/photo-1455390582262-044cdead277a?w=400',
+      grade: 3,
+      semester: 1,
+      isFeatured: true,
+      createdAt: '2025-03-10T00:00:00Z'
+    },
+    {
+      id: 4,
+      studentId: 1,
+      title: '植物生长观察实验',
+      category: 'science',
+      description: '连续30天观察并记录绿豆种子在不同光照条件下的生长情况，数据记录完整，结论合理。',
+      fileUrl: 'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=800',
+      thumbnail: 'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=400',
+      grade: 2,
+      semester: 2,
+      isFeatured: false,
+      createdAt: '2024-12-20T00:00:00Z'
+    },
+    {
+      id: 5,
+      studentId: 2,
+      title: '未来的学校',
+      category: 'writing',
+      description: '科幻作文，想象了2050年的学校是什么样子。想象力丰富，语言优美，在校刊发表。',
+      fileUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800',
+      thumbnail: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400',
+      grade: 4,
+      semester: 1,
+      isFeatured: true,
+      createdAt: '2025-02-20T00:00:00Z'
+    },
+    {
+      id: 6,
+      studentId: 2,
+      title: '火山喷发模拟实验',
+      category: 'science',
+      description: '用小苏打和醋模拟火山喷发，研究不同比例对喷发高度的影响。实验设计科学，记录详细。',
+      fileUrl: 'https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=800',
+      thumbnail: 'https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=400',
+      grade: 4,
+      semester: 1,
+      isFeatured: true,
+      createdAt: '2025-03-05T00:00:00Z'
+    },
+    {
+      id: 7,
+      studentId: 3,
+      title: '数学竞赛获奖解题思路',
+      category: 'math',
+      description: '记录了区数学竞赛三道难题的解题过程，方法巧妙，体现了优秀的逻辑思维能力。',
+      fileUrl: 'https://images.unsplash.com/photo-1596495578065-6e0763fa1178?w=800',
+      thumbnail: 'https://images.unsplash.com/photo-1596495578065-6e0763fa1178?w=400',
+      grade: 5,
+      semester: 1,
+      isFeatured: true,
+      createdAt: '2025-02-25T00:00:00Z'
+    },
+    {
+      id: 8,
+      studentId: 3,
+      title: '我的第一个Python程序',
+      category: 'science',
+      description: '编写了一个猜数字游戏，包含随机数生成、用户输入处理、循环判断等编程概念。',
+      fileUrl: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800',
+      thumbnail: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=400',
+      grade: 5,
+      semester: 1,
+      isFeatured: false,
+      createdAt: '2025-03-12T00:00:00Z'
+    },
+    {
+      id: 9,
+      studentId: 4,
+      title: '芭蕾舞者',
+      category: 'art',
+      description: '彩铅画，捕捉了芭蕾舞者优雅的瞬间。线条流畅，人物动态表现到位。',
+      fileUrl: 'https://images.unsplash.com/photo-1518611012118-696072aa579a?w=800',
+      thumbnail: 'https://images.unsplash.com/photo-1518611012118-696072aa579a?w=400',
+      grade: 2,
+      semester: 1,
+      isFeatured: true,
+      createdAt: '2025-01-30T00:00:00Z'
+    },
+    {
+      id: 10,
+      studentId: 4,
+      title: '我的小多肉花园',
+      category: 'science',
+      description: '记录了6盆多肉植物两个月的生长情况，每周浇水、测量、拍照，观察日记内容丰富。',
+      fileUrl: 'https://images.unsplash.com/photo-1459411552884-841db9b3cc2a?w=800',
+      thumbnail: 'https://images.unsplash.com/photo-1459411552884-841db9b3cc2a?w=400',
+      grade: 2,
+      semester: 1,
+      isFeatured: false,
+      createdAt: '2025-03-08T00:00:00Z'
+    },
+    {
+      id: 11,
+      studentId: 5,
+      title: '三国人物分析报告',
+      category: 'writing',
+      description: '从领导者角度分析了曹操、刘备、孙权三位历史人物的优缺点，观点独到，论据充分。',
+      fileUrl: 'https://images.unsplash.com/photo-1461360370896-922624d12a74?w=800',
+      thumbnail: 'https://images.unsplash.com/photo-1461360370896-922624d12a74?w=400',
+      grade: 6,
+      semester: 1,
+      isFeatured: true,
+      createdAt: '2025-02-18T00:00:00Z'
+    },
+    {
+      id: 12,
+      studentId: 5,
+      title: '辩论赛最佳辩手',
+      category: 'art',
+      description: '记录了辩论赛的精彩瞬间和辩词，展现了出色的表达能力和逻辑思维。',
+      fileUrl: 'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=800',
+      thumbnail: 'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=400',
+      grade: 6,
+      semester: 1,
+      isFeatured: true,
+      createdAt: '2025-03-03T00:00:00Z'
+    },
+    {
+      id: 13,
+      studentId: 6,
+      title: '书法作品-宁静致远',
+      category: 'art',
+      description: '楷书作品，字迹工整，结构匀称。体现了一年来书法学习的进步。',
+      fileUrl: 'https://images.unsplash.com/photo-1596367407372-96cb88503db6?w=800',
+      thumbnail: 'https://images.unsplash.com/photo-1596367407372-96cb88503db6?w=400',
+      grade: 3,
+      semester: 1,
+      isFeatured: true,
+      createdAt: '2025-02-22T00:00:00Z'
+    },
+    {
+      id: 14,
+      studentId: 1,
+      title: '一年级入学画',
+      category: 'art',
+      description: '刚入小学时画的第一张画，用色大胆，充满想象力。',
+      fileUrl: 'https://images.unsplash.com/photo-1503602642458-232111445657?w=800',
+      thumbnail: 'https://images.unsplash.com/photo-1503602642458-232111445657?w=400',
+      grade: 1,
+      semester: 1,
+      isFeatured: false,
+      createdAt: '2023-09-10T00:00:00Z'
+    },
+    {
+      id: 15,
+      studentId: 1,
+      title: '二年级看图写话',
+      category: 'writing',
+      description: '二年级时的作文，虽然文笔稚嫩，但情感真实。',
+      fileUrl: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=800',
+      thumbnail: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=400',
+      grade: 2,
+      semester: 1,
+      isFeatured: false,
+      createdAt: '2024-03-15T00:00:00Z'
+    }
+  ],
+  assessments: [
+    {
+      id: 1,
+      studentId: 1,
+      semester: '2024-2025第一学期',
+      intelligence: {
+        linguistic: 75,
+        logicalMathematical: 82,
+        spatial: 90,
+        musical: 70,
+        bodilyKinesthetic: 78,
+        interpersonal: 85,
+        intrapersonal: 80
+      },
+      keySkills: {
+        criticalThinking: 80,
+        creativity: 88,
+        collaboration: 85,
+        learningHabits: 78
+      },
+      teacherComment: '张小明同学本学期进步明显，特别是在数学和绘画方面表现突出。空间智能和创造力是其优势。需要加强语言表达能力的训练，鼓励多读书、多写作。',
+      createdAt: '2025-01-15T00:00:00Z'
+    },
+    {
+      id: 2,
+      studentId: 1,
+      semester: '2024-2025第二学期',
+      intelligence: {
+        linguistic: 80,
+        logicalMathematical: 88,
+        spatial: 92,
+        musical: 72,
+        bodilyKinesthetic: 80,
+        interpersonal: 86,
+        intrapersonal: 83
+      },
+      keySkills: {
+        criticalThinking: 85,
+        creativity: 90,
+        collaboration: 86,
+        learningHabits: 82
+      },
+      teacherComment: '本学期继续保持良好的发展势头，数学成绩稳居班级前列，绘画作品多次获奖。语言智能有明显提升，继续保持阅读习惯。建议在音乐方面多投入一些时间，促进全面发展。',
+      createdAt: '2025-06-20T00:00:00Z'
+    },
+    {
+      id: 3,
+      studentId: 2,
+      semester: '2024-2025第一学期',
+      intelligence: {
+        linguistic: 95,
+        logicalMathematical: 78,
+        spatial: 70,
+        musical: 75,
+        bodilyKinesthetic: 65,
+        interpersonal: 80,
+        intrapersonal: 88
+      },
+      keySkills: {
+        criticalThinking: 85,
+        creativity: 92,
+        collaboration: 75,
+        learningHabits: 90
+      },
+      teacherComment: '李小雨同学语言天赋突出，写作能力远超同龄水平。逻辑思维和学习习惯都很好。需要加强体育锻炼，提高动觉智能。建议参加一些团队运动，增强协作能力。',
+      createdAt: '2025-01-15T00:00:00Z'
+    },
+    {
+      id: 4,
+      studentId: 3,
+      semester: '2024-2025第一学期',
+      intelligence: {
+        linguistic: 72,
+        logicalMathematical: 98,
+        spatial: 85,
+        musical: 60,
+        bodilyKinesthetic: 70,
+        interpersonal: 65,
+        intrapersonal: 82
+      },
+      keySkills: {
+        criticalThinking: 95,
+        creativity: 88,
+        collaboration: 68,
+        learningHabits: 85
+      },
+      teacherComment: '王小磊同学逻辑数学智能非常突出，在数学和编程方面展现出过人天赋。但需要注意均衡发展，加强人际交往和沟通能力的培养。建议多参与小组活动，学习与他人合作。',
+      createdAt: '2025-01-15T00:00:00Z'
+    },
+    {
+      id: 5,
+      studentId: 4,
+      semester: '2024-2025第一学期',
+      intelligence: {
+        linguistic: 78,
+        logicalMathematical: 70,
+        spatial: 88,
+        musical: 90,
+        bodilyKinesthetic: 92,
+        interpersonal: 82,
+        intrapersonal: 75
+      },
+      keySkills: {
+        criticalThinking: 72,
+        creativity: 90,
+        collaboration: 85,
+        learningHabits: 78
+      },
+      teacherComment: '陈朵朵同学在艺术和运动方面有明显优势，身体动觉和音乐智能发展很好。需要加强逻辑数学方面的训练，提高批判思维能力。继续保持对艺术的热爱，同时注重基础知识的学习。',
+      createdAt: '2025-01-15T00:00:00Z'
+    },
+    {
+      id: 6,
+      studentId: 5,
+      semester: '2024-2025第一学期',
+      intelligence: {
+        linguistic: 90,
+        logicalMathematical: 82,
+        spatial: 75,
+        musical: 70,
+        bodilyKinesthetic: 78,
+        interpersonal: 95,
+        intrapersonal: 88
+      },
+      keySkills: {
+        criticalThinking: 88,
+        creativity: 82,
+        collaboration: 95,
+        learningHabits: 85
+      },
+      teacherComment: '刘子轩同学展现出优秀的领导才能和人际交往能力，是老师的得力助手。语言表达和逻辑思维都很出色。需要注意理科成绩的稳定性，制定更均衡的学习计划。',
+      createdAt: '2025-01-15T00:00:00Z'
+    },
+    {
+      id: 7,
+      studentId: 6,
+      semester: '2024-2025第一学期',
+      intelligence: {
+        linguistic: 82,
+        logicalMathematical: 75,
+        spatial: 85,
+        musical: 78,
+        bodilyKinesthetic: 70,
+        interpersonal: 75,
+        intrapersonal: 88
+      },
+      keySkills: {
+        criticalThinking: 78,
+        creativity: 85,
+        collaboration: 72,
+        learningHabits: 85
+      },
+      teacherComment: '赵思琪同学性格文静，善于独立思考，在书法和围棋方面表现出专注力和耐心。内省智能突出。需要多参与集体活动，培养团队协作能力。鼓励大胆表达自己的想法。',
+      createdAt: '2025-01-15T00:00:00Z'
+    }
+  ],
+  milestones: [
+    {
+      id: 1,
+      studentId: 1,
+      title: '第一次数学测验满分',
+      description: '三年级上学期数学第一单元测验获得满分，这是小明上学以来第一次数学满分，大大增强了学习数学的信心。',
+      date: '2024-09-28',
+      badge: 'trophy'
+    },
+    {
+      id: 2,
+      studentId: 1,
+      title: '校园艺术展一等奖',
+      description: '水彩画作品《春天的花园》在学校年度艺术展中获得一等奖，并被选送参加区里的比赛。',
+      date: '2025-02-15',
+      badge: 'award'
+    },
+    {
+      id: 3,
+      studentId: 1,
+      title: '作文被选为年级范文',
+      description: '《快乐的寒假》一文因情感真挚、语言生动，被选为全年级作文范文。',
+      date: '2025-03-10',
+      badge: 'star'
+    },
+    {
+      id: 4,
+      studentId: 2,
+      title: '在校刊发表文章',
+      description: '科幻作文《未来的学校》在校刊《小作家》上发表，这是小雨第一次公开发表作品。',
+      date: '2025-02-20',
+      badge: 'award'
+    },
+    {
+      id: 5,
+      studentId: 2,
+      title: '科学展览二等奖',
+      description: '火山喷发模拟实验项目在学校科学展览中获得二等奖，获得评委一致好评。',
+      date: '2025-03-05',
+      badge: 'trophy'
+    },
+    {
+      id: 6,
+      studentId: 3,
+      title: '区数学竞赛一等奖',
+      description: '在区小学数学竞赛中以满分的成绩获得一等奖，展现了出色的数学天赋。',
+      date: '2025-02-25',
+      badge: 'trophy'
+    },
+    {
+      id: 7,
+      studentId: 3,
+      title: '完成第一个编程项目',
+      description: '独立完成了猜数字游戏的Python程序，这是小磊的第一个完整编程项目。',
+      date: '2025-03-12',
+      badge: 'star'
+    },
+    {
+      id: 8,
+      studentId: 4,
+      title: '舞蹈考级通过',
+      description: '中国舞四级考试顺利通过，这是朵朵坚持两年舞蹈学习的成果。',
+      date: '2025-01-20',
+      badge: 'award'
+    },
+    {
+      id: 9,
+      studentId: 4,
+      title: '手工作品入选展览',
+      description: '黏土作品《我的动物朋友》入选市少年儿童艺术展。',
+      date: '2025-03-01',
+      badge: 'star'
+    },
+    {
+      id: 10,
+      studentId: 5,
+      title: '辩论赛最佳辩手',
+      description: '作为主辩手带领班级获得年级辩论赛冠军，并个人获得最佳辩手称号。',
+      date: '2025-03-03',
+      badge: 'trophy'
+    },
+    {
+      id: 11,
+      studentId: 5,
+      title: '成为少先队大队长',
+      description: '经过民主选举，子轩当选为学校少先队大队长。',
+      date: '2024-10-15',
+      badge: 'award'
+    },
+    {
+      id: 12,
+      studentId: 6,
+      title: '书法五级考试通过',
+      description: '顺利通过中国书法家协会书法五级考试，是同年龄段中较早达到这个水平的孩子。',
+      date: '2025-02-10',
+      badge: 'award'
+    },
+    {
+      id: 13,
+      studentId: 6,
+      title: '围棋比赛第八名',
+      description: '在市少年围棋比赛中进入前八名，围棋水平达到业余二段。',
+      date: '2025-03-08',
+      badge: 'star'
+    },
+    {
+      id: 14,
+      studentId: 1,
+      title: '加入学校足球队',
+      description: '通过选拔，成功加入学校足球队，担任前锋位置。',
+      date: '2024-09-10',
+      badge: 'star'
+    },
+    {
+      id: 15,
+      studentId: 2,
+      title: '成为科学社团社长',
+      description: '凭借对科学的热情和出色的组织能力，被选为科学社团社长。',
+      date: '2024-11-05',
+      badge: 'award'
+    }
+  ],
+  reports: [
+    {
+      id: 1,
+      studentId: 1,
+      semester: '2024-2025第一学期',
+      featuredWorks: [1, 3, 4],
+      assessmentId: 1,
+      teacherComment: '张小明同学在本学期取得了显著进步。数学成绩从80分提升到90分以上，绘画作品多次获奖。小明最大的优点是对学习充满热情，对未知事物保持好奇心。空间智能和创造力尤为突出，建议在艺术和数学方面继续深入培养。同时，需要加强英语和语文的阅读训练，提升语言表达能力。在家访中了解到小明有良好的学习习惯，希望能继续保持。家长在家校配合方面做得很好，建议继续保持良好的沟通，共同促进孩子的全面发展。',
+      highlights: ['数学成绩提升10分', '艺术展一等奖', '作文选为年级范文', '加入学校足球队'],
+      createdAt: '2025-01-20T00:00:00Z'
+    },
+    {
+      id: 2,
+      studentId: 2,
+      semester: '2024-2025第一学期',
+      featuredWorks: [5, 6],
+      assessmentId: 3,
+      teacherComment: '李小雨同学是一名热爱学习、善于思考的优秀学生。语言天赋突出，阅读量远超同龄孩子，写作能力令人印象深刻。科学实验项目展现了她的创新思维和实践能力。需要注意的是，小雨最近用眼过度，家长反映视力有所下降，建议合理安排阅读和休息时间。同时，应增加体育锻炼时间，提高身体素质。总体来说，小雨是一个让老师和家长都很放心的孩子，希望她能继续保持对知识的热爱，健康快乐地成长。',
+      highlights: ['校刊发表文章', '科学展二等奖', '科学社团社长', '阅读量超过50本'],
+      createdAt: '2025-01-20T00:00:00Z'
+    },
+    {
+      id: 3,
+      studentId: 3,
+      semester: '2024-2025第一学期',
+      featuredWorks: [7, 8],
+      assessmentId: 4,
+      teacherComment: '王小磊同学在数学和编程方面展现出过人的天赋，区数学竞赛一等奖就是最好的证明。小磊的逻辑思维能力和自主学习能力都很强，经常能提出一些有深度的问题。然而，需要注意均衡发展，在人际交往和团队协作方面还有提升空间。建议在发挥优势的同时，不要忽视语文和英语的学习。家长也反映孩子有时会因为编程而忽略其他作业，需要家长和老师共同引导，帮助孩子建立合理的时间管理观念。',
+      highlights: ['区数学竞赛一等奖', '完成第一个Python程序', '数学成绩稳居年级前三', '编程社团技术总监'],
+      createdAt: '2025-01-20T00:00:00Z'
+    },
+    {
+      id: 4,
+      studentId: 4,
+      semester: '2024-2025第一学期',
+      featuredWorks: [9, 10],
+      assessmentId: 5,
+      teacherComment: '陈朵朵同学是一个有艺术天赋的孩子，在舞蹈和绘画方面都有出色的表现。身体协调性很好，动觉智能突出。朵朵性格开朗，乐于助人，在班级里很受欢迎。学习态度比较认真，但有时会因为参加艺术活动而影响学习进度。需要帮助朵朵平衡艺术学习和文化课学习，让两者相互促进。朵朵的创造力和动手能力很强，这在她的手工作品中得到了充分体现。希望她能继续保持对艺术的热爱，同时打好文化课基础。',
+      highlights: ['舞蹈四级通过', '手工作品入选市展', '彩铅画获校二等奖', '运动会跳远第四名'],
+      createdAt: '2025-01-20T00:00:00Z'
+    },
+    {
+      id: 5,
+      studentId: 5,
+      semester: '2024-2025第一学期',
+      featuredWorks: [11, 12],
+      assessmentId: 6,
+      teacherComment: '刘子轩同学是一位品学兼优的学生干部，展现出优秀的领导才能和组织能力。作为少先队大队长，他能很好地平衡学习和工作，是同学们的好榜样。子轩的语言表达和逻辑思维都很出色，历史研究报告和辩论赛表现都令人印象深刻。本学期理科成绩略有波动，需要引起重视。建议制定更详细的学习计划，确保各学科均衡发展。子轩有很强的责任感和上进心，只要方法得当，一定能取得更大的进步。',
+      highlights: ['少先队大队长', '辩论赛最佳辩手', '历史研究报告优秀奖', '语文成绩年级前十'],
+      createdAt: '2025-01-20T00:00:00Z'
+    },
+    {
+      id: 6,
+      studentId: 6,
+      semester: '2024-2025第一学期',
+      featuredWorks: [13],
+      assessmentId: 7,
+      teacherComment: '赵思琪同学是一个安静、内秀的孩子，有着超出同龄人的专注力和耐心。书法和围棋的学习培养了她沉稳的性格和良好的学习习惯。思琪善于独立思考，内省智能突出。但有时会因为过于内向而不敢表达自己的想法，建议多鼓励她参与课堂讨论和集体活动。思琪的学习态度很认真，作业工整，基础知识扎实。如果能在人际交往方面更主动一些，一定会有更全面的发展。希望思琪能多参加一些团队活动，在与同学的交流中获得更多成长。',
+      highlights: ['书法五级通过', '围棋比赛第八名', '作业工整之星', '围棋业余二段'],
+      createdAt: '2025-01-20T00:00:00Z'
+    }
+  ],
+  nextId: {
+    students: 7,
+    communications: 6,
+    portfolios: 16,
+    assessments: 8,
+    milestones: 16,
+    reports: 7
+  }
+};
+
+let db: Database;
+
+function ensureDataDir() {
+  if (!fs.existsSync(DATA_DIR)) {
+    fs.mkdirSync(DATA_DIR, { recursive: true });
+  }
+}
+
+function loadDB(): Database {
+  ensureDataDir();
+  if (!fs.existsSync(DB_FILE)) {
+    fs.writeFileSync(DB_FILE, JSON.stringify(defaultData, null, 2), 'utf-8');
+    return defaultData;
+  }
+  try {
+    const data = fs.readFileSync(DB_FILE, 'utf-8');
+    return JSON.parse(data);
+  } catch {
+    return defaultData;
+  }
+}
+
+function saveDB() {
+  ensureDataDir();
+  fs.writeFileSync(DB_FILE, JSON.stringify(db, null, 2), 'utf-8');
+}
+
+export function initDB() {
+  db = loadDB();
+}
+
+export function getDB() {
+  if (!db) {
+    initDB();
+  }
+  return db;
+}
+
+export function getNextId(table: keyof typeof db.nextId): number {
+  const id = db.nextId[table];
+  db.nextId[table]++;
+  saveDB();
+  return id;
+}
+
+export { saveDB };
