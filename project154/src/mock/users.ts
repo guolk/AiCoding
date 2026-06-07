@@ -1,0 +1,61 @@
+import type { User } from '@/types/user';
+
+export const mockUsers: User[] = [
+  {
+    id: 'user-1',
+    username: '骑行达人',
+    email: 'rider1@example.com',
+    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=rider1',
+    role: 'verified',
+    bio: '热爱骑行，已骑行超过10000公里，专注于城市通勤路线探索。',
+    totalRides: 156,
+    totalDistance: 12580,
+    createdAt: '2023-01-15T08:00:00Z',
+  },
+  {
+    id: 'user-2',
+    username: '周末骑士',
+    email: 'rider2@example.com',
+    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=rider2',
+    role: 'user',
+    bio: '周末骑行爱好者，喜欢探索近郊休闲路线。',
+    totalRides: 48,
+    totalDistance: 3200,
+    createdAt: '2023-06-20T10:30:00Z',
+  },
+  {
+    id: 'user-3',
+    username: '速度狂人',
+    email: 'rider3@example.com',
+    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=rider3',
+    role: 'verified',
+    bio: '公路车竞技选手，追求速度与极限。',
+    totalRides: 203,
+    totalDistance: 18650,
+    createdAt: '2022-11-05T14:00:00Z',
+  },
+  {
+    id: 'user-4',
+    username: '通勤一族',
+    email: 'rider4@example.com',
+    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=rider4',
+    role: 'user',
+    bio: '每天骑车上下班，环保又健康。',
+    totalRides: 312,
+    totalDistance: 9360,
+    createdAt: '2023-03-10T07:00:00Z',
+  },
+  {
+    id: 'user-5',
+    username: '风景猎人',
+    email: 'rider5@example.com',
+    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=rider5',
+    role: 'user',
+    bio: '骑行只为寻找最美的风景，用镜头记录每一次美好。',
+    totalRides: 89,
+    totalDistance: 7820,
+    createdAt: '2023-04-18T09:00:00Z',
+  },
+];
+
+export const currentUser: User = mockUsers[0];
