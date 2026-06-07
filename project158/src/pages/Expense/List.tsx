@@ -87,12 +87,14 @@ export default function ExpenseList() {
       if (itineraryFilter && expense.itineraryId !== itineraryFilter) return false;
       if (dateRange && dateRange[0] && dateRange[1]) {
         const expenseDate = dayjs(expense.expenseDate);
-        if (expenseDate.isBefore(dateRange[0]) || expenseDate.isAfter(dateRange[1])) return false;
+        if (expenseDate.isBefore(dateRange[0], 'day') || expenseDate.isAfter(dateRange[1], 'day')) return false;
       }
-      if (searchText) {
-        const search = searchText.toLowerCase();
-        const matchDescription = expense.description?.toLowerCase().includes(search);
-        const matchMerchant = expense.merchant?.toLowerCase().includes(search);
+      if (searchText && searchText.trim()) {
+        const search = searchText.trim().toLowerCase();
+        const description = expense.description || '';
+        const merchant = expense.merchant || '';
+        const matchDescription = description.toLowerCase().includes(search);
+        const matchMerchant = merchant.toLowerCase().includes(search);
         const matchAmount = expense.amount.toString().includes(search);
         if (!matchDescription && !matchMerchant && !matchAmount) return false;
       }
@@ -361,12 +363,14 @@ export default function ExpenseList() {
       <Card className="mb-6">
         <Row gutter={[16, 16]} align="middle">
           <Col xs={24} sm={12} md={6}>
-            <Input
+            <Input.Search
               placeholder="搜索说明/商家/金额"
               prefix={<Search size={16} />}
               value={searchText}
               onChange={e => setSearchText(e.target.value)}
+              onSearch={value => setSearchText(value)}
               allowClear
+              enterButton
             />
           </Col>
           <Col xs={24} sm={12} md={4}>

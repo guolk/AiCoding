@@ -1,4 +1,4 @@
-import { createBrowserRouter } from 'react-router-dom';
+import { createBrowserRouter, Navigate } from 'react-router-dom';
 import { AppLayout } from '@/components/Layout';
 import Dashboard from '@/pages/Dashboard';
 import ItineraryList from '@/pages/Itinerary/List';
@@ -78,6 +78,10 @@ const router = createBrowserRouter([
       {
         path: 'analysis',
         children: [
+          {
+            index: true,
+            element: <Navigate to="travel" replace />,
+          },
           {
             path: 'travel',
             element: <AnalysisTravel />,

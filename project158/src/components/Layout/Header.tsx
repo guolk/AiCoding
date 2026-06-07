@@ -13,6 +13,12 @@ const routeMap: Record<string, { label: string; icon: React.ElementType }> = {
   '/analysis': { label: '数据分析', icon: BarChart3 },
 };
 
+const subRouteMap: Record<string, string> = {
+  '/analysis/travel': '出行统计',
+  '/analysis/expense': '费用分析',
+  '/analysis/efficiency': '效率评估',
+};
+
 interface HeaderProps {
   sidebarCollapsed: boolean;
 }
@@ -27,7 +33,26 @@ export default function Header({ sidebarCollapsed }: HeaderProps) {
   const userMenuRef = useRef<HTMLDivElement>(null);
   const notificationRef = useRef<HTMLDivElement>(null);
 
-  const currentRoute = routeMap[location.pathname] || { label: '未知页面', icon: Home };
+  const getCurrentRoute = () => {
+    const pathname = location.pathname;
+    if (routeMap[pathname]) {
+      return routeMap[pathname];
+    }
+    for (const parentPath of Object.keys(routeMap)) {
+      if (parentPath !== '/' && pathname.startsWith(parentPath)) {
+        return routeMap[parentPath];
+      }
+    }
+    return { label: '未知页面', icon: Home };
+  };
+
+  const getSubRoute = () => {
+    const pathname = location.pathname;
+    return subRouteMap[pathname];
+  };
+
+  const currentRoute = getCurrentRoute();
+  const subRoute = getSubRoute();
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -87,6 +112,14 @@ export default function Header({ sidebarCollapsed }: HeaderProps) {
               <span className="font-medium text-neutral-700 dark:text-white">
                 {currentRoute.label}
               </span>
+              {subRoute && (
+                <>
+                  <ChevronDown className="w-4 h-4 text-neutral-300 rotate-[-90deg]" />
+                  <span className="text-neutral-500 dark:text-neutral-400">
+                    {subRoute}
+                  </span>
+                </>
+              )}
             </div>
           </nav>
         </div>
