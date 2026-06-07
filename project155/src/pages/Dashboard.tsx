@@ -1,3 +1,4 @@
+import { useParams, useNavigate } from 'react-router-dom';
 import {
   Wallet,
   CreditCard,
@@ -83,13 +84,19 @@ interface TimelineItem {
 }
 
 export default function Dashboard() {
-  const { projects } = useProjectStore();
+  const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
+  const { getProjectById } = useProjectStore();
   const { budgetCategories, getTotalBudgetByProjectId, getTotalSpentByProjectId } = useBudgetStore();
   const { getTaskProgressByProjectId } = useConstructionStore();
-  const { functionAreas } = useSpaceStore();
+  const { functionAreas, getRoomsByProjectId } = useSpaceStore();
 
-  const currentProject = projects[0];
-  const projectId = currentProject?.id || 'proj-001';
+  const currentProject = id ? getProjectById(id) : undefined;
+  const projectId = id || '';
+  const projectRooms = getRoomsByProjectId(projectId);
+  const projectFunctionAreas = functionAreas.filter(fa =>
+    projectRooms.some(room => room.id === fa.roomId)
+  );
 
   const totalBudget = getTotalBudgetByProjectId(projectId);
   const totalSpent = getTotalSpentByProjectId(projectId);
@@ -97,9 +104,9 @@ export default function Dashboard() {
   const budgetUsagePercent = totalBudget > 0 ? Math.round((totalSpent / totalBudget) * 100) : 0;
 
   const avgEfficiencyScore =
-    functionAreas.length > 0
+    projectFunctionAreas.length > 0
       ? Math.round(
-          functionAreas.reduce((sum, fa) => sum + (fa.efficiencyScore || 75), 0) / functionAreas.length
+          projectFunctionAreas.reduce((sum, fa) => sum + (fa.efficiencyScore || 75), 0) / projectFunctionAreas.length
         )
       : 78;
 
@@ -112,6 +119,34 @@ export default function Dashboard() {
         budgetCategories.findIndex((b) => b.id === bc.id) % 5
       ],
     }));
+
+  if (!id) {
+    return (
+      <PageLayout>
+        <div className="flex items-center justify-center h-screen">
+          <div className="text-center">
+            <AlertCircle className="w-16 h-16 text-yellow-500 mx-auto mb-4" />
+            <h2 className="text-xl font-semibold text-gray-900 mb-2">缺少项目ID</h2>
+            <p className="text-gray-500">请从项目列表中选择一个项目</p>
+          </div>
+        </div>
+      </PageLayout>
+    );
+  }
+
+  if (!currentProject) {
+    return (
+      <PageLayout>
+        <div className="flex items-center justify-center h-screen">
+          <div className="text-center">
+            <AlertCircle className="w-16 h-16 text-red-500 mx-auto mb-4" />
+            <h2 className="text-xl font-semibold text-gray-900 mb-2">项目不存在</h2>
+            <p className="text-gray-500">未找到ID为 {id} 的项目</p>
+          </div>
+        </div>
+      </PageLayout>
+    );
+  }
 
   const timelineActivities: TimelineItem[] = [
     {
@@ -215,7 +250,7 @@ export default function Dashboard() {
               <FileText className="w-4 h-4 mr-2" />
               导出报告
             </Button>
-            <Button>
+            <Button onClick={() => navigate(`/projects/${id}/construction?newTask=true`)}>
               <Plus className="w-4 h-4 mr-2" />
               新建任务
             </Button>

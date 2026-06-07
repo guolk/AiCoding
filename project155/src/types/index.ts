@@ -45,12 +45,17 @@ export interface Project {
   name: string;
   description: string;
   location: string;
+  address: string;
   totalBudget: number;
+  spentAmount: number;
+  totalArea: number;
+  progress: number;
   startDate: string;
   endDate: string;
   status: ProjectStatus;
   createdAt: string;
   updatedAt: string;
+  coverImage: string;
 }
 
 /**

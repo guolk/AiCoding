@@ -1,4 +1,6 @@
 import React, { useState, useMemo } from 'react';
+import { useParams } from 'react-router-dom';
+import { AlertCircle } from 'lucide-react';
 import PageLayout from '@/components/layout/PageLayout';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/Tabs';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
@@ -7,7 +9,6 @@ import { Badge } from '@/components/ui/Badge';
 import { Progress } from '@/components/ui/Progress';
 import FloorPlanCanvas from '@/components/canvas/FloorPlanCanvas';
 import { useSpaceStore } from '@/store/useSpaceStore';
-import type { Room, FunctionArea } from '@/types';
 import { cn } from '@/lib/utils';
 
 const ROOM_TYPE_LABELS: Record<string, string> = {
@@ -79,27 +80,34 @@ const getEfficiencyLabel = (score: number) => {
 };
 
 export default function SpacePlanning() {
-  const { rooms, functionAreas } = useSpaceStore();
+  const { id } = useParams<{ id: string }>();
+  const { functionAreas, getRoomsByProjectId } = useSpaceStore();
   const [activeTab, setActiveTab] = useState('floorplan');
   const [selectedRoomId, setSelectedRoomId] = useState<string | null>(null);
   const [selectedAreaId, setSelectedAreaId] = useState<string | null>(null);
 
+  const projectId = id || '';
+  const projectRooms = getRoomsByProjectId(projectId);
+  const projectFunctionAreas = functionAreas.filter(fa =>
+    projectRooms.some(room => room.id === fa.roomId)
+  );
+
   const currentRoom = useMemo(() => {
-    return rooms.find((r) => r.id === selectedRoomId) || rooms[0];
-  }, [rooms, selectedRoomId]);
+    return projectRooms.find((r) => r.id === selectedRoomId) || projectRooms[0];
+  }, [projectRooms, selectedRoomId]);
 
   const currentAreas = useMemo(() => {
     if (!currentRoom) return [];
-    return functionAreas.filter((fa) => fa.roomId === currentRoom.id);
-  }, [currentRoom, functionAreas]);
+    return projectFunctionAreas.filter((fa) => fa.roomId === currentRoom.id);
+  }, [currentRoom, projectFunctionAreas]);
 
   const selectedArea = useMemo(() => {
-    return functionAreas.find((fa) => fa.id === selectedAreaId);
-  }, [functionAreas, selectedAreaId]);
+    return projectFunctionAreas.find((fa) => fa.id === selectedAreaId);
+  }, [projectFunctionAreas, selectedAreaId]);
 
   const roomEfficiencyData = useMemo(() => {
-    return rooms.map((room) => {
-      const areas = functionAreas.filter((fa) => fa.roomId === room.id);
+    return projectRooms.map((room) => {
+      const areas = projectFunctionAreas.filter((fa) => fa.roomId === room.id);
       const totalArea = (room.width || 600) * (room.height || 500) / 100;
       const usedArea = areas.reduce((sum, fa) => sum + (fa.width * fa.height) / 100, 0);
       const utilizationRate = totalArea > 0 ? Math.round((usedArea / totalArea) * 100) : 0;
@@ -118,7 +126,7 @@ export default function SpacePlanning() {
         avgEfficiency,
       };
     });
-  }, [rooms, functionAreas]);
+  }, [projectRooms, projectFunctionAreas]);
 
   const currentRoomEfficiency = useMemo(() => {
     return roomEfficiencyData.find((d) => d.roomId === currentRoom?.id) || roomEfficiencyData[0];
@@ -166,6 +174,20 @@ export default function SpacePlanning() {
     return suggestions;
   }, [currentRoomEfficiency, currentAreas]);
 
+  if (!id) {
+    return (
+      <PageLayout>
+        <div className="flex items-center justify-center h-screen">
+          <div className="text-center">
+            <AlertCircle className="w-16 h-16 text-yellow-500 mx-auto mb-4" />
+            <h2 className="text-xl font-semibold text-gray-900 mb-2">缺少项目ID</h2>
+            <p className="text-gray-500">请从项目列表中选择一个项目</p>
+          </div>
+        </div>
+      </PageLayout>
+    );
+  }
+
   return (
     <PageLayout>
       <div className="h-full flex flex-col">
@@ -189,7 +211,7 @@ export default function SpacePlanning() {
                     <CardTitle className="text-base">房间列表</CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-2">
-                    {rooms.map((room) => {
+                    {projectRooms.map((room) => {
                       const area = (room.width || 600) * (room.height || 500) / 100;
                       const isActive = currentRoom?.id === room.id;
                       return (
@@ -215,7 +237,7 @@ export default function SpacePlanning() {
                           <div className="text-sm text-gray-500">
                             <span>面积: {Math.round(area)}㎡</span>
                             <span className="mx-2">·</span>
-                            <span>{functionAreas.filter(fa => fa.roomId === room.id).length}个功能区</span>
+                            <span>{projectFunctionAreas.filter(fa => fa.roomId === room.id).length}个功能区</span>
                           </div>
                         </button>
                       );
@@ -348,7 +370,7 @@ export default function SpacePlanning() {
                     <CardTitle className="text-base">房间列表</CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-2">
-                    {rooms.map((room) => {
+                    {projectRooms.map((room) => {
                       const area = (room.width || 600) * (room.height || 500) / 100;
                       const isActive = currentRoom?.id === room.id;
                       return (
@@ -374,7 +396,7 @@ export default function SpacePlanning() {
                           <div className="text-sm text-gray-500">
                             <span>面积: {Math.round(area)}㎡</span>
                             <span className="mx-2">·</span>
-                            <span>{functionAreas.filter(fa => fa.roomId === room.id).length}个功能区</span>
+                            <span>{projectFunctionAreas.filter(fa => fa.roomId === room.id).length}个功能区</span>
                           </div>
                         </button>
                       );

@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react';
+import { useParams } from 'react-router-dom';
 import PageLayout from '@/components/layout/PageLayout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/Tabs';
@@ -17,6 +18,7 @@ import {
   ThumbsUp,
   ChevronRight,
   TrendingUp,
+  AlertCircle,
 } from 'lucide-react';
 import { suppliers as mockSuppliers } from '@/data/mockData';
 import type { Supplier, Quotation } from '@/data/mockData';
@@ -121,24 +123,26 @@ function SupplierCard({ supplier }: { supplier: Supplier }) {
   );
 }
 
-function SupplierList() {
+function SupplierList({ suppliers }: { suppliers: Supplier[] }) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-      {mockSuppliers.map((supplier) => (
+      {suppliers.map((supplier) => (
         <SupplierCard key={supplier.id} supplier={supplier} />
       ))}
     </div>
   );
 }
 
-function PriceComparison() {
+function PriceComparison({ suppliers, projectId }: { suppliers: Supplier[]; projectId: string }) {
   const [searchTerm, setSearchTerm] = useState('');
 
   const priceComparisons = useMemo(() => {
     const itemMap = new Map<string, PriceComparisonItem>();
 
-    mockSuppliers.forEach((supplier) => {
-      supplier.quotations.forEach((quotation) => {
+    suppliers.forEach((supplier) => {
+      supplier.quotations
+        .filter(q => q.projectId === projectId)
+        .forEach((quotation) => {
         const key = quotation.itemName;
         if (!itemMap.has(key)) {
           itemMap.set(key, {
@@ -159,7 +163,7 @@ function PriceComparison() {
     });
 
     return Array.from(itemMap.values());
-  }, []);
+  }, [suppliers, projectId]);
 
   const filteredComparisons = useMemo(() => {
     if (!searchTerm.trim()) return priceComparisons;
@@ -319,7 +323,29 @@ function PriceComparison() {
 }
 
 export default function SupplierManagement() {
+  const { id } = useParams<{ id: string }>();
   const [activeTab, setActiveTab] = useState('suppliers');
+
+  const projectId = id || '';
+  const projectSuppliers = useMemo(() => {
+    return mockSuppliers.filter((supplier) =>
+      supplier.quotations.some((q) => q.projectId === projectId)
+    );
+  }, [projectId]);
+
+  if (!id) {
+    return (
+      <PageLayout>
+        <div className="flex items-center justify-center h-screen">
+          <div className="text-center">
+            <AlertCircle className="w-16 h-16 text-yellow-500 mx-auto mb-4" />
+            <h2 className="text-xl font-semibold text-gray-900 mb-2">缺少项目ID</h2>
+            <p className="text-gray-500">请从项目列表中选择一个项目</p>
+          </div>
+        </div>
+      </PageLayout>
+    );
+  }
 
   return (
     <PageLayout>
@@ -332,7 +358,7 @@ export default function SupplierManagement() {
           <div className="flex items-center gap-2">
             <Badge variant="outline" className="text-sm">
               <Building2 className="w-3.5 h-3.5 mr-1.5" />
-              共 {mockSuppliers.length} 家供应商
+              共 {projectSuppliers.length} 家供应商
             </Badge>
           </div>
         </div>
@@ -343,10 +369,10 @@ export default function SupplierManagement() {
             <TabsTrigger value="comparison">比价记录</TabsTrigger>
           </TabsList>
           <TabsContent value="suppliers">
-            <SupplierList />
+            <SupplierList suppliers={projectSuppliers} />
           </TabsContent>
           <TabsContent value="comparison">
-            <PriceComparison />
+            <PriceComparison suppliers={projectSuppliers} projectId={projectId} />
           </TabsContent>
         </Tabs>
       </div>

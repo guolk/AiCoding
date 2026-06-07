@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useParams } from 'react-router-dom';
 import PageLayout from '@/components/layout/PageLayout';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/Tabs';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/Card';
@@ -12,16 +13,31 @@ import { useBudgetStore } from '@/store/useBudgetStore';
 import { BUDGET_CATEGORY_COLORS } from '@/components/charts/PieChart';
 import { AlertTriangle, TrendingDown, CheckCircle, Lightbulb } from 'lucide-react';
 
-const PROJECT_ID = 'proj-001';
-
 export default function BudgetManagement() {
+  const { id } = useParams<{ id: string }>();
   const [activeTab, setActiveTab] = useState('breakdown');
   const { budgetCategories, expenses, updateBudgetCategory } = useBudgetStore();
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editValue, setEditValue] = useState<string>('');
 
-  const projectBudgets = budgetCategories.filter(bc => bc.projectId === PROJECT_ID);
-  const projectExpenses = expenses.filter(e => e.projectId === PROJECT_ID);
+  if (!id) {
+    return (
+      <PageLayout>
+        <div className="flex items-center justify-center min-h-[400px]">
+          <Card className="max-w-md w-full">
+            <CardContent className="py-12 text-center">
+              <AlertTriangle className="w-16 h-16 text-yellow-500 mx-auto mb-4" />
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">未找到项目ID</h3>
+              <p className="text-gray-500">请从项目列表中选择一个项目来查看预算管理页面。</p>
+            </CardContent>
+          </Card>
+        </div>
+      </PageLayout>
+    );
+  }
+
+  const projectBudgets = budgetCategories.filter(bc => bc.projectId === id);
+  const projectExpenses = expenses.filter(e => e.projectId === id);
 
   const pieData: PieChartDataItem[] = projectBudgets.map(bc => ({
     name: bc.name,

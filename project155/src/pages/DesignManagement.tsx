@@ -1,4 +1,6 @@
 import React, { useState, useMemo } from 'react';
+import { useParams } from 'react-router-dom';
+import { AlertCircle } from 'lucide-react';
 import PageLayout from '@/components/layout/PageLayout';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/Tabs';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/Card';
@@ -8,7 +10,7 @@ import { Input } from '@/components/ui/Input';
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/Table';
 import { useDesignStore } from '@/store/useDesignStore';
 import { useSpaceStore } from '@/store/useSpaceStore';
-import type { DesignVersion, MoodBoardImage, DesignElement } from '@/types';
+import type { DesignVersion } from '@/types';
 import { cn } from '@/lib/utils';
 
 const VERSION_STATUS_LABELS: Record<string, string> = {
@@ -80,8 +82,9 @@ const formatDate = (dateStr: string) => {
 };
 
 export default function DesignManagement() {
-  const { designVersions, moodBoardImages, designElements } = useDesignStore();
-  const { rooms } = useSpaceStore();
+  const { id } = useParams<{ id: string }>();
+  const { moodBoardImages, designElements, getDesignVersionsByProjectId } = useDesignStore();
+  const { getRoomsByProjectId } = useSpaceStore();
   const [activeTab, setActiveTab] = useState('versions');
   const [selectedVersionId, setSelectedVersionId] = useState<string | null>(null);
   const [compareVersionId, setCompareVersionId] = useState<string | null>(null);
@@ -90,24 +93,34 @@ export default function DesignManagement() {
   const [searchQuery, setSearchQuery] = useState('');
   const [showCompare, setShowCompare] = useState(false);
 
+  const projectId = id || '';
+  const projectVersions = getDesignVersionsByProjectId(projectId);
+  const projectRooms = getRoomsByProjectId(projectId);
+  const projectElements = designElements.filter(el =>
+    projectVersions.some(v => v.id === el.versionId)
+  );
+  const projectMoodBoardImages = moodBoardImages.filter(img =>
+    projectVersions.some(v => v.id === img.versionId)
+  );
+
   const selectedVersion = useMemo(() => {
-    return designVersions.find((v) => v.id === selectedVersionId) || designVersions[0];
-  }, [designVersions, selectedVersionId]);
+    return projectVersions.find((v) => v.id === selectedVersionId) || projectVersions[0];
+  }, [projectVersions, selectedVersionId]);
 
   const compareVersion = useMemo(() => {
-    return designVersions.find((v) => v.id === compareVersionId);
-  }, [designVersions, compareVersionId]);
+    return projectVersions.find((v) => v.id === compareVersionId);
+  }, [projectVersions, compareVersionId]);
 
   const filteredMoodBoardImages = useMemo(() => {
-    let images = selectedVersion?.moodBoardImages || moodBoardImages;
+    let images = selectedVersion?.moodBoardImages || projectMoodBoardImages;
     if (roomFilter !== 'all') {
       images = images.filter((img) => (img as any).roomId === roomFilter);
     }
     return images;
-  }, [selectedVersion, moodBoardImages, roomFilter]);
+  }, [selectedVersion, projectMoodBoardImages, roomFilter]);
 
   const filteredElements = useMemo(() => {
-    let elements = selectedVersion?.elements || designElements;
+    let elements = selectedVersion?.elements || projectElements;
     if (categoryFilter !== 'all') {
       elements = elements.filter((el) => el.category === categoryFilter);
     }
@@ -120,7 +133,7 @@ export default function DesignManagement() {
       );
     }
     return elements;
-  }, [selectedVersion, designElements, categoryFilter, searchQuery]);
+  }, [selectedVersion, projectElements, categoryFilter, searchQuery]);
 
   const elementsSummary = useMemo(() => {
     const elements = filteredElements;
@@ -134,8 +147,22 @@ export default function DesignManagement() {
   }, [filteredElements]);
 
   const getRoomName = (roomId: string) => {
-    return rooms.find((r) => r.id === roomId)?.name || '未指定';
+    return projectRooms.find((r) => r.id === roomId)?.name || '未指定';
   };
+
+  if (!id) {
+    return (
+      <PageLayout>
+        <div className="flex items-center justify-center h-screen">
+          <div className="text-center">
+            <AlertCircle className="w-16 h-16 text-yellow-500 mx-auto mb-4" />
+            <h2 className="text-xl font-semibold text-gray-900 mb-2">缺少项目ID</h2>
+            <p className="text-gray-500">请从项目列表中选择一个项目</p>
+          </div>
+        </div>
+      </PageLayout>
+    );
+  }
 
   const handleVersionCompare = (versionId: string) => {
     if (compareVersionId === versionId) {
@@ -173,7 +200,7 @@ export default function DesignManagement() {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <h3 className="text-lg font-medium text-gray-900">设计版本列表</h3>
-                  <Badge variant="outline">{designVersions.length} 个版本</Badge>
+                  <Badge variant="outline">{projectVersions.length} 个版本</Badge>
                 </div>
                 <Button>+ 新建版本</Button>
               </div>
@@ -275,7 +302,7 @@ export default function DesignManagement() {
               )}
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {designVersions.map((version) => {
+                {projectVersions.map((version) => {
                   const isSelected = selectedVersion?.id === version.id;
                   const isCompare = compareVersionId === version.id;
                   const totalPrice = (version.elements || []).reduce(
@@ -408,7 +435,7 @@ export default function DesignManagement() {
                       className="px-3 py-1.5 text-sm rounded-lg border border-gray-300 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                     >
                       <option value="all">全部房间</option>
-                      {rooms.map((room) => (
+                      {projectRooms.map((room) => (
                         <option key={room.id} value={room.id}>
                           {room.name}
                         </option>

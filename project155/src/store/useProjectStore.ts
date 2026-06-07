@@ -4,7 +4,7 @@ import { mockData } from '../data/mockData';
 
 interface ProjectStore {
   projects: Project[];
-  addProject: (project: Omit<Project, 'id' | 'createdAt' | 'updatedAt'>) => void;
+  addProject: (project: Project) => void;
   updateProject: (id: string, updates: Partial<Project>) => void;
   deleteProject: (id: string) => void;
   getProjectById: (id: string) => Project | undefined;
@@ -12,25 +12,30 @@ interface ProjectStore {
   setProjects: (projects: Project[]) => void;
 }
 
-const initialProjects: Project[] = mockData.projects.map(p => ({
-  ...p,
-  location: p.address,
-  createdAt: '2026-01-01T00:00:00.000Z',
-  updatedAt: '2026-06-01T00:00:00.000Z',
-} as unknown as Project));
+const initialProjects: Project[] = mockData.projects.map((p: any) => ({
+  id: p.id,
+  name: p.name,
+  description: p.description || '',
+  location: p.location || p.address || '',
+  address: p.address || '',
+  totalBudget: p.totalBudget || 0,
+  spentAmount: p.spentAmount || 0,
+  totalArea: p.totalArea || 0,
+  progress: p.progress || 0,
+  startDate: p.startDate || '',
+  endDate: p.endDate || '',
+  status: p.status || 'planning',
+  createdAt: p.createdAt || '2026-01-01T00:00:00.000Z',
+  updatedAt: p.updatedAt || '2026-06-01T00:00:00.000Z',
+  coverImage: p.coverImage || '',
+}));
 
 export const useProjectStore = create<ProjectStore>((set, get) => ({
   projects: initialProjects,
 
   addProject: (project) => {
-    const newProject: Project = {
-      ...project,
-      id: `proj-${Date.now()}`,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    };
     set((state) => ({
-      projects: [...state.projects, newProject],
+      projects: [...state.projects, project],
     }));
   },
 

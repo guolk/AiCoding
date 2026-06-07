@@ -1,17 +1,20 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import PageLayout from '@/components/layout/PageLayout';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/Tabs';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/Card';
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/Table';
 import { Badge } from '@/components/ui/Badge';
 import { Progress } from '@/components/ui/Progress';
+import { Button } from '@/components/ui/Button';
+import { Input } from '@/components/ui/Input';
+import { Select } from '@/components/ui/Select';
+import { Modal, ModalHeader, ModalTitle, ModalDescription, ModalContent, ModalFooter } from '@/components/ui/Modal';
 import { GanttChart, GanttChartDataItem, TASK_TYPE_COLORS, TASK_TYPE_NAMES } from '@/components/charts/GanttChart';
 import { BarChart, BarChartDataItem } from '@/components/charts/BarChart';
 import { useConstructionStore } from '@/store/useConstructionStore';
-import { ConstructionTaskStatus, IssueSeverity, IssueStatus } from '@/types';
-import { Calendar, Clock, AlertTriangle, CheckCircle, Timer, AlertCircle, XCircle } from 'lucide-react';
-
-const PROJECT_ID = 'proj-001';
+import { ConstructionTaskStatus, IssueSeverity, IssueStatus, ConstructionTaskType } from '@/types';
+import { Calendar, Clock, AlertTriangle, CheckCircle, Timer, AlertCircle, XCircle, Plus } from 'lucide-react';
 
 const STATUS_TEXT: Record<ConstructionTaskStatus, string> = {
   'pending': '待开始',
@@ -55,12 +58,55 @@ const ISSUE_STATUS_VARIANT: Record<IssueStatus, 'default' | 'success' | 'warning
   'closed': 'outline',
 };
 
-export default function ConstructionManagement() {
-  const [activeTab, setActiveTab] = useState('schedule');
-  const { constructionTasks, issues, getTaskProgressByProjectId } = useConstructionStore();
+const TASK_TYPE_OPTIONS: { value: ConstructionTaskType; label: string }[] = [
+  { value: 'waterproof', label: '防水' },
+  { value: 'electrical', label: '电路' },
+  { value: 'tiling', label: '瓦工' },
+  { value: 'carpentry', label: '木工' },
+  { value: 'painting', label: '油漆' },
+  { value: 'soft-decoration', label: '软装' },
+];
 
-  const projectTasks = constructionTasks.filter(t => t.projectId === PROJECT_ID);
-  const projectIssues = issues.filter(i => i.projectId === PROJECT_ID);
+export default function ConstructionManagement() {
+  const { id } = useParams<{ id: string }>();
+  const [activeTab, setActiveTab] = useState('schedule');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [formData, setFormData] = useState({
+    name: '',
+    type: 'waterproof' as ConstructionTaskType,
+    plannedStartDate: '',
+    plannedEndDate: '',
+    assignee: '',
+  });
+  const { constructionTasks, issues, getTaskProgressByProjectId, addConstructionTask } = useConstructionStore();
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    if (params.get('newTask') === 'true') {
+      setIsModalOpen(true);
+      params.delete('newTask');
+      navigate({ search: params.toString() }, { replace: true });
+    }
+  }, [location.search, navigate]);
+
+  if (!id) {
+    return (
+      <PageLayout>
+        <div className="flex items-center justify-center min-h-[400px]">
+          <div className="text-center">
+            <AlertCircle className="w-16 h-16 text-yellow-500 mx-auto mb-4" />
+            <h2 className="text-xl font-semibold text-gray-900 mb-2">未找到项目ID</h2>
+            <p className="text-gray-500">请从项目列表中选择一个项目查看施工进度</p>
+          </div>
+        </div>
+      </PageLayout>
+    );
+  }
+
+  const projectTasks = constructionTasks.filter(t => t.projectId === id);
+  const projectIssues = issues.filter(i => i.projectId === id);
 
   const ganttData: GanttChartDataItem[] = projectTasks.map(task => ({
     id: task.id,
@@ -79,7 +125,7 @@ export default function ConstructionManagement() {
     actual: calculateActualProgress(task),
   }));
 
-  const overallProgress = getTaskProgressByProjectId(PROJECT_ID);
+  const overallProgress = getTaskProgressByProjectId(id);
   const completedTasks = projectTasks.filter(t => t.status === 'completed').length;
   const inProgressTasks = projectTasks.filter(t => t.status === 'in-progress').length;
   const delayedTasks = projectTasks.filter(t => t.status === 'delayed').length;
@@ -138,6 +184,48 @@ export default function ConstructionManagement() {
       case 'low':
         return <AlertCircle className="w-4 h-4 text-blue-500" />;
     }
+  }
+
+  function handleAddTask() {
+    setIsModalOpen(true);
+    setFormData({
+      name: '',
+      type: 'waterproof',
+      plannedStartDate: '',
+      plannedEndDate: '',
+      assignee: '',
+    });
+  }
+
+  function handleCloseModal() {
+    setIsModalOpen(false);
+  }
+
+  function handleFormChange(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value,
+    }));
+  }
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (!id) return;
+    
+    addConstructionTask({
+      projectId: id,
+      name: formData.name,
+      type: formData.type,
+      plannedStartDate: formData.plannedStartDate,
+      plannedEndDate: formData.plannedEndDate,
+      progress: 0,
+      status: 'pending',
+      dependencies: [],
+      assignee: formData.assignee || undefined,
+    });
+    
+    setIsModalOpen(false);
   }
 
   return (
@@ -213,6 +301,12 @@ export default function ConstructionManagement() {
           </TabsList>
 
           <TabsContent value="schedule" className="space-y-6">
+            <div className="flex justify-end">
+              <Button onClick={handleAddTask}>
+                <Plus className="w-4 h-4 mr-2" />
+                新增任务
+              </Button>
+            </div>
             <Card>
               <CardHeader>
                 <CardTitle>施工甘特图</CardTitle>
@@ -651,6 +745,91 @@ export default function ConstructionManagement() {
           </TabsContent>
         </Tabs>
       </div>
+
+      <Modal open={isModalOpen} onClose={handleCloseModal}>
+        <ModalHeader onClose={handleCloseModal}>
+          <ModalTitle>新增任务</ModalTitle>
+          <ModalDescription>请填写新任务的详细信息</ModalDescription>
+        </ModalHeader>
+        <form onSubmit={handleSubmit}>
+          <ModalContent className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                任务名称 <span className="text-red-500">*</span>
+              </label>
+              <Input
+                name="name"
+                value={formData.name}
+                onChange={handleFormChange}
+                placeholder="请输入任务名称"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                任务类型 <span className="text-red-500">*</span>
+              </label>
+              <Select
+                name="type"
+                value={formData.type}
+                onChange={handleFormChange}
+                required
+              >
+                {TASK_TYPE_OPTIONS.map(option => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </Select>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  计划开始日期 <span className="text-red-500">*</span>
+                </label>
+                <Input
+                  type="date"
+                  name="plannedStartDate"
+                  value={formData.plannedStartDate}
+                  onChange={handleFormChange}
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  计划结束日期 <span className="text-red-500">*</span>
+                </label>
+                <Input
+                  type="date"
+                  name="plannedEndDate"
+                  value={formData.plannedEndDate}
+                  onChange={handleFormChange}
+                  required
+                />
+              </div>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                负责人
+              </label>
+              <Input
+                name="assignee"
+                value={formData.assignee}
+                onChange={handleFormChange}
+                placeholder="请输入负责人姓名"
+              />
+            </div>
+          </ModalContent>
+          <ModalFooter>
+            <Button type="button" variant="outline" onClick={handleCloseModal}>
+              取消
+            </Button>
+            <Button type="submit">
+              确认添加
+            </Button>
+          </ModalFooter>
+        </form>
+      </Modal>
     </PageLayout>
   );
 }
