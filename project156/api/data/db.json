@@ -316,19 +316,6 @@
       "semester": 1,
       "isFeatured": false,
       "createdAt": "2024-03-15T00:00:00Z"
-    },
-    {
-      "title": "tetst",
-      "category": "art",
-      "description": "fdsgdg",
-      "fileUrl": "http://t553.com",
-      "thumbnail": "http://t553.com",
-      "grade": 3,
-      "semester": 1,
-      "id": 16,
-      "studentId": 1,
-      "isFeatured": false,
-      "createdAt": "2026-06-07T08:51:37.180Z"
     }
   ],
   "assessments": [
@@ -744,7 +731,7 @@
   "nextId": {
     "students": 7,
     "communications": 6,
-    "portfolios": 17,
+    "portfolios": 19,
     "assessments": 9,
     "milestones": 16,
     "reports": 7

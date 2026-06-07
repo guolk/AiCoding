@@ -17,8 +17,8 @@ router.get('/student/:studentId', (req, res) => {
     const { category, grade } = req.query;
     const portfolios = getPortfoliosByStudentId(
       studentId,
-      category as string,
-      grade ? parseInt(grade as string) : undefined
+      category && category !== '' ? category as string : undefined,
+      grade && grade !== '' ? parseInt(grade as string) : undefined
     );
     res.json(portfolios);
   } catch (error) {

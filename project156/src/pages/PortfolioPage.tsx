@@ -38,7 +38,7 @@ export default function PortfolioPage() {
   const {
     portfolios, portfolioTimeline, featuredPortfolios,
     fetchPortfolios, fetchPortfolioTimeline, fetchFeaturedPortfolios,
-    toggleFeatured, deletePortfolio
+    toggleFeatured, deletePortfolio, addPortfolio
   } = useStudentStore();
 
   const [selectedCategory, setSelectedCategory] = useState<string | undefined>(undefined);
@@ -447,9 +447,9 @@ export default function PortfolioPage() {
                 取消
               </button>
               <button
-                onClick={() => {
+                onClick={async () => {
                   if (newPortfolio.title && newPortfolio.fileUrl) {
-                    useStudentStore.getState().addPortfolio(studentId, newPortfolio);
+                    await addPortfolio(studentId, newPortfolio);
                     setShowAddModal(false);
                     setNewPortfolio({
                       title: '',
@@ -460,6 +460,9 @@ export default function PortfolioPage() {
                       grade: 3,
                       semester: 1,
                     });
+                    fetchPortfolios(studentId, selectedCategory, selectedGrade);
+                    fetchPortfolioTimeline(studentId);
+                    fetchFeaturedPortfolios(studentId);
                   }
                 }}
                 className="btn-primary"
