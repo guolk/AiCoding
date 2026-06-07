@@ -1,0 +1,100 @@
+/** @type {import('tailwindcss').Config} */
+
+export default {
+  darkMode: "class",
+  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
+  theme: {
+    container: {
+      center: true,
+    },
+    extend: {
+      colors: {
+        primary: {
+          50: '#E8F3FF',
+          100: '#B9D8FF',
+          200: '#8ABDFF',
+          300: '#5BA2FF',
+          400: '#2C87FF',
+          500: '#165DFF',
+          600: '#0E42D2',
+          700: '#0A2BA0',
+          800: '#061A6E',
+          900: '#030D3C',
+        },
+        success: {
+          50: '#E8FFEA',
+          100: '#B4F5B7',
+          200: '#80E584',
+          300: '#4DD051',
+          400: '#26B32A',
+          500: '#00B42A',
+          600: '#009A24',
+          700: '#00751A',
+          800: '#005210',
+          900: '#002F07',
+        },
+        warning: {
+          50: '#FFF7E8',
+          100: '#FFE5B4',
+          200: '#FFD180',
+          300: '#FFBD4D',
+          400: '#FFA826',
+          500: '#FF7D00',
+          600: '#E06A00',
+          700: '#B05100',
+          800: '#7A3800',
+          900: '#421F00',
+        },
+        danger: {
+          50: '#FFECE8',
+          100: '#FCC5B9',
+          200: '#FA9E8B',
+          300: '#F5765C',
+          400: '#F3543A',
+          500: '#F53F3F',
+          600: '#D32828',
+          700: '#A81818',
+          800: '#720C0C',
+          900: '#3F0404',
+        },
+        neutral: {
+          50: '#F7F8FA',
+          100: '#F2F3F5',
+          200: '#E5E6EB',
+          300: '#C9CDD4',
+          400: '#86909C',
+          500: '#4E5969',
+          600: '#272E3B',
+          700: '#1D2129',
+          800: '#141821',
+          900: '#0A0E16',
+        },
+      },
+      fontFamily: {
+        serif: ['"Noto Serif SC"', 'serif'],
+        sans: ['Inter', 'system-ui', 'sans-serif'],
+      },
+      boxShadow: {
+        'card': '0 2px 8px rgba(0, 0, 0, 0.06)',
+        'card-hover': '0 4px 16px rgba(0, 0, 0, 0.1)',
+        'button': '0 2px 4px rgba(22, 93, 255, 0.3)',
+      },
+      animation: {
+        'fade-in': 'fadeIn 0.3s ease-out',
+        'slide-up': 'slideUp 0.3s ease-out',
+        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+      },
+      keyframes: {
+        fadeIn: {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' },
+        },
+        slideUp: {
+          '0%': { transform: 'translateY(10px)', opacity: '0' },
+          '100%': { transform: 'translateY(0)', opacity: '1' },
+        },
+      },
+    },
+  },
+  plugins: [],
+};
