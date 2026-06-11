@@ -12,8 +12,31 @@ export default function MaintenanceList() {
   const [delId, setDelId] = useState<string | null>(null);
 
   const handleAdd = () => {
+    if (!form.facilityId) {
+      alert('请选择关联设施');
+      return;
+    }
+    if (!form.type.trim()) {
+      alert('请填写维护类型');
+      return;
+    }
+    if (!form.maintenanceDate) {
+      alert('请选择维护日期');
+      return;
+    }
     const facility = facilities.find((f) => f.id === form.facilityId);
-    addMaintenance({ id: Date.now().toString(), ...form, facilityName: facility?.name || '', cost: Number(form.cost) });
+    const newRecord: MaintenanceRecord = {
+      id: Date.now().toString(),
+      facilityId: form.facilityId,
+      facilityName: facility?.name || '',
+      type: form.type,
+      maintenanceDate: form.maintenanceDate,
+      maintainer: form.maintainer,
+      parts: form.parts,
+      cost: Number(form.cost) || 0,
+      description: form.description,
+    };
+    addMaintenance(newRecord);
     setForm(emptyForm);
     setAddOpen(false);
   };

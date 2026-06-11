@@ -70,6 +70,11 @@ export default function PlanList() {
                   <div className="flex items-center gap-2">
                     <span className="px-2 py-0.5 rounded text-xs font-medium bg-blue-50 text-blue-700">v{plan.version}</span>
                     <span className={`px-2 py-0.5 rounded text-xs font-medium ${statusInfo.color}`}>{statusInfo.label}</span>
+                    <button onClick={(e) => { e.stopPropagation(); setConfirmId(plan.id); }}
+                      className="p-1.5 text-gray-400 hover:text-red-500 rounded-lg hover:bg-red-50 transition-colors"
+                      title="删除预案">
+                      <Trash2 size={15} />
+                    </button>
                   </div>
                 </div>
                 <div className="mt-3 flex items-center justify-between text-sm text-gray-500">
@@ -99,12 +104,6 @@ export default function PlanList() {
                       </div>
                     ))}
                   </div>
-                  <div className="mt-3 flex justify-end">
-                    <button onClick={(e) => { e.stopPropagation(); setConfirmId(plan.id); }}
-                      className="flex items-center gap-1 text-sm text-red-500 hover:text-red-700">
-                      <Trash2 size={14} /> 删除
-                    </button>
-                  </div>
                 </div>
               )}
             </div>
@@ -113,13 +112,15 @@ export default function PlanList() {
       </div>
 
       {confirmId && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-          <div className="bg-white rounded-xl p-6 w-80 shadow-lg space-y-4">
-            <p className="text-gray-900 font-medium">确认删除该预案？</p>
-            <div className="flex justify-end gap-3">
-              <button onClick={() => setConfirmId(null)} className="px-4 py-1.5 rounded-lg text-sm text-gray-600 border">取消</button>
+        <div className="fixed inset-0 z-[100] flex items-center justify-center">
+          <div className="absolute inset-0 bg-black/40" onClick={() => setConfirmId(null)} />
+          <div className="relative bg-white rounded-xl p-6 w-80 shadow-xl space-y-4">
+            <h3 className="text-gray-900 font-medium text-base">确认删除预案</h3>
+            <p className="text-sm text-gray-500">删除后将无法恢复，确定要删除该预案吗？</p>
+            <div className="flex justify-end gap-3 pt-2">
+              <button onClick={() => setConfirmId(null)} className="px-4 py-2 rounded-lg text-sm text-gray-600 border border-gray-200 hover:bg-gray-50 transition-colors">取消</button>
               <button onClick={() => { deletePlan(confirmId); setConfirmId(null); setExpanded(null); }}
-                className="px-4 py-1.5 rounded-lg text-sm text-white" style={{ background: '#C41E3A' }}>确认</button>
+                className="px-4 py-2 rounded-lg text-sm text-white transition-colors hover:opacity-90" style={{ background: '#C41E3A' }}>确认删除</button>
             </div>
           </div>
         </div>
