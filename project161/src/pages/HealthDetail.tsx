@@ -1,14 +1,24 @@
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useTreeStore } from '@/store/treeStore';
-import { ArrowLeft, HeartPulse, TreePine, Shield, Wrench, MapPin } from 'lucide-react';
+import { ArrowLeft, HeartPulse, TreePine, Shield, Wrench, MapPin, Trash2, AlertCircle, X, Check } from 'lucide-react';
 import { SEVERITY_LABELS, MEASURE_TYPE_LABELS } from '@/types';
 import { RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, ResponsiveContainer } from 'recharts';
+import { useState } from 'react';
 
 export default function HealthDetail() {
   const { id } = useParams<{ id: string }>();
-  const { healthAssessments, getProtectionMeasuresByAssessmentId, trees } = useTreeStore();
+  const navigate = useNavigate();
+  const { healthAssessments, getProtectionMeasuresByAssessmentId, trees, deleteHealthAssessment } = useTreeStore();
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   const assessment = healthAssessments.find((a) => a.id === id);
+
+  const handleDelete = () => {
+    if (id) {
+      deleteHealthAssessment(id);
+      navigate('/health');
+    }
+  };
   if (!assessment) {
     return (
       <div className="p-8 text-center">
@@ -61,17 +71,26 @@ export default function HealthDetail() {
 
   return (
     <div className="p-8">
-      <div className="flex items-center gap-4 mb-6">
-        <Link to="/health" className="p-2 rounded-lg hover:bg-forest-100 transition-colors">
-          <ArrowLeft className="w-5 h-5 text-forest-600" />
-        </Link>
-        <div>
-          <h1 className="font-serif text-3xl font-bold text-forest-600 flex items-center gap-3">
-            <HeartPulse className="w-8 h-8" />
-            {assessment.treeSpecies} 健康评估
-          </h1>
-          <p className="text-brown-700/60 mt-1">评估日期：{assessment.assessmentDate} | 评估员：{assessment.assessor}</p>
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center gap-4">
+          <Link to="/health" className="p-2 rounded-lg hover:bg-forest-100 transition-colors">
+            <ArrowLeft className="w-5 h-5 text-forest-600" />
+          </Link>
+          <div>
+            <h1 className="font-serif text-3xl font-bold text-forest-600 flex items-center gap-3">
+              <HeartPulse className="w-8 h-8" />
+              {assessment.treeSpecies} 健康评估
+            </h1>
+            <p className="text-brown-700/60 mt-1">评估日期：{assessment.assessmentDate} | 评估员：{assessment.assessor}</p>
+          </div>
         </div>
+        <button
+          onClick={() => setShowDeleteConfirm(true)}
+          className="flex items-center gap-2 px-4 py-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+        >
+          <Trash2 className="w-4 h-4" />
+          删除评估
+        </button>
       </div>
 
       <div className="grid grid-cols-3 gap-6">
@@ -179,6 +198,41 @@ export default function HealthDetail() {
           </div>
         </div>
       </div>
+
+      {showDeleteConfirm && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center" onClick={() => setShowDeleteConfirm(false)}>
+          <div className="bg-white rounded-xl p-6 max-w-sm w-full mx-4 animate-fade-in-up" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center">
+                <AlertCircle className="w-6 h-6 text-red-500" />
+              </div>
+              <div>
+                <h3 className="font-serif text-lg font-semibold text-brown-700">确认删除</h3>
+                <p className="text-sm text-brown-700/60">此操作不可恢复</p>
+              </div>
+            </div>
+            <p className="text-sm text-brown-700/70 mb-6">
+              确定要删除这条健康评估记录吗？相关的保护措施记录也会一并删除。
+            </p>
+            <div className="flex gap-3">
+              <button
+                onClick={() => setShowDeleteConfirm(false)}
+                className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 border border-forest-200 rounded-lg text-brown-700/70 hover:bg-forest-50 transition-colors"
+              >
+                <X className="w-4 h-4" />
+                取消
+              </button>
+              <button
+                onClick={handleDelete}
+                className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
+              >
+                <Check className="w-4 h-4" />
+                确认删除
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

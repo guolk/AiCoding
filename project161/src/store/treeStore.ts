@@ -22,6 +22,7 @@ interface TreeStore {
   getMediaAssetsByTreeId: (treeId: string) => MediaAsset[];
 
   addHealthAssessment: (assessment: HealthAssessment) => void;
+  deleteHealthAssessment: (id: string) => void;
   getHealthAssessmentsByTreeId: (treeId: string) => HealthAssessment[];
 
   addProtectionMeasure: (measure: ProtectionMeasure) => void;
@@ -55,6 +56,10 @@ export const useTreeStore = create<TreeStore>((set, get) => ({
   getMediaAssetsByTreeId: (treeId) => get().mediaAssets.filter((a) => a.treeId === treeId),
 
   addHealthAssessment: (assessment) => set((state) => ({ healthAssessments: [...state.healthAssessments, assessment] })),
+  deleteHealthAssessment: (id) => set((state) => ({
+    healthAssessments: state.healthAssessments.filter((a) => a.id !== id),
+    protectionMeasures: state.protectionMeasures.filter((m) => m.assessmentId !== id),
+  })),
   getHealthAssessmentsByTreeId: (treeId) => get().healthAssessments.filter((a) => a.treeId === treeId),
 
   addProtectionMeasure: (measure) => set((state) => ({ protectionMeasures: [...state.protectionMeasures, measure] })),
