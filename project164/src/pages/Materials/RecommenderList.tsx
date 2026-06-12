@@ -26,6 +26,7 @@ export default function RecommenderList() {
   const {
     recommenders,
     addRecommender,
+    updateRecommender,
     deleteRecommender,
     updateRecommendationRequest,
     deleteRecommendationRequest,
@@ -235,7 +236,18 @@ export default function RecommenderList() {
                         </div>
                       </div>
                     )}
-                    <button className="p-2 text-slate-400 hover:text-primary-700 hover:bg-primary-50 rounded-lg transition-colors">
+                    <button
+                      onClick={() => {
+                        const name = prompt("请输入推荐人姓名：", rec.name);
+                        if (name) {
+                          const title = prompt("请输入推荐人职称（如：教授、博士）：", rec.title) || rec.title;
+                          const email = prompt("请输入推荐人邮箱：", rec.email) || rec.email;
+                          const institution = prompt("请输入推荐人所在机构：", rec.institution) || rec.institution;
+                          updateRecommender(rec.id, { name, title, email, institution });
+                        }
+                      }}
+                      className="p-2 text-slate-400 hover:text-primary-700 hover:bg-primary-50 rounded-lg transition-colors"
+                    >
                       <Edit3 className="w-4 h-4" />
                     </button>
                     <button
