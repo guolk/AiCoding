@@ -16,7 +16,7 @@ export default function EquipmentList() {
       <div className="flex items-center justify-between mb-8">
         <h1 className="font-display text-2xl font-bold text-white">设备管理</h1>
         <Link
-          to="#"
+          to="/equipment/new"
           className="inline-flex items-center gap-2 bg-accent-500 hover:bg-accent-600 text-white px-4 py-2 rounded-lg font-medium transition-colors"
         >
           <Plus className="w-4 h-4" />

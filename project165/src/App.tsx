@@ -7,6 +7,7 @@ import FlightNew from "@/pages/FlightNew";
 import EquipmentList from "@/pages/EquipmentList";
 import EquipmentDetail from "@/pages/EquipmentDetail";
 import MaintenanceNew from "@/pages/MaintenanceNew";
+import EquipmentNew from "@/pages/EquipmentNew";
 import ProjectList from "@/pages/ProjectList";
 import ProjectDetail from "@/pages/ProjectDetail";
 import ProjectNew from "@/pages/ProjectNew";
@@ -22,6 +23,7 @@ export default function App() {
           <Route path="/flights/new" element={<FlightNew />} />
           <Route path="/flights/:id" element={<FlightDetail />} />
           <Route path="/equipment" element={<EquipmentList />} />
+          <Route path="/equipment/new" element={<EquipmentNew />} />
           <Route path="/equipment/:id" element={<EquipmentDetail />} />
           <Route path="/equipment/:id/maintenance/new" element={<MaintenanceNew />} />
           <Route path="/projects" element={<ProjectList />} />
