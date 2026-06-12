@@ -1,9 +1,9 @@
 import { useState, useMemo } from 'react';
 import { useFinanceStore } from '@/store/financeStore';
 import { CURRENCIES } from '@/data/currencies';
-import { getCityById } from '@/data/cities';
-import type { FinanceTx, Currency } from '@/types';
-import { formatDate } from '@/utils/date';
+import { getCityById, CITIES } from '@/data/cities';
+import type { FinanceTx, Currency, TxType } from '@/types';
+import { formatDate, todayISO } from '@/utils/date';
 import { formatCurrency, formatUSD, convertToUSD } from '@/utils/currency';
 import {
   Wallet,
@@ -20,6 +20,7 @@ import {
   Receipt,
   Globe,
   PiggyBank,
+  X,
 } from 'lucide-react';
 import {
   PieChart as RechartsPieChart,
@@ -37,7 +38,6 @@ import {
 import { format, subMonths } from 'date-fns';
 import { zhCN } from 'date-fns/locale';
 
-// Tab configuration
 const TABS = [
   { id: 'transactions', label: '交易流水', icon: Receipt },
   { id: 'exchange', label: '汇率看板', icon: Globe },
@@ -46,7 +46,6 @@ const TABS = [
 
 type TabId = typeof TABS[number]['id'];
 
-// Static change indicators for exchange rates (simulated)
 const RATE_CHANGES: Record<string, { change: number; direction: 'up' | 'down' | 'flat' }> = {
   EUR: { change: 0.02, direction: 'up' },
   GBP: { change: 0.01, direction: 'up' },
@@ -69,40 +68,34 @@ const RATE_CHANGES: Record<string, { change: number; direction: 'up' | 'down' | 
   GEL: { change: 0.002, direction: 'up' },
 };
 
-// Pie chart colors
 const PIE_COLORS = [
-  '#0d9488',
-  '#0ea5e9',
-  '#f59e0b',
-  '#ef4444',
-  '#8b5cf6',
-  '#ec4899',
-  '#84cc16',
-  '#6366f1',
-  '#14b8a6',
-  '#f97316',
+  '#0d9488', '#0ea5e9', '#f59e0b', '#ef4444', '#8b5cf6',
+  '#ec4899', '#84cc16', '#6366f1', '#14b8a6', '#f97316',
 ];
+
+const EXPENSE_CATEGORIES = ['住宿', '餐饮', '交通', '工作空间', '娱乐', '订阅', '购物', '医疗', '其他'];
+const INCOME_CATEGORIES = ['薪资', '自由职业', '投资', '其他'];
 
 export default function Finance() {
   const [activeTab, setActiveTab] = useState<TabId>('transactions');
+  const [showTxModal, setShowTxModal] = useState(false);
   const {
     transactions,
     getTotalIncomeUSD,
     getTotalExpenseUSD,
     getBalanceUSD,
+    addTransaction,
     removeTransaction,
   } = useFinanceStore();
 
   return (
     <div className="min-h-screen bg-slate-50 p-6">
       <div className="mx-auto max-w-6xl">
-        {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-slate-900">财务管理</h1>
           <p className="mt-2 text-slate-500">追踪全球收入支出、汇率和预算分析</p>
         </div>
 
-        {/* Tabs */}
         <div className="mb-6 flex gap-1 rounded-xl bg-white p-1.5 shadow-sm ring-1 ring-slate-200">
           {TABS.map((tab) => {
             const Icon = tab.icon;
@@ -124,7 +117,6 @@ export default function Finance() {
           })}
         </div>
 
-        {/* Tab Content */}
         <div className="min-h-[600px]">
           {activeTab === 'transactions' && (
             <TransactionsTab
@@ -132,34 +124,45 @@ export default function Finance() {
               totalIncome={getTotalIncomeUSD()}
               totalExpense={getTotalExpenseUSD()}
               balance={getBalanceUSD()}
+              onAdd={() => setShowTxModal(true)}
               onRemove={removeTransaction}
             />
           )}
           {activeTab === 'exchange' && <ExchangeRateTab />}
           {activeTab === 'analysis' && <AnalysisTab transactions={transactions} />}
         </div>
+
+        {showTxModal && (
+          <AddTxModal
+            onClose={() => setShowTxModal(false)}
+            onSubmit={(tx) => {
+              addTransaction(tx);
+              setShowTxModal(false);
+            }}
+          />
+        )}
       </div>
     </div>
   );
 }
 
-// ==================== Tab 1: Transactions ====================
 function TransactionsTab({
   transactions,
   totalIncome,
   totalExpense,
   balance,
+  onAdd,
   onRemove,
 }: {
   transactions: FinanceTx[];
   totalIncome: number;
   totalExpense: number;
   balance: number;
+  onAdd: () => void;
   onRemove: (id: string) => void;
 }) {
   return (
     <div>
-      {/* Summary Cards */}
       <div className="mb-6 grid gap-4 md:grid-cols-3">
         <SummaryCard
           icon={ArrowUpCircle}
@@ -187,21 +190,19 @@ function TransactionsTab({
         />
       </div>
 
-      {/* Transaction list header */}
       <div className="mb-5 flex items-center justify-between">
         <h2 className="text-lg font-semibold text-slate-800">
-          交易记录{' '}
-          <span className="ml-2 text-sm font-normal text-slate-400">
-            ({transactions.length})
-          </span>
+          交易记录 <span className="ml-2 text-sm font-normal text-slate-400">({transactions.length})</span>
         </h2>
-        <button className="flex items-center gap-2 rounded-lg bg-teal-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-teal-700">
+        <button
+          onClick={onAdd}
+          className="flex items-center gap-2 rounded-lg bg-teal-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-teal-700"
+        >
           <Plus size={16} />
           添加交易
         </button>
       </div>
 
-      {/* Transaction list */}
       {transactions.length === 0 ? (
         <div className="flex flex-col items-center justify-center rounded-2xl bg-white py-20 text-center shadow-sm ring-1 ring-slate-200">
           <Receipt size={48} className="mb-4 text-slate-300" />
@@ -263,7 +264,6 @@ function TransactionItem({
 
   return (
     <div className="group flex items-center gap-4 p-4 transition-colors hover:bg-slate-50">
-      {/* Icon */}
       <div
         className={`flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-xl ${
           isIncome ? 'bg-green-100' : 'bg-red-100'
@@ -276,7 +276,6 @@ function TransactionItem({
         )}
       </div>
 
-      {/* Main info */}
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-2">
           <span
@@ -301,7 +300,6 @@ function TransactionItem({
         )}
       </div>
 
-      {/* Amount */}
       <div className="flex flex-col items-end gap-0.5">
         <div
           className={`text-base font-bold ${
@@ -316,12 +314,10 @@ function TransactionItem({
         </div>
       </div>
 
-      {/* Date */}
       <div className="hidden w-24 flex-shrink-0 text-right text-sm text-slate-500 sm:block">
         {formatDate(tx.date)}
       </div>
 
-      {/* Delete button */}
       <button
         onClick={onRemove}
         className="rounded-md p-2 text-slate-300 opacity-0 transition-all hover:bg-red-50 hover:text-red-500 group-hover:opacity-100"
@@ -332,7 +328,6 @@ function TransactionItem({
   );
 }
 
-// ==================== Tab 2: Exchange Rates ====================
 function ExchangeRateTab() {
   return (
     <div>
@@ -428,9 +423,7 @@ function RateIndicator({
   );
 }
 
-// ==================== Tab 3: Monthly Analysis ====================
 function AnalysisTab({ transactions }: { transactions: FinanceTx[] }) {
-  // Pie chart data: expenses by category
   const pieData = useMemo(() => {
     const categoryMap = new Map<string, number>();
     transactions
@@ -448,7 +441,6 @@ function AnalysisTab({ transactions }: { transactions: FinanceTx[] }) {
       .sort((a, b) => b.value - a.value);
   }, [transactions]);
 
-  // Bar chart data: last 6 months income vs expense
   const barData = useMemo(() => {
     const months: { month: string; label: string; income: number; expense: number }[] = [];
     const today = new Date();
@@ -476,12 +468,10 @@ function AnalysisTab({ transactions }: { transactions: FinanceTx[] }) {
     return months;
   }, [transactions]);
 
-  // Total stats
   const totalPieValue = pieData.reduce((sum, d) => sum + d.value, 0);
 
   return (
     <div className="space-y-6">
-      {/* Pie Chart */}
       <div className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
         <div className="mb-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -564,7 +554,6 @@ function AnalysisTab({ transactions }: { transactions: FinanceTx[] }) {
         )}
       </div>
 
-      {/* Bar Chart */}
       <div className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
         <div className="mb-4 flex items-center gap-2">
           <BarChart3 size={20} className="text-teal-600" />
@@ -616,6 +605,184 @@ function AnalysisTab({ transactions }: { transactions: FinanceTx[] }) {
             </BarChart>
           </ResponsiveContainer>
         </div>
+      </div>
+    </div>
+  );
+}
+
+function AddTxModal({
+  onClose,
+  onSubmit,
+}: {
+  onClose: () => void;
+  onSubmit: (tx: Omit<FinanceTx, 'id'>) => void;
+}) {
+  const [form, setForm] = useState({
+    type: 'expense' as TxType,
+    amount: '',
+    currency: 'USD',
+    category: EXPENSE_CATEGORIES[0],
+    date: todayISO(),
+    cityId: '',
+    notes: '',
+  });
+
+  const categories = form.type === 'expense' ? EXPENSE_CATEGORIES : INCOME_CATEGORIES;
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const amount = parseFloat(form.amount);
+    if (!amount || amount <= 0) return;
+    onSubmit({
+      type: form.type,
+      amount,
+      currency: form.currency,
+      category: form.category,
+      date: form.date,
+      cityId: form.cityId || undefined,
+      notes: form.notes,
+    });
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4 backdrop-blur-sm">
+      <div className="w-full max-w-lg overflow-hidden rounded-2xl bg-white shadow-xl">
+        <div className="flex items-center justify-between border-b border-slate-100 px-6 py-4">
+          <h3 className="text-lg font-bold text-slate-900">添加交易</h3>
+          <button onClick={onClose} className="rounded-lg p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-600">
+            <X size={20} />
+          </button>
+        </div>
+
+        <form onSubmit={handleSubmit} className="max-h-[70vh] overflow-y-auto p-6 space-y-4">
+          <div>
+            <label className="mb-1.5 block text-sm font-medium text-slate-700">交易类型</label>
+            <div className="grid grid-cols-2 gap-2">
+              <button
+                type="button"
+                onClick={() => setForm({ ...form, type: 'income', category: INCOME_CATEGORIES[0] })}
+                className={`flex items-center justify-center gap-2 rounded-lg py-2.5 text-sm font-medium transition-colors ${
+                  form.type === 'income'
+                    ? 'bg-green-100 text-green-700 ring-2 ring-green-200'
+                    : 'bg-slate-50 text-slate-600 hover:bg-slate-100'
+                }`}
+              >
+                <TrendingUp size={16} />
+                收入
+              </button>
+              <button
+                type="button"
+                onClick={() => setForm({ ...form, type: 'expense', category: EXPENSE_CATEGORIES[0] })}
+                className={`flex items-center justify-center gap-2 rounded-lg py-2.5 text-sm font-medium transition-colors ${
+                  form.type === 'expense'
+                    ? 'bg-red-100 text-red-700 ring-2 ring-red-200'
+                    : 'bg-slate-50 text-slate-600 hover:bg-slate-100'
+                }`}
+              >
+                <TrendingDown size={16} />
+                支出
+              </button>
+            </div>
+          </div>
+
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div>
+              <label className="mb-1.5 block text-sm font-medium text-slate-700">金额</label>
+              <input
+                type="number"
+                value={form.amount}
+                onChange={(e) => setForm({ ...form, amount: e.target.value })}
+                placeholder="0.00"
+                step="0.01"
+                min="0"
+                className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-100"
+                required
+              />
+            </div>
+            <div>
+              <label className="mb-1.5 block text-sm font-medium text-slate-700">货币</label>
+              <select
+                value={form.currency}
+                onChange={(e) => setForm({ ...form, currency: e.target.value })}
+                className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-100"
+              >
+                {CURRENCIES.map((c) => (
+                  <option key={c.code} value={c.code}>
+                    {c.flag} {c.code} - {c.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div>
+              <label className="mb-1.5 block text-sm font-medium text-slate-700">分类</label>
+              <select
+                value={form.category}
+                onChange={(e) => setForm({ ...form, category: e.target.value })}
+                className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-100"
+              >
+                {categories.map((c) => (
+                  <option key={c} value={c}>{c}</option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className="mb-1.5 block text-sm font-medium text-slate-700">日期</label>
+              <input
+                type="date"
+                value={form.date}
+                onChange={(e) => setForm({ ...form, date: e.target.value })}
+                className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-100"
+                required
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="mb-1.5 block text-sm font-medium text-slate-700">关联城市 (可选)</label>
+            <select
+              value={form.cityId}
+              onChange={(e) => setForm({ ...form, cityId: e.target.value })}
+              className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-100"
+            >
+              <option value="">不关联</option>
+              {CITIES.map((c) => (
+                <option key={c.id} value={c.id}>
+                  {c.flag} {c.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div>
+            <label className="mb-1.5 block text-sm font-medium text-slate-700">备注</label>
+            <input
+              type="text"
+              value={form.notes}
+              onChange={(e) => setForm({ ...form, notes: e.target.value })}
+              placeholder="添加备注..."
+              className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-100"
+            />
+          </div>
+
+          <div className="flex gap-3 pt-2">
+            <button
+              type="button"
+              onClick={onClose}
+              className="flex-1 rounded-lg border border-slate-200 bg-white py-2.5 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50"
+            >
+              取消
+            </button>
+            <button
+              type="submit"
+              className="flex-1 rounded-lg bg-teal-600 py-2.5 text-sm font-medium text-white transition-colors hover:bg-teal-700"
+            >
+              添加交易
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );
