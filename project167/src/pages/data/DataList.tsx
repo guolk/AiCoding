@@ -21,17 +21,59 @@ export default function DataList() {
   const [editForm, setEditForm] = useState<any>({});
   const pageSize = 20;
 
+  const instrumentName = (id: string) => instruments.find((i) => i.id === id)?.name || id;
+
   const filteredData = useMemo(() => {
     let data = [...observations];
 
     if (search) {
-      const lower = search.toLowerCase();
-      data = data.filter(
-        (o) =>
-          o.datetime.toLowerCase().includes(lower) ||
-          o.instrumentId.toLowerCase().includes(lower) ||
-          o.remark?.toLowerCase().includes(lower)
-      );
+      const lower = search.trim().toLowerCase();
+      const searchNum = parseFloat(lower);
+      const hasNumber = !isNaN(searchNum);
+      
+      data = data.filter((o) => {
+        const dateObj = new Date(o.datetime);
+        const year = dateObj.getFullYear().toString();
+        const month = (dateObj.getMonth() + 1).toString().padStart(2, '0');
+        const day = dateObj.getDate().toString().padStart(2, '0');
+        const hour = dateObj.getHours().toString().padStart(2, '0');
+        const minute = dateObj.getMinutes().toString().padStart(2, '0');
+        
+        const dateFormats = [
+          o.datetime.toLowerCase(),
+          `${year}-${month}-${day}`,
+          `${year}/${month}/${day}`,
+          `${year}${month}${day}`,
+          `${year}年${month}月${day}日`,
+          `${month}-${day}`,
+          `${month}/${day}`,
+          `${month}月${day}日`,
+          `${month}月${day}日 ${hour}:${minute}`,
+          `${year}-${month}-${day} ${hour}:${minute}`,
+          `${hour}:${minute}`,
+        ];
+        
+        const instName = instrumentName(o.instrumentId).toLowerCase();
+        
+        for (const fmt of dateFormats) {
+          if (fmt.includes(lower)) return true;
+        }
+        
+        if (o.instrumentId.toLowerCase().includes(lower)) return true;
+        if (instName.includes(lower)) return true;
+        if (o.remark?.toLowerCase().includes(lower)) return true;
+        
+        if (hasNumber) {
+          if (o.temperature !== null && Math.abs(o.temperature - searchNum) < 0.5) return true;
+          if (o.humidity !== null && Math.abs(o.humidity - searchNum) < 1) return true;
+          if (o.pressure !== null && Math.abs(o.pressure - searchNum) < 1) return true;
+          if (o.windSpeed !== null && Math.abs(o.windSpeed - searchNum) < 0.5) return true;
+          if (o.precipitation !== null && Math.abs(o.precipitation - searchNum) < 0.5) return true;
+          if (o.visibility !== null && Math.abs(o.visibility - searchNum) < 0.5) return true;
+        }
+        
+        return false;
+      });
     }
 
     if (qualityFilter !== 'all') {
@@ -55,7 +97,7 @@ export default function DataList() {
     }
 
     return data;
-  }, [observations, search, qualityFilter, reviewFilter, instrumentFilter, dateFrom, dateTo]);
+  }, [observations, instruments, search, qualityFilter, reviewFilter, instrumentFilter, dateFrom, dateTo]);
 
   const totalPages = Math.ceil(filteredData.length / pageSize);
   const pageData = filteredData.slice((currentPage - 1) * pageSize, currentPage * pageSize);
@@ -84,8 +126,6 @@ export default function DataList() {
     }
   };
 
-  const instrumentName = (id: string) => instruments.find((i) => i.id === id)?.name || id;
-
   return (
     <div className="space-y-6">
       <div className="flex items-start justify-between">
@@ -100,8 +140,8 @@ export default function DataList() {
       </div>
 
       <div className="card p-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
-          <div className="lg:col-span-2">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-4">
+          <div className="xl:col-span-2">
             <label className="input-label">
               <Search className="w-4 h-4 inline mr-1" />
               搜索
@@ -110,7 +150,7 @@ export default function DataList() {
               type="text"
               value={search}
               onChange={(e) => { setSearch(e.target.value); setCurrentPage(1); }}
-              placeholder="搜索时间、仪器、备注..."
+              placeholder="搜索日期、时间、仪器、备注、数值..."
               className="input"
             />
           </div>
@@ -142,6 +182,19 @@ export default function DataList() {
               <option value="pending">待审核</option>
               <option value="approved">已通过</option>
               <option value="rejected">已拒绝</option>
+            </select>
+          </div>
+          <div>
+            <label className="input-label">所属仪器</label>
+            <select
+              value={instrumentFilter}
+              onChange={(e) => { setInstrumentFilter(e.target.value); setCurrentPage(1); }}
+              className="input"
+            >
+              <option value="all">全部仪器</option>
+              {instruments.map((i) => (
+                <option key={i.id} value={i.id}>{i.name}</option>
+              ))}
             </select>
           </div>
           <div>

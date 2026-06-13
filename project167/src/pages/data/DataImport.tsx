@@ -1,10 +1,10 @@
-import { useState, useRef, useMemo } from 'react';
+import { useState, useRef, useMemo, useCallback } from 'react';
 import { useWeatherStore } from '@/store';
 import { parseCSV, generateSampleCSV, downloadCSV } from '@/utils/csv';
 import { batchQualityCheck } from '@/utils/quality';
 import type { Observation } from '@/types';
 import { ELEMENT_LABELS } from '@/types';
-import { Upload, FileSpreadsheet, AlertTriangle, CheckCircle, Download, X, Loader2 } from 'lucide-react';
+import { Upload, FileSpreadsheet, AlertTriangle, CheckCircle, Download, X, Loader2, FileUp } from 'lucide-react';
 
 export default function DataImport() {
   const batchAddObservations = useWeatherStore((state) => state.batchAddObservations);
@@ -23,7 +23,16 @@ export default function DataImport() {
       setErrors([]);
       setImportSuccess(false);
     }
+    if (e.target) {
+      e.target.value = '';
+    }
   };
+
+  const handleUploadClick = useCallback(() => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  }, []);
 
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -121,8 +130,7 @@ export default function DataImport() {
         <div
           onDrop={handleDrop}
           onDragOver={handleDragOver}
-          className="card p-12 border-2 border-dashed border-slate-300 hover:border-primary-400 hover:bg-primary-50/30 transition-all cursor-pointer"
-          onClick={() => fileInputRef.current?.click()}
+          className="card p-12 border-2 border-dashed border-slate-300 hover:border-primary-400 hover:bg-primary-50/30 transition-all"
         >
           <input
             ref={fileInputRef}
@@ -130,18 +138,36 @@ export default function DataImport() {
             accept=".csv"
             onChange={handleFileSelect}
             className="hidden"
+            id="csv-file-input"
           />
-          <div className="flex flex-col items-center text-center">
-            <div className="w-16 h-16 rounded-full bg-primary-100 flex items-center justify-center mb-4">
-              <Upload className="w-8 h-8 text-primary-600" />
+          <label htmlFor="csv-file-input" className="flex flex-col items-center text-center cursor-pointer block">
+            <div className="w-20 h-20 rounded-full bg-primary-100 flex items-center justify-center mb-4">
+              <FileUp className="w-10 h-10 text-primary-600" />
             </div>
-            <h3 className="text-lg font-semibold text-slate-700 mb-2">
-              {file ? file.name : '点击或拖拽上传 CSV 文件'}
+            <h3 className="text-xl font-semibold text-slate-700 mb-2">
+              {file ? file.name : '上传 CSV 数据文件'}
             </h3>
-            <p className="text-slate-500 text-sm">
+            {file && (
+              <p className="text-sm text-primary-600 mb-3">
+                文件大小: {(file.size / 1024).toFixed(1)} KB
+              </p>
+            )}
+            {!file && (
+              <p className="text-slate-500 text-sm mb-4">
+                拖拽文件到此处，或点击下方按钮选择文件
+              </p>
+            )}
+            <span
+              className="btn btn-primary flex items-center gap-2 mt-2"
+              onClick={(e) => { e.preventDefault(); document.getElementById('csv-file-input')?.click(); }}
+            >
+              <Upload className="w-4 h-4" />
+              {file ? '重新选择文件' : '选择 CSV 文件'}
+            </span>
+            <p className="text-xs text-slate-400 mt-4">
               支持 datetime, 气温(temperature), 湿度(humidity) 等中英文表头
             </p>
-          </div>
+          </label>
         </div>
       )}
 
