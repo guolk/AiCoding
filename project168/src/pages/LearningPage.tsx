@@ -3,6 +3,7 @@ import { BookOpen, Target, CheckCircle, Plus, Star, TrendingUp, Calendar, Award 
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
 import { useGoStore } from '@/store/useGoStore';
 import Card from '@/components/ui/Card';
+import ProblemPracticeModal from '@/components/practice/ProblemPracticeModal';
 import {
   DIFFICULTY_LABELS,
   DIFFICULTY_STARS,
@@ -11,16 +12,18 @@ import {
   TASK_TYPE_LABELS,
   JosekiMastery,
   ProblemDifficulty,
+  LifeDeathProblem,
 } from '@/types';
 import { cn } from '@/lib/utils';
 import { formatDate, getWeekDates, formatDuration, getTodayString } from '@/utils/dateUtils';
 
 export default function LearningPage() {
-  const { problems, josekis, dailyTasks, toggleDailyTask, updateJoseki, addDailyTask } = useGoStore();
+  const { problems, josekis, dailyTasks, toggleDailyTask, updateJoseki, addDailyTask, addPracticeRecord } = useGoStore();
   const [activeTab, setActiveTab] = useState<'problems' | 'joseki' | 'tasks'>('problems');
   const [difficultyFilter, setDifficultyFilter] = useState<ProblemDifficulty | 'all'>('all');
   const [showAddTask, setShowAddTask] = useState(false);
   const [newTaskTitle, setNewTaskTitle] = useState('');
+  const [practiceProblem, setPracticeProblem] = useState<LifeDeathProblem | null>(null);
 
   const today = getTodayString();
   const todayTasks = dailyTasks.filter(t => t.date === today);
@@ -238,7 +241,10 @@ export default function LearningPage() {
                               {lastRecord && ` · 上次: ${formatDate(lastRecord.date, 'MM/dd')}`}
                             </p>
                           </div>
-                          <button className="px-4 py-2 bg-go-wood-700 text-white text-sm rounded-lg hover:bg-go-wood-800 transition-colors">
+                          <button
+                            onClick={() => setPracticeProblem(problem)}
+                            className="px-4 py-2 bg-go-wood-700 text-white text-sm rounded-lg hover:bg-go-wood-800 transition-colors"
+                          >
                             练习
                           </button>
                         </div>
@@ -471,6 +477,24 @@ export default function LearningPage() {
           </Card>
         </div>
       </div>
+
+      {practiceProblem && (
+        <ProblemPracticeModal
+          problem={practiceProblem}
+          isOpen={!!practiceProblem}
+          onClose={() => setPracticeProblem(null)}
+          onSubmit={(isCorrect, timeSpent, notes) => {
+            if (practiceProblem) {
+              addPracticeRecord(practiceProblem.id, {
+                date: Date.now(),
+                isCorrect,
+                timeSpent,
+                notes,
+              });
+            }
+          }}
+        />
+      )}
     </div>
   );
 }
