@@ -31,7 +31,7 @@ export const Sidebar: React.FC = () => {
   const location = useLocation();
 
   return (
-    <aside className="hidden xl:block w-64 shrink-0 border-r border-earth-100 dark:border-forest-800 bg-white/50 dark:bg-forest-950/50 backdrop-blur-sm">
+    <aside className="hidden lg:block w-64 shrink-0 border-r border-earth-100 dark:border-forest-800 bg-white/50 dark:bg-forest-950/50 backdrop-blur-sm">
       <div className="sticky top-16 h-[calc(100vh-4rem)] overflow-y-auto py-6">
         <div className="px-6 space-y-6">
           {sidebarItems.map((section) => (
@@ -48,7 +48,7 @@ export const Sidebar: React.FC = () => {
                     <Link
                       key={item.path}
                       to={item.path}
-                      className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 group
+                      className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 group cursor-pointer
                         ${isActive
                           ? 'bg-forest-600 text-white shadow-lg shadow-forest-600/30'
                           : 'text-earth-600 hover:text-earth-900 hover:bg-earth-100 dark:text-earth-400 dark:hover:text-earth-100 dark:hover:bg-forest-800/50'

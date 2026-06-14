@@ -25,63 +25,72 @@ export const HeatmapLayer: React.FC<HeatmapLayerProps> = ({
   ],
 }) => {
   const map = useMap();
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const layerRef = useRef<L.Layer | null>(null);
 
   useEffect(() => {
     if (!map || points.length === 0) return;
 
     const canvas = document.createElement('canvas');
-    canvasRef.current = canvas;
 
     const updateHeatmap = () => {
-      const size = map.getSize();
-      canvas.width = size.x;
-      canvas.height = size.y;
+      try {
+        const size = map.getSize();
+        if (size.x <= 0 || size.y <= 0) return;
 
-      const ctx = canvas.getContext('2d');
-      if (!ctx) return;
+        canvas.width = size.x;
+        canvas.height = size.y;
+        canvas.style.position = 'absolute';
+        canvas.style.top = '0';
+        canvas.style.left = '0';
+        canvas.style.pointerEvents = 'none';
 
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return;
 
-      points.forEach(point => {
-        const containerPoint = map.latLngToContainerPoint([point.lat, point.lng]);
-        
-        const x = containerPoint.x;
-        const y = containerPoint.y;
-        
-        const gradientObj = ctx.createRadialGradient(x, y, 0, x, y, radius);
-        gradientObj.addColorStop(0, `rgba(255, 255, 255, ${point.intensity / 100 * maxOpacity})`);
-        gradientObj.addColorStop(1, 'rgba(255, 255, 255, 0)');
-        
-        ctx.fillStyle = gradientObj;
-        ctx.beginPath();
-        ctx.arc(x, y, radius + blur, 0, Math.PI * 2);
-        ctx.fill();
-      });
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-      const data = imageData.data;
-
-      for (let i = 0; i < data.length; i += 4) {
-        const alpha = data[i + 3];
-        if (alpha > 0) {
-          const gradientIndex = Math.min(
-            Math.floor((alpha / 255) * (gradient.length - 1) * (255 / maxOpacity / 255)),
-            gradient.length - 1
-          );
-          const color = gradient[gradientIndex];
+        points.forEach(point => {
+          const containerPoint = map.latLngToContainerPoint([point.lat, point.lng]);
           
-          const rgbaMatch = color.match(/rgba?\((\d+),\s*(\d+),\s*(\d+),?\s*([\d.]+)?\)/);
-          if (rgbaMatch) {
-            data[i] = parseInt(rgbaMatch[1]);
-            data[i + 1] = parseInt(rgbaMatch[2]);
-            data[i + 2] = parseInt(rgbaMatch[3]);
+          const x = containerPoint.x;
+          const y = containerPoint.y;
+          
+          const r = Math.max(1, radius);
+          const gradientObj = ctx.createRadialGradient(x, y, 0, x, y, r);
+          gradientObj.addColorStop(0, `rgba(255, 255, 255, ${point.intensity / 100 * maxOpacity})`);
+          gradientObj.addColorStop(1, 'rgba(255, 255, 255, 0)');
+          
+          ctx.fillStyle = gradientObj;
+          ctx.beginPath();
+          ctx.arc(x, y, r + blur, 0, Math.PI * 2);
+          ctx.fill();
+        });
+
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const data = imageData.data;
+
+        for (let i = 0; i < data.length; i += 4) {
+          const alpha = data[i + 3];
+          if (alpha > 0) {
+            const gradientIndex = Math.min(
+              Math.floor((alpha / 255) * (gradient.length - 1) * (255 / maxOpacity / 255)),
+              gradient.length - 1
+            );
+            const color = gradient[gradientIndex];
+            
+            const rgbaMatch = color.match(/rgba?\((\d+),\s*(\d+),\s*(\d+),?\s*([\d.]+)?\)/);
+            if (rgbaMatch) {
+              data[i] = parseInt(rgbaMatch[1]);
+              data[i + 1] = parseInt(rgbaMatch[2]);
+              data[i + 2] = parseInt(rgbaMatch[3]);
+            }
           }
         }
-      }
 
-      ctx.putImageData(imageData, 0, 0);
+        ctx.putImageData(imageData, 0, 0);
+      } catch (e) {
+        console.warn('HeatmapLayer update failed:', e);
+      }
     };
 
     const CustomLayer = L.Layer.extend({
@@ -90,9 +99,13 @@ export const HeatmapLayer: React.FC<HeatmapLayerProps> = ({
         if (pane) {
           pane.appendChild(canvas);
         }
-        updateHeatmap();
+        try {
+          updateHeatmap();
+        } catch (e) {
+          console.warn('HeatmapLayer onAdd failed:', e);
+        }
       },
-      onRemove: function (map: L.Map) {
+      onRemove: function () {
         if (canvas.parentNode) {
           canvas.parentNode.removeChild(canvas);
         }
@@ -109,9 +122,10 @@ export const HeatmapLayer: React.FC<HeatmapLayerProps> = ({
       map.off('moveend zoomend resize', updateHeatmap);
       if (layerRef.current) {
         map.removeLayer(layerRef.current);
+        layerRef.current = null;
       }
     };
-  }, [map, points, radius, maxOpacity, blur, gradient]);
+  }, [map, points, radius, maxOpacity, blur, gradient.join(',')]);
 
   return null;
 };

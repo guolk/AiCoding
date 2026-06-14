@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { 
   Mic, 
   Menu, 
@@ -21,6 +21,7 @@ export const Header: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const { theme, toggleTheme } = useTheme();
   const location = useLocation();
+  const navigate = useNavigate();
 
   const navItems = [
     { path: '/', label: '首页', icon: Compass },
@@ -50,12 +51,12 @@ export const Header: React.FC = () => {
             </div>
           </Link>
 
-          <nav className="hidden lg:flex items-center gap-1">
+          <nav className="hidden lg:flex items-center gap-1 relative z-10">
             {navItems.map((item) => (
               <Link
                 key={item.path}
                 to={item.path}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-2
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-2 relative z-10 cursor-pointer
                   ${location.pathname === item.path 
                     ? 'bg-forest-100 text-forest-700 dark:bg-forest-800/50 dark:text-forest-300' 
                     : 'text-earth-600 hover:text-earth-900 hover:bg-earth-50 dark:text-earth-400 dark:hover:text-earth-100 dark:hover:bg-forest-800/30'
@@ -79,11 +80,14 @@ export const Header: React.FC = () => {
               />
             </div>
 
-            <Link to="/archive/new">
-              <IconButton variant="filled" size="md">
-                <Plus size={20} />
-              </IconButton>
-            </Link>
+            <IconButton 
+              variant="filled" 
+              size="md"
+              onClick={() => navigate('/archive/new')}
+              aria-label="新建录音"
+            >
+              <Plus size={20} />
+            </IconButton>
 
             <IconButton onClick={toggleTheme} size="md">
               {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
@@ -100,14 +104,14 @@ export const Header: React.FC = () => {
         </div>
 
         {isMenuOpen && (
-          <div className="lg:hidden py-4 border-t border-earth-100 dark:border-forest-800 animate-fade-in">
+          <div className="lg:hidden py-4 border-t border-earth-100 dark:border-forest-800 animate-fade-in relative z-50">
             <nav className="flex flex-col gap-2">
               {navItems.map((item) => (
                 <Link
                   key={item.path}
                   to={item.path}
                   onClick={() => setIsMenuOpen(false)}
-                  className={`px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-3
+                  className={`px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-3 cursor-pointer
                     ${location.pathname === item.path 
                       ? 'bg-forest-100 text-forest-700 dark:bg-forest-800/50 dark:text-forest-300' 
                       : 'text-earth-600 hover:text-earth-900 hover:bg-earth-50 dark:text-earth-400 dark:hover:text-earth-100 dark:hover:bg-forest-800/30'

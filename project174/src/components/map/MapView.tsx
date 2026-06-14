@@ -114,10 +114,6 @@ export const MapView: React.FC<MapViewProps> = ({
             />
           )
         ))}
-
-        {showHeatmap && heatmapPoints.length > 0 && (
-          <HeatmapLayer points={heatmapPoints} />
-        )}
       </MapContainer>
     </div>
   );
