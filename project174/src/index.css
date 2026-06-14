@@ -1,0 +1,167 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: light dark;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: 'Sora', system-ui, sans-serif;
+    line-height: 1.6;
+    font-weight: 400;
+    background-color: #faf8f5;
+    color: #2c3e35;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  .dark body {
+    background-color: #1a2420;
+    color: #e5e7eb;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-weight: 600;
+    line-height: 1.2;
+  }
+
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #8b7355 transparent;
+  }
+
+  *::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background-color: #8b7355;
+    border-radius: 3px;
+  }
+
+  *::-webkit-scrollbar-thumb:hover {
+    background-color: #1a4d2e;
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply bg-white/80 dark:bg-forest-900/80 backdrop-blur-md border border-white/20 dark:border-forest-700/30 rounded-xl shadow-lg;
+  }
+
+  .btn-primary {
+    @apply px-6 py-3 bg-gradient-to-r from-forest-600 to-forest-700 text-white rounded-lg font-medium 
+           hover:from-forest-700 hover:to-forest-800 transition-all duration-300 
+           hover:shadow-lg hover:shadow-forest-600/30 hover:-translate-y-0.5
+           active:translate-y-0 focus:outline-none focus:ring-2 focus:ring-forest-500 focus:ring-offset-2;
+  }
+
+  .btn-secondary {
+    @apply px-6 py-3 bg-earth-100 dark:bg-earth-900/50 text-earth-800 dark:text-earth-200 rounded-lg font-medium
+           hover:bg-earth-200 dark:hover:bg-earth-800/50 transition-all duration-300
+           border border-earth-200 dark:border-earth-700
+           focus:outline-none focus:ring-2 focus:ring-earth-500 focus:ring-offset-2;
+  }
+
+  .btn-ghost {
+    @apply px-4 py-2 text-forest-700 dark:text-forest-300 rounded-lg font-medium
+           hover:bg-forest-50 dark:hover:bg-forest-800/30 transition-all duration-200
+           focus:outline-none focus:ring-2 focus:ring-forest-500 focus:ring-offset-2;
+  }
+
+  .input-field {
+    @apply w-full px-4 py-3 bg-white dark:bg-forest-900/50 border border-earth-200 dark:border-forest-700 
+           rounded-lg text-earth-900 dark:text-earth-100 placeholder-earth-400 dark:placeholder-earth-600
+           focus:outline-none focus:ring-2 focus:ring-forest-500 focus:border-transparent
+           transition-all duration-200;
+  }
+
+  .card-hover {
+    @apply transition-all duration-300 hover:-translate-y-1 hover:shadow-xl;
+  }
+
+  .noise-overlay {
+    position: relative;
+  }
+
+  .noise-overlay::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    opacity: 0.03;
+    pointer-events: none;
+    border-radius: inherit;
+  }
+
+  .gradient-text {
+    @apply bg-gradient-to-r from-forest-600 via-forest-500 to-sky-500 bg-clip-text text-transparent;
+  }
+
+  .stagger-reveal > * {
+    opacity: 0;
+    animation: fadeInUp 0.6s ease-out forwards;
+  }
+
+  .stagger-reveal > *:nth-child(1) { animation-delay: 0.1s; }
+  .stagger-reveal > *:nth-child(2) { animation-delay: 0.2s; }
+  .stagger-reveal > *:nth-child(3) { animation-delay: 0.3s; }
+  .stagger-reveal > *:nth-child(4) { animation-delay: 0.4s; }
+  .stagger-reveal > *:nth-child(5) { animation-delay: 0.5s; }
+  .stagger-reveal > *:nth-child(6) { animation-delay: 0.6s; }
+  .stagger-reveal > *:nth-child(7) { animation-delay: 0.7s; }
+  .stagger-reveal > *:nth-child(8) { animation-delay: 0.8s; }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .animate-delay-100 { animation-delay: 100ms; }
+  .animate-delay-200 { animation-delay: 200ms; }
+  .animate-delay-300 { animation-delay: 300ms; }
+  .animate-delay-400 { animation-delay: 400ms; }
+  .animate-delay-500 { animation-delay: 500ms; }
+  .animate-delay-600 { animation-delay: 600ms; }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.leaflet-container {
+  font-family: 'Sora', system-ui, sans-serif;
+  border-radius: 0.75rem;
+}
+
+.leaflet-popup-content-wrapper {
+  border-radius: 0.75rem;
+  padding: 0;
+}
+
+.leaflet-popup-content {
+  margin: 0;
+  min-width: 200px;
+}

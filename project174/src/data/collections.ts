@@ -1,0 +1,66 @@
+import { Collection } from '@/types';
+
+const generateId = () => Math.random().toString(36).substr(2, 9);
+
+export const mockCollections: Collection[] = [
+  {
+    id: generateId(),
+    name: '春日鸟鸣',
+    theme: '春天的声音',
+    mood: '欢快',
+    description: '收录春天里各种鸟类的鸣叫声，感受生命的苏醒。',
+    recordingIds: [],
+    coverImage: 'https://images.unsplash.com/photo-1444464666168-49d633b86797?w=800&h=600&fit=crop',
+    createdAt: new Date('2024-05-20'),
+  },
+  {
+    id: generateId(),
+    name: '山水之间',
+    theme: '自然水景',
+    mood: '宁静',
+    description: '瀑布、溪流、海浪，水的千姿百态带来心灵的洗涤。',
+    recordingIds: [],
+    coverImage: 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=800&h=600&fit=crop',
+    createdAt: new Date('2024-06-15'),
+  },
+  {
+    id: generateId(),
+    name: '四季轮回',
+    theme: '季节变化',
+    mood: '多变',
+    description: '春夏秋冬，每个季节都有独特的声音记忆。',
+    recordingIds: [],
+    coverImage: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&h=600&fit=crop',
+    createdAt: new Date('2024-07-10'),
+  },
+  {
+    id: generateId(),
+    name: '城市与自然',
+    theme: '对比',
+    mood: '思考',
+    description: '当城市的喧嚣遇见自然的宁静，会产生怎样的对话？',
+    recordingIds: [],
+    coverImage: 'https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=800&h=600&fit=crop',
+    createdAt: new Date('2024-08-01'),
+  },
+  {
+    id: generateId(),
+    name: '夜之声',
+    theme: '夜晚',
+    mood: '神秘',
+    description: '当世界沉睡，另一些生命开始苏醒。探索夜晚的声音世界。',
+    recordingIds: [],
+    coverImage: 'https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=800&h=600&fit=crop',
+    createdAt: new Date('2024-09-20'),
+  },
+  {
+    id: generateId(),
+    name: '旅行日记',
+    theme: '旅途',
+    mood: '自由',
+    description: '每段旅程都有独特的声音，记录下走过的每一个地方。',
+    recordingIds: [],
+    coverImage: 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=800&h=600&fit=crop',
+    createdAt: new Date('2024-10-05'),
+  },
+];

@@ -1,0 +1,28 @@
+import { Tag, TagCategory } from '@/types';
+
+export const defaultTags: Tag[] = [
+  { id: 't1', name: '画眉鸟', category: 'birdsong' as TagCategory, color: '#22c55e' },
+  { id: 't2', name: '喜鹊', category: 'birdsong' as TagCategory, color: '#22c55e' },
+  { id: 't3', name: '布谷鸟', category: 'birdsong' as TagCategory, color: '#22c55e' },
+  { id: 't4', name: '麻雀', category: 'birdsong' as TagCategory, color: '#22c55e' },
+  { id: 't5', name: '夜莺', category: 'birdsong' as TagCategory, color: '#22c55e' },
+  { id: 't6', name: '啄木鸟', category: 'birdsong' as TagCategory, color: '#22c55e' },
+  { id: 't7', name: '溪流', category: 'water' as TagCategory, color: '#3b82f6' },
+  { id: 't8', name: '瀑布', category: 'water' as TagCategory, color: '#3b82f6' },
+  { id: 't9', name: '海浪', category: 'water' as TagCategory, color: '#3b82f6' },
+  { id: 't10', name: '雨滴', category: 'water' as TagCategory, color: '#3b82f6' },
+  { id: 't11', name: '河流', category: 'water' as TagCategory, color: '#3b82f6' },
+  { id: 't12', name: '泉水', category: 'water' as TagCategory, color: '#3b82f6' },
+  { id: 't13', name: '微风', category: 'wind' as TagCategory, color: '#60a5fa' },
+  { id: 't14', name: '强风', category: 'wind' as TagCategory, color: '#60a5fa' },
+  { id: 't15', name: '树叶沙沙', category: 'wind' as TagCategory, color: '#60a5fa' },
+  { id: 't16', name: '蝉鸣', category: 'insects' as TagCategory, color: '#eab308' },
+  { id: 't17', name: '蟋蟀', category: 'insects' as TagCategory, color: '#eab308' },
+  { id: 't18', name: '蛙鸣', category: 'insects' as TagCategory, color: '#eab308' },
+  { id: 't19', name: '城市交通', category: 'urban' as TagCategory, color: '#6b7280' },
+  { id: 't20', name: '人声', category: 'urban' as TagCategory, color: '#6b7280' },
+  { id: 't21', name: '建筑施工', category: 'urban' as TagCategory, color: '#6b7280' },
+  { id: 't22', name: '钟声', category: 'other' as TagCategory, color: '#8b5cf6' },
+  { id: 't23', name: '雷声', category: 'other' as TagCategory, color: '#8b5cf6' },
+  { id: 't24', name: '远处狗吠', category: 'other' as TagCategory, color: '#8b5cf6' },
+];
