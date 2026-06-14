@@ -67,16 +67,27 @@ export default function Layout() {
           </div>
 
           <div className="flex items-center gap-3">
-            <div className="relative">
-              <button className="relative p-2 text-gray-500 hover:text-amber-700 hover:bg-gray-100 rounded-lg transition-colors">
+            <div className="relative" ref={notifRef}>
+              <button
+                onClick={() => setNotifOpen((v) => !v)}
+                className="relative p-2 text-gray-500 hover:text-amber-700 hover:bg-gray-100 rounded-lg transition-colors"
+              >
                 <Bell className="w-5 h-5" />
                 {onLoanCount > 0 && (
                   <span className="absolute top-1 right-1 w-2 h-2 bg-amber-500 rounded-full" />
                 )}
               </button>
-              {onLoanCount > 0 && (
-                <div className="absolute top-full right-0 mt-2 w-64 p-3 bg-white rounded-xl shadow-card-hover border border-gray-100 animate-fade-in">
-                  <p className="text-sm font-medium text-amber-800 mb-2">出借提醒</p>
+              {notifOpen && onLoanCount > 0 && (
+                <div className="absolute top-full right-0 mt-2 w-64 p-3 bg-white rounded-xl shadow-card-hover border border-gray-100 animate-fade-in z-50">
+                  <div className="flex items-center justify-between mb-2">
+                    <p className="text-sm font-medium text-amber-800">出借提醒</p>
+                    <button
+                      onClick={() => setNotifOpen(false)}
+                      className="text-gray-400 hover:text-gray-600 transition-colors"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  </div>
                   <p className="text-xs text-gray-500">
                     有 <span className="font-semibold text-amber-600">{onLoanCount}</span> 批标本正在外借中
                   </p>
