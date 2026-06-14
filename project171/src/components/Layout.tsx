@@ -22,8 +22,8 @@ const navItems: NavItem[] = [
   { to: '/', label: '首页仪表盘', icon: LayoutDashboard },
   { to: '/donations', label: '捐款记录', icon: Heart },
   { to: '/institutions', label: '机构研究', icon: Building2 },
-  { to: '/participation/volunteer', label: '公益参与', icon: Users },
-  { to: '/tracking/progress', label: '效果追踪', icon: TrendingUp },
+  { to: '/participation', label: '公益参与', icon: Users },
+  { to: '/tracking', label: '效果追踪', icon: TrendingUp },
   { to: '/report', label: '年度报告', icon: FileText },
 ];
 
@@ -31,8 +31,8 @@ const pageTitles: Record<string, string> = {
   '/': '首页仪表盘',
   '/donations': '捐款记录',
   '/institutions': '机构研究',
-  '/participation/volunteer': '公益参与',
-  '/tracking/progress': '效果追踪',
+  '/participation': '公益参与',
+  '/tracking': '效果追踪',
   '/report': '年度报告',
 };
 
