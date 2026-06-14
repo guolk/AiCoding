@@ -1,9 +1,23 @@
 import type { Project, QuantitativeTarget, BudgetItem, Milestone, VisitRecord, PhotoGroup, EffectData, BenefitCase, Issue, Risk, IssueHistory, RiskMeasure } from '@/types';
-import { initMockData } from '@/data/mockData';
+import {
+  mockProjects,
+  mockQuantitativeTargets,
+  mockBudgetItems,
+  mockMilestones,
+  mockVisitRecords,
+  mockPhotoGroups,
+  mockEffectData,
+  mockBenefitCases,
+  mockIssues,
+  mockRisks,
+  initMockData,
+} from '@/data/mockData';
 import { v4 as uuidv4 } from 'uuid';
 import { create } from 'zustand';
 
-const STORAGE_KEY = 'rural_revival_data';
+const STORAGE_KEY = 'rural_revival_data_v2';
+const DATA_VERSION = '2.0.0';
+const VERSION_KEY = 'rural_revival_data_version_v2';
 
 interface StorageData {
   projects: Project[];
@@ -85,87 +99,67 @@ interface ProjectStore {
   deleteRisk: (id: string) => void;
 
   saveToStorage: () => void;
+  resetData: () => void;
 }
 
 export const useProjectStore = create<ProjectStore>((set, get) => ({
-  projects: [],
-  targets: [],
-  budgets: [],
-  milestones: [],
-  visits: [],
-  photoGroups: [],
-  effectData: [],
-  cases: [],
-  issues: [],
-  risks: [],
+  projects: mockProjects,
+  targets: mockQuantitativeTargets,
+  budgets: mockBudgetItems,
+  milestones: mockMilestones,
+  visits: mockVisitRecords,
+  photoGroups: mockPhotoGroups,
+  effectData: mockEffectData,
+  cases: mockBenefitCases,
+  issues: mockIssues,
+  risks: mockRisks,
   currentProjectId: null,
-  loading: true,
+  loading: false,
 
   initializeData: () => {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored) {
+    console.log('[Store] initializeData called');
+    const storedData = localStorage.getItem(STORAGE_KEY);
+    
+    if (storedData) {
       try {
-        const data: StorageData = JSON.parse(stored);
-        set({
-          projects: data.projects || [],
-          targets: data.targets || [],
-          budgets: data.budgets || [],
-          milestones: data.milestones || [],
-          visits: data.visits || [],
-          photoGroups: data.photoGroups || [],
-          effectData: data.effectData || [],
-          cases: data.cases || [],
-          issues: data.issues || [],
-          risks: data.risks || [],
-          loading: false,
-        });
-        return;
+        const data: StorageData = JSON.parse(storedData);
+        if (data.projects && data.projects.length > 0) {
+          set({
+            projects: data.projects,
+            targets: data.targets || [],
+            budgets: data.budgets || [],
+            milestones: data.milestones || [],
+            visits: data.visits || [],
+            photoGroups: data.photoGroups || [],
+            effectData: data.effectData || [],
+            cases: data.cases || [],
+            issues: data.issues || [],
+            risks: data.risks || [],
+            loading: false,
+          });
+          return;
+        }
       } catch (e) {
         console.error('Failed to parse stored data:', e);
       }
     }
     
-    initMockData();
-    
-    const projects = JSON.parse(localStorage.getItem('mockProjects') || '[]');
-    const targets = JSON.parse(localStorage.getItem('mockQuantitativeTargets') || '[]');
-    const budgets = JSON.parse(localStorage.getItem('mockBudgetItems') || '[]');
-    const milestones = JSON.parse(localStorage.getItem('mockMilestones') || '[]');
-    const visits = JSON.parse(localStorage.getItem('mockVisitRecords') || '[]');
-    const photoGroups = JSON.parse(localStorage.getItem('mockPhotoGroups') || '[]');
-    const effectData = JSON.parse(localStorage.getItem('mockEffectData') || '[]');
-    const cases = JSON.parse(localStorage.getItem('mockBenefitCases') || '[]');
-    const issues = JSON.parse(localStorage.getItem('mockIssues') || '[]');
-    const risks = JSON.parse(localStorage.getItem('mockRisks') || '[]');
-
     const data: StorageData = {
-      projects,
-      targets,
-      budgets,
-      milestones,
-      visits,
-      photoGroups,
-      effectData,
-      cases,
-      issues,
-      risks,
+      projects: mockProjects,
+      targets: mockQuantitativeTargets,
+      budgets: mockBudgetItems,
+      milestones: mockMilestones,
+      visits: mockVisitRecords,
+      photoGroups: mockPhotoGroups,
+      effectData: mockEffectData,
+      cases: mockBenefitCases,
+      issues: mockIssues,
+      risks: mockRisks,
     };
 
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-
-    set({
-      projects,
-      targets,
-      budgets,
-      milestones,
-      visits,
-      photoGroups,
-      effectData,
-      cases,
-      issues,
-      risks,
-      loading: false,
-    });
+    localStorage.setItem(VERSION_KEY, DATA_VERSION);
+    initMockData();
   },
 
   setCurrentProjectId: (id: string | null) => {
@@ -496,4 +490,99 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
     };
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
   },
+
+  resetData: () => {
+    localStorage.removeItem(STORAGE_KEY);
+    localStorage.removeItem(VERSION_KEY);
+    localStorage.removeItem('mockProjects');
+    localStorage.removeItem('mockQuantitativeTargets');
+    localStorage.removeItem('mockBudgetItems');
+    localStorage.removeItem('mockMilestones');
+    localStorage.removeItem('mockVisitRecords');
+    localStorage.removeItem('mockPhotos');
+    localStorage.removeItem('mockPhotoGroups');
+    localStorage.removeItem('mockEffectData');
+    localStorage.removeItem('mockBenefitCases');
+    localStorage.removeItem('mockIssueHistories');
+    localStorage.removeItem('mockIssues');
+    localStorage.removeItem('mockRiskMeasures');
+    localStorage.removeItem('mockRisks');
+    
+    initMockData();
+    
+    set({
+      projects: mockProjects,
+      targets: mockQuantitativeTargets,
+      budgets: mockBudgetItems,
+      milestones: mockMilestones,
+      visits: mockVisitRecords,
+      photoGroups: mockPhotoGroups,
+      effectData: mockEffectData,
+      cases: mockBenefitCases,
+      issues: mockIssues,
+      risks: mockRisks,
+      currentProjectId: null,
+      loading: false,
+    });
+  },
 }));
+
+export function useProjectById(projectId: string | undefined) {
+  const projects = useProjectStore((state) => state.projects);
+  if (!projectId) return undefined;
+  return projects.find((p) => p.id === projectId);
+}
+
+export function useProjectTargets(projectId: string | undefined) {
+  const targets = useProjectStore((state) => state.targets);
+  if (!projectId) return [];
+  return targets.filter((t) => t.projectId === projectId);
+}
+
+export function useProjectBudgets(projectId: string | undefined) {
+  const budgets = useProjectStore((state) => state.budgets);
+  if (!projectId) return [];
+  return budgets.filter((b) => b.projectId === projectId);
+}
+
+export function useProjectMilestones(projectId: string | undefined) {
+  const milestones = useProjectStore((state) => state.milestones);
+  if (!projectId) return [];
+  return milestones.filter((m) => m.projectId === projectId);
+}
+
+export function useProjectVisits(projectId: string | undefined) {
+  const visits = useProjectStore((state) => state.visits);
+  if (!projectId) return [];
+  return visits.filter((v) => v.projectId === projectId);
+}
+
+export function useProjectPhotoGroups(projectId: string | undefined) {
+  const photoGroups = useProjectStore((state) => state.photoGroups);
+  if (!projectId) return [];
+  return photoGroups.filter((p) => p.projectId === projectId);
+}
+
+export function useProjectEffectData(projectId: string | undefined) {
+  const effectData = useProjectStore((state) => state.effectData);
+  if (!projectId) return [];
+  return effectData.filter((e) => e.projectId === projectId);
+}
+
+export function useProjectCases(projectId: string | undefined) {
+  const cases = useProjectStore((state) => state.cases);
+  if (!projectId) return [];
+  return cases.filter((c) => c.projectId === projectId);
+}
+
+export function useProjectIssues(projectId: string | undefined) {
+  const issues = useProjectStore((state) => state.issues);
+  if (!projectId) return [];
+  return issues.filter((i) => i.projectId === projectId);
+}
+
+export function useProjectRisks(projectId: string | undefined) {
+  const risks = useProjectStore((state) => state.risks);
+  if (!projectId) return [];
+  return risks.filter((r) => r.projectId === projectId);
+}

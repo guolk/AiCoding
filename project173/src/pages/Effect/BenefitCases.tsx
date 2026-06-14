@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { useProjectId } from '@/hooks/useProjectId';
 import dayjs from 'dayjs';
 import {
   Plus,
@@ -14,7 +15,7 @@ import {
   ChevronDown,
   ChevronUp,
 } from 'lucide-react';
-import { useProjectStore } from '@/store/projectStore';
+import { useProjectStore, useProjectById, useProjectCases } from '@/store/projectStore';
 import { ProjectSubNav } from '@/components/Layout';
 import { StatusBadge, EmptyState, Modal, ConfirmDialog, PhotoViewer } from '@/components/UI';
 import type { BenefitCase, Photo } from '@/types';
@@ -30,15 +31,12 @@ interface FormData {
 
 export default function BenefitCases() {
   const navigate = useNavigate();
-  const { projectId } = useParams<{ projectId: string }>();
+  const projectId = useProjectId();
   const {
-    getProjectById,
-    getProjectCases,
     addCase,
     updateCase,
     deleteCase,
     setCurrentProjectId,
-    loading,
     initializeData,
   } = useProjectStore();
 
@@ -57,8 +55,8 @@ export default function BenefitCases() {
     incomeIncrease: '',
   });
 
-  const project = projectId ? getProjectById(projectId) : undefined;
-  const cases = projectId ? getProjectCases(projectId) : [];
+  const project = useProjectById(projectId);
+  const cases = useProjectCases(projectId);
 
   useEffect(() => {
     initializeData();
@@ -160,22 +158,6 @@ export default function BenefitCases() {
   const imgBase = 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image';
   const encode = (str: string) => encodeURIComponent(str);
   const imgUrl = (prompt: string) => `${imgBase}?prompt=${encode(prompt)}&image_size=square`;
-
-  if (loading) {
-    return (
-      <div className="p-6">
-        <div className="animate-pulse space-y-6">
-          <div className="h-8 bg-gray-200 rounded w-1/4"></div>
-          <div className="h-12 bg-gray-200 rounded"></div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[1, 2, 3, 4, 5, 6].map((i) => (
-              <div key={i} className="h-80 bg-gray-200 rounded"></div>
-            ))}
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   if (!project) {
     return (

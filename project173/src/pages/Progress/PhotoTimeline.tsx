@@ -1,5 +1,6 @@
 import { useEffect, useState, useMemo } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { useProjectId } from '@/hooks/useProjectId';
 import dayjs from 'dayjs';
 import {
   Plus,
@@ -8,7 +9,7 @@ import {
   ZoomIn,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { useProjectStore } from '@/store/projectStore';
+import { useProjectStore, useProjectById, useProjectPhotoGroups } from '@/store/projectStore';
 import { ProjectSubNav } from '@/components/Layout';
 import { Modal, EmptyState, PhotoViewer, StatusBadge } from '@/components/UI';
 import type { Photo } from '@/types';
@@ -38,13 +39,10 @@ const imgUrl = (prompt: string) => `${imgBase}?prompt=${encode(prompt)}&image_si
 
 export default function PhotoTimeline() {
   const navigate = useNavigate();
-  const { projectId } = useParams<{ projectId: string }>();
+  const projectId = useProjectId();
   const {
-    getProjectById,
-    getProjectPhotoGroups,
     addPhotoGroup,
     setCurrentProjectId,
-    loading,
     initializeData,
   } = useProjectStore();
 
@@ -55,8 +53,8 @@ export default function PhotoTimeline() {
   const [viewerPhotos, setViewerPhotos] = useState<Photo[]>([]);
   const [viewerInitialIndex, setViewerInitialIndex] = useState(0);
 
-  const project = projectId ? getProjectById(projectId) : undefined;
-  const photoGroups = projectId ? getProjectPhotoGroups(projectId) : [];
+  const project = useProjectById(projectId);
+  const photoGroups = useProjectPhotoGroups(projectId);
 
   const sortedPhotoGroups = useMemo(() => {
     return [...photoGroups].sort((a, b) =>
@@ -153,18 +151,6 @@ export default function PhotoTimeline() {
     const url = imgUrl(prompts[type] + ' ' + formData.stage);
     setFormData({ ...formData, [`${type}Url`]: url });
   };
-
-  if (loading) {
-    return (
-      <div className="p-6">
-        <div className="animate-pulse space-y-6">
-          <div className="h-8 bg-gray-200 rounded w-1/4"></div>
-          <div className="h-12 bg-gray-200 rounded"></div>
-          <div className="h-96 bg-gray-200 rounded"></div>
-        </div>
-      </div>
-    );
-  }
 
   if (!project) {
     return (

@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { useProjectId } from '@/hooks/useProjectId';
 import dayjs from 'dayjs';
 import {
   AlertCircle,
@@ -12,7 +13,7 @@ import {
   Clock,
   Filter,
 } from 'lucide-react';
-import { useProjectStore } from '@/store/projectStore';
+import { useProjectStore, useProjectById, useProjectIssues } from '@/store/projectStore';
 import { ProjectSubNav } from '@/components/Layout';
 import {
   StatusBadge,
@@ -50,12 +51,9 @@ interface HistoryFormData {
 
 export default function IssueList() {
   const navigate = useNavigate();
-  const { projectId } = useParams<{ projectId: string }>();
+  const projectId = useProjectId();
   const {
-    getProjectById,
-    getProjectIssues,
     setCurrentProjectId,
-    loading,
     initializeData,
     addIssue,
     updateIssue,
@@ -63,8 +61,8 @@ export default function IssueList() {
     deleteIssue,
   } = useProjectStore();
 
-  const project = projectId ? getProjectById(projectId) : undefined;
-  const issues = projectId ? getProjectIssues(projectId) : [];
+  const project = useProjectById(projectId);
+  const issues = useProjectIssues(projectId);
 
   const [filters, setFilters] = useState<FilterState>({
     type: '',
@@ -266,18 +264,6 @@ export default function IssueList() {
   };
 
 
-
-  if (loading) {
-    return (
-      <div className="p-6">
-        <div className="animate-pulse space-y-6">
-          <div className="h-8 bg-gray-200 rounded w-1/4"></div>
-          <div className="h-12 bg-gray-200 rounded"></div>
-          <div className="h-96 bg-gray-200 rounded"></div>
-        </div>
-      </div>
-    );
-  }
 
   if (!project) {
     return (

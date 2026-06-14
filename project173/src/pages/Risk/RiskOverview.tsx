@@ -1,5 +1,6 @@
 import { useEffect, useMemo } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { useProjectId } from '@/hooks/useProjectId';
 import dayjs from 'dayjs';
 import {
   AlertTriangle,
@@ -10,7 +11,7 @@ import {
   AlertOctagon,
   Activity,
 } from 'lucide-react';
-import { useProjectStore } from '@/store/projectStore';
+import { useProjectStore, useProjectById, useProjectIssues, useProjectRisks } from '@/store/projectStore';
 import { ProjectSubNav } from '@/components/Layout';
 import { Timeline, StatusBadge, EmptyState, StatCard } from '@/components/UI';
 import type { TimelineItem } from '@/components/UI/Timeline';
@@ -23,19 +24,15 @@ import type { Issue, Risk } from '@/types';
 
 export default function RiskOverview() {
   const navigate = useNavigate();
-  const { projectId } = useParams<{ projectId: string }>();
+  const projectId = useProjectId();
   const {
-    getProjectById,
-    getProjectIssues,
-    getProjectRisks,
     setCurrentProjectId,
-    loading,
     initializeData,
   } = useProjectStore();
 
-  const project = projectId ? getProjectById(projectId) : undefined;
-  const issues = projectId ? getProjectIssues(projectId) : [];
-  const risks = projectId ? getProjectRisks(projectId) : [];
+  const project = useProjectById(projectId);
+  const issues = useProjectIssues(projectId);
+  const risks = useProjectRisks(projectId);
 
   useEffect(() => {
     initializeData();
@@ -142,24 +139,6 @@ export default function RiskOverview() {
         return 'border-l-gray-500';
     }
   };
-
-  if (loading) {
-    return (
-      <div className="p-6">
-        <div className="animate-pulse space-y-6">
-          <div className="h-8 bg-gray-200 rounded w-1/4"></div>
-          <div className="h-12 bg-gray-200 rounded"></div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="h-32 bg-gray-200 rounded"></div>
-            <div className="h-32 bg-gray-200 rounded"></div>
-            <div className="h-32 bg-gray-200 rounded"></div>
-            <div className="h-32 bg-gray-200 rounded"></div>
-          </div>
-          <div className="h-64 bg-gray-200 rounded"></div>
-        </div>
-      </div>
-    );
-  }
 
   if (!project) {
     return (

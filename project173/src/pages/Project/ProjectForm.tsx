@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { useProjectId } from '@/hooks/useProjectId';
 import dayjs from 'dayjs';
 import {
   ArrowLeft,
@@ -13,7 +14,7 @@ import {
   FileText,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { useProjectStore } from '@/store/projectStore';
+import { useProjectStore, useProjectById, useProjectTargets, useProjectBudgets } from '@/store/projectStore';
 import { ConfirmDialog } from '@/components/UI';
 import {
   ProjectTypeMap,
@@ -60,13 +61,10 @@ function generateId() {
 
 export default function ProjectForm() {
   const navigate = useNavigate();
-  const { projectId } = useParams<{ projectId: string }>();
+  const projectId = useProjectId();
   const isEdit = projectId && projectId !== 'new';
 
   const {
-    getProjectById,
-    getProjectTargets,
-    getProjectBudgets,
     addProject,
     updateProject,
     deleteProject,
@@ -78,6 +76,10 @@ export default function ProjectForm() {
     deleteBudget,
     initializeData,
   } = useProjectStore();
+
+  const project = useProjectById(projectId);
+  const existingTargets = useProjectTargets(projectId);
+  const existingBudgets = useProjectBudgets(projectId);
 
   const [formData, setFormData] = useState({
     name: '',
@@ -102,24 +104,24 @@ export default function ProjectForm() {
   }, [initializeData]);
 
   useEffect(() => {
-    if (isEdit && projectId) {
-      const project = getProjectById(projectId);
-      if (project) {
-        setFormData({
-          name: project.name,
-          village: project.village,
-          type: project.type,
-          fundSource: project.fundSource,
-          responsibleUnit: project.responsibleUnit,
-          responsiblePerson: project.responsiblePerson,
-          startDate: project.startDate,
-          endDate: project.endDate,
-          status: project.status,
-          description: project.description,
-        });
-      }
+    if (isEdit && project) {
+      setFormData({
+        name: project.name,
+        village: project.village,
+        type: project.type,
+        fundSource: project.fundSource,
+        responsibleUnit: project.responsibleUnit,
+        responsiblePerson: project.responsiblePerson,
+        startDate: project.startDate,
+        endDate: project.endDate,
+        status: project.status,
+        description: project.description,
+      });
+    }
+  }, [isEdit, project]);
 
-      const existingTargets = getProjectTargets(projectId);
+  useEffect(() => {
+    if (isEdit && existingTargets.length > 0) {
       setTargets(
         existingTargets.map((t) => ({
           id: t.id,
@@ -130,8 +132,11 @@ export default function ProjectForm() {
           description: t.description,
         }))
       );
+    }
+  }, [isEdit, existingTargets]);
 
-      const existingBudgets = getProjectBudgets(projectId);
+  useEffect(() => {
+    if (isEdit && existingBudgets.length > 0) {
       setBudgets(
         existingBudgets.map((b) => ({
           id: b.id,
@@ -141,7 +146,7 @@ export default function ProjectForm() {
         }))
       );
     }
-  }, [isEdit, projectId, getProjectById, getProjectTargets, getProjectBudgets]);
+  }, [isEdit, existingBudgets]);
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
@@ -206,7 +211,6 @@ export default function ProjectForm() {
     if (isEdit && projectId) {
       updateProject(projectId, projectData);
 
-      const existingTargets = getProjectTargets(projectId);
       const existingTargetIds = existingTargets.map((t) => t.id);
       targets.forEach((target) => {
         const targetData = {
@@ -229,7 +233,6 @@ export default function ProjectForm() {
         }
       });
 
-      const existingBudgets = getProjectBudgets(projectId);
       const existingBudgetIds = existingBudgets.map((b) => b.id);
       budgets.forEach((budget) => {
         const existingBudget = existingBudgets.find((b) => b.id === budget.id);

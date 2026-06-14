@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { useProjectId } from '@/hooks/useProjectId';
 import ReactECharts from 'echarts-for-react';
 import dayjs from 'dayjs';
 import {
@@ -11,7 +12,7 @@ import {
   X,
   Check,
 } from 'lucide-react';
-import { useProjectStore } from '@/store/projectStore';
+import { useProjectStore, useProjectById, useProjectEffectData } from '@/store/projectStore';
 import { ProjectSubNav } from '@/components/Layout';
 import { StatusBadge, EmptyState, Modal, ConfirmDialog } from '@/components/UI';
 import type { EffectData } from '@/types';
@@ -41,14 +42,11 @@ const PERIOD_OPTIONS = [
 
 export default function EffectInput() {
   const navigate = useNavigate();
-  const { projectId } = useParams<{ projectId: string }>();
+  const projectId = useProjectId();
   const {
-    getProjectById,
-    getProjectEffectData,
     addEffectData,
     updateEffectData,
     setCurrentProjectId,
-    loading,
     initializeData,
   } = useProjectStore();
 
@@ -66,8 +64,8 @@ export default function EffectInput() {
     remark: '',
   });
 
-  const project = projectId ? getProjectById(projectId) : undefined;
-  const allEffectData = projectId ? getProjectEffectData(projectId) : [];
+  const project = useProjectById(projectId);
+  const allEffectData = useProjectEffectData(projectId);
 
   useEffect(() => {
     initializeData();
@@ -229,21 +227,6 @@ export default function EffectInput() {
     }
     setConfirmDelete(null);
   };
-
-  if (loading) {
-    return (
-      <div className="p-6">
-        <div className="animate-pulse space-y-6">
-          <div className="h-8 bg-gray-200 rounded w-1/4"></div>
-          <div className="h-12 bg-gray-200 rounded"></div>
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-            <div className="h-96 bg-gray-200 rounded lg:col-span-1"></div>
-            <div className="h-96 bg-gray-200 rounded lg:col-span-3"></div>
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   if (!project) {
     return (

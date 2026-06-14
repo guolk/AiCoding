@@ -1,5 +1,6 @@
 import { useEffect, useMemo } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { useProjectId } from '@/hooks/useProjectId';
 import ReactECharts from 'echarts-for-react';
 import dayjs from 'dayjs';
 import {
@@ -13,7 +14,7 @@ import {
   Clock,
   User,
 } from 'lucide-react';
-import { useProjectStore } from '@/store/projectStore';
+import { useProjectStore, useProjectById, useProjectEffectData, useProjectTargets } from '@/store/projectStore';
 import { ProjectSubNav } from '@/components/Layout';
 import { StatusBadge, EmptyState, ProgressBar } from '@/components/UI';
 import { ProjectStatusMap } from '@/types';
@@ -31,19 +32,15 @@ interface IndicatorLatestData {
 
 export default function EffectOverview() {
   const navigate = useNavigate();
-  const { projectId } = useParams<{ projectId: string }>();
+  const projectId = useProjectId();
   const {
-    getProjectById,
-    getProjectEffectData,
-    getProjectTargets,
     setCurrentProjectId,
-    loading,
     initializeData,
   } = useProjectStore();
 
-  const project = projectId ? getProjectById(projectId) : undefined;
-  const effectData = projectId ? getProjectEffectData(projectId) : [];
-  const targets = projectId ? getProjectTargets(projectId) : [];
+  const project = useProjectById(projectId);
+  const effectData = useProjectEffectData(projectId);
+  const targets = useProjectTargets(projectId);
 
   useEffect(() => {
     initializeData();
@@ -169,23 +166,6 @@ export default function EffectOverview() {
     }
     return value.toString();
   };
-
-  if (loading) {
-    return (
-      <div className="p-6">
-        <div className="animate-pulse space-y-6">
-          <div className="h-8 bg-gray-200 rounded w-1/4"></div>
-          <div className="h-12 bg-gray-200 rounded"></div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="h-40 bg-gray-200 rounded"></div>
-            <div className="h-40 bg-gray-200 rounded"></div>
-            <div className="h-40 bg-gray-200 rounded"></div>
-          </div>
-          <div className="h-80 bg-gray-200 rounded"></div>
-        </div>
-      </div>
-    );
-  }
 
   if (!project) {
     return (

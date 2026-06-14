@@ -1,5 +1,6 @@
 import { useEffect, useMemo } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { useProjectId } from '@/hooks/useProjectId';
 import ReactECharts from 'echarts-for-react';
 import dayjs from 'dayjs';
 import {
@@ -9,7 +10,7 @@ import {
   ChevronRight,
   AlertCircle,
 } from 'lucide-react';
-import { useProjectStore } from '@/store/projectStore';
+import { useProjectStore, useProjectById, useProjectMilestones, useProjectVisits, useProjectPhotoGroups } from '@/store/projectStore';
 import { ProjectSubNav } from '@/components/Layout';
 import { Timeline, StatusBadge, EmptyState } from '@/components/UI';
 import type { TimelineItem } from '@/components/UI/Timeline';
@@ -19,21 +20,17 @@ import {
 
 export default function ProgressOverview() {
   const navigate = useNavigate();
-  const { projectId } = useParams<{ projectId: string }>();
+  const projectId = useProjectId();
   const {
-    getProjectById,
-    getProjectMilestones,
-    getProjectVisits,
-    getProjectPhotoGroups,
     setCurrentProjectId,
-    loading,
     initializeData,
   } = useProjectStore();
 
-  const project = projectId ? getProjectById(projectId) : undefined;
-  const milestones = projectId ? getProjectMilestones(projectId).slice(0, 3) : [];
-  const visits = projectId ? getProjectVisits(projectId).slice(0, 2) : [];
-  const photoGroups = projectId ? getProjectPhotoGroups(projectId).slice(0, 1) : [];
+  const project = useProjectById(projectId);
+  const allMilestones = useProjectMilestones(projectId);
+  const milestones = allMilestones.slice(0, 3);
+  const visits = useProjectVisits(projectId).slice(0, 2);
+  const photoGroups = useProjectPhotoGroups(projectId).slice(0, 1);
 
   useEffect(() => {
     initializeData();
@@ -49,12 +46,10 @@ export default function ProgressOverview() {
   }, [projectId, setCurrentProjectId]);
 
   const overallProgress = useMemo(() => {
-    if (!projectId) return 0;
-    const allMilestones = useProjectStore.getState().getProjectMilestones(projectId);
     if (allMilestones.length === 0) return 0;
     const totalProgress = allMilestones.reduce((sum, m) => sum + m.progress, 0);
     return Math.round(totalProgress / allMilestones.length);
-  }, [projectId]);
+  }, [allMilestones]);
 
   const chartOption = useMemo(() => ({
     series: [
@@ -102,22 +97,6 @@ export default function ProgressOverview() {
       type: 'milestone',
     }));
   }, [milestones]);
-
-  if (loading) {
-    return (
-      <div className="p-6">
-        <div className="animate-pulse space-y-6">
-          <div className="h-8 bg-gray-200 rounded w-1/4"></div>
-          <div className="h-12 bg-gray-200 rounded"></div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div className="h-64 bg-gray-200 rounded"></div>
-            <div className="h-64 bg-gray-200 rounded"></div>
-            <div className="h-64 bg-gray-200 rounded"></div>
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   if (!project) {
     return (
@@ -189,7 +168,7 @@ export default function ProgressOverview() {
                 <div className="p-3 bg-gray-50 rounded-lg">
                   <div className="text-sm text-gray-500">里程碑数</div>
                   <div className="text-base font-medium text-gray-900">
-                    {useProjectStore.getState().getProjectMilestones(projectId!).length} 个
+                    {allMilestones.length} 个
                   </div>
                 </div>
               </div>

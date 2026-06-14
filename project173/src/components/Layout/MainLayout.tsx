@@ -3,11 +3,17 @@ import { Outlet, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import Sidebar from './Sidebar';
 import Header from './Header';
+import { useProjectStore } from '@/store/projectStore';
 
 export default function MainLayout() {
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
+  const initializeData = useProjectStore((state) => state.initializeData);
+
+  useEffect(() => {
+    initializeData();
+  }, [initializeData]);
 
   useEffect(() => {
     const handleResize = () => {

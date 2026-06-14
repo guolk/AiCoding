@@ -1,5 +1,6 @@
 import { useEffect, useState, useMemo } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { useProjectId } from '@/hooks/useProjectId';
 import dayjs from 'dayjs';
 import {
   Plus,
@@ -12,7 +13,7 @@ import {
   AlertCircle,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { useProjectStore } from '@/store/projectStore';
+import { useProjectStore, useProjectById, useProjectMilestones } from '@/store/projectStore';
 import { ProjectSubNav } from '@/components/Layout';
 import { Modal, StatusBadge, ProgressBar, EmptyState, ConfirmDialog } from '@/components/UI';
 import {
@@ -53,15 +54,12 @@ const initialFormData: MilestoneFormData = {
 
 export default function MilestoneList() {
   const navigate = useNavigate();
-  const { projectId } = useParams<{ projectId: string }>();
+  const projectId = useProjectId();
   const {
-    getProjectById,
-    getProjectMilestones,
     addMilestone,
     updateMilestone,
     deleteMilestone,
     setCurrentProjectId,
-    loading,
     initializeData,
   } = useProjectStore();
 
@@ -73,8 +71,8 @@ export default function MilestoneList() {
   const [progressModal, setProgressModal] = useState<Milestone | null>(null);
   const [newProgress, setNewProgress] = useState(0);
 
-  const project = projectId ? getProjectById(projectId) : undefined;
-  const milestones = projectId ? getProjectMilestones(projectId) : [];
+  const project = useProjectById(projectId);
+  const milestones = useProjectMilestones(projectId);
 
   const sortedMilestones = useMemo(() => {
     return [...milestones].sort((a, b) => 
@@ -180,18 +178,6 @@ export default function MilestoneList() {
     });
     setProgressModal(null);
   };
-
-  if (loading) {
-    return (
-      <div className="p-6">
-        <div className="animate-pulse space-y-6">
-          <div className="h-8 bg-gray-200 rounded w-1/4"></div>
-          <div className="h-12 bg-gray-200 rounded"></div>
-          <div className="h-96 bg-gray-200 rounded"></div>
-        </div>
-      </div>
-    );
-  }
 
   if (!project) {
     return (

@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
-import { useParams, useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useProjectId } from '@/hooks/useProjectId';
 import ReactECharts from 'echarts-for-react';
 import dayjs from 'dayjs';
 import {
@@ -17,7 +18,7 @@ import {
   AlertCircle,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { useProjectStore } from '@/store/projectStore';
+import { useProjectStore, useProjectById, useProjectTargets, useProjectBudgets } from '@/store/projectStore';
 import { ProjectSubNav } from '@/components/Layout';
 import { DataTable, EmptyState, StatusBadge, ConfirmDialog } from '@/components/UI';
 import type { DataTableColumn } from '@/components/UI/DataTable';
@@ -610,21 +611,17 @@ function BudgetSection({ budgets, projectId }: {
 export default function ProjectDetail() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { projectId } = useParams<{ projectId: string }>();
+  const projectId = useProjectId();
   const {
-    getProjectById,
-    getProjectTargets,
-    getProjectBudgets,
     setCurrentProjectId,
     deleteProject,
-    loading,
     initializeData,
   } = useProjectStore();
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
-  const project = projectId ? getProjectById(projectId) : undefined;
-  const targets = projectId ? getProjectTargets(projectId) : [];
-  const budgets = projectId ? getProjectBudgets(projectId) : [];
+  const project = useProjectById(projectId);
+  const targets = useProjectTargets(projectId);
+  const budgets = useProjectBudgets(projectId);
 
   useEffect(() => {
     initializeData();
@@ -657,18 +654,6 @@ export default function ProjectDetail() {
   };
 
   const activeTab = getActiveTab();
-
-  if (loading) {
-    return (
-      <div className="p-6">
-        <div className="animate-pulse space-y-6">
-          <div className="h-8 bg-gray-200 rounded w-1/4"></div>
-          <div className="h-12 bg-gray-200 rounded"></div>
-          <div className="h-96 bg-gray-200 rounded"></div>
-        </div>
-      </div>
-    );
-  }
 
   if (!project) {
     return (
