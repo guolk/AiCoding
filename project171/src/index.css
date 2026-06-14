@@ -1,0 +1,129 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Source+Sans+Pro:wght@300;400;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  line-height: 1.6;
+  font-weight: 400;
+  color: #3D405B;
+  background-color: #FDFCFA;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #FDFCFA 0%, #F4F1DE 100%);
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-terracotta-400 text-white px-6 py-2.5 rounded-xl font-semibold shadow-soft hover:bg-terracotta-500 hover:shadow-hover transition-all duration-300 transform hover:-translate-y-0.5;
+  }
+
+  .btn-secondary {
+    @apply bg-white text-forest-500 px-6 py-2.5 rounded-xl font-semibold shadow-soft hover:shadow-card transition-all duration-300 border border-forest-100;
+  }
+
+  .btn-outline {
+    @apply border-2 border-terracotta-400 text-terracotta-500 px-6 py-2 rounded-xl font-semibold hover:bg-terracotta-50 transition-all duration-300;
+  }
+
+  .card {
+    @apply bg-white rounded-2xl shadow-soft p-6 transition-all duration-300 hover:shadow-card;
+  }
+
+  .card-gradient {
+    @apply rounded-2xl shadow-card p-6 transition-all duration-300 hover:shadow-hover;
+    background: linear-gradient(135deg, #E07A5F 0%, #D46347 100%);
+  }
+
+  .input-field {
+    @apply w-full px-4 py-3 rounded-xl border border-forest-100 focus:border-terracotta-400 focus:ring-2 focus:ring-terracotta-100 outline-none transition-all duration-300 bg-white;
+  }
+
+  .label {
+    @apply block text-sm font-semibold text-forest-500 mb-2;
+  }
+
+  .badge {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold;
+  }
+
+  .sidebar-link {
+    @apply flex items-center gap-3 px-4 py-3 rounded-xl text-forest-400 hover:bg-terracotta-50 hover:text-terracotta-500 transition-all duration-300;
+  }
+
+  .sidebar-link-active {
+    @apply bg-gradient-to-r from-terracotta-400 to-terracotta-500 text-white shadow-soft hover:bg-gradient-to-r hover:from-terracotta-500 hover:to-terracotta-600;
+  }
+
+  .stat-card {
+    @apply relative overflow-hidden rounded-2xl p-6 text-white;
+  }
+
+  .rating-star {
+    @apply text-terracotta-400;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .glass {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #E07A5F #F4F1DE;
+}
+
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+*::-webkit-scrollbar-track {
+  background: #F4F1DE;
+  border-radius: 4px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: #E07A5F;
+  border-radius: 4px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: #D46347;
+}
