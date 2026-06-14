@@ -281,9 +281,12 @@ export default function StrainForm() {
       operator: '当前用户',
     };
 
+    let targetStrainId: string | undefined;
+
     if (isEditMode && id) {
       // 编辑模式：更新菌株
       updateStrain(id, strainData);
+      targetStrainId = id;
 
       // 更新冻存位置（如果选择了）
       if (formData.fridgeCode && formData.boxCode && formData.position) {
@@ -305,25 +308,32 @@ export default function StrainForm() {
         }
       }
     } else {
-      // 新增模式：添加菌株
+      // 新增模式：添加菌株，addStrain现在直接返回新创建的对象
       const newStrain = addStrain(strainData);
-      // 注意：zustand的addStrain不返回新对象，需要获取最新的
-      // 这里我们简单处理：刚创建的是strains中最后一个匹配code的
-      const createdStrainId = strains.find((s) => s.code === strainData.code)?.id;
+      targetStrainId = newStrain.id;
 
-      // 预留：创建空的表型特征
-      if (createdStrainId) {
-        // 更新冻存位置
-        if (formData.fridgeCode && formData.boxCode && formData.position) {
-          const targetStorage = storages.find(
-            (s) =>
-              s.fridgeCode === formData.fridgeCode &&
-              s.boxCode === formData.boxCode &&
-              s.position === formData.position
-          );
-          if (targetStorage) {
-            updateStorage(targetStorage.id, { strainId: createdStrainId, status: '正常' });
-          }
+      // 创建空的表型特征
+      addPhenotype({
+        strainId: targetStrainId,
+        colonyMorphology: '',
+        gramStain: '',
+        motility: '',
+        size: '',
+        shape: '',
+        color: '',
+        otherFeatures: '',
+      });
+
+      // 更新冻存位置
+      if (formData.fridgeCode && formData.boxCode && formData.position) {
+        const targetStorage = storages.find(
+          (s) =>
+            s.fridgeCode === formData.fridgeCode &&
+            s.boxCode === formData.boxCode &&
+            s.position === formData.position
+        );
+        if (targetStorage) {
+          updateStorage(targetStorage.id, { strainId: targetStrainId, status: '正常' });
         }
       }
     }

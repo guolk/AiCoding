@@ -42,7 +42,7 @@ const generateUUID = (): UUID => {
 
 // 通用CRUD操作工具类型
 type CrudActions<T extends { id: UUID }> = {
-  add: (item: Omit<T, 'id'>) => void;
+  add: (item: Omit<T, 'id'>) => T;
   update: (id: UUID, updates: Partial<T>) => void;
   remove: (id: UUID) => void;
 };
@@ -63,57 +63,57 @@ interface LabState {
   disposals: Disposal[];
 
   // ========== 菌株CRUD ==========
-  addStrain: (strain: Omit<Strain, 'id'>) => void;
+  addStrain: (strain: Omit<Strain, 'id'>) => Strain;
   updateStrain: (id: UUID, updates: Partial<Strain>) => void;
   removeStrain: (id: UUID) => void;
 
   // ========== 传代记录CRUD ==========
-  addPassage: (passage: Omit<Passage, 'id'>) => void;
+  addPassage: (passage: Omit<Passage, 'id'>) => Passage;
   updatePassage: (id: UUID, updates: Partial<Passage>) => void;
   removePassage: (id: UUID) => void;
 
   // ========== 表型特征CRUD ==========
-  addPhenotype: (phenotype: Omit<Phenotype, 'id'>) => void;
+  addPhenotype: (phenotype: Omit<Phenotype, 'id'>) => Phenotype;
   updatePhenotype: (id: UUID, updates: Partial<Phenotype>) => void;
   removePhenotype: (id: UUID) => void;
 
   // ========== 培养基CRUD ==========
-  addMedium: (medium: Omit<Medium, 'id'>) => void;
+  addMedium: (medium: Omit<Medium, 'id'>) => Medium;
   updateMedium: (id: UUID, updates: Partial<Medium>) => void;
   removeMedium: (id: UUID) => void;
 
   // ========== 培养记录CRUD ==========
-  addCulture: (culture: Omit<Culture, 'id'>) => void;
+  addCulture: (culture: Omit<Culture, 'id'>) => Culture;
   updateCulture: (id: UUID, updates: Partial<Culture>) => void;
   removeCulture: (id: UUID) => void;
 
   // ========== 实验记录CRUD ==========
-  addExperiment: (experiment: Omit<Experiment, 'id'>) => void;
+  addExperiment: (experiment: Omit<Experiment, 'id'>) => Experiment;
   updateExperiment: (id: UUID, updates: Partial<Experiment>) => void;
   removeExperiment: (id: UUID) => void;
 
   // ========== 实验重复性记录CRUD ==========
-  addRepeat: (repeat: Omit<ExperimentRepeat, 'id'>) => void;
+  addRepeat: (repeat: Omit<ExperimentRepeat, 'id'>) => ExperimentRepeat;
   updateRepeat: (id: UUID, updates: Partial<ExperimentRepeat>) => void;
   removeRepeat: (id: UUID) => void;
 
   // ========== 对照组记录CRUD ==========
-  addControl: (control: Omit<Control, 'id'>) => void;
+  addControl: (control: Omit<Control, 'id'>) => Control;
   updateControl: (id: UUID, updates: Partial<Control>) => void;
   removeControl: (id: UUID) => void;
 
   // ========== 储存位置CRUD ==========
-  addStorage: (storage: Omit<Storage, 'id'>) => void;
+  addStorage: (storage: Omit<Storage, 'id'>) => Storage;
   updateStorage: (id: UUID, updates: Partial<Storage>) => void;
   removeStorage: (id: UUID) => void;
 
   // ========== 核查记录CRUD ==========
-  addAudit: (audit: Omit<AuditLog, 'id'>) => void;
+  addAudit: (audit: Omit<AuditLog, 'id'>) => AuditLog;
   updateAudit: (id: UUID, updates: Partial<AuditLog>) => void;
   removeAudit: (id: UUID) => void;
 
   // ========== 销毁记录CRUD ==========
-  addDisposal: (disposal: Omit<Disposal, 'id'>) => void;
+  addDisposal: (disposal: Omit<Disposal, 'id'>) => Disposal;
   updateDisposal: (id: UUID, updates: Partial<Disposal>) => void;
   removeDisposal: (id: UUID) => void;
 
@@ -121,19 +121,13 @@ interface LabState {
   resetAllData: () => void;
 }
 
-// 创建通用CRUD操作函数
+// 创建通用CRUD操作函数（未使用，仅作类型参考；实际实现见下方store）
 const createCrud = <T extends { id: UUID }>(
-  key: keyof LabState
+  _key: keyof LabState
 ): CrudActions<T> => ({
-  add: (item: Omit<T, 'id'>) => {
-    // 此函数在set内部实际执行，这里仅作类型声明
-  },
-  update: (id: UUID, updates: Partial<T>) => {
-    // 此函数在set内部实际执行
-  },
-  remove: (id: UUID) => {
-    // 此函数在set内部实际执行
-  },
+  add: (_item: Omit<T, 'id'>) => ({} as T),
+  update: (_id: UUID, _updates: Partial<T>) => { /* void */ },
+  remove: (_id: UUID) => { /* void */ },
 });
 
 export const useLabStore = create<LabState>()(
@@ -153,10 +147,11 @@ export const useLabStore = create<LabState>()(
       disposals: seedDisposals,
 
       // ========== 菌株CRUD操作 ==========
-      addStrain: (strain) =>
-        set((state) => ({
-          strains: [...state.strains, { ...strain, id: generateUUID() } as Strain],
-        })),
+      addStrain: (strain) => {
+        const newItem = { ...strain, id: generateUUID() } as Strain;
+        set((state) => ({ strains: [...state.strains, newItem] }));
+        return newItem;
+      },
       updateStrain: (id, updates) =>
         set((state) => ({
           strains: state.strains.map((s) =>
@@ -169,10 +164,11 @@ export const useLabStore = create<LabState>()(
         })),
 
       // ========== 传代记录CRUD操作 ==========
-      addPassage: (passage) =>
-        set((state) => ({
-          passages: [...state.passages, { ...passage, id: generateUUID() } as Passage],
-        })),
+      addPassage: (passage) => {
+        const newItem = { ...passage, id: generateUUID() } as Passage;
+        set((state) => ({ passages: [...state.passages, newItem] }));
+        return newItem;
+      },
       updatePassage: (id, updates) =>
         set((state) => ({
           passages: state.passages.map((p) =>
@@ -185,10 +181,11 @@ export const useLabStore = create<LabState>()(
         })),
 
       // ========== 表型特征CRUD操作 ==========
-      addPhenotype: (phenotype) =>
-        set((state) => ({
-          phenotypes: [...state.phenotypes, { ...phenotype, id: generateUUID() } as Phenotype],
-        })),
+      addPhenotype: (phenotype) => {
+        const newItem = { ...phenotype, id: generateUUID() } as Phenotype;
+        set((state) => ({ phenotypes: [...state.phenotypes, newItem] }));
+        return newItem;
+      },
       updatePhenotype: (id, updates) =>
         set((state) => ({
           phenotypes: state.phenotypes.map((p) =>
@@ -201,10 +198,11 @@ export const useLabStore = create<LabState>()(
         })),
 
       // ========== 培养基CRUD操作 ==========
-      addMedium: (medium) =>
-        set((state) => ({
-          media: [...state.media, { ...medium, id: generateUUID() } as Medium],
-        })),
+      addMedium: (medium) => {
+        const newItem = { ...medium, id: generateUUID() } as Medium;
+        set((state) => ({ media: [...state.media, newItem] }));
+        return newItem;
+      },
       updateMedium: (id, updates) =>
         set((state) => ({
           media: state.media.map((m) =>
@@ -217,10 +215,11 @@ export const useLabStore = create<LabState>()(
         })),
 
       // ========== 培养记录CRUD操作 ==========
-      addCulture: (culture) =>
-        set((state) => ({
-          cultures: [...state.cultures, { ...culture, id: generateUUID() } as Culture],
-        })),
+      addCulture: (culture) => {
+        const newItem = { ...culture, id: generateUUID() } as Culture;
+        set((state) => ({ cultures: [...state.cultures, newItem] }));
+        return newItem;
+      },
       updateCulture: (id, updates) =>
         set((state) => ({
           cultures: state.cultures.map((c) =>
@@ -233,10 +232,11 @@ export const useLabStore = create<LabState>()(
         })),
 
       // ========== 实验记录CRUD操作 ==========
-      addExperiment: (experiment) =>
-        set((state) => ({
-          experiments: [...state.experiments, { ...experiment, id: generateUUID() } as Experiment],
-        })),
+      addExperiment: (experiment) => {
+        const newItem = { ...experiment, id: generateUUID() } as Experiment;
+        set((state) => ({ experiments: [...state.experiments, newItem] }));
+        return newItem;
+      },
       updateExperiment: (id, updates) =>
         set((state) => ({
           experiments: state.experiments.map((e) =>
@@ -249,10 +249,11 @@ export const useLabStore = create<LabState>()(
         })),
 
       // ========== 实验重复性记录CRUD操作 ==========
-      addRepeat: (repeat) =>
-        set((state) => ({
-          repeats: [...state.repeats, { ...repeat, id: generateUUID() } as ExperimentRepeat],
-        })),
+      addRepeat: (repeat) => {
+        const newItem = { ...repeat, id: generateUUID() } as ExperimentRepeat;
+        set((state) => ({ repeats: [...state.repeats, newItem] }));
+        return newItem;
+      },
       updateRepeat: (id, updates) =>
         set((state) => ({
           repeats: state.repeats.map((r) =>
@@ -265,10 +266,11 @@ export const useLabStore = create<LabState>()(
         })),
 
       // ========== 对照组记录CRUD操作 ==========
-      addControl: (control) =>
-        set((state) => ({
-          controls: [...state.controls, { ...control, id: generateUUID() } as Control],
-        })),
+      addControl: (control) => {
+        const newItem = { ...control, id: generateUUID() } as Control;
+        set((state) => ({ controls: [...state.controls, newItem] }));
+        return newItem;
+      },
       updateControl: (id, updates) =>
         set((state) => ({
           controls: state.controls.map((c) =>
@@ -281,10 +283,11 @@ export const useLabStore = create<LabState>()(
         })),
 
       // ========== 储存位置CRUD操作 ==========
-      addStorage: (storage) =>
-        set((state) => ({
-          storages: [...state.storages, { ...storage, id: generateUUID() } as Storage],
-        })),
+      addStorage: (storage) => {
+        const newItem = { ...storage, id: generateUUID() } as Storage;
+        set((state) => ({ storages: [...state.storages, newItem] }));
+        return newItem;
+      },
       updateStorage: (id, updates) =>
         set((state) => ({
           storages: state.storages.map((s) =>
@@ -297,10 +300,11 @@ export const useLabStore = create<LabState>()(
         })),
 
       // ========== 核查记录CRUD操作 ==========
-      addAudit: (audit) =>
-        set((state) => ({
-          audits: [...state.audits, { ...audit, id: generateUUID() } as AuditLog],
-        })),
+      addAudit: (audit) => {
+        const newItem = { ...audit, id: generateUUID() } as AuditLog;
+        set((state) => ({ audits: [...state.audits, newItem] }));
+        return newItem;
+      },
       updateAudit: (id, updates) =>
         set((state) => ({
           audits: state.audits.map((a) =>
@@ -313,10 +317,11 @@ export const useLabStore = create<LabState>()(
         })),
 
       // ========== 销毁记录CRUD操作 ==========
-      addDisposal: (disposal) =>
-        set((state) => ({
-          disposals: [...state.disposals, { ...disposal, id: generateUUID() } as Disposal],
-        })),
+      addDisposal: (disposal) => {
+        const newItem = { ...disposal, id: generateUUID() } as Disposal;
+        set((state) => ({ disposals: [...state.disposals, newItem] }));
+        return newItem;
+      },
       updateDisposal: (id, updates) =>
         set((state) => ({
           disposals: state.disposals.map((d) =>

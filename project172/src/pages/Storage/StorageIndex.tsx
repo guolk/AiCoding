@@ -17,6 +17,8 @@ import {
   Calendar,
   Package,
   EyeOff,
+  Pencil,
+  ArrowLeftRight,
 } from 'lucide-react';
 import { useLabStore } from '@/store/useLabStore';
 import AppLayout from '@/components/Layout/AppLayout';
@@ -121,6 +123,13 @@ export default function StorageIndex() {
 
   const [viewAuditDetail, setViewAuditDetail] = useState<AuditLog | null>(null);
   const [viewDisposalDetail, setViewDisposalDetail] = useState<Disposal | null>(null);
+
+  // 编辑位置（移动菌株到新位置）
+  const [editLocationModalOpen, setEditLocationModalOpen] = useState(false);
+  const [editLocationStorage, setEditLocationStorage] = useState<Storage | null>(null);
+  const [editFridgeCode, setEditFridgeCode] = useState('');
+  const [editBoxCode, setEditBoxCode] = useState('');
+  const [editPosition, setEditPosition] = useState('');
 
   const occupiedPositions = useMemo(
     () => storages.filter((s) => s.strainId !== null),
@@ -249,6 +258,84 @@ export default function StorageIndex() {
       });
     }
   };
+
+  // 打开编辑位置Modal
+  const handleOpenEditLocation = (storage: Storage) => {
+    setEditLocationStorage(storage);
+    setEditFridgeCode(storage.fridgeCode);
+    setEditBoxCode(storage.boxCode);
+    setEditPosition('');
+    setEditLocationModalOpen(true);
+  };
+
+  // 确认移动到新位置
+  const handleConfirmEditLocation = () => {
+    if (editLocationStorage && editFridgeCode && editBoxCode && editPosition) {
+      // 找到新位置对应的storage
+      const newStorage = storages.find(
+        (s) =>
+          s.fridgeCode === editFridgeCode &&
+          s.boxCode === editBoxCode &&
+          s.position === editPosition
+      );
+      if (newStorage && editLocationStorage.strainId) {
+        // 先清空旧位置
+        updateStorage(editLocationStorage.id, {
+          strainId: null,
+          status: '空',
+        });
+        // 设置新位置
+        updateStorage(newStorage.id, {
+          strainId: editLocationStorage.strainId,
+          status: '正常',
+        });
+      }
+      setEditLocationModalOpen(false);
+      setEditLocationStorage(null);
+      setDetailModalOpen(false);
+      setDetailStorage(null);
+    }
+  };
+
+  // 编辑位置可用冰箱列表（排除当前占用）
+  const editAvailableFridges = useMemo(() => {
+    const set = new Set<string>();
+    storages.forEach((s) => {
+      if (s.strainId === null || s.id === editLocationStorage?.id) {
+        set.add(s.fridgeCode);
+      }
+    });
+    return Array.from(set).sort();
+  }, [storages, editLocationStorage]);
+
+  // 编辑位置可用盒号
+  const editAvailableBoxes = useMemo(() => {
+    if (!editFridgeCode) return [];
+    const set = new Set<string>();
+    storages.forEach((s) => {
+      if (
+        s.fridgeCode === editFridgeCode &&
+        (s.strainId === null || s.id === editLocationStorage?.id)
+      ) {
+        set.add(s.boxCode);
+      }
+    });
+    return Array.from(set).sort();
+  }, [storages, editFridgeCode, editLocationStorage]);
+
+  // 编辑位置可用位置号
+  const editAvailablePositions = useMemo(() => {
+    if (!editFridgeCode || !editBoxCode) return [];
+    return storages
+      .filter(
+        (s) =>
+          s.fridgeCode === editFridgeCode &&
+          s.boxCode === editBoxCode &&
+          (s.strainId === null || s.id === editLocationStorage?.id)
+      )
+      .map((s) => s.position)
+      .sort();
+  }, [storages, editFridgeCode, editBoxCode, editLocationStorage]);
 
   const filteredAudits = useMemo(() => {
     return audits
@@ -1352,10 +1439,9 @@ export default function StorageIndex() {
                 {getStrain(detailStorage.strainId)?.cultureConditions}
               </div>
             </div>
-            <div className="flex gap-3 pt-2">
+            <div className="grid grid-cols-2 gap-3 pt-2">
               <Button
                 variant="secondary"
-                className="flex-1"
                 leftIcon={<Eye className="h-4 w-4" />}
                 onClick={() => {
                   const strain = getStrain(detailStorage.strainId);
@@ -1363,10 +1449,18 @@ export default function StorageIndex() {
                   setDetailModalOpen(false);
                 }}
               >
-                跳转菌株详情
+                菌株详情
               </Button>
               <Button
-                className="flex-1"
+                variant="secondary"
+                leftIcon={<ArrowLeftRight className="h-4 w-4" />}
+                onClick={() => {
+                  handleOpenEditLocation(detailStorage);
+                }}
+              >
+                修改位置
+              </Button>
+              <Button
                 leftIcon={<FileCheck className="h-4 w-4" />}
                 onClick={() => {
                   handleOpenAudit(detailStorage);
@@ -1374,6 +1468,13 @@ export default function StorageIndex() {
                 }}
               >
                 开始核查
+              </Button>
+              <Button
+                variant="danger"
+                leftIcon={<Package className="h-4 w-4" />}
+                onClick={() => handleOutbound(detailStorage)}
+              >
+                菌株出库
               </Button>
             </div>
           </div>
@@ -1891,6 +1992,167 @@ export default function StorageIndex() {
                 {viewDisposalDetail.reason}
               </div>
             </div>
+          </div>
+        )}
+      </Modal>
+
+      {/* 修改冻存位置Modal */}
+      <Modal
+        open={editLocationModalOpen}
+        onClose={() => setEditLocationModalOpen(false)}
+        title="修改菌株冻存位置"
+        width={560}
+        footer={
+          <div className="flex justify-end gap-3">
+            <Button
+              variant="secondary"
+              onClick={() => setEditLocationModalOpen(false)}
+            >
+              取消
+            </Button>
+            <Button
+              onClick={handleConfirmEditLocation}
+              disabled={!editFridgeCode || !editBoxCode || !editPosition}
+              leftIcon={<ArrowLeftRight className="h-4 w-4" />}
+            >
+              确认移动
+            </Button>
+          </div>
+        }
+      >
+        {editLocationStorage && (
+          <div className="space-y-5">
+            {/* 当前位置信息 */}
+            <div className="bg-gradient-to-r from-blue-50 to-white rounded-xl p-4 border border-blue-100">
+              <div className="text-[12px] text-gray-500 mb-2 flex items-center gap-1.5">
+                <Package className="h-3.5 w-3.5" />
+                当前位置（即将移出）
+              </div>
+              <div className="text-[18px] font-bold text-gray-800">
+                {editLocationStorage.fridgeCode} /{' '}
+                {editLocationStorage.boxCode} / 位置{' '}
+                {editLocationStorage.position}
+              </div>
+              <div className="mt-2 text-[13px] text-gray-600">
+                菌株：
+                <span className="font-semibold text-gray-800">
+                  {getStrain(editLocationStorage.strainId)?.name}（
+                  {getStrain(editLocationStorage.strainId)?.code}）
+                </span>
+              </div>
+            </div>
+
+            {/* 箭头分隔 */}
+            <div className="flex justify-center">
+              <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-100 text-gray-400">
+                <ArrowLeftRight className="h-4 w-4" />
+              </div>
+            </div>
+
+            {/* 新位置选择 */}
+            <div className="space-y-4">
+              <div className="flex items-center gap-2 border-b border-gray-100 pb-2">
+                <Pencil className="h-4 w-4 text-[#165DFF]" />
+                <span className="text-[14px] font-semibold text-gray-800">
+                  选择新位置
+                </span>
+              </div>
+
+              {/* 冰箱号 */}
+              <div>
+                <label className="block text-[13px] font-medium text-gray-700 mb-1.5">
+                  冰箱号 <span className="text-[#F53F3F]">*</span>
+                </label>
+                <select
+                  value={editFridgeCode}
+                  onChange={(e) => {
+                    setEditFridgeCode(e.target.value);
+                    setEditBoxCode('');
+                    setEditPosition('');
+                  }}
+                  className={cn(
+                    'w-full h-11 px-4 rounded-lg border border-gray-200 bg-white',
+                    'focus:outline-none focus:border-[#165DFF] focus:ring-2 focus:ring-[#165DFF]/20',
+                    'text-[14px] text-gray-700 transition-all'
+                  )}
+                >
+                  <option value="">请选择冰箱</option>
+                  {editAvailableFridges.map((f) => (
+                    <option key={f} value={f}>
+                      {f}（{FRIDGE_INFO[f]?.temp || ''}）
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* 盒号 */}
+              <div>
+                <label className="block text-[13px] font-medium text-gray-700 mb-1.5">
+                  冻存盒号 <span className="text-[#F53F3F]">*</span>
+                </label>
+                <select
+                  value={editBoxCode}
+                  onChange={(e) => {
+                    setEditBoxCode(e.target.value);
+                    setEditPosition('');
+                  }}
+                  disabled={!editFridgeCode}
+                  className={cn(
+                    'w-full h-11 px-4 rounded-lg border bg-white transition-all',
+                    'focus:outline-none focus:ring-2',
+                    editFridgeCode
+                      ? 'border-gray-200 focus:border-[#165DFF] focus:ring-[#165DFF]/20 text-gray-700'
+                      : 'border-gray-200 bg-gray-50 cursor-not-allowed opacity-60 text-gray-400'
+                  )}
+                >
+                  <option value="">请选择冻存盒</option>
+                  {editAvailableBoxes.map((b) => (
+                    <option key={b} value={b}>
+                      {b}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* 位置号 */}
+              <div>
+                <label className="block text-[13px] font-medium text-gray-700 mb-1.5">
+                  位置号 <span className="text-[#F53F3F]">*</span>
+                </label>
+                <select
+                  value={editPosition}
+                  onChange={(e) => setEditPosition(e.target.value)}
+                  disabled={!editBoxCode}
+                  className={cn(
+                    'w-full h-11 px-4 rounded-lg border bg-white transition-all',
+                    'focus:outline-none focus:ring-2',
+                    editBoxCode
+                      ? 'border-gray-200 focus:border-[#165DFF] focus:ring-[#165DFF]/20 text-gray-700'
+                      : 'border-gray-200 bg-gray-50 cursor-not-allowed opacity-60 text-gray-400'
+                  )}
+                >
+                  <option value="">请选择位置</option>
+                  {editAvailablePositions.map((p) => (
+                    <option key={p} value={p}>
+                      位置 {p}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            {/* 新位置预览 */}
+            {editFridgeCode && editBoxCode && editPosition && (
+              <div className="bg-gradient-to-r from-green-50 to-white rounded-xl p-4 border border-green-100">
+                <div className="text-[12px] text-gray-500 mb-2 flex items-center gap-1.5">
+                  <CheckCircle2 className="h-3.5 w-3.5 text-[#00B42A]" />
+                  目标位置预览
+                </div>
+                <div className="text-[18px] font-bold text-gray-800">
+                  {editFridgeCode} / {editBoxCode} / 位置 {editPosition}
+                </div>
+              </div>
+            )}
           </div>
         )}
       </Modal>
