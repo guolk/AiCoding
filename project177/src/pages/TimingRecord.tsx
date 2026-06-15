@@ -383,25 +383,26 @@ export default function TimingRecord() {
               </h3>
               <p className="text-xs text-gray-500 mb-4">导入芯片计时数据文件，批量添加出发/到达时间</p>
 
-              <div
-                onClick={() => fileRef.current?.click()}
-                className="border-2 border-dashed border-gray-700 hover:border-blue-500/60 rounded-xl p-8 text-center cursor-pointer transition-colors mb-4"
-              >
-                <FileText className="w-12 h-12 mx-auto mb-3 text-gray-600" />
-                <div className="text-sm text-gray-400 mb-1">
-                  {fileProcessing ? "处理中..." : "点击选择CSV文件 或 拖拽到此区域"}
-                </div>
-                <div className="text-xs text-gray-600">
-                  .csv 格式
+              <label className="block">
+                <div
+                  className="border-2 border-dashed border-gray-700 hover:border-blue-500/60 rounded-xl p-8 text-center cursor-pointer transition-colors mb-4 hover:bg-gray-800/30"
+                >
+                  <FileText className="w-12 h-12 mx-auto mb-3 text-gray-500" />
+                  <div className="text-sm text-gray-300 mb-1">
+                    {fileProcessing ? "处理中..." : "点击选择CSV文件 或 拖拽到此区域"}
+                  </div>
+                  <div className="text-xs text-gray-500">
+                    .csv 格式
+                  </div>
                 </div>
                 <input
                   ref={fileRef}
                   type="file"
                   accept=".csv,text/csv"
                   onChange={handleFileUpload}
-                  className="hidden"
+                  className="sr-only"
                 />
-              </div>
+              </label>
 
               {importResult && (
                 <div className={classNames(

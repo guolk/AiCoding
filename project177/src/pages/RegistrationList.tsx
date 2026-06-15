@@ -72,17 +72,28 @@ export default function RegistrationList() {
   }, [participants]);
 
   const filtered = useMemo(() => {
+    if (!search && categoryFilter === "all") return participants;
+    
     return participants.filter((p) => {
       if (categoryFilter !== "all" && p.category_id !== categoryFilter) return false;
-      if (search) {
-        const s = search.toLowerCase();
+      
+      if (search && search.trim()) {
+        const s = search.trim().toLowerCase();
         const bib = bibMap[p.id];
-        const bibStr = bib ? `${bib.prefix}${bib.number}` : "";
+        const bibStr = bib ? `${bib.prefix}${bib.number}`.toLowerCase() : "";
+        const bibNumStr = bib ? String(bib.number) : "";
+        const nameLower = p.name ? p.name.toLowerCase() : "";
+        const phoneStr = p.phone || "";
+        const teamLower = p.team ? p.team.toLowerCase() : "";
+        const emergencyLower = p.emergency_contact ? p.emergency_contact.toLowerCase() : "";
+        
         return (
-          p.name.toLowerCase().includes(s) ||
-          p.phone.includes(s) ||
-          bibStr.toLowerCase().includes(s) ||
-          (p.team || "").toLowerCase().includes(s)
+          nameLower.includes(s) ||
+          phoneStr.includes(s) ||
+          bibStr.includes(s) ||
+          bibNumStr.includes(s) ||
+          teamLower.includes(s) ||
+          emergencyLower.includes(s)
         );
       }
       return true;
