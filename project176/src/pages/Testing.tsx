@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Plus, ChevronDown, ChevronUp, CheckCircle, XCircle, MinusCircle, Users, Calendar, ClipboardList } from "lucide-react";
-import { format } from "date-fns";
+import { safeFormat } from "@/lib/utils";
 import { useStore } from "@/store";
 import type { TestPlan, BugReport, BetaTestSession, BetaTester } from "@/types";
 import BugForm from "./BugForm";
@@ -194,7 +194,7 @@ export default function Testing() {
                     </div>
                     <div className="mt-2 flex items-center gap-4 text-sm text-white/50">
                       <span className="flex items-center gap-1"><Users className="w-3.5 h-3.5" />{plan.assignee}</span>
-                      <span className="flex items-center gap-1"><Calendar className="w-3.5 h-3.5" />{plan.deadline ? format(new Date(plan.deadline), "yyyy-MM-dd") : "无期限"}</span>
+                      <span className="flex items-center gap-1"><Calendar className="w-3.5 h-3.5" />{plan.deadline ? safeFormat(plan.deadline, "yyyy-MM-dd") : "无期限"}</span>
                       <span className="text-green-400">{passCount} 通过</span>
                       <span className="text-red-400">{failCount} 失败</span>
                       <span className="text-white/30">{plan.scenarios.length} 场景</span>
@@ -308,7 +308,7 @@ export default function Testing() {
                     <div className="flex items-center justify-between">
                       <span className="font-mono text-white font-semibold">{session.name}</span>
                       <div className="flex items-center gap-3 text-sm text-white/50">
-                        <span>{format(new Date(session.startDate), "MM/dd")} - {format(new Date(session.endDate), "MM/dd")}</span>
+                        <span>{safeFormat(session.startDate, "MM/dd")} - {safeFormat(session.endDate, "MM/dd")}</span>
                         <span className="text-neon-green">{accepted}/{session.testers.length} 已接受</span>
                         {isExpanded ? <ChevronUp className="w-4 h-4 text-white/40" /> : <ChevronDown className="w-4 h-4 text-white/40" />}
                       </div>

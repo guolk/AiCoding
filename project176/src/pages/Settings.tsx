@@ -30,15 +30,19 @@ function Settings() {
   const [newRole, setNewRole] = useState("");
   const [importKey, setImportKey] = useState(0);
 
-  const handleSave = () => {
+  const syncSettings = (patch: Partial<{ name: string; desc: string; engine: string; platforms: string[]; members: TeamMember[] }>) => {
     setProjectSettings({
       ...projectSettings,
-      projectName: name,
-      description: desc,
-      engine,
-      targetPlatforms: platforms,
-      teamMembers: members,
+      projectName: patch.name ?? name,
+      description: patch.desc ?? desc,
+      engine: patch.engine ?? engine,
+      targetPlatforms: patch.platforms ?? platforms,
+      teamMembers: patch.members ?? members,
     });
+  };
+
+  const handleSave = () => {
+    syncSettings({ name, desc, engine, platforms, members });
   };
 
   const addPlatform = () => {
@@ -70,7 +74,9 @@ function Settings() {
   };
 
   const removeMember = (id: string) => {
-    setMembers(members.filter((m) => m.id !== id));
+    const next = members.filter((m) => m.id !== id);
+    setMembers(next);
+    syncSettings({ members: next });
   };
 
   const handleExport = () => {
@@ -119,15 +125,15 @@ function Settings() {
         <div className="space-y-3">
           <div>
             <label className="block text-gray-400 text-sm mb-1">项目名称</label>
-            <input className="cyber-input w-full" value={name} onChange={(e) => setName(e.target.value)} />
+            <input className="input-field w-full" value={name} onChange={(e) => setName(e.target.value)} />
           </div>
           <div>
             <label className="block text-gray-400 text-sm mb-1">项目描述</label>
-            <textarea className="cyber-input w-full h-24 resize-none" value={desc} onChange={(e) => setDesc(e.target.value)} />
+            <textarea className="input-field w-full h-24 resize-none" value={desc} onChange={(e) => setDesc(e.target.value)} />
           </div>
           <div>
             <label className="block text-gray-400 text-sm mb-1">开发引擎</label>
-            <input className="cyber-input w-full" value={engine} onChange={(e) => setEngine(e.target.value)} />
+            <input className="input-field w-full" value={engine} onChange={(e) => setEngine(e.target.value)} />
           </div>
           <div>
             <label className="block text-gray-400 text-sm mb-1">目标平台</label>
@@ -140,7 +146,7 @@ function Settings() {
               ))}
             </div>
             <div className="flex gap-2">
-              <input className="cyber-input flex-1" placeholder="添加平台..." value={platformInput} onChange={(e) => setPlatformInput(e.target.value)} onKeyDown={(e) => e.key === "Enter" && addPlatform()} />
+              <input className="input-field flex-1" placeholder="添加平台..." value={platformInput} onChange={(e) => setPlatformInput(e.target.value)} onKeyDown={(e) => e.key === "Enter" && addPlatform()} />
               <button className="neon-btn flex items-center gap-1" onClick={addPlatform}><Plus className="w-4 h-4" />添加</button>
             </div>
           </div>
@@ -167,9 +173,9 @@ function Settings() {
         </div>
         {showAddMember ? (
           <div className="p-4 rounded-lg bg-white/5 border border-neon-green/20 space-y-3">
-            <input className="cyber-input w-full" placeholder="姓名" value={newName} onChange={(e) => setNewName(e.target.value)} />
-            <input className="cyber-input w-full" placeholder="邮箱" value={newEmail} onChange={(e) => setNewEmail(e.target.value)} />
-            <input className="cyber-input w-full" placeholder="角色" value={newRole} onChange={(e) => setNewRole(e.target.value)} />
+            <input className="input-field w-full" placeholder="姓名" value={newName} onChange={(e) => setNewName(e.target.value)} />
+            <input className="input-field w-full" placeholder="邮箱" value={newEmail} onChange={(e) => setNewEmail(e.target.value)} />
+            <input className="input-field w-full" placeholder="角色" value={newRole} onChange={(e) => setNewRole(e.target.value)} />
             <div className="flex gap-2">
               <button className="neon-btn-primary flex items-center gap-1" onClick={addMember}><Plus className="w-4 h-4" />确认添加</button>
               <button className="neon-btn" onClick={() => setShowAddMember(false)}>取消</button>

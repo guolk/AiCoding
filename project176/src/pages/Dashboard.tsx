@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import { format, differenceInDays, subDays, isAfter } from "date-fns";
+import { differenceInDays, subDays, isAfter } from "date-fns";
+import { safeFormat } from "@/lib/utils";
 import {
   Clock,
   FileText,
@@ -181,7 +182,7 @@ function Dashboard() {
                 className={`absolute -left-4 top-1.5 w-2 h-2 rounded-full ${dotColor[item.type]}`}
               />
               <span className="text-gray-500 text-xs font-mono shrink-0 w-20">
-                {format(new Date(item.date), "MM/dd")}
+                {safeFormat(item.date, "MM/dd")}
               </span>
               <span className="text-gray-300 text-sm truncate">{item.description}</span>
             </div>

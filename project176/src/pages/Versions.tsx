@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Plus, Check, Bug, Edit, Star, ChevronRight } from "lucide-react";
-import { format } from "date-fns";
+import { isValid, parseISO } from "date-fns";
+import { safeFormat } from "@/lib/utils";
 import { useStore } from "@/store";
 import type { GameVersion } from "@/types";
 import Modal from "@/components/Modal";
@@ -11,9 +12,11 @@ export default function Versions() {
   const versions = useStore((s) => s.versions);
   const [selected, setSelected] = useState<GameVersion | null>(null);
 
-  const sorted = [...versions].sort(
-    (a, b) => new Date(b.releaseDate).getTime() - new Date(a.releaseDate).getTime()
-  );
+  const sorted = [...versions].sort((a, b) => {
+    const da = (parseISO(a.releaseDate) || new Date(a.releaseDate)).getTime() || 0;
+    const db = (parseISO(b.releaseDate) || new Date(b.releaseDate)).getTime() || 0;
+    return db - da;
+  });
 
   return (
     <div className="p-6 space-y-6">
@@ -71,7 +74,7 @@ export default function Versions() {
                       </div>
                       <div className="flex items-center gap-2">
                         <span className="text-gray-400 text-sm">
-                          {format(new Date(v.releaseDate), "yyyy-MM-dd")}
+                          {safeFormat(v.releaseDate, "yyyy-MM-dd")}
                         </span>
                         <button
                           className="neon-btn p-1.5"
@@ -176,7 +179,7 @@ export default function Versions() {
                 <span className="badge-green">{selected.milestoneLabel || "里程碑"}</span>
               )}
               <span className="text-gray-400 text-sm ml-auto">
-                {format(new Date(selected.releaseDate), "yyyy-MM-dd")}
+                {safeFormat(selected.releaseDate, "yyyy-MM-dd")}
               </span>
             </div>
 
@@ -253,7 +256,7 @@ export default function Versions() {
                           ))}
                         </div>
                         <span className="text-xs text-gray-500">
-                          {fb.source} · {format(new Date(fb.date), "yyyy-MM-dd")}
+                          {fb.source} · {safeFormat(fb.date, "yyyy-MM-dd")}
                         </span>
                       </div>
                       <p className="text-sm text-gray-300">{fb.comment}</p>

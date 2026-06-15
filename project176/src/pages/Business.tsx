@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Plus, Circle, Trash2, X } from "lucide-react";
-import { format, differenceInDays, min, max } from "date-fns";
+import { differenceInDays, min, max } from "date-fns";
+import { safeFormat } from "@/lib/utils";
 import { useStore } from "@/store";
 import type { PlatformResearch, PricingStrategy, MarketingCampaign } from "@/types";
 
@@ -221,7 +222,7 @@ function PricingTab({ strategies, onAdd }: { strategies: PricingStrategy[]; onAd
               </div>
             )}
             {s.decisionNotes && <p className="text-gray-300 text-sm">{s.decisionNotes}</p>}
-            <p className="text-gray-500 text-xs">{format(new Date(s.decidedAt), "yyyy-MM-dd")}</p>
+            <p className="text-gray-500 text-xs">{safeFormat(s.decidedAt, "yyyy-MM-dd")}</p>
           </div>
         ))}
       </div>
@@ -293,7 +294,7 @@ function CampaignTab({ campaigns, onAdd }: { campaigns: MarketingCampaign[]; onA
               {[0, 1, 2, 3, 4].map((i) => (
                 <div key={i} className="flex-1 border-l border-white/5 h-full flex items-end">
                   <span className="text-[10px] text-gray-600 ml-1">
-                    {format(new Date(timelineStart.getTime() + (totalDays * i * 86400000)), "MM/dd")}
+                    {safeFormat(timelineStart.getTime() + (totalDays * i * 86400000), "MM/dd")}
                   </span>
                 </div>
               ))}
@@ -311,7 +312,7 @@ function CampaignTab({ campaigns, onAdd }: { campaigns: MarketingCampaign[]; onA
                       style={{ left: `${left}%`, width: `${Math.max(width, 2)}%` }} />
                     {hovered === c.id && (
                       <div className="absolute z-10 -top-8 left-1/2 -translate-x-1/2 bg-base-900 border border-white/10 rounded px-2 py-1 text-xs text-gray-300 whitespace-nowrap shadow-lg">
-                        {c.name} · {format(new Date(c.startDate), "MM/dd")}-{format(new Date(c.endDate), "MM/dd")}
+                        {c.name} · {safeFormat(c.startDate, "MM/dd")}-{safeFormat(c.endDate, "MM/dd")}
                       </div>
                     )}
                   </div>
@@ -339,7 +340,7 @@ function CampaignTab({ campaigns, onAdd }: { campaigns: MarketingCampaign[]; onA
               <span className="font-mono text-neon-green">¥{c.budget}</span>
             </div>
             <div className="text-sm text-gray-400 mb-2">
-              {c.startDate && c.endDate ? `${format(new Date(c.startDate), "yyyy-MM-dd")} → ${format(new Date(c.endDate), "yyyy-MM-dd")}` : "日期未设定"}
+              {c.startDate && c.endDate ? `${safeFormat(c.startDate, "yyyy-MM-dd")} → ${safeFormat(c.endDate, "yyyy-MM-dd")}` : "日期未设定"}
             </div>
             <div className="flex gap-6 text-sm">
               <span className="text-gray-400">曝光: <span className="text-gray-200">{c.impressions.toLocaleString()}</span></span>
