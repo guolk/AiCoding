@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react';
+import { createPortal } from 'react-dom';
 import {
   Plus,
   Edit2,
@@ -143,7 +144,8 @@ export default function AppointmentReminder() {
   };
 
   return (
-    <div className="space-y-6">
+    <>
+      <div className="space-y-6">
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="bg-gradient-to-br from-amber-500 to-orange-600 rounded-2xl p-5 text-white">
           <div className="flex items-center gap-2 text-amber-100 text-sm">
@@ -373,10 +375,12 @@ export default function AppointmentReminder() {
         </div>
       )}
 
-      {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+      </div>
+
+      {isModalOpen && createPortal(
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50 p-4">
           <div className="w-full max-w-md rounded-2xl bg-white shadow-xl max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between border-b border-gray-100 px-6 py-4 sticky top-0 bg-white">
+            <div className="flex items-center justify-between border-b border-gray-100 px-6 py-4 sticky top-0 bg-white z-10">
               <h3 className="text-lg font-semibold text-gray-900">
                 {editingAppointment ? '编辑预约' : '添加预约'}
               </h3>
@@ -520,11 +524,12 @@ export default function AppointmentReminder() {
               </div>
             </form>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
-      {deleteConfirmId && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+      {deleteConfirmId && createPortal(
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50 p-4">
           <div className="w-full max-w-sm rounded-2xl bg-white p-6 shadow-xl">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center">
@@ -550,8 +555,9 @@ export default function AppointmentReminder() {
               </button>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
-    </div>
+    </>
   );
 }

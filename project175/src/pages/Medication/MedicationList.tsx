@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { Plus, Edit2, Trash2, X, Pill, User, Calendar, Clock, Stethoscope } from 'lucide-react';
 import { useHealthStore } from '@/store';
 import type { Medication, MedicationFrequency } from '@/types';
@@ -82,7 +83,8 @@ export default function MedicationList() {
   };
 
   return (
-    <div>
+    <>
+      <div>
       <div className="mb-4 flex items-center justify-between">
         <h2 className="text-lg font-semibold text-gray-900">我的药物</h2>
         <button
@@ -184,9 +186,10 @@ export default function MedicationList() {
           ))}
         </div>
       )}
+    </div>
 
-      {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+    {isModalOpen && createPortal(
+      <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50 p-4">
           <div className="w-full max-w-md rounded-2xl bg-white shadow-xl">
             <div className="flex items-center justify-between border-b border-gray-100 px-6 py-4">
               <h3 className="text-lg font-semibold text-gray-900">
@@ -307,7 +310,7 @@ export default function MedicationList() {
             </form>
           </div>
         </div>
-      )}
-    </div>
+      , document.body)}
+    </>
   );
 }

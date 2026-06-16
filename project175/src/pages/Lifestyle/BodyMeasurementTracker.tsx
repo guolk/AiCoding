@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react';
+import { createPortal } from 'react-dom';
 import {
   Plus,
   Edit2,
@@ -140,7 +141,8 @@ export default function BodyMeasurementTracker() {
   const weightTrend = Number(weightChange);
 
   return (
-    <div className="space-y-6">
+    <>
+      <div className="space-y-6">
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="bg-gradient-to-br from-purple-500 to-indigo-600 rounded-2xl p-5 text-white">
           <div className="flex items-center gap-2 text-purple-100 text-sm">
@@ -361,9 +363,10 @@ export default function BodyMeasurementTracker() {
           </div>
         )}
       </div>
+      </div>
 
-      {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+      {isModalOpen && createPortal(
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50 p-4">
           <div className="w-full max-w-md rounded-2xl bg-white shadow-xl">
             <div className="flex items-center justify-between border-b border-gray-100 px-6 py-4">
               <h3 className="text-lg font-semibold text-gray-900">
@@ -480,10 +483,10 @@ export default function BodyMeasurementTracker() {
             </form>
           </div>
         </div>
-      )}
+      , document.body)}
 
-      {deleteConfirmId && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+      {deleteConfirmId && createPortal(
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50 p-4">
           <div className="w-full max-w-sm rounded-2xl bg-white p-6 shadow-xl">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center">
@@ -510,7 +513,7 @@ export default function BodyMeasurementTracker() {
             </div>
           </div>
         </div>
-      )}
-    </div>
+      , document.body)}
+    </>
   );
 }

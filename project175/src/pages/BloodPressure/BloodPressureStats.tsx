@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { createPortal } from 'react-dom';
 import {
   AreaChart,
   Area,
@@ -113,7 +114,8 @@ export default function BloodPressureStats() {
   };
 
   return (
-    <div className="space-y-5">
+    <>
+      <div className="space-y-5">
       <div className="flex items-center justify-between">
         <div className="flex gap-2">
           {dayRanges.map((r) => (
@@ -371,9 +373,10 @@ export default function BloodPressureStats() {
           </div>
         </div>
       </div>
+    </div>
 
-      {showTargetModal && (
-        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
+    {showTargetModal && createPortal(
+      <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-[9999] p-4">
           <div className="bg-white rounded-2xl w-full max-w-sm p-6 shadow-2xl">
             <h3 className="text-lg font-bold text-gray-800 mb-4">设置目标范围</h3>
             <div className="space-y-4">
@@ -438,7 +441,7 @@ export default function BloodPressureStats() {
             </div>
           </div>
         </div>
-      )}
-    </div>
+      , document.body)}
+    </>
   );
 }

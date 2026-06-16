@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { createPortal } from 'react-dom';
 import {
   Plus,
   Edit2,
@@ -130,7 +131,8 @@ export default function SideEffectRecords() {
   );
 
   return (
-    <div>
+    <>
+      <div>
       <div className="mb-4 flex items-center justify-between">
         <h2 className="text-lg font-semibold text-gray-900">副作用记录</h2>
         <button
@@ -247,9 +249,10 @@ export default function SideEffectRecords() {
           ))}
         </div>
       )}
+    </div>
 
-      {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+    {isModalOpen && createPortal(
+      <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50 p-4">
           <div className="w-full max-w-md rounded-2xl bg-white shadow-xl max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between border-b border-gray-100 px-6 py-4 sticky top-0 bg-white">
               <h3 className="text-lg font-semibold text-gray-900">
@@ -398,7 +401,7 @@ export default function SideEffectRecords() {
             </form>
           </div>
         </div>
-      )}
-    </div>
+      , document.body)}
+    </>
   );
 }
