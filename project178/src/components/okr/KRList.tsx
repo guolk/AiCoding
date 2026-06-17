@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import useAppStore from '@/store/useAppStore'
 import type { KeyResult, MetricType } from '@/types'
 import { METRIC_LABELS } from '@/types'
@@ -30,8 +31,13 @@ function getProgressTextColor(pct: number): string {
 }
 
 export default function KRList({ okrId, onEditKR }: KRListProps) {
-  const keyResults = useAppStore((s) => s.keyResults.filter((kr) => kr.okrId === okrId).sort((a, b) => a.sortOrder - b.sortOrder))
+  const allKeyResults = useAppStore((s) => s.keyResults)
   const addKeyResult = useAppStore((s) => s.addKeyResult)
+
+  const keyResults = useMemo(
+    () => allKeyResults.filter((kr) => kr.okrId === okrId).sort((a, b) => a.sortOrder - b.sortOrder),
+    [allKeyResults, okrId]
+  )
 
   function handleAddKR() {
     const maxSort = keyResults.length > 0 ? Math.max(...keyResults.map((kr) => kr.sortOrder)) : 0
