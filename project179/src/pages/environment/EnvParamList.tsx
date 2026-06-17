@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import {
   Thermometer,
   Droplets,
@@ -56,11 +56,22 @@ export default function EnvParamList() {
     }).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
   }, [envParams, filterSiteId, startDate, endDate]);
 
-  const totalPages = Math.ceil(filteredData.length / PAGE_SIZE);
-  const paginatedData = filteredData.slice(
-    (currentPage - 1) * PAGE_SIZE,
-    currentPage * PAGE_SIZE
-  );
+  const totalPages = Math.max(1, Math.ceil(filteredData.length / PAGE_SIZE));
+
+  useEffect(() => {
+    if (currentPage > totalPages && totalPages > 0) {
+      setCurrentPage(totalPages);
+    }
+    if (filteredData.length > 0 && currentPage === 0) {
+      setCurrentPage(1);
+    }
+  }, [filteredData.length, totalPages, currentPage]);
+
+  const paginatedData = useMemo(() => {
+    const start = Math.max(0, (currentPage - 1) * PAGE_SIZE);
+    const end = start + PAGE_SIZE;
+    return filteredData.slice(start, end);
+  }, [filteredData, currentPage]);
 
   const getSiteName = (siteId: string) => {
     return sites.find((s) => s.id === siteId)?.name || '未知监测点';
@@ -130,6 +141,7 @@ export default function EnvParamList() {
       updateEnvParam(editingRecord.id, paramData);
     } else {
       addEnvParam(paramData);
+      setCurrentPage(1);
     }
     setIsModalOpen(false);
     resetForm();
@@ -137,7 +149,11 @@ export default function EnvParamList() {
 
   const handleDelete = (id: string) => {
     if (confirm('确定要删除这条记录吗？')) {
+      const isLastItem = paginatedData.length === 1 && currentPage > 1;
       deleteEnvParam(id);
+      if (isLastItem) {
+        setCurrentPage((prev) => Math.max(1, prev - 1));
+      }
     }
   };
 

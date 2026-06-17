@@ -9,6 +9,9 @@ import {
   Calendar,
   Navigation,
   Filter,
+  Trash2,
+  Edit2,
+  AlertTriangle,
 } from 'lucide-react';
 import { Header } from '@/components/Layout/Header';
 import { Badge } from '@/components/ui/Badge';
@@ -19,11 +22,13 @@ import SiteFormModal from './SiteFormModal';
 
 export default function SiteList() {
   const navigate = useNavigate();
-  const { sites, species, envParams } = useAppStore();
+  const { sites, species, envParams, deleteSite } = useAppStore();
 
   const [searchKeyword, setSearchKeyword] = useState('');
   const [filterEcosystem, setFilterEcosystem] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingSite, setEditingSite] = useState<null | any>(null);
+  const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
 
   const ecosystemTypes = useMemo(() => {
     const types = new Set(sites.map((s) => s.ecosystemType));
@@ -60,6 +65,18 @@ export default function SiteList() {
 
   const handleCardClick = (siteId: string) => {
     navigate(`/sites/${siteId}`);
+  };
+
+  const handleDelete = (siteId: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setDeleteConfirmId(siteId);
+  };
+
+  const confirmDelete = () => {
+    if (deleteConfirmId) {
+      deleteSite(deleteConfirmId);
+      setDeleteConfirmId(null);
+    }
   };
 
   return (
@@ -173,7 +190,14 @@ export default function SiteList() {
                       </div>
                     )}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
-                    <div className="absolute top-3 right-3">
+                    <div className="absolute top-3 right-3 flex items-center gap-2">
+                      <button
+                        onClick={(e) => handleDelete(site.id, e)}
+                        className="w-7 h-7 rounded-lg bg-white/90 backdrop-blur-sm flex items-center justify-center text-red-500 hover:bg-white hover:shadow-md transition-all duration-200"
+                        title="删除监测点"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
                       <Badge text={site.ecosystemType} variant="info" />
                     </div>
                     <div className="absolute bottom-3 left-4 right-4">
@@ -222,8 +246,47 @@ export default function SiteList() {
 
       <SiteFormModal
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        onClose={() => {
+          setIsModalOpen(false);
+          setEditingSite(null);
+        }}
+        editingSite={editingSite}
       />
+
+      {deleteConfirmId && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm animate-fade-in">
+          <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl animate-slide-up">
+            <div className="mb-4 flex items-center gap-3">
+              <div className="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center">
+                <AlertTriangle className="w-6 h-6 text-red-500" />
+              </div>
+              <div>
+                <h3 className="text-lg font-bold text-forest-800">确认删除</h3>
+                <p className="text-sm text-forest-600">此操作不可撤销</p>
+              </div>
+            </div>
+            <div className="mb-6 rounded-xl bg-red-50 p-4">
+              <p className="text-sm text-red-700">
+                您确定要删除该监测点吗？这将同时删除该监测点下的所有物种记录和环境参数数据。
+              </p>
+            </div>
+            <div className="flex justify-end gap-3">
+              <button
+                onClick={() => setDeleteConfirmId(null)}
+                className="px-5 py-2.5 rounded-xl text-sm font-medium text-forest-600 border border-forest-200 hover:bg-forest-50 transition-colors"
+              >
+                取消
+              </button>
+              <button
+                onClick={confirmDelete}
+                className="px-5 py-2.5 rounded-xl text-sm font-medium text-white bg-red-500 hover:bg-red-600 transition-colors"
+              >
+                确认删除
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
