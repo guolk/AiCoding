@@ -46,11 +46,18 @@ export default function Matches() {
   useEffect(() => { load() }, [])
 
   useEffect(() => {
-    if (id) {
+    if (id && list.length > 0) {
       const m = list.find(x => x.id === Number(id))
-      if (m) setCurrent(m)
-    } else setCurrent(null)
-  }, [id, list])
+      if (m) {
+        const topic = topics.find(t => t.id === m.topicId)
+        setCurrent({ ...m, topicType: topic?.type })
+      } else {
+        setCurrent(null)
+      }
+    } else if (!id) {
+      setCurrent(null)
+    }
+  }, [id, list, topics])
 
   useEffect(() => {
     if (current && review === 'review') {
@@ -82,28 +89,7 @@ export default function Matches() {
     } catch { alert('保存失败') }
   }
 
-  if (current && review === 'review') {
-    return <MatchReviewPage
-      match={current}
-      reviewData={reviewData}
-      args={argumentsData}
-      onBack={() => nav('/matches')}
-      onSave={async (d: any) => {
-        await fetchAPI(`/api/matches/${current.id}/review`, {
-          method: 'POST', body: JSON.stringify(d),
-        })
-        alert('复盘已保存')
-        nav('/matches')
-      }}
-    />
-  }
-
-  if (current) {
-    return <MatchDetail match={current} onBack={() => nav('/matches')}
-      onStartResult={() => nav(`/matches/${current.id}/review`)} />
-  }
-
-  // 日历数据
+  // 日历数据（必须放在所有提前 return 之前！
   const calendarDays = useMemo(() => {
     const today = new Date()
     const year = today.getFullYear(), month = today.getMonth()
@@ -125,6 +111,27 @@ export default function Matches() {
     })
     return m
   }, [filtered])
+
+  if (current && review === 'review') {
+    return <MatchReviewPage
+      match={current}
+      reviewData={reviewData}
+      args={argumentsData}
+      onBack={() => nav('/matches')}
+      onSave={async (d: any) => {
+        await fetchAPI(`/api/matches/${current.id}/review`, {
+          method: 'POST', body: JSON.stringify(d),
+        })
+        alert('复盘已保存')
+        nav('/matches')
+      }}
+    />
+  }
+
+  if (current) {
+    return <MatchDetail match={current} onBack={() => nav('/matches')}
+      onStartResult={() => nav(`/matches/${current.id}/review`)} />
+  }
 
   return (
     <div className="animate-fade-in">

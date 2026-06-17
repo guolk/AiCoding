@@ -43,7 +43,16 @@ export default function TopicsList() {
     }
   }, [id])
 
-  const filtered = useMemo(() => list, [list])
+  const filtered = useMemo(() => {
+    let result = list
+    if (search) {
+      const s = search.toLowerCase()
+      result = result.filter(t =>
+        t.title.toLowerCase().includes(s) || t.description.toLowerCase().includes(s)
+      )
+    }
+    return result
+  }, [list, search])
 
   const submitNew = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
