@@ -1,0 +1,134 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: 'Noto Sans SC', sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background-color: #0a0e1a;
+  color: #e2e8f0;
+  min-height: 100vh;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0a0e1a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
+
+@layer components {
+  .cyber-card {
+    @apply bg-cyber-card border border-cyber-border rounded-xl p-5 transition-all duration-300 hover:border-cyber-border-light;
+  }
+
+  .cyber-card-glow {
+    @apply cyber-card hover:shadow-glow-green hover:border-cyber-green/30;
+  }
+
+  .cyber-input {
+    @apply bg-cyber-surface border border-cyber-border rounded-lg px-3 py-2 text-sm text-slate-200 
+    placeholder-slate-500 focus:outline-none focus:border-cyber-blue/50 focus:ring-1 focus:ring-cyber-blue/30 
+    transition-all duration-200 w-full;
+  }
+
+  .cyber-btn {
+    @apply px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 
+    focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-cyber-bg;
+  }
+
+  .cyber-btn-primary {
+    @apply cyber-btn bg-cyber-green/10 text-cyber-green border border-cyber-green/30 
+    hover:bg-cyber-green/20 hover:shadow-glow-green focus:ring-cyber-green/50;
+  }
+
+  .cyber-btn-secondary {
+    @apply cyber-btn bg-cyber-surface text-slate-300 border border-cyber-border 
+    hover:bg-cyber-border hover:text-white focus:ring-cyber-blue/50;
+  }
+
+  .cyber-btn-danger {
+    @apply cyber-btn bg-cyber-red/10 text-cyber-red border border-cyber-red/30 
+    hover:bg-cyber-red/20 hover:shadow-glow-red focus:ring-cyber-red/50;
+  }
+
+  .cyber-badge {
+    @apply inline-flex items-center px-2 py-0.5 rounded text-xs font-mono font-medium;
+  }
+
+  .cyber-badge-green {
+    @apply cyber-badge bg-cyber-green/10 text-cyber-green border border-cyber-green/20;
+  }
+
+  .cyber-badge-blue {
+    @apply cyber-badge bg-cyber-blue/10 text-cyber-blue border border-cyber-blue/20;
+  }
+
+  .cyber-badge-amber {
+    @apply cyber-badge bg-cyber-amber/10 text-cyber-amber border border-cyber-amber/20;
+  }
+
+  .cyber-badge-red {
+    @apply cyber-badge bg-cyber-red/10 text-cyber-red border border-cyber-red/20;
+  }
+
+  .cyber-section-title {
+    @apply text-lg font-semibold text-slate-100 font-mono flex items-center gap-2;
+  }
+
+  .cyber-empty {
+    @apply flex flex-col items-center justify-center py-16 text-slate-500;
+  }
+}
+
+.neon-text-green {
+  text-shadow: 0 0 10px rgba(0, 255, 136, 0.5), 0 0 40px rgba(0, 255, 136, 0.2);
+}
+
+.neon-text-blue {
+  text-shadow: 0 0 10px rgba(0, 212, 255, 0.5), 0 0 40px rgba(0, 212, 255, 0.2);
+}
+
+.neon-text-red {
+  text-shadow: 0 0 10px rgba(255, 51, 102, 0.5), 0 0 40px rgba(255, 51, 102, 0.2);
+}
+
+.neon-text-amber {
+  text-shadow: 0 0 10px rgba(255, 184, 0, 0.5), 0 0 40px rgba(255, 184, 0, 0.2);
+}
+
+.scan-line {
+  position: relative;
+  overflow: hidden;
+}
+
+.scan-line::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #00ff88, transparent);
+  animation: scan 3s linear infinite;
+  opacity: 0.3;
+}
