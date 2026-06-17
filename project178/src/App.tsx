@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Layout from "@/components/layout/Layout";
+import ErrorBoundary from "@/components/ErrorBoundary";
 import Dashboard from "@/pages/Dashboard";
 import KnowledgePlanning from "@/pages/KnowledgePlanning";
 import OKRPlanning from "@/pages/OKRPlanning";
@@ -10,13 +11,15 @@ export default function App() {
   return (
     <Router>
       <Layout>
-        <Routes>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/knowledge" element={<KnowledgePlanning />} />
-          <Route path="/okr" element={<OKRPlanning />} />
-          <Route path="/resources" element={<ResourcePlanning />} />
-          <Route path="/output" element={<OutputTracking />} />
-        </Routes>
+        <ErrorBoundary>
+          <Routes>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/knowledge" element={<KnowledgePlanning />} />
+            <Route path="/okr" element={<OKRPlanning />} />
+            <Route path="/resources" element={<ResourcePlanning />} />
+            <Route path="/output" element={<OutputTracking />} />
+          </Routes>
+        </ErrorBoundary>
       </Layout>
     </Router>
   );

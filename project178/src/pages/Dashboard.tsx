@@ -5,7 +5,7 @@ import WeeklyHeatmap from '@/components/dashboard/WeeklyHeatmap'
 
 export default function Dashboard() {
   return (
-    <div className="min-h-screen bg-[var(--color-bg)] p-6 space-y-6">
+    <div className="p-6 space-y-6">
       <div className="max-w-7xl mx-auto space-y-6">
         <div className="animate-fade-in-up">
           <h1 className="text-2xl font-bold text-[var(--color-text-primary)]">仪表盘</h1>

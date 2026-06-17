@@ -496,7 +496,7 @@ export default function OutputTracking() {
   }
 
   return (
-    <div className="min-h-screen p-6 max-w-7xl mx-auto">
+    <div className="p-6 max-w-7xl mx-auto">
       <div className="mb-6">
         <h1 className="text-2xl font-serif font-bold text-[var(--color-text-primary)]">输出追踪</h1>
         <p className="text-sm text-[var(--color-text-muted)] mt-1">评估学习效果，记录输出成果，追踪知识应用</p>

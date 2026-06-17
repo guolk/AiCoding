@@ -2,7 +2,7 @@ import { useState } from 'react'
 import type { QuarterlyOKR, OKRStatus, KnowledgeArea } from '@/types'
 import { OKR_STATUS_LABELS } from '@/types'
 import { cn } from '@/lib/utils'
-import { Edit3, Trash2, Save, X, MapPin } from 'lucide-react'
+import { Pencil, Trash2, Save, X, MapPin } from 'lucide-react'
 
 interface ObjectiveCardProps {
   okr: QuarterlyOKR
@@ -57,10 +57,9 @@ export default function ObjectiveCard({ okr, area, onUpdate, onDelete }: Objecti
 
   if (editing) {
     return (
-      <div className="card-static p-5 rounded-xl animate-fade-in-up">
-        <div className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-[var(--color-text-secondary)] mb-1">目标描述</label>
+      <div className="space-y-4 animate-fade-in-up">
+        <div>
+          <label className="block text-sm font-medium text-[var(--color-text-secondary)] mb-1">目标描述</label>
             <textarea
               className="input-field min-h-[72px] resize-y"
               value={form.objective}
@@ -106,13 +105,12 @@ export default function ObjectiveCard({ okr, area, onUpdate, onDelete }: Objecti
               保存
             </button>
           </div>
-        </div>
       </div>
     )
   }
 
   return (
-    <div className="card p-5 rounded-xl">
+    <div>
       <div className="flex items-start justify-between gap-3 mb-3">
         <div className="flex-1 min-w-0">
           <h3 className="text-base font-semibold text-[var(--color-text-primary)] leading-snug mb-1">
@@ -125,7 +123,7 @@ export default function ObjectiveCard({ okr, area, onUpdate, onDelete }: Objecti
 
         <div className="flex items-center gap-1 shrink-0">
           <button onClick={handleStartEdit} className="btn-ghost p-1.5 rounded-lg">
-            <Edit3 className="w-4 h-4" />
+            <Pencil className="w-4 h-4" />
           </button>
           <button
             onClick={handleDelete}

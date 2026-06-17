@@ -2,7 +2,7 @@ import useAppStore from '@/store/useAppStore'
 import type { KeyResult, MetricType } from '@/types'
 import { METRIC_LABELS } from '@/types'
 import { cn } from '@/lib/utils'
-import { Plus, Edit3, BookOpen, GraduationCap, FileText, Clock, FolderKanban } from 'lucide-react'
+import { Plus, Pencil, BookOpen, GraduationCap, FileText, Clock, FolderKanban } from 'lucide-react'
 
 interface KRListProps {
   okrId: string
@@ -70,7 +70,7 @@ export default function KRList({ okrId, onEditKR }: KRListProps) {
                   onClick={() => onEditKR(kr)}
                   className="shrink-0 p-1 rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:bg-white"
                 >
-                  <Edit3 className="w-3.5 h-3.5 text-[var(--color-text-muted)]" />
+                  <Pencil className="w-3.5 h-3.5 text-[var(--color-text-muted)]" />
                 </button>
               </div>
 
