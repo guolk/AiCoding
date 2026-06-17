@@ -80,9 +80,14 @@ export default function Accounts() {
   const saveDeletion = () => {
     if (!deletionForm.accountId) return
     addAccountDeletion({ id: generateId(), accountId: deletionForm.accountId, status: 'pending', requestDate: new Date().toISOString(), completionDate: '', notes: deletionForm.notes })
+    updateAccount(deletionForm.accountId, { status: 'pending_deletion' })
     setShowDeletionModal(false)
     setDeletionForm({ accountId: '', notes: '' })
   }
+
+  const accountsEligibleForDeletion = accounts.filter((a) =>
+    a.status !== 'deleted' && !accountDeletions.some((d) => d.accountId === a.id && d.status !== 'completed')
+  )
 
   const checkedAccount = accounts.find((a) => a.id === selectedCheckId)
   const checkItems = checkedAccount ? [
@@ -272,16 +277,29 @@ export default function Accounts() {
                       <div key={d.id} className="cyber-card p-3 space-y-2">
                         <div className="flex items-center justify-between">
                           <span className="font-mono text-sm text-white">{acc?.name ?? '未知'}</span>
-                          <button onClick={() => deleteAccountDeletion(d.id)} className="text-cyber-red hover:text-cyber-red/80"><Trash2 className="w-3.5 h-3.5" /></button>
+                          <button onClick={() => {
+                            deleteAccountDeletion(d.id)
+                            if (d.status !== 'completed') {
+                              updateAccount(d.accountId, { status: 'active' })
+                            }
+                          }} className="text-cyber-red hover:text-cyber-red/80"><Trash2 className="w-3.5 h-3.5" /></button>
                         </div>
                         <p className="text-xs text-slate-500">申请: {formatDate(d.requestDate)}</p>
                         {d.notes && <p className="text-xs text-slate-400">{d.notes}</p>}
                         {d.completionDate && <p className="text-xs text-slate-500">完成: {formatDate(d.completionDate)}</p>}
                         {nextStatus && (
-                          <button onClick={() => updateAccountDeletion(d.id, {
-                            status: nextStatus,
-                            completionDate: nextStatus === 'completed' ? new Date().toISOString() : d.completionDate,
-                          })} className="flex items-center gap-1 text-xs text-cyber-blue hover:text-cyber-blue/80">
+                          <button onClick={() => {
+                            const updates: Partial<AccountDeletion> = {
+                              status: nextStatus,
+                              completionDate: nextStatus === 'completed' ? new Date().toISOString() : d.completionDate,
+                            }
+                            updateAccountDeletion(d.id, updates)
+                            if (nextStatus === 'completed') {
+                              updateAccount(d.accountId, { status: 'deleted' })
+                            } else if (nextStatus === 'in_progress') {
+                              updateAccount(d.accountId, { status: 'pending_deletion' })
+                            }
+                          }} className="flex items-center gap-1 text-xs text-cyber-blue hover:text-cyber-blue/80">
                             <ChevronRight className="w-3 h-3" />{deletionLabel[nextStatus]}
                           </button>
                         )}
@@ -364,7 +382,8 @@ export default function Accounts() {
             </div>
             <select value={deletionForm.accountId} onChange={(e) => setDeletionForm({ ...deletionForm, accountId: e.target.value })} className="cyber-input w-full">
               <option value="">选择账号...</option>
-              {accounts.map((a) => <option key={a.id} value={a.id}>{a.name} ({a.platform})</option>)}
+              {accountsEligibleForDeletion.length === 0 && <option value="" disabled>没有可注销的账号</option>}
+              {accountsEligibleForDeletion.map((a) => <option key={a.id} value={a.id}>{a.name} ({a.platform}) - {statusLabel[a.status]}</option>)}
             </select>
             <textarea placeholder="备注" value={deletionForm.notes} onChange={(e) => setDeletionForm({ ...deletionForm, notes: e.target.value })} className="cyber-input w-full h-20 resize-none" />
             <div className="flex gap-3 pt-2">
