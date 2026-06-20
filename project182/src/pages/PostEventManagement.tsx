@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import {
   Mail, Gift, Image, CheckCircle, Clock, Plus, Edit2, Trash2, Share2,
   Eye, Link, Upload, CheckSquare, Square, Filter,
@@ -66,6 +66,8 @@ export default function PostEventManagement() {
   const [editingAlbum, setEditingAlbum] = useState<PhotoAlbum | null>(null);
   const [giftForm, setGiftForm] = useState({ guestName: '', type: 'cash' as GiftType, amount: 0, description: '', date: '', notes: '' });
   const [albumForm, setAlbumForm] = useState({ name: '', description: '' });
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [uploadingAlbumId, setUploadingAlbumId] = useState<string | null>(null);
 
   const { currentEventId, thankYous, guests, giftRecords, photoAlbums,
     addGiftRecord, updateGiftRecord, deleteGiftRecord,
@@ -131,6 +133,49 @@ export default function PostEventManagement() {
   };
   const handleMarkShared = (id: string) => {
     updatePhotoAlbum(id, { isShared: true, shareDate: new Date().toISOString() });
+  };
+
+  const handleUploadClick = (albumId: string) => {
+    setUploadingAlbumId(albumId);
+    fileInputRef.current?.click();
+  };
+
+  const readFileAsDataURL = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  };
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0 || !uploadingAlbumId) return;
+
+    const album = photoAlbums.find(a => a.id === uploadingAlbumId);
+    if (!album) return;
+
+    try {
+      const newPhotos = await Promise.all(
+        Array.from(files).map(file => readFileAsDataURL(file))
+      );
+      updatePhotoAlbum(uploadingAlbumId, {
+        photoUrls: [...album.photoUrls, ...newPhotos],
+      });
+    } catch (err) {
+      console.error('照片上传失败:', err);
+    }
+
+    setUploadingAlbumId(null);
+    if (fileInputRef.current) fileInputRef.current.value = '';
+  };
+
+  const handleRemovePhoto = (albumId: string, photoIndex: number) => {
+    const album = photoAlbums.find(a => a.id === albumId);
+    if (!album) return;
+    const newPhotos = album.photoUrls.filter((_, i) => i !== photoIndex);
+    updatePhotoAlbum(albumId, { photoUrls: newPhotos });
   };
 
   const thankYouColumns = [
@@ -270,10 +315,32 @@ export default function PostEventManagement() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {eventAlbums.map(album => (
               <Card key={album.id} hoverable className="animate-slide-up">
-                <div className="aspect-video bg-gradient-to-br from-primary-100 to-accent-100 rounded-xl mb-4 flex items-center justify-center relative overflow-hidden">
-                  <Image className="h-12 w-12 text-primary-400" />
-                  <div className="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity bg-warmGray-900/50">
-                    <Button variant="secondary" size="sm" leftIcon={<Upload className="h-4 w-4" />}>添加照片</Button>
+                <div
+                  className="aspect-video bg-gradient-to-br from-primary-100 to-accent-100 rounded-xl mb-4 relative overflow-hidden cursor-pointer group"
+                  onClick={() => handleUploadClick(album.id)}
+                >
+                  {album.photoUrls.length > 0 ? (
+                    <div className="w-full h-full grid grid-cols-2 gap-0.5 p-0.5">
+                      {album.photoUrls.slice(0, 4).map((url, idx) => (
+                        <div key={idx} className="relative overflow-hidden">
+                          <img src={url} alt="" className="w-full h-full object-cover" />
+                          {idx === 3 && album.photoUrls.length > 4 && (
+                            <div className="absolute inset-0 bg-warmGray-900/60 flex items-center justify-center">
+                              <span className="text-white text-xl font-bold">+{album.photoUrls.length - 4}</span>
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center">
+                      <Image className="h-12 w-12 text-primary-400" />
+                    </div>
+                  )}
+                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-warmGray-900/50">
+                    <Button variant="secondary" size="sm" leftIcon={<Upload className="h-4 w-4" />}>
+                      {album.photoUrls.length > 0 ? '上传照片' : '添加照片'}
+                    </Button>
                   </div>
                 </div>
                 <div className="space-y-2">
@@ -325,6 +392,15 @@ export default function PostEventManagement() {
           <Textarea label="描述" value={albumForm.description} onChange={(e) => setAlbumForm({ ...albumForm, description: e.target.value })} rows={3} />
         </div>
       </Modal>
+
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="image/*"
+        multiple
+        onChange={handleFileChange}
+        className="hidden"
+      />
 
       <Modal isOpen={templateModalOpen} onClose={() => setTemplateModalOpen(false)} title="感谢信模板" size="lg"
         footer={<Button variant="ghost" onClick={() => setTemplateModalOpen(false)}>关闭</Button>}>

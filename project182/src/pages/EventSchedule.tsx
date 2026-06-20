@@ -64,6 +64,7 @@ export default function EventSchedule() {
   const [editingItem, setEditingItem] = useState<ScheduleItem | null>(null);
   const [formData, setFormData] = useState(emptyScheduleItem);
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
+  const [timeError, setTimeError] = useState<string>('');
 
   const event = getCurrentEvent();
 
@@ -80,6 +81,7 @@ export default function EventSchedule() {
 
   const handleAdd = () => {
     setEditingItem(null);
+    setTimeError('');
     setFormData({
       ...emptyScheduleItem,
       eventId: currentEventId,
@@ -90,6 +92,7 @@ export default function EventSchedule() {
 
   const handleEdit = (item: ScheduleItem) => {
     setEditingItem(item);
+    setTimeError('');
     setFormData({
       ...item,
       startTime: item.startTime.slice(0, 16),
@@ -104,8 +107,24 @@ export default function EventSchedule() {
     }
   };
 
+  const validateTime = (): boolean => {
+    if (!formData.startTime || !formData.endTime) {
+      setTimeError('');
+      return false;
+    }
+    const start = new Date(formData.startTime).getTime();
+    const end = new Date(formData.endTime).getTime();
+    if (end <= start) {
+      setTimeError('结束时间必须晚于开始时间');
+      return false;
+    }
+    setTimeError('');
+    return true;
+  };
+
   const handleSave = () => {
     if (!formData.title.trim() || !formData.startTime || !formData.endTime) return;
+    if (!validateTime()) return;
 
     const data = {
       ...formData,
@@ -336,17 +355,41 @@ export default function EventSchedule() {
               label="开始时间"
               type="datetime-local"
               value={formData.startTime}
-              onChange={(e) => setFormData({ ...formData, startTime: e.target.value })}
+              onChange={(e) => {
+                setFormData({ ...formData, startTime: e.target.value });
+                if (formData.endTime) {
+                  const start = new Date(e.target.value).getTime();
+                  const end = new Date(formData.endTime).getTime();
+                  if (end <= start) setTimeError('结束时间必须晚于开始时间');
+                  else setTimeError('');
+                }
+              }}
+              error={timeError ? ' ' : undefined}
               required
             />
             <Input
               label="结束时间"
               type="datetime-local"
               value={formData.endTime}
-              onChange={(e) => setFormData({ ...formData, endTime: e.target.value })}
+              onChange={(e) => {
+                setFormData({ ...formData, endTime: e.target.value });
+                if (formData.startTime) {
+                  const start = new Date(formData.startTime).getTime();
+                  const end = new Date(e.target.value).getTime();
+                  if (end <= start) setTimeError('结束时间必须晚于开始时间');
+                  else setTimeError('');
+                }
+              }}
+              error={timeError ? ' ' : undefined}
               required
             />
           </div>
+          {timeError && (
+            <p className="text-sm text-red-500 flex items-center gap-1 -mt-2">
+              <span className="w-1.5 h-1.5 bg-red-500 rounded-full" />
+              {timeError}
+            </p>
+          )}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Input
               label="地点"
