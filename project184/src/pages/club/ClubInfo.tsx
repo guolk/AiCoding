@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, memo } from "react";
 import {
   Building2,
   Calendar,
@@ -14,6 +14,62 @@ import Card from "@/components/ui/Card";
 import Button from "@/components/ui/Button";
 import { useAppStore } from "@/store/useAppStore";
 import { formatDate } from "@/utils";
+
+interface InfoItemProps {
+  icon: React.ElementType;
+  label: string;
+  value: string;
+  isEditing: boolean;
+  editName?: string;
+  editType?: string;
+  multiline?: boolean;
+  editValue?: string;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+}
+
+const InfoItem = memo(function InfoItem({
+  icon: Icon,
+  label,
+  value,
+  isEditing,
+  editName,
+  editType = "text",
+  multiline = false,
+  editValue = "",
+  onChange,
+}: InfoItemProps) {
+  return (
+    <div className="flex items-start gap-4">
+      <div className="w-10 h-10 bg-primary-100 dark:bg-primary-900/50 rounded-lg flex items-center justify-center flex-shrink-0">
+        <Icon className="w-5 h-5 text-primary-600 dark:text-primary-400" />
+      </div>
+      <div className="flex-1 min-w-0">
+        <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">{label}</p>
+        {isEditing && editName ? (
+          multiline ? (
+            <textarea
+              name={editName}
+              value={editValue}
+              onChange={onChange}
+              rows={4}
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none"
+            />
+          ) : (
+            <input
+              type={editType}
+              name={editName}
+              value={editValue}
+              onChange={onChange}
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+            />
+          )
+        ) : (
+          <p className="text-gray-900 dark:text-white font-medium">{value}</p>
+        )}
+      </div>
+    </div>
+  );
+});
 
 export default function ClubInfo() {
   const { clubInfo, updateClubInfo } = useAppStore();
@@ -54,52 +110,6 @@ export default function ClubInfo() {
     const { name, value } = e.target;
     setEditForm((prev) => ({ ...prev, [name]: value }));
   };
-
-  const InfoItem = ({
-    icon: Icon,
-    label,
-    value,
-    editName,
-    editType = "text",
-    multiline = false,
-  }: {
-    icon: React.ElementType;
-    label: string;
-    value: string;
-    editName?: string;
-    editType?: string;
-    multiline?: boolean;
-  }) => (
-    <div className="flex items-start gap-4">
-      <div className="w-10 h-10 bg-primary-100 dark:bg-primary-900/50 rounded-lg flex items-center justify-center flex-shrink-0">
-        <Icon className="w-5 h-5 text-primary-600 dark:text-primary-400" />
-      </div>
-      <div className="flex-1 min-w-0">
-        <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">{label}</p>
-        {isEditing && editName ? (
-          multiline ? (
-            <textarea
-              name={editName}
-              value={editForm[editName as keyof typeof editForm]}
-              onChange={handleInputChange}
-              rows={4}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none"
-            />
-          ) : (
-            <input
-              type={editType}
-              name={editName}
-              value={editForm[editName as keyof typeof editForm]}
-              onChange={handleInputChange}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-            />
-          )
-        ) : (
-          <p className="text-gray-900 dark:text-white font-medium">{value}</p>
-        )}
-      </div>
-    </div>
-  );
 
   return (
     <div className="space-y-6">
@@ -144,38 +154,53 @@ export default function ClubInfo() {
               icon={Building2}
               label="社团名称"
               value={clubInfo.name}
+              isEditing={isEditing}
               editName="name"
+              editValue={editForm.name}
+              onChange={handleInputChange}
             />
 
             <InfoItem
               icon={Calendar}
               label="成立时间"
               value={formatDate(clubInfo.foundedDate)}
+              isEditing={isEditing}
               editName="foundedDate"
               editType="date"
+              editValue={editForm.foundedDate}
+              onChange={handleInputChange}
             />
 
             <InfoItem
               icon={Target}
               label="社团宗旨"
               value={clubInfo.purpose}
+              isEditing={isEditing}
               editName="purpose"
               multiline
+              editValue={editForm.purpose}
+              onChange={handleInputChange}
             />
 
             <InfoItem
               icon={User}
               label="指导老师"
               value={clubInfo.advisor}
+              isEditing={isEditing}
               editName="advisor"
+              editValue={editForm.advisor}
+              onChange={handleInputChange}
             />
 
             <InfoItem
               icon={Wallet}
               label="会费制度"
               value={clubInfo.feePolicy}
+              isEditing={isEditing}
               editName="feePolicy"
               multiline
+              editValue={editForm.feePolicy}
+              onChange={handleInputChange}
             />
           </Card.Body>
         </Card>

@@ -75,12 +75,18 @@ export default function FinanceRecords() {
   const currentCategories = formData.type === "income" ? incomeCategories : expenseCategories;
 
   const filteredRecords = useMemo(() => {
+    if (!searchTerm && typeFilter === "all" && categoryFilter === "all" && !startDate && !endDate) {
+      return financeRecords;
+    }
     return financeRecords.filter((record) => {
-      const matchesSearch =
-        record.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        record.categoryLabel.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        (record.relatedActivityName &&
-          record.relatedActivityName.toLowerCase().includes(searchTerm.toLowerCase()));
+      const searchLower = searchTerm.trim().toLowerCase();
+      const matchesSearch = searchTerm
+        ? record.description.toLowerCase().includes(searchLower) ||
+          record.categoryLabel.toLowerCase().includes(searchLower) ||
+          String(record.amount).includes(searchTerm) ||
+          (record.relatedActivityName &&
+            record.relatedActivityName.toLowerCase().includes(searchLower))
+        : true;
       const matchesType = typeFilter === "all" || record.type === typeFilter;
       const matchesCategory = categoryFilter === "all" || record.category === categoryFilter;
       const matchesStartDate = !startDate || record.date >= startDate;
@@ -241,11 +247,16 @@ export default function FinanceRecords() {
       <Card>
         <Card.Header>
           <div className="flex flex-col gap-4">
-            <div className="flex items-center gap-2">
-              <Filter className="w-5 h-5 text-gray-400" />
-              <span className="font-medium text-gray-900 dark:text-white">
-                筛选条件
-              </span>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Filter className="w-5 h-5 text-gray-400" />
+                <span className="font-medium text-gray-900 dark:text-white">
+                  筛选条件
+                </span>
+                <span className="text-sm text-gray-500 dark:text-gray-400">
+                  (共 {filteredRecords.length} 条记录)
+                </span>
+              </div>
               {(searchTerm || typeFilter !== "all" || categoryFilter !== "all" || startDate || endDate) && (
                 <Button variant="ghost" size="sm" onClick={clearFilters}>
                   <X className="w-4 h-4 mr-1" />
