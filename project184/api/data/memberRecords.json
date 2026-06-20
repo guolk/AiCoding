@@ -1,0 +1,32 @@
+[
+  {
+    "id": "record-001",
+    "name": "黄晓",
+    "type": "join",
+    "date": "2024-12-01",
+    "status": "pending",
+    "reason": "对人工智能很感兴趣",
+    "grade": "大一",
+    "major": "人工智能",
+    "phone": "13800138011"
+  },
+  {
+    "id": "record-002",
+    "name": "林峰",
+    "type": "join",
+    "date": "2024-11-28",
+    "status": "pending",
+    "reason": "想参加科技竞赛",
+    "grade": "大二",
+    "major": "软件工程",
+    "phone": "13800138012"
+  },
+  {
+    "id": "record-003",
+    "name": "王磊",
+    "type": "leave",
+    "date": "2024-11-20",
+    "status": "approved",
+    "reason": "学业繁忙，时间不足"
+  }
+]

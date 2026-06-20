@@ -1,0 +1,32 @@
+[
+  {
+    "id": "eval-001",
+    "activityId": "act-001",
+    "activityName": "校园程序设计大赛",
+    "participationRate": 85,
+    "satisfactionScore": 4.5,
+    "goalAchievement": 90,
+    "summary": "本次程序设计大赛参与度高，参赛选手反馈良好。",
+    "createdAt": "2024-11-22"
+  },
+  {
+    "id": "eval-002",
+    "activityId": "act-002",
+    "activityName": "AI技术前沿讲座",
+    "participationRate": 78,
+    "satisfactionScore": 4.7,
+    "goalAchievement": 88,
+    "summary": "讲座内容前沿实用，嘉宾分享深入浅出。",
+    "createdAt": "2024-12-07"
+  },
+  {
+    "id": "eval-003",
+    "activityId": "act-003",
+    "activityName": "Python编程培训",
+    "participationRate": 92,
+    "satisfactionScore": 4.3,
+    "goalAchievement": 85,
+    "summary": "培训内容适合零基础同学，出勤率高。",
+    "createdAt": "2024-10-30"
+  }
+]

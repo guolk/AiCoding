@@ -1,0 +1,29 @@
+[
+  {
+    "id": "budget-001",
+    "category": "activity",
+    "categoryLabel": "活动支出",
+    "plannedAmount": 12000,
+    "actualAmount": 5000,
+    "description": "各类主题活动开展费用",
+    "semester": "2024-2025学年第一学期"
+  },
+  {
+    "id": "budget-002",
+    "category": "office",
+    "categoryLabel": "办公采购",
+    "plannedAmount": 2000,
+    "actualAmount": 1400,
+    "description": "日常办公用品及宣传物料",
+    "semester": "2024-2025学年第一学期"
+  },
+  {
+    "id": "budget-003",
+    "category": "training",
+    "categoryLabel": "培训经费",
+    "plannedAmount": 3000,
+    "actualAmount": 500,
+    "description": "技术培训课程费用",
+    "semester": "2024-2025学年第一学期"
+  }
+]

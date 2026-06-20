@@ -1,0 +1,40 @@
+[
+  {
+    "id": "app-001",
+    "memberId": "member-005",
+    "memberName": "陈静",
+    "honorName": "校长奖学金",
+    "applicationDate": "2024-12-01",
+    "status": "reviewing",
+    "materials": [
+      "成绩单.pdf",
+      "获奖证明.pdf"
+    ],
+    "remarks": "材料齐全，成绩优异"
+  },
+  {
+    "id": "app-002",
+    "memberId": "member-001",
+    "memberName": "李明",
+    "honorName": "十佳大学生",
+    "applicationDate": "2024-11-25",
+    "status": "submitted",
+    "materials": [
+      "申请表.docx",
+      "成绩单.pdf"
+    ],
+    "remarks": ""
+  },
+  {
+    "id": "app-003",
+    "memberId": "member-002",
+    "memberName": "王芳",
+    "honorName": "优秀社团干部",
+    "applicationDate": "2024-12-10",
+    "status": "draft",
+    "materials": [
+      "申请表.docx"
+    ],
+    "remarks": "材料准备中"
+  }
+]

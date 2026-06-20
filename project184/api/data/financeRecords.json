@@ -1,0 +1,78 @@
+[
+  {
+    "id": "fin-001",
+    "type": "income",
+    "category": "membership_fee",
+    "categoryLabel": "会费收入",
+    "amount": 10000,
+    "date": "2024-09-15",
+    "description": "2024学年第一学期会费收缴",
+    "createdAt": "2024-09-15"
+  },
+  {
+    "id": "fin-002",
+    "type": "income",
+    "category": "school_grant",
+    "categoryLabel": "学校拨款",
+    "amount": 8000,
+    "date": "2024-09-20",
+    "description": "校级重点社团活动经费",
+    "createdAt": "2024-09-20"
+  },
+  {
+    "id": "fin-003",
+    "type": "income",
+    "category": "sponsorship",
+    "categoryLabel": "企业赞助",
+    "amount": 5000,
+    "date": "2024-10-10",
+    "description": "科技公司赞助程序设计大赛",
+    "relatedActivityId": "act-001",
+    "relatedActivityName": "校园程序设计大赛",
+    "createdAt": "2024-10-10"
+  },
+  {
+    "id": "fin-004",
+    "type": "expense",
+    "category": "activity",
+    "categoryLabel": "活动支出",
+    "amount": 3000,
+    "date": "2024-11-21",
+    "description": "程序设计大赛奖金及物料费",
+    "relatedActivityId": "act-001",
+    "relatedActivityName": "校园程序设计大赛",
+    "createdAt": "2024-11-21"
+  },
+  {
+    "id": "fin-005",
+    "type": "expense",
+    "category": "activity",
+    "categoryLabel": "活动支出",
+    "amount": 1500,
+    "date": "2024-12-06",
+    "description": "AI技术讲座场地及嘉宾费用",
+    "relatedActivityId": "act-002",
+    "relatedActivityName": "AI技术前沿讲座",
+    "createdAt": "2024-12-06"
+  },
+  {
+    "id": "fin-006",
+    "type": "expense",
+    "category": "office",
+    "categoryLabel": "办公采购",
+    "amount": 800,
+    "date": "2024-09-25",
+    "description": "社团招新宣传物料印刷",
+    "createdAt": "2024-09-25"
+  },
+  {
+    "id": "fin-007",
+    "type": "expense",
+    "category": "activity",
+    "categoryLabel": "活动支出",
+    "amount": 500,
+    "date": "2024-10-29",
+    "description": "Python培训教材及证书费",
+    "createdAt": "2024-10-29"
+  }
+]

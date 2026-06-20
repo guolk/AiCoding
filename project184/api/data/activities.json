@@ -1,0 +1,84 @@
+[
+  {
+    "id": "act-001",
+    "name": "校园程序设计大赛",
+    "date": "2024-11-20",
+    "location": "图书馆报告厅",
+    "organizer": "技术部",
+    "budget": 3000,
+    "participantCount": 120,
+    "maxParticipants": 150,
+    "status": "completed",
+    "description": "面向全校学生的程序设计竞赛"
+  },
+  {
+    "id": "act-002",
+    "name": "AI技术前沿讲座",
+    "date": "2024-12-05",
+    "location": "逸夫楼201",
+    "organizer": "策划部",
+    "budget": 1500,
+    "participantCount": 80,
+    "maxParticipants": 100,
+    "status": "completed",
+    "description": "邀请业界专家分享AI领域最新技术进展"
+  },
+  {
+    "id": "act-003",
+    "name": "Python编程培训",
+    "date": "2024-10-28",
+    "location": "实验楼A301",
+    "organizer": "技术部",
+    "budget": 500,
+    "participantCount": 60,
+    "maxParticipants": 80,
+    "status": "completed",
+    "description": "面向零基础同学的Python入门培训课程"
+  },
+  {
+    "id": "act-004",
+    "name": "省创新创业大赛",
+    "date": "2024-10-15",
+    "location": "省科技馆",
+    "organizer": "外联部",
+    "budget": 5000,
+    "participantCount": 15,
+    "status": "completed",
+    "description": "代表学校参加省级创新创业大赛"
+  },
+  {
+    "id": "act-005",
+    "name": "社团招新活动",
+    "date": "2024-09-20",
+    "location": "学生活动中心广场",
+    "organizer": "宣传部",
+    "budget": 2000,
+    "participantCount": 200,
+    "status": "completed",
+    "description": "新学期社团招新，展示社团风采"
+  },
+  {
+    "id": "act-006",
+    "name": "黑客马拉松",
+    "date": "2024-12-25",
+    "location": "创业孵化基地",
+    "organizer": "技术部",
+    "budget": 4000,
+    "participantCount": 50,
+    "maxParticipants": 60,
+    "status": "planning",
+    "description": "48小时不间断编程挑战"
+  },
+  {
+    "id": "act-007",
+    "name": "年终总结大会",
+    "date": "2024-12-30",
+    "location": "多功能厅",
+    "organizer": "主席团",
+    "budget": 1000,
+    "participantCount": 100,
+    "maxParticipants": 120,
+    "status": "planning",
+    "description": "年度工作总结，优秀成员表彰"
+  }
+]

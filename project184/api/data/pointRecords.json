@@ -1,0 +1,32 @@
+[
+  {
+    "id": "point-001",
+    "memberId": "member-001",
+    "memberName": "李明",
+    "points": 20,
+    "reason": "参加程序设计竞赛获得一等奖",
+    "activityId": "act-001",
+    "activityName": "校园程序设计大赛",
+    "createdAt": "2024-11-15"
+  },
+  {
+    "id": "point-002",
+    "memberId": "member-002",
+    "memberName": "王芳",
+    "points": 15,
+    "reason": "组织科技创新讲座",
+    "activityId": "act-002",
+    "activityName": "AI技术前沿讲座",
+    "createdAt": "2024-11-10"
+  },
+  {
+    "id": "point-003",
+    "memberId": "member-005",
+    "memberName": "陈静",
+    "points": 25,
+    "reason": "省级创新创业大赛金奖",
+    "activityId": "act-004",
+    "activityName": "省创新创业大赛",
+    "createdAt": "2024-10-20"
+  }
+]

@@ -1,0 +1,24 @@
+[
+  {
+    "id": "plan-001",
+    "activityId": "act-006",
+    "activityName": "黑客马拉松",
+    "version": "v1.0",
+    "title": "黑客马拉松初步方案",
+    "content": "## 活动主题\n代码创新，未来无限\n\n## 活动时间\n2024年12月25日-26日",
+    "status": "draft",
+    "createdAt": "2024-11-25",
+    "createdBy": "张伟"
+  },
+  {
+    "id": "plan-002",
+    "activityId": "act-001",
+    "activityName": "校园程序设计大赛",
+    "version": "v2.0",
+    "title": "程序设计大赛优化方案",
+    "content": "## 比赛形式\n个人赛，4小时\n\n## 题目类型\n算法题6道",
+    "status": "approved",
+    "createdAt": "2024-10-25",
+    "createdBy": "李明"
+  }
+]

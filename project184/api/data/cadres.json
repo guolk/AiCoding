@@ -1,0 +1,52 @@
+[
+  {
+    "id": "cadre-001",
+    "name": "李明",
+    "position": "社长",
+    "term": "第7届",
+    "startDate": "2024-09-01",
+    "department": "主席团"
+  },
+  {
+    "id": "cadre-002",
+    "name": "王芳",
+    "position": "副社长",
+    "term": "第7届",
+    "startDate": "2024-09-01",
+    "department": "主席团"
+  },
+  {
+    "id": "cadre-003",
+    "name": "张伟",
+    "position": "技术部部长",
+    "term": "第7届",
+    "startDate": "2024-09-01",
+    "department": "技术部"
+  },
+  {
+    "id": "cadre-004",
+    "name": "刘洋",
+    "position": "策划部部长",
+    "term": "第7届",
+    "startDate": "2024-09-01",
+    "department": "策划部"
+  },
+  {
+    "id": "cadre-005",
+    "name": "陈静",
+    "position": "社长",
+    "term": "第6届",
+    "startDate": "2023-09-01",
+    "endDate": "2024-08-31",
+    "department": "主席团"
+  },
+  {
+    "id": "cadre-006",
+    "name": "赵强",
+    "position": "副社长",
+    "term": "第6届",
+    "startDate": "2023-09-01",
+    "endDate": "2024-08-31",
+    "department": "主席团"
+  }
+]
